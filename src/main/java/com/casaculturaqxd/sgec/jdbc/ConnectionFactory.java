@@ -19,4 +19,12 @@ public class ConnectionFactory {
             return null;
         }
     }
+    
+    public void desconectar(Connection connection) {
+        try {
+            connection.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(DatabasePostgreSQL.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }
