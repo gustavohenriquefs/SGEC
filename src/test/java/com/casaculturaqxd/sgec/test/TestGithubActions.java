@@ -1,15 +1,16 @@
+package com.casaculturaqxd.sgec.test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
 public class TestGithubActions {
     @Test
-    void TestDummy(){
+    public void TestDummy(){
         assertEquals(0,0);
     } 
 
     @Test
-    void TestPropositalError(){
+    public void TestPropositalError(){
         assertEquals(1,0);
     }
 }
