@@ -12,10 +12,10 @@ public class ConnectionFactory {
     public Connection conectar() {
         try {
             Class.forName("org.postgresql.Driver");
-            this.connection = DriverManager.getConnection("jdbc:postgresql://127.0.0.1/javafxmvc", "postgres","493519");
+            this.connection = DriverManager.getConnection("jdbc:postgresql://127.0.0.1/nome-do-banco", "usuario","senha");
             return this.connection;
         } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(DatabasePostgreSQL.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ConnectionFactory.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
     }
