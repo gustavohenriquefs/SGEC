@@ -8,4 +8,8 @@ public class TestGithubActions {
         assertEquals(0,0);
     } 
 
+    @Test
+    void TestPropositalError(){
+        assertEquals(1,0);
+    }
 }
