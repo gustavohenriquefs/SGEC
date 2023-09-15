@@ -1,3 +1,4 @@
+package com.casaculturaqxd.sgec.test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
