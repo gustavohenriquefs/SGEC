@@ -1,0 +1,9 @@
+.root{
+    -color-button: #D67C40;
+    -fx-background-image:url('../imagens/imagem-casa.jpg');
+    -fx-background-size:cover;
+}
+
+#loginButton {
+    background-color: -color-button;
+}
