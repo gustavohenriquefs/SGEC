@@ -24,7 +24,7 @@ public class ConnectionFactory {
         try {
             connection.close();
         } catch (SQLException ex) {
-            Logger.getLogger(DatabasePostgreSQL.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ConnectionFactory.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }
