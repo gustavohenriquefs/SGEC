@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -17,7 +18,9 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("view/login"), 640, 480);
+        scene = new Scene(loadFXML("login"), 640, 480);
+        Image image = new Image(App.class.getResourceAsStream("imagens/logo_cego_aderaldo.png"));
+        stage.getIcons().add(image);
         stage.setScene(scene);
         stage.show();
     }
