@@ -23,6 +23,8 @@ public class App extends Application {
         stage.getIcons().add(image);
         stage.setTitle("SGEC");
         stage.setScene(scene);
+        
+        stage.setMaximized(true);
         stage.show();
     }
 
