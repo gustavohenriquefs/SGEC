@@ -1,0 +1,7 @@
+@font-face {
+    font-family: "CustomFont";
+    src: url("CustomFont.eot");
+    src: url("CustomFont.woff") format("woff"),
+    url("CustomFont.otf") format("opentype"),
+    url("CustomFont.svg#filename") format("svg");
+}
