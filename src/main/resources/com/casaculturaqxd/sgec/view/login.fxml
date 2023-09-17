@@ -5,17 +5,24 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@../css/LoginStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@../css/LoginStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Button fx:id="loginButton" layoutX="274.0" layoutY="291.0" mnemonicParsing="false" style="-fx-background-color: D67C40;" text="Login" />
-      <Pane layoutX="200.0" layoutY="82.0" prefHeight="200.0" prefWidth="200.0">
+      <Pane fx:id="form" layoutX="195.0" layoutY="109.0" maxWidth="200.0" prefHeight="210.0" prefWidth="219.0">
          <children>
-            <PasswordField layoutX="26.0" layoutY="139.0" />
-            <TextField layoutX="26.0" layoutY="81.0" />
+            <PasswordField fx:id="senha" layoutX="26.0" layoutY="139.0" />
+            <TextField fx:id="email" layoutX="26.0" layoutY="81.0" />
             <Label layoutX="25.0" layoutY="64.0" text="E-mail" />
             <Label layoutX="25.0" layoutY="122.0" text="Senha" />
+            <Button fx:id="loginButton" layoutX="77.0" layoutY="174.0" prefHeight="25.0" prefWidth="47.0" text="Login" />
+            <Label layoutX="58.0" layoutY="31.0" text="Bem-Vindo!">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
          </children>
       </Pane>
    </children>
-</Pane>
+</VBox>
