@@ -8,16 +8,9 @@
 #form{
     -fx-background-color: -color-form;
     -fx-opacity: 82%;
-    /*-fx-position: absolute;
-    -fx-top: 50%;
-    -fx-left: 50%;
-    -fx-transform: translate(-50%, -50%);*/
 }
 
 #loginButton {
     -fx-background-color: -color-button;
     -fx-position: absolute;
-    /*-fx-top: 50%;
-    -fx-left: 50%;
-    -fx-transform: translate(-50%, -50%) ;*/
 }
