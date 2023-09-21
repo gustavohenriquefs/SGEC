@@ -10,6 +10,7 @@ public class ConnectionFactory {
     private Connection connection;
     private String urlDataBase;
     private String nomeUsuario;
+    private String senha;
 
     public Connection conectar() {
         try {
