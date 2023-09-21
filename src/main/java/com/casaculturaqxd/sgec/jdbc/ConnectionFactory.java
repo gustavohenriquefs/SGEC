@@ -31,8 +31,8 @@ public class ConnectionFactory {
     public void desconectar(Connection connection) {
         try {
             connection.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(ConnectionFactory.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException erro) {
+            throw new RuntimeException(erro);
         }
     }
 }
