@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 public class ConnectionFactory {
     private Connection connection;
     private String urlDataBase;
+    private String nomeUsuario;
 
     public Connection conectar() {
         try {
