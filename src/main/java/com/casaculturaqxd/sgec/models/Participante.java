@@ -2,17 +2,17 @@ package com.casaculturaqxd.sgec.models;
 
 import java.io.ByteArrayInputStream;
 
-public class Artista {
+public class Participante {
     private String nome;
     private String areaDeAtuacao;
     private String linkMapaDaCultura;
-    private ByteArrayInputStream imagemArtista;
+    private ByteArrayInputStream imagemParticipante;
 
-    public Artista(String nome, String areaDeAtuacao, String linkMapaDaCultura, ByteArrayInputStream imagemArtista) {
+    public Participante(String nome, String areaDeAtuacao, String linkMapaDaCultura, ByteArrayInputStream imagemParticipante) {
         this.nome = nome;
         this.areaDeAtuacao = areaDeAtuacao;
         this.linkMapaDaCultura = linkMapaDaCultura;
-        this.imagemArtista = imagemArtista;
+        this.imagemParticipante = imagemParticipante;
     }
 
     public String getNome() {
@@ -33,11 +33,11 @@ public class Artista {
     public void setLinkMapaDaCultura(String linkMapaDaCultura) {
         this.linkMapaDaCultura = linkMapaDaCultura;
     }
-    public ByteArrayInputStream getImagemArtista() {
-        return imagemArtista;
+    public ByteArrayInputStream getimagemParticipante() {
+        return imagemParticipante;
     }
-    public void setImagemArtista(ByteArrayInputStream imagemArtista) {
-        this.imagemArtista = imagemArtista;
+    public void setimagemParticipante(ByteArrayInputStream imagemParticipante) {
+        this.imagemParticipante = imagemParticipante;
     }
 
     
