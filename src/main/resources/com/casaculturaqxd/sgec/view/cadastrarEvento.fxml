@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox id="container" stylesheets="@../css/cadastrarEventoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Pane fx:id="header" prefHeight="35.0" prefWidth="790.0">
+         <children>
+            <Hyperlink layoutX="25.0" layoutY="4.0" text="Home" textFill="#fffef7" />
+            <Hyperlink layoutX="78.0" layoutY="7.0" text="Pesquisar" textFill="#fffef7">
+               <padding>
+                  <Insets bottom="0.0" />
+               </padding>
+            </Hyperlink>
+            <Hyperlink layoutX="144.0" layoutY="7.0" text="Cadastrar Evento" textFill="#fffef7">
+               <padding>
+                  <Insets bottom="0.0" />
+               </padding>
+            </Hyperlink>
+            <Hyperlink layoutX="254.0" layoutY="7.0" text="Metas" textFill="#fffef7">
+               <padding>
+                  <Insets bottom="0.0" />
+               </padding>
+            </Hyperlink>
+         </children>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+      </Pane>
+      <Label prefHeight="42.0" prefWidth="124.0" text="Criar Evento">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+         <VBox.margin>
+            <Insets left="30.0" top="10.0" />
+         </VBox.margin>
+      </Label>
+      <VBox VBox.vgrow="ALWAYS">
+        <children>
+            <HBox HBox.hgrow="ALWAYS">
+                <children>
+                    <Pane prefWidth="790.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+                        <children>
+                            <Label layoutX="25.0" layoutY="6.0" prefHeight="17.0" prefWidth="40.0" text="Título" />
+                            <TextField layoutX="23.0" layoutY="28.0" prefHeight="25.0" prefWidth="493.0" />
+                            <TextField layoutX="558.0" layoutY="28.0" prefHeight="25.0" prefWidth="200.0" />
+                            <Label layoutX="557.0" layoutY="6.0" prefHeight="17.0" prefWidth="101.0" text="Meta(s) do Evento" />
+                            <Label layoutX="23.0" layoutY="57.0" prefHeight="17.0" prefWidth="63.0" text="Data inicial" />
+                            <Label layoutX="286.0" layoutY="57.0" prefHeight="17.0" prefWidth="63.0" text="Data final" />
+                            <Label layoutX="483.0" layoutY="57.0" prefHeight="17.0" prefWidth="85.0" text="Horas" />
+                            <DatePicker layoutX="23.0" layoutY="78.0" />
+                            <DatePicker layoutX="277.0" layoutY="78.0" />
+                            <TextArea layoutX="25.0" layoutY="128.0" prefHeight="85.0" prefWidth="800.0" />
+                            <Label layoutX="23.0" layoutY="111.0" prefHeight="17.0" prefWidth="63.0" text="Descrição" />
+                        <Spinner layoutX="484.0" layoutY="78.0" />
+                        <Spinner layoutX="641.0" layoutY="78.0" />
+                        <Label layoutX="641.0" layoutY="57.0" prefHeight="17.0" prefWidth="85.0" text="Minutos" />
+                        </children>
+                    </Pane>
+                </children>
+            </HBox>
+        </children>
+      </VBox>
+      <Pane prefHeight="45.0" prefWidth="770.0" VBox.vgrow="ALWAYS">
+         <children>
+            <RadioButton layoutX="506.0" layoutY="6.0" mnemonicParsing="false" text="Certificável" />
+            <RadioButton layoutX="623.0" layoutY="6.0" mnemonicParsing="false" text="Acessível em libras" />
+            <ChoiceBox layoutY="19.0" prefWidth="150.0" />
+            <Label layoutY="5.0" prefHeight="18.0" prefWidth="105.0" text="Classificação etária" />
+         </children>
+         <VBox.margin>
+            <Insets left="20.0" />
+         </VBox.margin>
+      </Pane>
+      <GridPane maxWidth="1.7976931348623157E308" prefHeight="86.0" prefWidth="790.0" VBox.vgrow="ALWAYS">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints maxHeight="52.8000244140625" minHeight="10.0" prefHeight="34.4" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="44.00000190734864" minHeight="10.0" prefHeight="32.800000000000004" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <Label prefHeight="17.0" prefWidth="63.0" text="Rua">
+               <GridPane.margin>
+                  <Insets bottom="20.0" left="20.0" />
+               </GridPane.margin>
+            </Label>
+            <TextField maxHeight="10.0" maxWidth="210.0" minWidth="26.0" prefHeight="26.0" prefWidth="190.0">
+               <GridPane.margin>
+                  <Insets left="20.0" top="20.0" />
+               </GridPane.margin>
+            </TextField>
+            <TextField layoutX="30.0" layoutY="34.0" maxHeight="10.0" maxWidth="210.0" minWidth="26.0" prefHeight="26.0" prefWidth="190.0" GridPane.columnIndex="1">
+               <GridPane.margin>
+                  <Insets left="20.0" top="20.0" />
+               </GridPane.margin>
+            </TextField>
+            <Label text="Bairro" GridPane.columnIndex="1">
+               <GridPane.margin>
+                  <Insets bottom="20.0" left="20.0" />
+               </GridPane.margin>
+            </Label>
+            <TextField layoutX="290.0" layoutY="34.0" maxHeight="10.0" maxWidth="210.0" minWidth="26.0" prefHeight="26.0" prefWidth="190.0" GridPane.columnIndex="2">
+               <GridPane.margin>
+                  <Insets left="20.0" top="20.0" />
+               </GridPane.margin>
+            </TextField>
+            <Label text="Número" GridPane.columnIndex="2">
+               <GridPane.margin>
+                  <Insets bottom="20.0" left="20.0" />
+               </GridPane.margin>
+            </Label>
+            <Label text="Cidade" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets bottom="20.0" left="20.0" />
+               </GridPane.margin>
+            </Label>
+            <Label text="Estado" GridPane.columnIndex="2" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets bottom="20.0" left="20.0" />
+               </GridPane.margin>
+            </Label>
+            <TextField layoutX="30.0" layoutY="80.0" maxHeight="10.0" maxWidth="210.0" minWidth="26.0" prefHeight="26.0" prefWidth="190.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets left="20.0" top="20.0" />
+               </GridPane.margin>
+            </TextField>
+            <TextField layoutX="290.0" layoutY="80.0" maxHeight="10.0" maxWidth="210.0" minWidth="26.0" prefHeight="26.0" prefWidth="190.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets left="20.0" top="20.0" />
+               </GridPane.margin>
+            </TextField>
+            <Pane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
+               <children>
+                  <TextField layoutX="21.0" layoutY="17.0" maxHeight="25.0" maxWidth="210.0" minWidth="26.0" prefHeight="25.0" prefWidth="121.0" />
+                  <Label layoutX="21.0" layoutY="1.0" text="CEP" />
+                  <Label layoutX="142.0" layoutY="22.0" prefHeight="6.0" prefWidth="13.0" text="-">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <TextField layoutX="149.0" layoutY="18.0" prefHeight="25.0" prefWidth="63.0" />
+               </children>
+            </Pane>
+         </children>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+      </GridPane>
+      <StackPane prefHeight="52.0" prefWidth="790.0" VBox.vgrow="ALWAYS">
+         <children>
+            <Button fx:id="botao" alignment="CENTER" layoutX="303.0" layoutY="15.0" mnemonicParsing="false" style="-fx-background-color: #2A3F25;" text="Adicionar nova localização +" textFill="WHITE">
+               <StackPane.margin>
+                  <Insets top="30.0" />
+               </StackPane.margin></Button>
+         </children>
+      </StackPane>
+   </children>
+</VBox>
