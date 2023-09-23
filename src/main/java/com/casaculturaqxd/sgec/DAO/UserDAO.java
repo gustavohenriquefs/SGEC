@@ -41,15 +41,17 @@ public class UserDAO {
   }
 
   public User getUsuario(User obj){
-    String sql = "SELECT * FROM user WHERE email=?";
+    String sql = "SELECT * FROM user WHERE id=?";
     try {
       PreparedStatement stmt = connection.prepareStatement(sql);
-      stmt.setString(1, obj.getEmail());
+      stmt.setInt(1, obj.getIdUsuario());
       ResultSet resultado = stmt.executeQuery();
       if (resultado.next()) {
-        obj.setNomeUsuario(resultado.getString("nome"));
+        obj.setIdUsuario(resultado.getInt("id_usuario"));
+        obj.setNomeUsuario(resultado.getString("nome_usuario"));
         obj.setEmail(resultado.getString("email"));
         obj.setSenha(resultado.getString("senha"));
+        obj.setEditor(resultado.getBoolean("editor"));
         return obj;
       } else {
         return null;
