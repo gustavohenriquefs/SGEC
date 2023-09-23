@@ -72,4 +72,8 @@ public class UserDAO {
     return false;
   }
 
+  public boolean update(User obj){
+    return true;
+  }
+
 }
