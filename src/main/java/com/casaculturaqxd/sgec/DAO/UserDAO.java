@@ -88,8 +88,16 @@ public class UserDAO {
     }
   }
 
-  public boolean deletar(User usuario){
-    return true;
+  public boolean deletar(User obj){
+    String sql = "DELETE FROM user WHERE id=?";
+    try {
+      PreparedStatement stmt = connection.prepareStatement(sql);
+      stmt.setInt(1, obj.getIdUsuario());
+      stmt.execute();
+      return true;
+    } catch (Exception e) {
+      return false;
+    }
   }
 
 }
