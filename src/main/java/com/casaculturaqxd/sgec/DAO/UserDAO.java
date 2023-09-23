@@ -88,4 +88,8 @@ public class UserDAO {
     }
   }
 
+  public boolean deletar(User usuario){
+    return true;
+  }
+
 }
