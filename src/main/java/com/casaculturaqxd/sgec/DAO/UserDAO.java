@@ -11,10 +11,6 @@ import com.casaculturaqxd.sgec.models.User;
 public class UserDAO {
   private Connection connection; 
 
-  public UserDAO(String urlDataBase, String nomeUsuario, String senha){
-    this.connection = new ConnectionFactory(urlDataBase,nomeUsuario,senha).conectar();
-}
-
   public Connection getConnection() {
     return connection;
   }
@@ -61,5 +57,7 @@ public class UserDAO {
       return null;
     }
   }
+
+
 
 }
