@@ -8,23 +8,31 @@ import java.util.logging.Logger;
 
 public class ConnectionFactory {
     private Connection connection;
+    private String urlDataBase;
+    private String nomeUsuario;
+    private String senha;
+
+    ConnectionFactory(String urlDataBase, String nomeUsuario, String senha){
+        this.urlDataBase = urlDataBase;
+        this.nomeUsuario = nomeUsuario;
+        this.senha = senha;
+    }
 
     public Connection conectar() {
         try {
             Class.forName("org.postgresql.Driver");
-            this.connection = DriverManager.getConnection("jdbc:postgresql://127.0.0.1/nome-do-banco", "usuario","senha");
+            this.connection = DriverManager.getConnection(urlDataBase, nomeUsuario,senha);
             return this.connection;
-        } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(ConnectionFactory.class.getName()).log(Level.SEVERE, null, ex);
-            return null;
+        } catch (SQLException | ClassNotFoundException erro) {
+            throw new RuntimeException(erro);
         }
     }
     
     public void desconectar(Connection connection) {
         try {
             connection.close();
-        } catch (SQLException ex) {
-            Logger.getLogger(ConnectionFactory.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException erro) {
+            throw new RuntimeException(erro);
         }
     }
 }
