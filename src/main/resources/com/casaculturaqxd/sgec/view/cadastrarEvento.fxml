@@ -83,7 +83,6 @@
             <children>
                 <Label layoutX="25.0" layoutY="6.0" prefHeight="17.0" prefWidth="40.0" text="Título" textFill="#352929" AnchorPane.leftAnchor="5.0" />
                 <TextField layoutX="23.0" layoutY="28.0" maxWidth="430.0" prefHeight="26.0" prefWidth="430.0" AnchorPane.leftAnchor="5.0" />
-                <TextField layoutX="469.0" layoutY="28.0" maxWidth="400.0" prefHeight="26.0" prefWidth="298.0" AnchorPane.leftAnchor="469.0" AnchorPane.rightAnchor="12.399999999999977" />
                 <Label layoutX="469.0" layoutY="5.0" prefHeight="18.0" prefWidth="107.0" text="Meta(s) do Evento" textFill="#352929" AnchorPane.leftAnchor="469.0" AnchorPane.rightAnchor="203.39999999999998" />
                 <Label layoutX="23.0" layoutY="57.0" prefHeight="17.0" prefWidth="63.0" text="Data inicial" textFill="#352929" AnchorPane.leftAnchor="5.0" />
                 <Label layoutX="223.0" layoutY="57.0" prefHeight="17.0" prefWidth="63.0" text="Data final" textFill="#352929" />
@@ -95,6 +94,11 @@
             <Spinner layoutX="425.0" layoutY="78.0" maxWidth="200.0" prefWidth="164.0" AnchorPane.leftAnchor="425.0" />
             <Spinner layoutX="607.0" layoutY="78.0" maxWidth="200.0" prefHeight="26.0" prefWidth="158.0" AnchorPane.leftAnchor="607.0" AnchorPane.rightAnchor="40.0" />
             <Label layoutX="611.0" layoutY="57.0" prefHeight="17.0" prefWidth="52.0" text="Minutos" textFill="#352929" AnchorPane.rightAnchor="116.39999999999998" />
+            <VBox layoutX="473.0" layoutY="28.0" prefHeight="26.0" prefWidth="289.0">
+               <children>
+                  <TextField maxWidth="430.0" prefHeight="26.0" prefWidth="430.0" />
+               </children>
+            </VBox>
             </children>
         </Pane>
       <AnchorPane layoutX="2.0" layoutY="413.0" prefHeight="118.0" prefWidth="790.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="40.0" />
@@ -119,7 +123,7 @@
                   <Insets left="20.0" top="20.0" />
                </GridPane.margin>
             </TextField>
-            <TextField layoutX="30.0" layoutY="34.0" maxHeight="10.0" minWidth="26.0" prefHeight="26.0" prefWidth="190.0" GridPane.columnIndex="1">
+            <TextField layoutX="30.0" layoutY="34.0" minWidth="26.0" prefHeight="26.0" GridPane.columnIndex="1">
                <GridPane.margin>
                   <Insets left="20.0" top="20.0" />
                </GridPane.margin>
