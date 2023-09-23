@@ -10,8 +10,8 @@ import com.casaculturaqxd.sgec.models.User;
 public class UserDAO {
   private Connection connection; 
 
-  public UserDAO(){
-    this.connection = new ConnectionFactory("","","").conectar();
+  public UserDAO(String urlDataBase, String nomeUsuario, String senha){
+    this.connection = new ConnectionFactory(urlDataBase,nomeUsuario,senha).conectar();
 }
 
   public Connection getConnection() {
