@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.casaculturaqxd.sgec.jdbc.ConnectionFactory;
 import com.casaculturaqxd.sgec.models.User;
 
 public class UserDAO {
@@ -22,8 +21,8 @@ public class UserDAO {
   public boolean inserir(User obj){
     try {
       //1° passo - criar comando sql
-      String sql = "insert into user (nome,email,senha)"
-              + " values(?,?,?)";
+      String sql = "insert into user (id_usuario,nome_usuario,email,senha,editor)"
+              + " values(?,?,?,?,?)";
       //2° passo - conectar o banco de dados e organizar o comando sql
       PreparedStatement stmt = connection.prepareStatement(sql);
       stmt.setInt(1, obj.getIdUsuario());
