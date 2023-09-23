@@ -73,7 +73,19 @@ public class UserDAO {
   }
 
   public boolean update(User obj){
-    return true;
+    String sql = "UPDATE user SET nome_usuario=?, email=?, senha=?, editor=? WHERE id=?";
+    try {
+      PreparedStatement stmt = connection.prepareStatement(sql);
+      stmt.setString(1, obj.getNomeUsuario());
+      stmt.setString(2, obj.getEmail());
+      stmt.setString(3, obj.getSenha());
+      stmt.setBoolean(4, obj.isEditor());
+      stmt.setInt(5, obj.getIdUsuario());
+      stmt.execute();
+      return true;
+    } catch (Exception e) {
+      return false;
+    }
   }
 
 }
