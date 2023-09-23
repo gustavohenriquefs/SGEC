@@ -62,14 +62,24 @@ public class UserDAO {
   }
 
   public boolean validar(User obj){
-    User usuario = getUsuario(obj);
-    if(usuario != null){
-      if(obj.getEmail().equals(usuario.getEmail()) && obj.getSenha().equals(usuario.getSenha())){
+    String sql = "SELECT * FROM user WHERE email=? and senha=?";
+    try {
+      PreparedStatement stmt = connection.prepareStatement(sql);
+      stmt.setString(1, obj.getEmail());
+      stmt.setString(2, obj.getSenha());
+      ResultSet resultado = stmt.executeQuery();
+      if (resultado.next()) {
+        obj.setIdUsuario(resultado.getInt("id_usuario"));
+        obj.setNomeUsuario(resultado.getString("nome_usuario"));
+        obj.setEmail(resultado.getString("email"));
+        obj.setSenha(resultado.getString("senha"));
+        obj.setEditor(resultado.getBoolean("editor"));
         return true;
-      }
+      } 
+      return false;
+    } catch (Exception e) {
       return false;
     }
-    return false;
   }
 
   public boolean update(User obj){
