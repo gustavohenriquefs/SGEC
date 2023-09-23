@@ -59,7 +59,14 @@ public class UserDAO {
   }
 
   public boolean validar(User obj){
-    return true;
+    User usuario = getUsuario(obj);
+    if(usuario != null){
+      if(obj.getEmail().equals(usuario.getEmail()) && obj.getSenha().equals(usuario.getSenha())){
+        return true;
+      }
+      return false;
+    }
+    return false;
   }
 
 }
