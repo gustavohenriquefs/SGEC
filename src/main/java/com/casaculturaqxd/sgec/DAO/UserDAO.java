@@ -7,5 +7,10 @@ public class UserDAO {
 
   public Connection getConnection() {
     return connection;
-}
+  }
+
+  public void setConnection(Connection connection) {
+    this.connection = connection;
+  }
+  
 }
