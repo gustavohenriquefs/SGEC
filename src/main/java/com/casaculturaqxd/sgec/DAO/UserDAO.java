@@ -58,6 +58,8 @@ public class UserDAO {
     }
   }
 
-
+  public boolean validar(User obj){
+    return true;
+  }
 
 }
