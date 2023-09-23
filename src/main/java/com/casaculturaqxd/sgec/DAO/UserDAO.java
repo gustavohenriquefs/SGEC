@@ -26,9 +26,11 @@ public class UserDAO {
               + " values(?,?,?)";
       //2° passo - conectar o banco de dados e organizar o comando sql
       PreparedStatement stmt = connection.prepareStatement(sql);
-      stmt.setString(1, obj.getNome_usuario());
-      stmt.setString(2, obj.getEmail());
-      stmt.setString(3, obj.getSenha());
+      stmt.setInt(1, obj.getIdUsuario());
+      stmt.setString(2, obj.getNomeUsuario());
+      stmt.setString(3, obj.getEmail());
+      stmt.setString(4, obj.getSenha());
+      stmt.setBoolean(5, obj.isEditor());
       //3° passo - executar o comando sql
       stmt.execute();
       stmt.close();
