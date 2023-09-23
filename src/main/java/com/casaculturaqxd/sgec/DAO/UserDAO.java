@@ -42,6 +42,8 @@ public class UserDAO {
     
   }
 
-
+  public User getUsuario(User obj){
+    return obj;
+  }
 
 }
