@@ -2,6 +2,7 @@ package com.casaculturaqxd.sgec.DAO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.casaculturaqxd.sgec.jdbc.ConnectionFactory;
@@ -25,7 +26,7 @@ public class UserDAO {
   public boolean inserir(User obj){
     try {
       //1° passo - criar comando sql
-      String sql = "insert into tb_clientes (nome,email,senha)"
+      String sql = "insert into user (nome,email,senha)"
               + " values(?,?,?)";
       //2° passo - conectar o banco de dados e organizar o comando sql
       PreparedStatement stmt = connection.prepareStatement(sql);
@@ -43,7 +44,20 @@ public class UserDAO {
   }
 
   public User getUsuario(User obj){
-    return obj;
+    String sql = "SELECT * FROM user WHERE email=?";
+    try {
+      PreparedStatement stmt = connection.prepareStatement(sql);
+      stmt.setString(1, obj.getEmail());
+      ResultSet resultado = stmt.executeQuery();
+      if (resultado.next()) {
+        obj.setNomeUsuario(resultado.getString("nome"));
+        obj.setEmail(resultado.getString("email"));
+        obj.setSenha(resultado.getString("senha"));
+      }
+      return obj;
+    } catch (Exception e) {
+      return null;
+    }
   }
 
 }
