@@ -12,7 +12,7 @@ public class ConnectionFactory {
     private String nomeUsuario;
     private String senha;
 
-    ConnectionFactory(String urlDataBase, String nomeUsuario, String senha){
+    public ConnectionFactory(String urlDataBase, String nomeUsuario, String senha){
         this.urlDataBase = urlDataBase;
         this.nomeUsuario = nomeUsuario;
         this.senha = senha;
