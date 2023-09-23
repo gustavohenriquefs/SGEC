@@ -35,11 +35,13 @@ public class UserDAO {
       //3° passo - executar o comando sql
       stmt.execute();
       stmt.close();
-
+      return true;
     } catch (SQLException e) {
-
+      return false;
     }
-    return true;
+    
   }
+
+
 
 }
