@@ -53,8 +53,10 @@ public class UserDAO {
         obj.setNomeUsuario(resultado.getString("nome"));
         obj.setEmail(resultado.getString("email"));
         obj.setSenha(resultado.getString("senha"));
+        return obj;
+      } else {
+        return null;
       }
-      return obj;
     } catch (Exception e) {
       return null;
     }
