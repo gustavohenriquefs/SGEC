@@ -96,7 +96,7 @@
             <Label layoutX="611.0" layoutY="57.0" prefHeight="17.0" prefWidth="52.0" text="Minutos" textFill="#352929" AnchorPane.rightAnchor="116.39999999999998" />
             <VBox layoutX="473.0" layoutY="28.0" prefHeight="26.0" prefWidth="289.0">
                <children>
-                  <TextField maxWidth="430.0" prefHeight="26.0" prefWidth="430.0" />
+                  <ChoiceBox prefHeight="26.0" prefWidth="289.0" />
                </children>
             </VBox>
             </children>
