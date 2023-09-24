@@ -57,10 +57,14 @@
             <HBox HBox.hgrow="ALWAYS" />
         </children>
       </VBox>
-      <Pane layoutX="10.0" layoutY="316.0" prefHeight="46.0" prefWidth="199.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="1231.0" VBox.vgrow="ALWAYS">
+      <Pane layoutX="10.0" layoutY="310.0" prefHeight="52.0" prefWidth="692.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="738.0" VBox.vgrow="ALWAYS">
          <children>
             <ChoiceBox layoutX="22.0" layoutY="19.0" prefWidth="150.0" />
             <Label layoutX="22.0" layoutY="-3.0" prefHeight="18.0" prefWidth="105.0" text="Classificação etária" textFill="#352929" />
+            <TextField layoutX="240.0" layoutY="15.0" />
+            <Label layoutX="242.0" layoutY="-6.0" prefHeight="18.0" prefWidth="91.0" text="Público desejado" textFill="#352929" />
+            <TextField layoutX="512.0" layoutY="14.0" />
+            <Label layoutX="512.0" layoutY="-3.0" prefHeight="18.0" prefWidth="105.0" text="Público alcançado" textFill="#352929" />
          </children>
          <VBox.margin>
             <Insets left="20.0" />
