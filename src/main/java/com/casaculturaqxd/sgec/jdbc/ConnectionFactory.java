@@ -3,8 +3,7 @@ package com.casaculturaqxd.sgec.jdbc;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import io.github.cdimascio.dotenv.Dotenv;
 
 public class ConnectionFactory {
     private Connection connection;
@@ -12,10 +11,12 @@ public class ConnectionFactory {
     private String nomeUsuario;
     private String senha;
 
-    public ConnectionFactory(String urlDataBase, String nomeUsuario, String senha){
-        this.urlDataBase = urlDataBase;
-        this.nomeUsuario = nomeUsuario;
-        this.senha = senha;
+    public ConnectionFactory(String urlKey, String userNameKey, String passwordKey) {
+        Dotenv dotenv = Dotenv.load();
+        
+        this.urlDataBase = dotenv.get(urlKey);
+        this.nomeUsuario = dotenv.get(userNameKey);
+        this.senha       = dotenv.get(passwordKey);
     }
 
     public Connection conectar() {
