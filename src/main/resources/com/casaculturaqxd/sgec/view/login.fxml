@@ -16,7 +16,7 @@
             <TextField fx:id="email" layoutX="26.0" layoutY="81.0" onKeyReleased="#keyReleasedProperty" />
             <Label layoutX="25.0" layoutY="64.0" text="E-mail" />
             <Label layoutX="25.0" layoutY="122.0" text="Senha" />
-            <Button fx:id="loginButton" layoutX="77.0" layoutY="174.0" prefHeight="25.0" prefWidth="47.0" text="Login" />
+            <Button fx:id="loginButton" layoutX="77.0" layoutY="174.0" prefHeight="25.0" prefWidth="47.0" text="Login" onAction="#authUsuario"/>
             <Label layoutX="58.0" layoutY="31.0" text="Bem-Vindo!">
                <font>
                   <Font size="16.0" />
