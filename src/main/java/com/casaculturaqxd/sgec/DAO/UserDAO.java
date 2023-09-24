@@ -21,7 +21,7 @@ public class UserDAO {
   public boolean inserir(User obj){
     try {
       //1° passo - criar comando sql
-      String sql = "insert into user (id_usuario,nome_usuario,email,senha,editor)"
+      String sql = "insert into usuario (id_usuario,nome_usuario,email,senha,editor)"
               + " values(?,?,?,?,?)";
       //2° passo - conectar o banco de dados e organizar o comando sql
       PreparedStatement stmt = connection.prepareStatement(sql);
@@ -41,10 +41,11 @@ public class UserDAO {
   }
 
   public User getUsuario(User obj){
-    String sql = "SELECT * FROM user WHERE id=?";
+    String sql = "SELECT * FROM usuario WHERE id_usuario=?";
     try {
       PreparedStatement stmt = connection.prepareStatement(sql);
       stmt.setInt(1, obj.getIdUsuario());
+      System.out.println(stmt);
       ResultSet resultado = stmt.executeQuery();
       if (resultado.next()) {
         obj.setIdUsuario(resultado.getInt("id_usuario"));
@@ -62,7 +63,7 @@ public class UserDAO {
   }
 
   public boolean validar(User obj){
-    String sql = "SELECT * FROM user WHERE email=? and senha=?";
+    String sql = "SELECT * FROM usuario WHERE email=? and senha=?";
     try {
       PreparedStatement stmt = connection.prepareStatement(sql);
       stmt.setString(1, obj.getEmail());
@@ -83,7 +84,7 @@ public class UserDAO {
   }
 
   public boolean update(User obj){
-    String sql = "UPDATE user SET nome_usuario=?, email=?, senha=?, editor=? WHERE id=?";
+    String sql = "UPDATE usuario SET nome_usuario=?, email=?, senha=?, editor=? WHERE id_usuario=?";
     try {
       PreparedStatement stmt = connection.prepareStatement(sql);
       stmt.setString(1, obj.getNomeUsuario());
@@ -99,7 +100,7 @@ public class UserDAO {
   }
 
   public boolean deletar(User obj){
-    String sql = "DELETE FROM user WHERE id=?";
+    String sql = "DELETE FROM usuario WHERE id_usuario=?";
     try {
       PreparedStatement stmt = connection.prepareStatement(sql);
       stmt.setInt(1, obj.getIdUsuario());
