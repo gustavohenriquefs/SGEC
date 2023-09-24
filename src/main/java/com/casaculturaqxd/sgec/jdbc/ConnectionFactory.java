@@ -11,8 +11,12 @@ public class ConnectionFactory {
     private String nomeUsuario;
     private String senha;
 
-    public ConnectionFactory(){
-        this.obterDadosConexao();
+    public ConnectionFactory(String urlKey, String userNameKey, String passwordKey) {
+        Dotenv dotenv = Dotenv.load();
+        
+        this.urlDataBase = dotenv.get(urlKey);
+        this.nomeUsuario = dotenv.get(userNameKey);
+        this.senha       = dotenv.get(passwordKey);
     }
 
     public Connection conectar() {
@@ -23,16 +27,6 @@ public class ConnectionFactory {
         } catch (SQLException | ClassNotFoundException erro) {
             throw new RuntimeException(erro);
         }
-    }
-    
-    public void obterDadosConexao() {
-        Dotenv dotenv = Dotenv.load();
-        
-        this.urlDataBase = dotenv.get("URL");
-        this.nomeUsuario = dotenv.get("USER_NAME");
-        this.senha = dotenv.get("PASSWORD");
-        
-        System.out.println("AQUUUI: " + this.urlDataBase + " " + this.nomeUsuario + " " + this.senha);
     }
     
     public void desconectar(Connection connection) {
