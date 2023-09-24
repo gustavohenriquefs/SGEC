@@ -2,9 +2,15 @@ package com.casaculturaqxd.sgec;
 
 import java.io.IOException;
 
+import com.casaculturaqxd.sgec.DAO.UserDAO;
+import com.casaculturaqxd.sgec.jdbc.ConnectionFactory;
+import com.casaculturaqxd.sgec.models.User;
+
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.PasswordField;
 
 public class LoginController {
@@ -15,7 +21,12 @@ public class LoginController {
     @FXML 
     private Button loginButton;
 
-    //private final ConnectionFactory userConnection = new ConnectionFactory();
+    private Alert mensagemErro = new Alert(AlertType.NONE);
+
+    private User usuario;
+    private UserDAO userDAO = new UserDAO();
+    private final ConnectionFactory userConnection = new 
+            ConnectionFactory("URL","USER_NAME","PASSWORD");
 
 
     /**
@@ -23,26 +34,25 @@ public class LoginController {
      */
     public void initialize(){
         loginButton.setDisable(true);
+        userDAO.setConnection(userConnection.conectar());
     }
 
     /**
      * Cria um DAO que verifica no banco de dados se as credenciais 
-     * estão corretas, depois envia o nome de usuario e senha para a proxima
-     * página
+     * estão corretas, 
+     * @implNote TODO: compartilhar usuario para a tela de login
      * @throws IOException
      */
     public void authUsuario() throws IOException{
-        //UserDAO dao = new UserDAO();
-        //try{
-            //dao.verificarUsuario()
-            //App.setRoot("view/home");
-        //catch (usuarioIncorreto){
-            
-        //}
-        //catch (senhaiIncorreta){
-            
-        //}
-
+        usuario = new User(email.getText(),senha.getText());
+        if(userDAO.validar(usuario)){
+            App.setRoot("view/home");
+        }
+        else{
+            mensagemErro.setAlertType(AlertType.ERROR);
+            mensagemErro.setContentText("Usuário ou senha inválidos");
+            mensagemErro.show();
+        }
     }
 
     /**
