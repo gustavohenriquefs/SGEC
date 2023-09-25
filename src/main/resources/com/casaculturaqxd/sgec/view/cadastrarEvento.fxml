@@ -59,11 +59,11 @@
       </VBox>
       <Pane layoutX="10.0" layoutY="310.0" prefHeight="52.0" prefWidth="692.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="738.0" VBox.vgrow="ALWAYS">
          <children>
-            <ChoiceBox layoutX="22.0" layoutY="19.0" prefWidth="150.0" />
+            <ChoiceBox fx:id="classificacaoEtaria" layoutX="22.0" layoutY="19.0" prefWidth="150.0" />
             <Label layoutX="22.0" layoutY="-3.0" prefHeight="18.0" prefWidth="105.0" text="Classificação etária" textFill="#352929" />
-            <TextField layoutX="240.0" layoutY="15.0" />
+            <TextField fx:id="publicoDesejado" layoutX="240.0" layoutY="15.0" />
             <Label layoutX="242.0" layoutY="-6.0" prefHeight="18.0" prefWidth="91.0" text="Público desejado" textFill="#352929" />
-            <TextField layoutX="512.0" layoutY="14.0" />
+            <TextField fx:id="publicoAlcancado" layoutX="512.0" layoutY="14.0" />
             <Label layoutX="512.0" layoutY="-3.0" prefHeight="18.0" prefWidth="105.0" text="Público alcançado" textFill="#352929" />
          </children>
          <VBox.margin>
@@ -85,23 +85,23 @@
         <Pane layoutX="-2.0" layoutY="74.0" maxWidth="1408.0" prefHeight="239.0" prefWidth="1395.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="40.0">
             <children>
                 <Label layoutX="25.0" layoutY="6.0" prefHeight="17.0" prefWidth="40.0" text="Título" textFill="#352929" AnchorPane.leftAnchor="5.0" />
-                <TextField layoutX="23.0" layoutY="28.0" maxWidth="430.0" prefHeight="26.0" prefWidth="430.0" AnchorPane.leftAnchor="5.0" />
+                <TextField fx:id="titulo" layoutX="23.0" layoutY="28.0" maxWidth="430.0" prefHeight="26.0" prefWidth="430.0" AnchorPane.leftAnchor="5.0" />
                 <Label layoutX="469.0" layoutY="5.0" prefHeight="18.0" prefWidth="107.0" text="Meta(s) do Evento" textFill="#352929" AnchorPane.leftAnchor="469.0" AnchorPane.rightAnchor="203.39999999999998" />
                 <Label layoutX="23.0" layoutY="57.0" prefHeight="17.0" prefWidth="63.0" text="Data inicial" textFill="#352929" AnchorPane.leftAnchor="5.0" />
                 <Label layoutX="223.0" layoutY="57.0" prefHeight="17.0" prefWidth="63.0" text="Data final" textFill="#352929" />
                 <Label layoutX="425.0" layoutY="57.0" prefHeight="17.0" prefWidth="44.0" text="Horas" textFill="#352929" />
-                <DatePicker layoutX="23.0" layoutY="78.0" maxWidth="200.0" AnchorPane.leftAnchor="5.0" />
-                <DatePicker layoutX="223.0" layoutY="78.0" maxWidth="200.0" prefHeight="26.0" prefWidth="164.0" AnchorPane.leftAnchor="223.0" />
-                <TextArea layoutX="25.0" layoutY="128.0" maxWidth="1408.0" prefHeight="101.0" prefWidth="1366.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="40.0" />
+                <DatePicker fx:id="dataInicial" layoutX="23.0" layoutY="78.0" maxWidth="200.0" AnchorPane.leftAnchor="5.0" />
+                <DatePicker fx:id="dataFinal" layoutX="223.0" layoutY="78.0" maxWidth="200.0" prefHeight="26.0" prefWidth="164.0" AnchorPane.leftAnchor="223.0" />
+                <TextArea fx:id="descricao" layoutX="25.0" layoutY="128.0" maxWidth="1408.0" prefHeight="101.0" prefWidth="1366.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="40.0" />
                 <Label layoutX="23.0" layoutY="111.0" prefHeight="17.0" prefWidth="63.0" text="Descrição" textFill="#352929" AnchorPane.leftAnchor="5.0" />
             <Label layoutX="611.0" layoutY="57.0" prefHeight="17.0" prefWidth="52.0" text="Minutos" textFill="#352929" AnchorPane.rightAnchor="116.39999999999998" />
             <VBox layoutX="473.0" layoutY="28.0" prefHeight="26.0" prefWidth="289.0">
                <children>
-                  <ChoiceBox prefHeight="26.0" prefWidth="289.0" />
+                  <ChoiceBox fx:id="metasEvento" prefHeight="26.0" prefWidth="289.0" />
                </children>
             </VBox>
-            <TextField layoutX="425.0" layoutY="79.0" />
-            <TextField layoutX="611.0" layoutY="79.0" />
+            <TextField fx:id="horas" layoutX="425.0" layoutY="79.0" />
+            <TextField fx:id="minutos" layoutX="611.0" layoutY="79.0" />
             </children>
         </Pane>
       <AnchorPane layoutX="2.0" layoutY="413.0" prefHeight="118.0" prefWidth="790.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="40.0" />
@@ -121,12 +121,12 @@
                   <Insets bottom="20.0" left="20.0" />
                </GridPane.margin>
             </Label>
-            <TextField maxHeight="10.0" minWidth="26.0" prefHeight="26.0" prefWidth="190.0">
+            <TextField fx:id="rua" maxHeight="10.0" minWidth="26.0" prefHeight="26.0" prefWidth="190.0">
                <GridPane.margin>
                   <Insets left="20.0" top="20.0" />
                </GridPane.margin>
             </TextField>
-            <TextField layoutX="30.0" layoutY="34.0" minWidth="26.0" prefHeight="26.0" GridPane.columnIndex="1">
+            <TextField fx:id="bairro" layoutX="30.0" layoutY="34.0" minWidth="26.0" prefHeight="26.0" GridPane.columnIndex="1">
                <GridPane.margin>
                   <Insets left="20.0" top="20.0" />
                </GridPane.margin>
@@ -136,7 +136,7 @@
                   <Insets bottom="20.0" left="20.0" />
                </GridPane.margin>
             </Label>
-            <TextField layoutX="290.0" layoutY="34.0" maxHeight="10.0" minWidth="26.0" prefHeight="26.0" prefWidth="190.0" GridPane.columnIndex="2">
+            <TextField fx:id="numero" layoutX="290.0" layoutY="34.0" maxHeight="10.0" minWidth="26.0" prefHeight="26.0" prefWidth="190.0" GridPane.columnIndex="2">
                <GridPane.margin>
                   <Insets left="20.0" top="20.0" />
                </GridPane.margin>
@@ -156,17 +156,17 @@
                   <Insets bottom="20.0" left="20.0" />
                </GridPane.margin>
             </Label>
-            <TextField layoutX="30.0" layoutY="80.0" maxHeight="10.0" minWidth="26.0" prefHeight="26.0" prefWidth="190.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <TextField fx:id="cidade" layoutX="30.0" layoutY="80.0" maxHeight="10.0" minWidth="26.0" prefHeight="26.0" prefWidth="190.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets left="20.0" top="20.0" />
                </GridPane.margin>
             </TextField>
-            <TextField layoutX="290.0" layoutY="80.0" maxHeight="10.0" minWidth="26.0" prefHeight="26.0" prefWidth="190.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+            <TextField fx:id="estado" layoutX="290.0" layoutY="80.0" maxHeight="10.0" minWidth="26.0" prefHeight="26.0" prefWidth="190.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets left="20.0" top="20.0" />
                </GridPane.margin>
             </TextField>
-            <TextField layoutX="30.0" layoutY="29.0" maxHeight="10.0" minWidth="26.0" prefHeight="26.0" prefWidth="190.0" promptText="Ex: 01001-000" GridPane.rowIndex="1">
+            <TextField fx:id="cep" layoutX="30.0" layoutY="29.0" maxHeight="10.0" minWidth="26.0" prefHeight="26.0" prefWidth="190.0" promptText="Ex: 01001-000" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets left="20.0" top="20.0" />
                </GridPane.margin>
@@ -179,7 +179,7 @@
          </children>
       </GridPane>
       <StackPane prefHeight="52.0" prefWidth="790.0" VBox.vgrow="ALWAYS" />
-      <Button fx:id="botao" alignment="CENTER" layoutX="636.0" layoutY="531.0" mnemonicParsing="false" style="-fx-background-color: #2A3F25;" text="Adicionar nova localização +" textFill="WHITE" />
+      <Button fx:id="adicionarLocalizacao" alignment="CENTER" layoutX="636.0" layoutY="531.0" mnemonicParsing="false" style="-fx-background-color: #2A3F25;" text="Adicionar nova localização +" textFill="WHITE" />
       <RadioButton layoutX="1279.0" layoutY="339.0" mnemonicParsing="false" text="Acessível em libras" textFill="#352929" AnchorPane.rightAnchor="40.0" />
       <RadioButton layoutX="1131.0" layoutY="339.0" mnemonicParsing="false" text="Certificável" textFill="#352929" AnchorPane.rightAnchor="250.0" />
       <VBox layoutX="25.0" layoutY="575.0" prefHeight="46.0" prefWidth="150.0" AnchorPane.leftAnchor="25.0">
@@ -197,7 +197,7 @@
             <Button mnemonicParsing="false" prefHeight="46.0" prefWidth="152.0" style="-fx-background-color: #352929;" text="Adicionar arquivos" textFill="WHITE" VBox.vgrow="ALWAYS" />
          </children>
       </VBox>
-      <Button fx:id="botao1" alignment="CENTER" layoutX="956.0" layoutY="734.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="107.0" style="-fx-background-color: #2A3F25;" text="Criar" textFill="WHITE" AnchorPane.rightAnchor="40.0" />
-      <Button fx:id="botao11" alignment="CENTER" layoutX="1142.0" layoutY="734.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="107.0" style="-fx-background-color: #352929;" text="Cancelar" textFill="WHITE" />
+      <Button fx:id="criar" alignment="CENTER" layoutX="956.0" layoutY="734.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="107.0" style="-fx-background-color: #2A3F25;" text="Criar" textFill="WHITE" AnchorPane.rightAnchor="40.0" />
+      <Button fx:id="cancelar" alignment="CENTER" layoutX="1142.0" layoutY="734.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="107.0" style="-fx-background-color: #352929;" text="Cancelar" textFill="WHITE" />
    </children>
 </AnchorPane>
