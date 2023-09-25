@@ -15,15 +15,15 @@
       <Pane fx:id="header" prefHeight="50.0" prefWidth="720.0">
          <children>
             <Hyperlink fx:id="home" layoutX="26.0" layoutY="8.0" text="Home" textFill="#fffef7" />
-            <Hyperlink fx:id="pesquisar" layoutX="78.0" layoutY="11.0" text="Pesquisar" textFill="#fffef7">
+            <Hyperlink fx:id="pesquisar" layoutX="78.0" layoutY="11.0" text="Pesquisar" textFill="#fffef7" onAction="#goToPesquisar">
                <padding>
                   <Insets bottom="0.0" />
                </padding></Hyperlink>
-            <Hyperlink fx:id="cadastrarEvento" layoutX="144.0" layoutY="10.0" text="Cadastrar Evento" textFill="#fffef7">
+            <Hyperlink fx:id="cadastrarEvento" layoutX="144.0" layoutY="11.0" text="Cadastrar Evento" textFill="#fffef7" onAction="#goToCadastrarEvento">
                <padding>
                   <Insets bottom="0.0" />
                </padding></Hyperlink>
-            <Hyperlink fx:id="metas" layoutX="254.0" layoutY="11.0" text="Metas" textFill="#fffef7">
+            <Hyperlink fx:id="metas" layoutX="254.0" layoutY="11.0" text="Metas" textFill="#fffef7" onAction="#goToMetas">
                <padding>
                   <Insets bottom="0.0" />
                </padding></Hyperlink>
