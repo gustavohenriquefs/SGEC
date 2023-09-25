@@ -3,6 +3,7 @@ package com.casaculturaqxd.sgec.models;
 import java.io.ByteArrayInputStream;
 
 public class Participante {
+    private int idParticipante;
     private String nome;
     private String areaDeAtuacao;
     private String linkMapaDaCultura;
@@ -33,11 +34,19 @@ public class Participante {
     public void setLinkMapaDaCultura(String linkMapaDaCultura) {
         this.linkMapaDaCultura = linkMapaDaCultura;
     }
-    public ByteArrayInputStream getimagemParticipante() {
+    public ByteArrayInputStream getImagemParticipante() {
         return imagemParticipante;
     }
-    public void setimagemParticipante(ByteArrayInputStream imagemParticipante) {
+    public void setImagemParticipante(ByteArrayInputStream imagemParticipante) {
         this.imagemParticipante = imagemParticipante;
+    }
+
+    public int getIdParticipante() {
+        return idParticipante;
+    }
+
+    public void setIdParticipante(int idParticipante) {
+        this.idParticipante = idParticipante;
     }
 
     

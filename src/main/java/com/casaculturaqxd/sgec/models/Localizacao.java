@@ -1,6 +1,7 @@
 package com.casaculturaqxd.sgec.models;
 
 public class Localizacao {
+    private int idLocalizacao;
     private String rua;
     private int numeroRua;
     private String bairro;
@@ -51,4 +52,11 @@ public class Localizacao {
     public void setPais(String pais) {
         this.pais = pais;
     }
+    public int getIdLocalizacao() {
+        return idLocalizacao;
+    }
+    public void setIdLocalizacao(int idLocalizacao) {
+        this.idLocalizacao = idLocalizacao;
+    }
+    
 }

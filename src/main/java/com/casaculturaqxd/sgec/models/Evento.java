@@ -8,6 +8,7 @@ import com.casaculturaqxd.sgec.enums.ClassificacaoEtaria;
 import com.casaculturaqxd.sgec.models.arquivo.Arquivo;
 
 public class Evento {
+    private int idEvento;
     private String nome;
     private String descricao;
     private int publico_esperado;
@@ -166,6 +167,13 @@ public class Evento {
     public boolean removeArquivo(Arquivo arquivo){
         return this.listaArquivos.remove(arquivo);
     }
+    public int getIdEvento() {
+        return idEvento;
+    }
+    public void setIdEvento(int idEvento) {
+        this.idEvento = idEvento;
+    }
+    
 }
 
 
