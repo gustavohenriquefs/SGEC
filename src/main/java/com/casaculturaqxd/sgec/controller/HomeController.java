@@ -24,7 +24,10 @@ public class HomeController {
     Alert erroPermissao = new Alert(AlertType.WARNING);
 
     public void initialize(){
-        
+    }
+    
+    public void setUsuario(User usuario){
+        this.usuario = usuario;
     }
 
     public void goToPesquisar() throws IOException{
