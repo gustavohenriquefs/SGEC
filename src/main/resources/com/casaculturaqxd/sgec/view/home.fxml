@@ -10,20 +10,20 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox id="container" prefHeight="576.0" prefWidth="780.0" stylesheets="@../css/HomeStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox id="container" prefHeight="576.0" prefWidth="780.0" stylesheets="@../css/HomeStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.HomeController">
    <children>
       <Pane fx:id="header" prefHeight="50.0" prefWidth="720.0">
          <children>
-            <Hyperlink layoutX="26.0" layoutY="8.0" text="Home" textFill="#fffef7" />
-            <Hyperlink layoutX="78.0" layoutY="11.0" text="Pesquisar" textFill="#fffef7">
+            <Hyperlink fx:id="home" layoutX="26.0" layoutY="8.0" text="Home" textFill="#fffef7" />
+            <Hyperlink fx:id="pesquisar" layoutX="78.0" layoutY="11.0" text="Pesquisar" textFill="#fffef7">
                <padding>
                   <Insets bottom="0.0" />
                </padding></Hyperlink>
-            <Hyperlink layoutX="144.0" layoutY="10.0" text="Cadastrar Evento" textFill="#fffef7">
+            <Hyperlink fx:id="cadastrarEvento" layoutX="144.0" layoutY="10.0" text="Cadastrar Evento" textFill="#fffef7">
                <padding>
                   <Insets bottom="0.0" />
                </padding></Hyperlink>
-            <Hyperlink layoutX="254.0" layoutY="11.0" text="Metas" textFill="#fffef7">
+            <Hyperlink fx:id="metas" layoutX="254.0" layoutY="11.0" text="Metas" textFill="#fffef7">
                <padding>
                   <Insets bottom="0.0" />
                </padding></Hyperlink>
