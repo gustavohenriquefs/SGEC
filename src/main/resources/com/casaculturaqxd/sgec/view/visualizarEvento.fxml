@@ -38,9 +38,9 @@
       </Pane>
       <ScrollBar layoutX="599.0" layoutY="45.0" orientation="VERTICAL" prefWidth="14.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="46.0" />
       <Pane id="imagens" layoutX="-4.0" layoutY="47.0" prefHeight="170.0" prefWidth="628.0" AnchorPane.leftAnchor="-4.0" AnchorPane.rightAnchor="7.0" />
-      <CheckBox disable="true" layoutX="27.0" layoutY="244.0" mnemonicParsing="false" text="Certificável" />
-      <ChoiceBox disable="true" layoutX="232.0" layoutY="240.0" prefWidth="150.0" />
-      <CheckBox disable="true" layoutX="138.0" layoutY="244.0" mnemonicParsing="false" text="Libras" />
+      <CheckBox id="certificavel" disable="true" layoutX="27.0" layoutY="244.0" mnemonicParsing="false" text="Certificável" />
+      <ChoiceBox id="classificacaoEtaria" disable="true" layoutX="232.0" layoutY="240.0" prefWidth="150.0" />
+      <CheckBox id="libras" disable="true" layoutX="138.0" layoutY="244.0" mnemonicParsing="false" text="Libras" />
       <TextArea id="descricao" disable="true" layoutX="-1.0" layoutY="554.0" prefHeight="193.0" prefWidth="614.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="554.0" />
    </children>
 </AnchorPane>
