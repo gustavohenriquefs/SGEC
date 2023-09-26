@@ -5,5 +5,6 @@ module com.casaculturaqxd.sgec {
     
     opens com.casaculturaqxd.sgec.controller to javafx.fxml;
     exports com.casaculturaqxd.sgec;
+    exports com.casaculturaqxd.sgec.models;
     requires io.github.cdimascio.dotenv.java;
 }
