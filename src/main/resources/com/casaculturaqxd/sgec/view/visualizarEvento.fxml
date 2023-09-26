@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.ScrollBar?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="400.0" prefWidth="606.0" stylesheets="@../css/visualizarEvento.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Pane fx:id="header" prefHeight="46.0" prefWidth="627.0" stylesheets="@../css/visualizarEvento.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Hyperlink layoutX="14.0" layoutY="4.0" text="Home" textFill="#fffef7" />
+            <Hyperlink layoutX="67.0" layoutY="7.0" text="Pesquisar Evento" textFill="#fffef7">
+               <padding>
+                  <Insets bottom="0.0" />
+               </padding>
+            </Hyperlink>
+            <Hyperlink layoutX="179.0" layoutY="7.0" text="Cadastrar Evento" textFill="#fffef7">
+               <padding>
+                  <Insets bottom="0.0" />
+               </padding>
+            </Hyperlink>
+            <Hyperlink layoutX="280.0" layoutY="7.0" text="Pesquisar Grupos de Eventos" textFill="#fffef7">
+               <padding>
+                  <Insets bottom="0.0" />
+               </padding>
+            </Hyperlink>
+            <Hyperlink layoutX="445.0" layoutY="7.0" text="Cadastrar Grupos de Eventos" textFill="#fffef7">
+               <padding>
+                  <Insets bottom="0.0" />
+               </padding>
+            </Hyperlink>
+         </children>
+      </Pane>
+      <HBox fx:id="descricao" layoutX="2.0" layoutY="286.0" maxHeight="1.7976931348623157E308" prefHeight="114.0" prefWidth="618.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+      <Pane id="imagens" layoutX="-5.0" layoutY="46.0" maxHeight="1.7976931348623157E308" prefHeight="106.0" prefWidth="606.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+      <HBox fx:id="container" layoutY="152.0" maxHeight="1.7976931348623157E308" prefHeight="200.0" prefWidth="606.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+      <ScrollBar layoutX="599.0" layoutY="45.0" orientation="VERTICAL" prefHeight="355.0" prefWidth="14.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="46.0" />
+   </children>
+</AnchorPane>
