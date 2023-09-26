@@ -32,16 +32,16 @@
             <Insets />
          </VBox.margin>
       </Pane>
-      <GridPane prefHeight="227.0" prefWidth="780.0">
+      <GridPane fx:id="secaoProximasMetas" prefHeight="227.0" prefWidth="780.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints fx:id="titulo1" minHeight="50.0" prefHeight="50.0" valignment="CENTER" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="50.0" prefHeight="50.0" valignment="CENTER" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" percentHeight="0.0" prefHeight="180.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label id="titulo1" prefHeight="74.0" prefWidth="1800.0" stylesheets="@../css/HomeStyle.css" text=" Próximas Metas" textFill="#fffef7">
+            <Label prefHeight="74.0" prefWidth="1800.0" stylesheets="@../css/HomeStyle.css" text=" Próximas Metas" textFill="#fffef7">
                <font>
                   <Font size="16.0" />
                </font>
@@ -57,16 +57,16 @@
             <Insets bottom="12.0" left="12.0" right="12.0" top="12.0" />
          </padding>
       </GridPane>
-      <GridPane layoutX="10.0" layoutY="72.0" prefHeight="227.0" prefWidth="780.0">
+      <GridPane fx:id="secaoUltimosEventos" layoutX="10.0" layoutY="72.0" prefHeight="227.0" prefWidth="780.0">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
          </columnConstraints>
          <rowConstraints>
-            <RowConstraints fx:id="titulo2" minHeight="50.0" prefHeight="50.0" valignment="CENTER" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="50.0" prefHeight="50.0" valignment="CENTER" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" percentHeight="0.0" prefHeight="180.0" vgrow="SOMETIMES" />
          </rowConstraints>
          <children>
-            <Label id="titulo1" prefHeight="68.0" prefWidth="1800.0" stylesheets="@../css/HomeStyle.css" text="Últimos Eventos Cadastrados" textFill="#fffef7">
+            <Label prefHeight="68.0" prefWidth="1800.0" stylesheets="@../css/HomeStyle.css" text="Últimos Eventos Cadastrados" textFill="#fffef7">
                <font>
                   <Font size="16.0" />
                </font>
