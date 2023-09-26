@@ -1,14 +1,11 @@
 #header {
     -fx-background-color: #A22D2E;
-    -fx-overflow-y: scroll;
 }
 
 #imagens, #descricao {
     -fx-background-color: white;
-    -fx-overflow-y: scroll;
 }
 
 #container {
     -fx-background-color: #E9E3CA;
-    -fx-overflow-y: scroll;
 }
