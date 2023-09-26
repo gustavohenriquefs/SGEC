@@ -24,7 +24,7 @@ public class LoginController {
 
     private Alert mensagemErro = new Alert(AlertType.NONE);
 
-    private User usuario;
+    private User usuarioLogin;
     private UserDAO userDAO = new UserDAO();
     private final ConnectionFactory userConnection = new 
             ConnectionFactory("URL","USER_NAME","PASSWORD");
@@ -39,14 +39,15 @@ public class LoginController {
     }
 
     /**
-     * Cria um DAO que verifica no banco de dados se as credenciais 
-     * estão corretas, 
+     * Chama a função de validar usuário do DAO, se for sucedido
+     * define o usuario da aplicação para ser o usuário que tentou login
      * @implNote TODO: compartilhar usuario para a tela de login
      * @throws IOException
      */
     public void authUsuario() throws IOException{
-        usuario = new User(email.getText(),senha.getText());
-        if(userDAO.validar(usuario)){
+        usuarioLogin = new User(email.getText(),senha.getText());
+        if(userDAO.validar(usuarioLogin)){
+            App.setUsuario(usuarioLogin);
             App.setRoot("view/home");
         }
         else{
