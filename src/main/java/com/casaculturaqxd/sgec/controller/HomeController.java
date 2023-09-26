@@ -12,8 +12,6 @@ import javafx.scene.control.Alert.AlertType;
 
 public class HomeController {
     
-    private User usuario;
-
     @FXML
     Hyperlink pesquisar;
     @FXML
@@ -26,17 +24,14 @@ public class HomeController {
     public void initialize(){
     }
     
-    public void setUsuario(User usuario){
-        this.usuario = usuario;
-    }
 
     public void goToPesquisar() throws IOException{
         App.setRoot("view/pesquisar");
     }
 
     public void goToCadastrarEvento() throws IOException{
-        if(usuario.isEditor()){
-            App.setRoot("view/CriarEvento");
+        if(App.getUsuario().isEditor()){
+            App.setRoot("view/cadastrarEvento");
         }
         else{
             erroPermissao.setContentText("Você não tem permissão para criar novos eventos");
