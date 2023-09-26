@@ -3,7 +3,6 @@ package com.casaculturaqxd.sgec.controller;
 import java.io.IOException;
 
 import com.casaculturaqxd.sgec.App;
-import com.casaculturaqxd.sgec.models.User;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
