@@ -7,19 +7,17 @@
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<ScrollPane prefHeight="1620.0" prefWidth="1440.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<ScrollPane prefHeight="1867.0" prefWidth="1440.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <content>
-      <AnchorPane id="container" fx:id="tela" prefWidth="1560.0" style="-fx-background-color: #E9E3CA;" stylesheets="@../css/visualizarEvento.css">
+      <AnchorPane id="container" fx:id="tela" prefHeight="1852.0" prefWidth="1560.0" style="-fx-background-color: #E9E3CA;" stylesheets="@../css/visualizarEvento.css">
          <children>
             <Pane id="header" fx:id="header" prefHeight="46.0" prefWidth="1442.0" stylesheets="@../css/visualizarEvento.css" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
@@ -103,167 +101,56 @@
                   </Label>
                </children>
             </StackPane>
-            <GridPane id="indicadoresGerais" alignment="CENTER" layoutY="1110.0" prefHeight="82.0" prefWidth="1426.0" style="-fx-background-color: #5B5B5B;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="135.0">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-               <children>
-                  <Label alignment="CENTER" contentDisplay="TOP" text="Esperado" GridPane.columnIndex="1">
-                     <GridPane.margin>
-                        <Insets left="200.0" />
-                     </GridPane.margin>
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
-                  <Label text="Alcançado" GridPane.columnIndex="2">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                     <GridPane.margin>
-                        <Insets left="200.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label text="Público esperado" textAlignment="CENTER" GridPane.rowIndex="1">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
-                  <TextField id="NumeroPublicoEsperado" disable="true" maxWidth="200.0" prefHeight="26.0" prefWidth="120.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                     <GridPane.margin>
-                        <Insets left="200.0" />
-                     </GridPane.margin>
-                  </TextField>
-                  <TextField id="NumeroPublicoAlcancado" disable="true" layoutX="530.0" layoutY="59.0" maxWidth="200.0" prefHeight="26.0" prefWidth="120.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
-                     <GridPane.margin>
-                        <Insets left="100.0" />
-                     </GridPane.margin>
-                  </TextField>
-               </children>
-            </GridPane>
-            <GridPane id="meta1" alignment="CENTER" layoutY="1235.0" prefHeight="88.0" prefWidth="1426.0" style="-fx-background-color: #5B5B5B;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="135.0">
-               <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-               </rowConstraints>
-               <children>
-                  <Label alignment="CENTER" contentDisplay="TOP" text="Esperado" GridPane.columnIndex="1">
-                     <GridPane.margin>
-                        <Insets left="200.0" />
-                     </GridPane.margin>
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
-                  <Label text="Alcançado" GridPane.columnIndex="2">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                     <GridPane.margin>
-                        <Insets left="200.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label text="Número de municípios" textAlignment="CENTER" GridPane.rowIndex="1">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
-                  <TextField id="NumeroPublicoAlcancado" disable="true" layoutX="530.0" layoutY="63.0" maxWidth="200.0" prefHeight="26.0" prefWidth="120.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
-                     <GridPane.margin>
-                        <Insets left="100.0" />
-                     </GridPane.margin>
-                  </TextField>
-                  <TextField id="NumeroMunicipiosEsperado" disable="true" layoutX="530.0" layoutY="63.0" maxWidth="200.0" prefHeight="26.0" prefWidth="120.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                     <GridPane.margin>
-                        <Insets left="200.0" />
-                     </GridPane.margin>
-                  </TextField>
-               </children>
-            </GridPane>
-            <GridPane id="meta1" alignment="CENTER" layoutX="6.0" layoutY="1376.0" prefHeight="104.0" prefWidth="1566.0" style="-fx-background-color: #5B5B5B;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="135.0">
-               <columnConstraints>
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-               </columnConstraints>
-               <rowConstraints>
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-               </rowConstraints>
-               <children>
-                  <Label alignment="CENTER" contentDisplay="TOP" text="Esperado" GridPane.columnIndex="1">
-                     <GridPane.margin>
-                        <Insets left="200.0" />
-                     </GridPane.margin>
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
-                  <Label text="Alcançado" GridPane.columnIndex="2">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                     <GridPane.margin>
-                        <Insets left="200.0" />
-                     </GridPane.margin>
-                  </Label>
-                  <Label id="meta2" text="Número de mestres" textAlignment="CENTER" GridPane.rowIndex="1">
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
-                  <TextField id="NumeroMestresEsperados" disable="true" maxWidth="200.0" prefHeight="26.0" prefWidth="120.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                     <GridPane.margin>
-                        <Insets left="200.0" />
-                     </GridPane.margin>
-                  </TextField>
-                  <TextField id="NumeroMestresAlcancado" disable="true" layoutX="530.0" layoutY="63.0" maxWidth="200.0" prefHeight="26.0" prefWidth="120.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
-                     <GridPane.margin>
-                        <Insets left="100.0" />
-                     </GridPane.margin>
-                  </TextField>
-               </children>
-            </GridPane>
-            <Label layoutX="24.0" layoutY="1331.0" text="Fortalecimento Patrimônio cultural (meta 2)">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Label>
-            <Label layoutX="24.0" layoutY="1200.0" prefHeight="22.0" prefWidth="137.0" text="LabFruição (meta 1)">
+            <Label layoutX="15.0" layoutY="1277.0" prefHeight="22.0" prefWidth="137.0" text="LabFruição (meta 1)">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label layoutX="27.0" layoutY="1071.0" prefHeight="22.0" prefWidth="44.0" text="Gerais">
+            <Label layoutX="17.0" layoutY="1081.0" prefHeight="22.0" prefWidth="44.0" text="Gerais">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <StackPane id="arquivos" layoutY="1515.0" prefHeight="91.0" prefWidth="1448.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="135.0">
+            <StackPane id="arquivos" layoutX="1.0" layoutY="1760.0" prefHeight="91.0" prefWidth="1448.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="134.0">
                <children>
                   <Button mnemonicParsing="false" style="-fx-background-color: #2A3F25;" text="Adicionar novo arquivo +" textFill="WHITE" />
                </children>
             </StackPane>
-            <Label layoutX="27.0" layoutY="1480.0" text="Arquivos">
+            <Label layoutX="18.0" layoutY="1719.0" text="Arquivos">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <Pane layoutX="8.0" layoutY="1500.0" prefHeight="10.0" prefWidth="200.0" style="-fx-background-color: #A22D2E;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="135.0" />
-            <Pane layoutX="8.0" layoutY="1351.0" prefHeight="10.0" prefWidth="200.0" style="-fx-background-color: #A22D2E;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="135.0" />
-            <Pane layoutX="8.0" layoutY="1217.0" prefHeight="10.0" prefWidth="200.0" style="-fx-background-color: #A22D2E;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="135.0" />
-            <Pane layoutX="8.0" layoutY="1091.0" prefHeight="10.0" prefWidth="200.0" style="-fx-background-color: #A22D2E;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="135.0" />
+            <Pane layoutY="1746.0" prefHeight="6.0" prefWidth="1425.0" style="-fx-background-color: #A22D2E;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="1000.0" />
+            <Pane layoutY="1529.0" prefHeight="6.0" prefWidth="560.0" style="-fx-background-color: #A22D2E;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="1000.0" />
+            <Pane layoutY="1300.0" prefHeight="5.0" prefWidth="360.0" style="-fx-background-color: #A22D2E;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="1200.0" />
+            <Pane layoutY="1107.0" prefHeight="4.0" prefWidth="160.0" style="-fx-background-color: #A22D2E;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="1400.0" />
+            <TableView id="numeroMestres" layoutY="1533.0" prefHeight="186.0" prefWidth="1560.0" style="-fx-background-color: #5B5B5B;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+              <columns>
+                <TableColumn prefWidth="498.39999920129776" />
+                <TableColumn prefWidth="348.7999572753906" text="Esperado" />
+                  <TableColumn prefWidth="591.1998291015625" text="Alcançado" />
+              </columns>
+            </TableView>
+            <TableView id="numeroMunicipios" layoutY="1303.0" prefHeight="190.0" prefWidth="1560.0" style="-fx-background-color: #5B5B5B;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+               <columns>
+                  <TableColumn prefWidth="498.39999920129776" />
+                  <TableColumn prefWidth="348.7999572753906" text="Esperado" />
+                  <TableColumn prefWidth="591.1998291015625" text="Alcançado" />
+               </columns>
+            </TableView>
+            <TableView id="numeroMunicipios" layoutY="1111.0" prefHeight="155.0" prefWidth="1560.0" style="-fx-background-color: #5B5B5B;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+               <columns>
+                  <TableColumn prefWidth="498.39999920129776" />
+                  <TableColumn prefWidth="348.7999572753906" text="Esperado" />
+                  <TableColumn prefWidth="591.1998291015625" text="Alcançado" />
+               </columns>
+            </TableView>
+            <Label layoutX="11.0" layoutY="1503.0" text="Fortalecimento Patrimônio cultural (meta 2)">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
    </content>
