@@ -1,0 +1,11 @@
+#header {
+    -fx-background-color: #A22D2E;
+}
+
+#imagens, #descricao, #listaParticipantes, #listaOrganizadores, #listaColaboradores, #arquivos {
+    -fx-background-color: white;
+}
+
+#container {
+    -fx-background-color: #E9E3CA;
+}
