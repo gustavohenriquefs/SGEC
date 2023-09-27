@@ -2,7 +2,7 @@
     -fx-background-color: #A22D2E;
 }
 
-#imagens, #descricao, #participantes, #organizadores {
+#imagens, #descricao, #participantes, #organizadores, #arquivos {
     -fx-background-color: white;
 }
 
