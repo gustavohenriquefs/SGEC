@@ -27,3 +27,6 @@
 hs_err_pid*
 replay_pid*
 /nbproject/
+/target/
+/.vscode/
+nbactions.xml
