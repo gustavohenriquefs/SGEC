@@ -65,7 +65,7 @@ public class ParticipanteDAO {
   }
 
   public boolean updateParticipante(Participante participante) throws SQLException {
-    String atualizarParticipanteQuery = "UPDATE participante SET nome=?, area_de_atuacao=?, link_perfil=? WHERE id_participante=?";
+    String atualizarParticipanteQuery = "UPDATE participante SET nome=?, area_de_atuacao=?, link_perfil=? WHERE id_participante=?"; 
 
     try {
       PreparedStatement statement = conn.prepareStatement(atualizarParticipanteQuery);
@@ -75,6 +75,27 @@ public class ParticipanteDAO {
       statement.setString(3, participante.getLinkMapaDaCultura());
       statement.setBlob(4, participante.getImagemParticipante());
       statement.setInt(5, participante.getIdParticipante());
+
+      statement.execute();
+      statement.close();
+    } catch (SQLException e) {
+      conn.rollback();
+      
+      return false;
+    } finally {
+      conn.commit();
+    }
+    
+    return true;
+  }
+  
+  public boolean deletarParticipante(Participante participante) throws SQLException {
+    String deletarParticipanteQuery = "DELETE FROM participante WHERE id_participante=?";
+
+    try {
+      PreparedStatement statement = conn.prepareStatement(deletarParticipanteQuery);
+
+      statement.setInt(1, participante.getIdParticipante());
 
       statement.execute();
       statement.close();
