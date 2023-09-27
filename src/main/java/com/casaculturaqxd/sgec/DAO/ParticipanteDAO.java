@@ -56,6 +56,32 @@ public class ParticipanteDAO {
       conn.rollback();
       
       return false;
+      
+    } finally {
+      conn.commit();
+    }
+    
+    return true;
+  }
+
+  public boolean updateParticipante(Participante participante) throws SQLException {
+    String atualizarParticipanteQuery = "UPDATE participante SET nome=?, area_de_atuacao=?, link_perfil=? WHERE id_participante=?";
+
+    try {
+      PreparedStatement statement = conn.prepareStatement(atualizarParticipanteQuery);
+
+      statement.setString(1, participante.getNome());
+      statement.setString(2, participante.getAreaDeAtuacao());
+      statement.setString(3, participante.getLinkMapaDaCultura());
+      statement.setBlob(4, participante.getImagemParticipante());
+      statement.setInt(5, participante.getIdParticipante());
+
+      statement.execute();
+      statement.close();
+    } catch (SQLException e) {
+      conn.rollback();
+      
+      return false;
     } finally {
       conn.commit();
     }
