@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="container" prefHeight="800.0" prefWidth="1440.0" stylesheets="@../css/cadastrarEventoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane id="container" prefHeight="800.0" prefWidth="1440.0" stylesheets="@../css/cadastrarEventoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.CadastrarEventoController">
    <children>
       <Pane fx:id="header" prefHeight="35.0" prefWidth="790.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
@@ -61,8 +61,8 @@
          <children>
             <ChoiceBox fx:id="classificacaoEtaria" layoutX="22.0" layoutY="19.0" prefWidth="150.0" />
             <Label layoutX="22.0" layoutY="-3.0" prefHeight="18.0" prefWidth="105.0" text="Classificação etária" textFill="#352929" />
-            <TextField fx:id="publicoDesejado" layoutX="240.0" layoutY="15.0" />
-            <Label layoutX="242.0" layoutY="-6.0" prefHeight="18.0" prefWidth="91.0" text="Público desejado" textFill="#352929" />
+            <TextField fx:id="publicoEsperado" layoutX="240.0" layoutY="15.0" />
+            <Label layoutX="242.0" layoutY="-6.0" prefHeight="18.0" prefWidth="91.0" text="Público esperado" textFill="#352929" />
             <TextField fx:id="publicoAlcancado" layoutX="512.0" layoutY="14.0" />
             <Label layoutX="512.0" layoutY="-3.0" prefHeight="18.0" prefWidth="105.0" text="Público alcançado" textFill="#352929" />
          </children>
@@ -189,7 +189,7 @@
       </VBox>
       <VBox layoutX="25.0" layoutY="639.0" prefHeight="46.0" prefWidth="150.0" AnchorPane.leftAnchor="25.0">
          <children>
-            <Button fx:id="colaboradores" mnemonicParsing="false" prefHeight="46.0" prefWidth="153.0" style="-fx-background-color: #352929;" text="Adicionar colaboradoes" textFill="WHITE" VBox.vgrow="ALWAYS" />
+            <Button fx:id="colaboradores" mnemonicParsing="false" prefHeight="46.0" prefWidth="153.0" style="-fx-background-color: #352929;" text="Adicionar colaboradores" textFill="WHITE" VBox.vgrow="ALWAYS" />
          </children>
       </VBox>
       <VBox layoutX="25.0" layoutY="701.0" prefHeight="46.0" prefWidth="150.0" AnchorPane.leftAnchor="25.0">
