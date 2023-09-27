@@ -45,13 +45,13 @@
                   </Hyperlink>
                </children>
             </Pane>
-            <Pane id="imagens" layoutX="-4.0" layoutY="47.0" prefHeight="170.0" prefWidth="1448.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="135.0" />
-            <ChoiceBox id="classificacaoEtaria" disable="true" layoutX="232.0" layoutY="355.0" prefWidth="150.0" />
-            <CheckBox id="libras" disable="true" layoutX="139.0" layoutY="359.0" mnemonicParsing="false" text="Libras" />
-            <TextArea id="descricao" disable="true" layoutY="475.0" prefHeight="160.0" prefWidth="1426.0" style="-fx-background-color: #FFFFFF;" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="475.0" />
+            <Pane id="imagens" fx:id="imagens" layoutX="-4.0" layoutY="47.0" prefHeight="170.0" prefWidth="1448.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="135.0" />
+            <ChoiceBox id="classificacaoEtaria" fx:id="classificacaoEtaria" disable="true" layoutX="232.0" layoutY="355.0" prefWidth="150.0" />
+            <CheckBox id="libras" fx:id="libras" disable="true" layoutX="139.0" layoutY="359.0" mnemonicParsing="false" text="Libras" />
+            <TextArea id="descricao" fx:id="descricao" disable="true" layoutY="475.0" prefHeight="160.0" prefWidth="1426.0" style="-fx-background-color: #FFFFFF;" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="475.0" />
             <AnchorPane id="Participantes" layoutX="2.0" layoutY="643.0" prefHeight="179.0" prefWidth="1562.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="646.0">
                <children>
-                  <StackPane id="listaParticipantes" prefHeight="140.0" prefWidth="1426.0" AnchorPane.topAnchor="0.0">
+                  <StackPane id="listaParticipantes" fx:id="listaParticipantes" prefHeight="140.0" prefWidth="1426.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <Label text="Participantes" StackPane.alignment="TOP_LEFT">
                            <StackPane.margin>
@@ -63,12 +63,12 @@
                         </Label>
                      </children>
                   </StackPane>
-                  <Button id="botaoNovoParticipante" layoutX="749.0" layoutY="140.0" mnemonicParsing="false" style="-fx-background-color: #2A3F25;" text="Adicionar novo participante +" textFill="WHITE" AnchorPane.rightAnchor="638.1999999999999" AnchorPane.topAnchor="145.0" />
+                  <Button id="botaoNovoParticipante" fx:id="botaoNovoParticipante" layoutX="749.0" layoutY="140.0" mnemonicParsing="false" style="-fx-background-color: #2A3F25;" text="Adicionar novo participante +" textFill="WHITE" AnchorPane.rightAnchor="638.1999999999999" AnchorPane.topAnchor="145.0" />
                </children>
             </AnchorPane>
             <AnchorPane id="Organizaodores" layoutY="821.0" prefHeight="168.0" prefWidth="1427.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="135.0">
                <children>
-                  <StackPane id="listaOrganizadores" prefHeight="136.0" prefWidth="1426.0" AnchorPane.topAnchor="0.0">
+                  <StackPane id="listaOrganizadores" fx:id="listaOrganizadores" prefHeight="136.0" prefWidth="1426.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <Label text="Organizadores" StackPane.alignment="TOP_LEFT">
                            <font>
@@ -80,7 +80,7 @@
                         </Label>
                      </children>
                   </StackPane>
-                  <Button id="botaoNovoOrganizador" layoutX="744.0" layoutY="141.0" mnemonicParsing="false" style="-fx-background-color: #2A3F25;" text="Adicionar novo organizador +" textFill="WHITE" AnchorPane.rightAnchor="507.39999999999986" />
+                  <Button id="botaoNovoOrganizador" fx:id="botaoNovoOrganizador" layoutX="744.0" layoutY="141.0" mnemonicParsing="false" style="-fx-background-color: #2A3F25;" text="Adicionar novo organizador +" textFill="WHITE" AnchorPane.rightAnchor="507.39999999999986" />
                </children>
             </AnchorPane>
             <Label layoutX="22.0" layoutY="475.0" text="Descrição">
@@ -90,7 +90,7 @@
             </Label>
             <AnchorPane id="colaboradores" layoutX="-2.0" layoutY="1000.0" prefHeight="168.0" prefWidth="1426.0">
                <children>
-                  <StackPane id="listaColaboradores" prefHeight="140.0" prefWidth="1426.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                  <StackPane id="listaColaboradores" fx:id="listaColaboradores" prefHeight="140.0" prefWidth="1426.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                      <children>
                         <Label text="Colaboradores" StackPane.alignment="TOP_LEFT">
                            <font>
@@ -111,9 +111,9 @@
                </font>
             </Label>
             <Pane layoutY="1888.0" prefHeight="6.0" prefWidth="1425.0" style="-fx-background-color: #A22D2E;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="135.0" />
-            <Button id="visualizarTodos" layoutX="1323.0" layoutY="1866.0" mnemonicParsing="false" style="-fx-background-color: #2A3F25;" text="Visualizar todos" textFill="WHITE" AnchorPane.bottomAnchor="200.0" AnchorPane.rightAnchor="137.0" />
-            <Button id="salvarAlteracoes" layoutX="1320.0" layoutY="1883.0" mnemonicParsing="false" style="-fx-background-color: #2A3F25;" text="Salvar alterações" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="135.0" />
-            <CheckBox id="certificavel" disable="true" layoutX="21.0" layoutY="359.0" mnemonicParsing="false" text="Certificável" />
+            <Button id="visualizarTodos" fx:id="visualizarTodos" layoutX="1323.0" layoutY="1866.0" mnemonicParsing="false" style="-fx-background-color: #2A3F25;" text="Visualizar todos" textFill="WHITE" AnchorPane.bottomAnchor="200.0" AnchorPane.rightAnchor="137.0" />
+            <Button id="salvarAlteracoes" fx:id="salvarAlteracoes" layoutX="1320.0" layoutY="1883.0" mnemonicParsing="false" style="-fx-background-color: #2A3F25;" text="Salvar alterações" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="135.0" />
+            <CheckBox id="certificavel" fx:id="certificavel" disable="true" layoutX="21.0" layoutY="359.0" mnemonicParsing="false" text="Certificável" />
             <StackPane layoutY="217.0" prefHeight="115.0" prefWidth="1425.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="135.0">
                <children>
                   <Label id="titulo" prefHeight="44.0" prefWidth="78.0" text="Título" StackPane.alignment="TOP_LEFT">
@@ -124,12 +124,12 @@
                         <Insets left="20.0" />
                      </StackPane.margin>
                   </Label>
-                  <TextField id="data" disable="true" maxWidth="100.0" prefWidth="100.0" StackPane.alignment="BOTTOM_LEFT">
+                  <TextField id="data" fx:id="data" disable="true" maxWidth="100.0" prefWidth="100.0" StackPane.alignment="BOTTOM_LEFT">
                      <StackPane.margin>
                         <Insets bottom="10.0" left="20.0" top="10.0" />
                      </StackPane.margin>
                   </TextField>
-                  <TextField id="cargaHoraria" disable="true" layoutX="30.0" layoutY="20.0" maxWidth="100.0" prefWidth="100.0" StackPane.alignment="BOTTOM_LEFT">
+                  <TextField id="cargaHoraria" fx:id="cargaHoraria" disable="true" layoutX="30.0" layoutY="20.0" maxWidth="100.0" prefWidth="100.0" StackPane.alignment="BOTTOM_LEFT">
                      <StackPane.margin>
                         <Insets bottom="10.0" left="150.0" top="10.0" />
                      </StackPane.margin>
@@ -150,7 +150,7 @@
                   </Label>
                   <Pane layoutX="-2.0" layoutY="140.0" prefHeight="4.0" prefWidth="160.0" style="-fx-background-color: #A22D2E;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
                   <Pane layoutX="8.0" layoutY="76.0" prefHeight="4.0" prefWidth="160.0" style="-fx-background-color: #A22D2E;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-                  <TableView id="numeroMunicipios" layoutY="142.0" prefHeight="155.0" prefWidth="1291.0" style="-fx-background-color: #FFFFFF;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                  <TableView id="numeroMunicipios" fx:id="numeroMunicipios" layoutY="142.0" prefHeight="155.0" prefWidth="1291.0" style="-fx-background-color: #FFFFFF;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                      <columns>
                         <TableColumn prefWidth="498.39999920129776" />
                         <TableColumn prefWidth="348.7999572753906" text="Esperado" />
@@ -163,7 +163,7 @@
                      </font>
                   </Label>
                   <Pane layoutX="155.0" layoutY="319.0" prefHeight="5.0" prefWidth="360.0" style="-fx-background-color: #A22D2E;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-                  <TableView id="numeroMunicipios" layoutY="325.0" prefHeight="155.0" prefWidth="1426.0" style="-fx-background-color: #FFFFFF;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                  <TableView id="numeroMunicipios" fx:id="numeroMunicipios" layoutY="325.0" prefHeight="155.0" prefWidth="1426.0" style="-fx-background-color: #FFFFFF;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                      <columns>
                         <TableColumn prefWidth="498.39999920129776" />
                         <TableColumn prefWidth="348.7999572753906" text="Esperado" />
@@ -176,17 +176,17 @@
                      </font>
                   </Label>
                   <Pane layoutX="172.0" layoutY="513.0" prefHeight="6.0" prefWidth="560.0" style="-fx-background-color: #A22D2E;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-                  <TableView id="numeroMestres" layoutX="-7.0" layoutY="519.0" prefHeight="155.0" prefWidth="1291.0" style="-fx-background-color: #FFFFFF;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                  <TableView id="numeroMestres" fx:id="numeroMestres" layoutX="-7.0" layoutY="519.0" prefHeight="155.0" prefWidth="1291.0" style="-fx-background-color: #FFFFFF;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                     <columns>
                       <TableColumn prefWidth="498.39999920129776" />
                       <TableColumn prefWidth="348.7999572753906" text="Esperado" />
                         <TableColumn prefWidth="591.1998291015625" text="Alcançado" />
                     </columns>
                   </TableView>
-                  <Button id="botaoColaboradores" layoutX="743.0" layoutY="17.0" mnemonicParsing="false" style="-fx-background-color: #2A3F25;" text="Adicionar novo colaborador +" textFill="WHITE" />
+                  <Button id="botaoColaboradores" fx:id="botaoColaboradores" layoutX="743.0" layoutY="17.0" mnemonicParsing="false" style="-fx-background-color: #2A3F25;" text="Adicionar novo colaborador +" textFill="WHITE" />
                </children>
             </AnchorPane>
-            <Button alignment="CENTER" layoutX="691.0" layoutY="2029.0" mnemonicParsing="false" style="-fx-background-color: #2A3F25;" text="Adicionar novo arquivo +" textFill="WHITE" AnchorPane.bottomAnchor="0.0" />
+            <Button fx:id="botaoAdicionarArquivo" alignment="CENTER" layoutX="691.0" layoutY="2029.0" mnemonicParsing="false" style="-fx-background-color: #2A3F25;" text="Adicionar novo arquivo +" textFill="WHITE" AnchorPane.bottomAnchor="0.0" />
          </children>
       </AnchorPane>
    </content>
