@@ -31,6 +31,8 @@ public class ParticipanteDAO {
         participante.setNome(resultado.getString("nome"));
         participante.setLinkMapaDaCultura(resultado.getString("link_perfil"));
       }
+
+      statement.close();
     } catch (Exception e) {
       return Optional.empty();
     }
