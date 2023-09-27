@@ -38,4 +38,28 @@ public class ParticipanteDAO {
 
     return Optional.of(participante);
   }
+
+  public boolean inserirParticipante(Participante participante) throws SQLException {
+    String inserirParticipanteQuery = "INSERT INTO participante (nome, area_de_atuacao, link_perfil) VALUES (?, ?, ?)";
+
+    try {
+      PreparedStatement statement = conn.prepareStatement(inserirParticipanteQuery);
+
+      statement.setString(1, participante.getNome());
+      statement.setString(2, participante.getAreaDeAtuacao());
+      statement.setString(3, participante.getLinkMapaDaCultura());
+      statement.setBlob(4, participante.getImagemParticipante());
+
+      statement.execute();
+      statement.close();
+    } catch (SQLException e) {
+      conn.rollback();
+      
+      return false;
+    } finally {
+      conn.commit();
+    }
+    
+    return true;
+  }
 }
