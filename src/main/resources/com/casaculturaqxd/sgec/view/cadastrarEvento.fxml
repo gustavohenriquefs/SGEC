@@ -63,7 +63,7 @@
             <ChoiceBox fx:id="classificacaoEtaria" layoutX="22.0" layoutY="19.0" prefWidth="150.0" />
             <Label layoutX="22.0" layoutY="-3.0" prefHeight="18.0" prefWidth="105.0" text="Classificação etária" textFill="#352929" />
             <TextField fx:id="publicoEsperado" layoutX="240.0" layoutY="15.0" />
-            <Label layoutX="242.0" layoutY="-6.0" prefHeight="18.0" prefWidth="91.0" text="Público esperado" textFill="#352929" />
+            <Label layoutX="242.0" layoutY="-6.0" prefHeight="18.0" prefWidth="105.0" text="Público esperado" textFill="#352929" />
             <TextField fx:id="publicoAlcancado" layoutX="512.0" layoutY="14.0" />
             <Label layoutX="512.0" layoutY="-3.0" prefHeight="18.0" prefWidth="105.0" text="Público alcançado" textFill="#352929" />
          </children>
@@ -109,7 +109,7 @@
             </children>
         </Pane>
       <AnchorPane layoutX="2.0" layoutY="413.0" prefHeight="118.0" prefWidth="790.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="40.0" />
-      <GridPane alignment="CENTER" layoutX="35.0" layoutY="417.0" maxWidth="1406.0" prefHeight="86.0" prefWidth="1377.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="40.0">
+      <GridPane fx:id="paneLocalizacoes" alignment="CENTER" layoutX="35.0" layoutY="417.0" maxWidth="1406.0" prefHeight="86.0" prefWidth="1377.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="40.0">
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="898.2000122070312" minWidth="10.0" prefWidth="428.0000366210937" />
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="612.7999877929686" minWidth="10.0" prefWidth="490.39996337890625" />
@@ -205,7 +205,7 @@
       <Button fx:id="cancelar" alignment="CENTER" layoutX="1142.0" layoutY="734.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="107.0" style="-fx-background-color: #352929;" text="Cancelar" textFill="WHITE" />
       <VBox fx:id="Participantes" layoutX="23.0" layoutY="756.0">
          <children>
-            <Button fx:id="participantes" mnemonicParsing="false" prefHeight="46.0" prefWidth="152.0" style="-fx-background-color: #352929;" text="Adicionar participantes" textFill="WHITE" />
+            <Button fx:id="botaoParticipantes" mnemonicParsing="false" prefHeight="46.0" prefWidth="152.0" style="-fx-background-color: #352929;" text="Adicionar participantes" textFill="WHITE" />
          </children>
       </VBox>
    </children>
