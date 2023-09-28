@@ -199,22 +199,22 @@
             <Button fx:id="botaoColaboradores" mnemonicParsing="false" prefHeight="46.0" prefWidth="153.0" style="-fx-background-color: #352929;" text="Adicionar colaboradores" textFill="WHITE" VBox.vgrow="ALWAYS" />
          </children>
       </VBox>
-      <VBox layoutX="25.0" layoutY="701.0" prefHeight="46.0" prefWidth="150.0" AnchorPane.leftAnchor="25.0">
+      <VBox layoutX="25.0" layoutY="760.0" prefHeight="46.0" prefWidth="150.0" AnchorPane.leftAnchor="25.0">
          <children>
             <Button fx:id="botaoArquivos" mnemonicParsing="false" prefHeight="46.0" prefWidth="152.0" style="-fx-background-color: #352929;" text="Adicionar arquivos" textFill="WHITE" VBox.vgrow="ALWAYS" />
          </children>
       </VBox>
-      <HBox layoutX="948.0" layoutY="745.0" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
-         <children>
-      <Button fx:id="cancelar" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="26.0" prefWidth="200.0" style="-fx-background-color: #352929;" text="Cancelar" textFill="WHITE" />
-      <Button fx:id="criar" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="26.0" prefWidth="200.0" style="-fx-background-color: #2A3F25;" text="Criar" textFill="WHITE" />
-         </children>
-      </HBox>
-      <VBox fx:id="Participantes" layoutX="23.0" layoutY="756.0">
+      <VBox fx:id="Participantes" layoutX="25.0" layoutY="700.0">
          <children>
             <Button fx:id="botaoParticipantes" mnemonicParsing="false" prefHeight="46.0" prefWidth="152.0" style="-fx-background-color: #352929;" text="Adicionar participantes" textFill="WHITE" />
          </children>
       </VBox>
+      <HBox layoutX="868.0" layoutY="735.0" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
+         <children>
+      <Button fx:id="cancelar" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="26.0" prefWidth="200.0" style="-fx-background-color: #352929;" text="Cancelar" textFill="WHITE" />
+      <Button fx:id="criarEvento" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="26.0" prefWidth="200.0" style="-fx-background-color: #2A3F25;" text="Criar" textFill="WHITE" />
+         </children>
+      </HBox>
    </children>
    </AnchorPane>
   </content>
