@@ -1,5 +1,6 @@
 package com.casaculturaqxd.sgec.DAO;
 
+import java.io.ByteArrayInputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -30,6 +31,7 @@ public class ParticipanteDAO {
         participante.setAreaDeAtuacao(resultado.getString("area_de_atuacao"));
         participante.setNome(resultado.getString("nome"));
         participante.setLinkMapaDaCultura(resultado.getString("link_perfil"));
+        participante.setImagemParticipante((ByteArrayInputStream) resultado.getBlob("imagem_preview"));
       }
 
       statement.close();
@@ -41,7 +43,7 @@ public class ParticipanteDAO {
   }
 
   public boolean inserirParticipante(Participante participante) throws SQLException {
-    String inserirParticipanteQuery = "INSERT INTO participante (nome, area_de_atuacao, link_perfil) VALUES (?, ?, ?)";
+    String inserirParticipanteQuery = "INSERT INTO participante (nome, area_de_atuacao, link_perfil, imagem_preview) VALUES (?, ?, ?, ?)";
 
     try {
       PreparedStatement statement = conn.prepareStatement(inserirParticipanteQuery);
@@ -66,7 +68,7 @@ public class ParticipanteDAO {
   }
 
   public boolean updateParticipante(Participante participante) throws SQLException {
-    String atualizarParticipanteQuery = "UPDATE participante SET nome=?, area_de_atuacao=?, link_perfil=? WHERE id_participante=?"; 
+    String atualizarParticipanteQuery = "UPDATE participante SET nome=?, area_de_atuacao=?, imagem_preview=?, link_perfil=? WHERE id_participante=?"; 
 
     try {
       PreparedStatement statement = conn.prepareStatement(atualizarParticipanteQuery);
