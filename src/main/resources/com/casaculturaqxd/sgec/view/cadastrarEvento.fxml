@@ -196,7 +196,7 @@
       </VBox>
       <VBox layoutX="25.0" layoutY="639.0" prefHeight="46.0" prefWidth="150.0" AnchorPane.leftAnchor="25.0">
          <children>
-            <Button fx:id="botaoColaboradores" mnemonicParsing="false" prefHeight="46.0" prefWidth="153.0" style="-fx-background-color: #352929;" text="Adicionar colaboradoes" textFill="WHITE" VBox.vgrow="ALWAYS" />
+            <Button fx:id="botaoColaboradores" mnemonicParsing="false" prefHeight="46.0" prefWidth="153.0" style="-fx-background-color: #352929;" text="Adicionar colaboradores" textFill="WHITE" VBox.vgrow="ALWAYS" />
          </children>
       </VBox>
       <VBox layoutX="25.0" layoutY="701.0" prefHeight="46.0" prefWidth="150.0" AnchorPane.leftAnchor="25.0">
