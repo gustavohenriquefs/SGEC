@@ -9,7 +9,8 @@ public class Participante {
     private String linkMapaDaCultura;
     private ByteArrayInputStream imagemParticipante;
 
-    public Participante(String nome, String areaDeAtuacao, String linkMapaDaCultura, ByteArrayInputStream imagemParticipante) {
+    public Participante(int idParticipante,String nome, String areaDeAtuacao, String linkMapaDaCultura, ByteArrayInputStream imagemParticipante) {
+        this.idParticipante = idParticipante;
         this.nome = nome;
         this.areaDeAtuacao = areaDeAtuacao;
         this.linkMapaDaCultura = linkMapaDaCultura;
