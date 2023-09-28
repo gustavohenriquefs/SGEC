@@ -11,7 +11,7 @@ import com.casaculturaqxd.sgec.models.Participante;
 public class ParticipanteDAO {
   private Connection conn;    
 
-  public ParticipanteDAO(Connection conn) {
+  public void setConnection(Connection conn) {
     this.conn = conn;
   }
 
