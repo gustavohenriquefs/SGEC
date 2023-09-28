@@ -28,10 +28,10 @@ public class ParticipanteDAO {
       
       if (resultado.next()) {
         participante.setIdParticipante(resultado.getInt("id_participante"));
-        participante.setAreaDeAtuacao(resultado.getString("area_de_atuacao"));
+        participante.setAreaDeAtuacao(resultado.getString("area_atuacao"));
         participante.setNome(resultado.getString("nome"));
         participante.setLinkMapaDaCultura(resultado.getString("link_perfil"));
-        participante.setImagemParticipante((ByteArrayInputStream) resultado.getBlob("imagem_preview"));
+        participante.setImagemParticipante((ByteArrayInputStream) resultado.getBinaryStream("imagem_preview"));
       }
 
       statement.close();
@@ -43,7 +43,7 @@ public class ParticipanteDAO {
   }
 
   public boolean inserirParticipante(Participante participante) throws SQLException {
-    String inserirParticipanteQuery = "INSERT INTO participante (nome, area_de_atuacao, link_perfil, imagem_preview) VALUES (?, ?, ?, ?)";
+    String inserirParticipanteQuery = "INSERT INTO participante (nome, area_atuacao, link_perfil, imagem_preview) VALUES (?, ?, ?, ?)";
 
     try {
       PreparedStatement statement = conn.prepareStatement(inserirParticipanteQuery);
@@ -68,7 +68,7 @@ public class ParticipanteDAO {
   }
 
   public boolean updateParticipante(Participante participante) throws SQLException {
-    String atualizarParticipanteQuery = "UPDATE participante SET nome=?, area_de_atuacao=?, imagem_preview=?, link_perfil=? WHERE id_participante=?"; 
+    String atualizarParticipanteQuery = "UPDATE participante SET nome=?, area_atuacao=?, imagem_preview=?, link_perfil=? WHERE id_participante=?"; 
 
     try {
       PreparedStatement statement = conn.prepareStatement(atualizarParticipanteQuery);
