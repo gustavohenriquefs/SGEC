@@ -204,8 +204,12 @@
             <Button fx:id="botaoArquivos" mnemonicParsing="false" prefHeight="46.0" prefWidth="152.0" style="-fx-background-color: #352929;" text="Adicionar arquivos" textFill="WHITE" VBox.vgrow="ALWAYS" />
          </children>
       </VBox>
-      <Button fx:id="criar" alignment="CENTER" layoutX="956.0" layoutY="734.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="107.0" style="-fx-background-color: #2A3F25;" text="Criar" textFill="WHITE" AnchorPane.rightAnchor="40.0" />
-      <Button fx:id="cancelar" alignment="CENTER" layoutX="1142.0" layoutY="734.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="107.0" style="-fx-background-color: #352929;" text="Cancelar" textFill="WHITE" />
+      <HBox layoutX="948.0" layoutY="745.0" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
+         <children>
+      <Button fx:id="cancelar" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="26.0" prefWidth="200.0" style="-fx-background-color: #352929;" text="Cancelar" textFill="WHITE" />
+      <Button fx:id="criar" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="26.0" prefWidth="200.0" style="-fx-background-color: #2A3F25;" text="Criar" textFill="WHITE" />
+         </children>
+      </HBox>
       <VBox fx:id="Participantes" layoutX="23.0" layoutY="756.0">
          <children>
             <Button fx:id="botaoParticipantes" mnemonicParsing="false" prefHeight="46.0" prefWidth="152.0" style="-fx-background-color: #352929;" text="Adicionar participantes" textFill="WHITE" />
