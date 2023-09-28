@@ -8,6 +8,7 @@
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -20,7 +21,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="container" prefHeight="800.0" prefWidth="1440.0" stylesheets="@../css/cadastrarEventoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.CadastrarEventoController">
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.CadastrarEventoController">
+  <content>
+    <AnchorPane id="container" prefHeight="800.0" prefWidth="1440.0" stylesheets="@../css/cadastrarEventoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Pane fx:id="header" prefHeight="35.0" prefWidth="790.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
@@ -182,7 +185,7 @@
             </Label>
          </children>
       </GridPane>
-      <StackPane prefHeight="52.0" prefWidth="790.0" VBox.vgrow="ALWAYS" />
+      <StackPane layoutX="-45.0" layoutY="-100.0" prefHeight="152.0" prefWidth="835.0" VBox.vgrow="ALWAYS" />
       <Button fx:id="adicionarLocalizacao" alignment="CENTER" layoutX="636.0" layoutY="531.0" mnemonicParsing="false" style="-fx-background-color: #2A3F25;" text="Adicionar nova localização +" textFill="WHITE" />
       <RadioButton fx:id="libras" layoutX="1279.0" layoutY="339.0" mnemonicParsing="false" text="Acessível em libras" textFill="#352929" AnchorPane.rightAnchor="40.0" />
       <RadioButton fx:id="certiticavel" layoutX="1131.0" layoutY="339.0" mnemonicParsing="false" text="Certificável" textFill="#352929" AnchorPane.rightAnchor="250.0" />
@@ -209,4 +212,6 @@
          </children>
       </VBox>
    </children>
-</AnchorPane>
+   </AnchorPane>
+  </content>
+</ScrollPane>
