@@ -28,10 +28,10 @@ public class ParticipanteDAO {
       
       if (resultado.next()) {
         participante.setIdParticipante(resultado.getInt("id_participante"));
-        participante.setAreaDeAtuacao(resultado.getString("area_de_atuacao"));
+        participante.setAreaDeAtuacao(resultado.getString("area_atuacao"));
         participante.setNome(resultado.getString("nome"));
         participante.setLinkMapaDaCultura(resultado.getString("link_perfil"));
-        participante.setImagemParticipante((ByteArrayInputStream) resultado.getBlob("imagem_preview"));
+        participante.setImagemParticipante((ByteArrayInputStream) resultado.getBinaryStream("imagem_preview"));
       }
 
       statement.close();
