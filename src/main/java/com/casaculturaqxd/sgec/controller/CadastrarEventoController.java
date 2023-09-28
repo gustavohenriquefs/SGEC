@@ -2,6 +2,7 @@ package com.casaculturaqxd.sgec.controller;
 
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 
@@ -16,9 +17,10 @@ public class CadastrarEventoController {
     TextField horas;
     @FXML
     TextField minutos;
-    /*    
     @FXML
-
+    ChoiceBox<String> classificacaoEtaria;
+    private String[] classificacoes = {"Livre","10 anos","12 anos","14 anos","16 anos","18 anos"};
+    /* 
     @FXML
 
     @FXML
@@ -60,7 +62,9 @@ public class CadastrarEventoController {
     
 
     public void initialize(){
+        classificacaoEtaria.getItems().addAll(classificacoes);
         publicoEsperado.setTextFormatter(getNumericalFormatter());
+        publicoAlcancado.setTextFormatter(getNumericalFormatter());
         horas.setTextFormatter(getTimeFormatter());
         minutos.setTextFormatter(getTimeFormatter());
     }
