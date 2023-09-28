@@ -199,5 +199,6 @@
       </VBox>
       <Button fx:id="criar" alignment="CENTER" layoutX="956.0" layoutY="734.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="107.0" style="-fx-background-color: #2A3F25;" text="Criar" textFill="WHITE" AnchorPane.rightAnchor="40.0" />
       <Button fx:id="cancelar" alignment="CENTER" layoutX="1142.0" layoutY="734.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="107.0" style="-fx-background-color: #352929;" text="Cancelar" textFill="WHITE" />
+      <Button fx:id="participantes" layoutX="23.0" layoutY="756.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="152.0" style="-fx-background-color: #352929;" text="Adicionar participantes" textFill="WHITE" />
    </children>
 </AnchorPane>
