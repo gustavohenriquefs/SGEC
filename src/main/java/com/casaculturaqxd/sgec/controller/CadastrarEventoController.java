@@ -5,10 +5,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
-import javafx.scene.layout.GridPane;
 
+import com.casaculturaqxd.sgec.DAO.ParticipanteDAO;
+import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.Localizacao;
 
 public class CadastrarEventoController {
@@ -16,8 +18,12 @@ public class CadastrarEventoController {
     TextField publicoEsperado;
     @FXML
     TextField publicoAlcancado;
+    @FXML 
+    Label textoHoras;
     @FXML
     TextField horas;
+    @FXML
+    Label textoMinutos;
     @FXML
     TextField minutos;
     @FXML
@@ -34,7 +40,7 @@ public class CadastrarEventoController {
 
     //Botoes
     @FXML
-    Button adicionarLocalizacao;
+    Button botaoNovaLocalizacao;
     @FXML
     Button botaoOrganizadores;
     @FXML
@@ -73,7 +79,6 @@ public class CadastrarEventoController {
         });
     }
     
-
     public void initialize(){
         /* aplicando restrições aos inputs */
         classificacaoEtaria.getItems().addAll(classificacoes);
@@ -81,9 +86,41 @@ public class CadastrarEventoController {
         publicoAlcancado.setTextFormatter(getNumericalFormatter());
         horas.setTextFormatter(getTimeFormatter());
         minutos.setTextFormatter(getTimeFormatter());
+
+        showCargaHoraria(checkMeta3.isSelected());
     }
 
-    public void addLocalizacao(Localizacao local){
-        locais.add(local);
+    public void criarNovoEvento(){
+        
+    }
+
+    public void adicionarLocalizacao(){
+   }
+
+    public void adicionarParticipante(){
+
+    }
+    public void adicionarOrganizador(){
+        
+    }
+    public void adicionarColaborador(){
+
+    }
+    public void adicionarArquivo(){
+
+    }
+
+    public void showCargaHoraria(boolean value){
+        if(value == false){
+            horas.clear();
+            minutos.clear();
+        }
+        horas.setVisible(value);
+        textoHoras.setVisible(value);
+        minutos.setVisible(value);
+        textoMinutos.setVisible(value);
+    }
+    public void onClickMeta3(){
+        showCargaHoraria(checkMeta3.isSelected());
     }
 }
