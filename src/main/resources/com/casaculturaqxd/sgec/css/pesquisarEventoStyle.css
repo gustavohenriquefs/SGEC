@@ -1,6 +1,8 @@
+@import "../css/colors/colorStyle.css";
+
 #container{
-    -fx-background-color: #E9E3CA;
+    -fx-background-color: -bege;
 }
 #header{
-    -fx-background-color: #A22D2E;
+    -fx-background-color: -vermelho;
 }
