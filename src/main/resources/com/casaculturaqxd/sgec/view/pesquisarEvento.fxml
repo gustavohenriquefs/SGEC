@@ -40,7 +40,7 @@
                   <Font name="System Bold" size="12.0" />
                </font>
             </Label>
-            <HBox layoutX="10.0" layoutY="32.0" prefHeight="26.0" prefWidth="542.0" AnchorPane.leftAnchor="10.0">
+            <HBox layoutX="10.0" layoutY="32.0" prefHeight="26.0" prefWidth="542.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
                <children>
                   <ChoiceBox fx:id="metas" prefHeight="26.0" prefWidth="130.0">
                      <HBox.margin>
