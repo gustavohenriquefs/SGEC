@@ -12,3 +12,6 @@
 #resultadosPesquisa, #resultados{
     -fx-background-color: -branco;
 }
+#botao{
+    -fx-background-color: -verde;
+}
