@@ -6,3 +6,6 @@
 #header{
     -fx-background-color: -vermelho;
 }
+#pesquisar, #exibir, #filtro{
+    -fx-color: -black;
+}
