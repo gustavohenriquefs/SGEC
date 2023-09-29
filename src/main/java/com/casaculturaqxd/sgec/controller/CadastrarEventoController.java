@@ -8,14 +8,21 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.IOException;
+
 
 public class CadastrarEventoController {
-    Stage stage;
+    private final int MAX_LOCALIZACOES = 2;
 
+    Stage stage;
+    @FXML
+    VBox Localizacoes;
     @FXML 
     TextField publicoEsperado;
     @FXML
@@ -96,7 +103,14 @@ public class CadastrarEventoController {
     public void criarNovoEvento(){
     }
 
-    public void adicionarLocalizacao(){
+    public void adicionarLocalizacao() throws IOException{
+        if(Localizacoes.getChildren().size() >= MAX_LOCALIZACOES){
+            botaoNovaLocalizacao.setDisable(true);
+        }
+        SubSceneLoader loaderLocais = new SubSceneLoader();
+        GridPane novoLocal = (GridPane) loaderLocais.getPage("FieldLocalizacao");
+        Localizacoes.getChildren().add(novoLocal);
+        Localizacoes.layout();
     }
 
     public void adicionarParticipante(){
