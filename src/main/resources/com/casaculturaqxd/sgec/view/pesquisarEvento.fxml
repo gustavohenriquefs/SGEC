@@ -95,7 +95,7 @@
                   <Label fx:id="localizacaoResultados" prefWidth="130.0" />
                </children>
             </HBox>
-            <ScrollPane fx:id="campoResultados" hbarPolicy="ALWAYS" layoutY="100.0" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="100.0">
+            <ScrollPane fx:id="campoResultados" fitToHeight="true" hbarPolicy="ALWAYS" layoutY="100.0" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="100.0">
                <content>
                   <HBox fx:id="resultados" />
                </content>
