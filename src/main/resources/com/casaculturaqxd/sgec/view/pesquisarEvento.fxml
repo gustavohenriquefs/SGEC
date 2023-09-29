@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="container" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #E9E3CA;" stylesheets="@../css/pesquisarEventoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Pane id="header" fx:id="header" layoutX="200.0" prefHeight="50.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Hyperlink layoutX="14.0" layoutY="14.0" text="Home" textFill="WHITE" />
+            <Hyperlink layoutX="54.0" layoutY="13.0" text="Pesquisar Evento" textFill="WHITE" />
+            <Hyperlink layoutX="162.0" layoutY="14.0" text="Cadastrar Evento" textFill="WHITE" />
+            <Hyperlink layoutX="260.0" layoutY="14.0" text="Pesquisar Grupos de Eventos" textFill="WHITE" />
+            <Hyperlink layoutX="421.0" layoutY="14.0" text="Cadastrar Grupos de Eventos" textFill="WHITE" />
+         </children></Pane>
+      <Label layoutX="32.0" layoutY="67.0" text="Pesquisar Evento" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="67.0">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Label>
+      <VBox fx:id="barra" layoutX="20.0" layoutY="110.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
+         <children>
+            <TextField fx:id="barraPesquisa" prefHeight="26.0" prefWidth="551.0" />
+         </children>
+      </VBox>
+      <AnchorPane layoutX="30.0" layoutY="146.0" prefHeight="69.0" prefWidth="560.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
+         <children>
+            <Label layoutX="14.0" layoutY="5.0" text="Filtros">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <HBox layoutX="10.0" layoutY="32.0" prefHeight="26.0" prefWidth="542.0" AnchorPane.leftAnchor="10.0">
+               <children>
+                  <ChoiceBox fx:id="metas" prefHeight="26.0" prefWidth="130.0">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </ChoiceBox>
+                  <DatePicker fx:id="inicio" prefWidth="130.0">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </DatePicker>
+                  <DatePicker fx:id="fim" prefWidth="130.0">
+                     <HBox.margin>
+                        <Insets left="15.0" />
+                     </HBox.margin>
+                  </DatePicker>
+                  <TextField fx:id="localizacao" prefWidth="130.0">
+                     <HBox.margin>
+                        <Insets left="20.0" />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+            </HBox>
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutX="180.0" layoutY="204.0" prefHeight="174.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="225.6">
+         <children>
+            <StackPane alignment="TOP_CENTER" layoutX="243.0" layoutY="14.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <Label text="Exibir resultados para" StackPane.alignment="CENTER">
+                     <StackPane.margin>
+                        <Insets />
+                     </StackPane.margin>
+                     <font>
+                        <Font name="System Bold" size="20.0" />
+                     </font>
+                  </Label>
+               </children>
+            </StackPane>
+            <HBox layoutX="28.0" layoutY="40.0" prefHeight="26.0" prefWidth="542.0">
+               <children>
+                  <ChoiceBox fx:id="metasResultados" disable="true" prefHeight="26.0" prefWidth="130.0">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </ChoiceBox>
+                  <DatePicker fx:id="inicioResultados" disable="true" prefWidth="130.0">
+                     <HBox.margin>
+                        <Insets left="10.0" />
+                     </HBox.margin>
+                  </DatePicker>
+                  <DatePicker fx:id="fimResultados" disable="true" prefWidth="130.0">
+                     <HBox.margin>
+                        <Insets left="15.0" />
+                     </HBox.margin>
+                  </DatePicker>
+                  <TextField fx:id="localizacaoResultados" disable="true" prefWidth="130.0">
+                     <HBox.margin>
+                        <Insets left="20.0" />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+            </HBox>
+            <HBox layoutX="199.0" layoutY="74.0" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+         </children></AnchorPane>
+   </children>
+</AnchorPane>
