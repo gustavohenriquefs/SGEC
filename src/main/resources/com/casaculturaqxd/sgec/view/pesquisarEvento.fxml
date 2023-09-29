@@ -14,7 +14,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane id="container" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #E9E3CA;" stylesheets="@../css/pesquisarEventoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Pane id="header" fx:id="header" layoutX="200.0" prefHeight="50.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -95,9 +94,9 @@
                   <Label fx:id="localizacaoResultados" prefWidth="130.0" />
                </children>
             </HBox>
-            <ScrollPane fx:id="campoResultados" fitToHeight="true" hbarPolicy="ALWAYS" layoutY="100.0" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="100.0">
+            <ScrollPane id="campoResultados" fx:id="campoResultados" fitToHeight="true" hbarPolicy="ALWAYS" layoutY="100.0" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="100.0">
                <content>
-                  <HBox fx:id="resultados" />
+                  <VBox id="resultados" fx:id="resultados" />
                </content>
             </ScrollPane>
          </children>
