@@ -47,32 +47,43 @@ public class DatabasePostgres implements Database{
     }
 
     public void setUrlDataBase(String urlKey) {
-        if(dotenv.get(urlKey) == null){
-            throw new RuntimeException("variavel de ambiente inexistente");
+        if(variavelEnvExists(urlKey)){
+            desconectar(connection);            
+            this.urlDataBase = dotenv.get(urlKey);
         }
         else{
-        desconectar(connection);            
-        this.urlDataBase = dotenv.get(urlKey);
+            throw new RuntimeException("variavel de ambiente inexistente");
         }
     }
 
     public void setNomeUsuario(String userNameKey) {
-        if(dotenv.get(userNameKey) == null){
-            throw new RuntimeException("variavel de ambiente inexistente");
+        if(variavelEnvExists(userNameKey)){
+            desconectar(connection);            
+            this.nomeUsuario = dotenv.get(userNameKey);
+            
         }
         else{
-        desconectar(connection);            
-        this.nomeUsuario = dotenv.get(userNameKey);
+            throw new RuntimeException("variavel de ambiente inexistente");
         }
     }
 
     public void setSenha(String passwordKey) {
-        if(dotenv.get(passwordKey) == null){
-            throw new RuntimeException("variavel de ambiente inexistente");
+        if(variavelEnvExists(passwordKey)){
+            desconectar(connection);            
+            this.senha = dotenv.get(passwordKey);
         }
         else{
-        desconectar(connection);            
-        this.senha = dotenv.get(passwordKey);
+            throw new RuntimeException("variavel de ambiente inexistente");
         }
     }
+
+    private boolean variavelEnvExists(String envKey){
+        if(dotenv.get(envKey) == null){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
 }
