@@ -92,7 +92,7 @@
                   <Label fx:id="localizacaoResultados" prefWidth="130.0" />
                </children>
             </HBox>
-            <HBox layoutX="199.0" layoutY="74.0" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+            <HBox fx:id="resultadosPesquisa" layoutX="199.0" layoutY="74.0" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #FFFEF7;" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
          </children></AnchorPane>
    </children>
 </AnchorPane>
