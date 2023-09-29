@@ -1,19 +1,21 @@
 package com.casaculturaqxd.sgec.controller;
 
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
-import com.casaculturaqxd.sgec.DAO.ParticipanteDAO;
-import com.casaculturaqxd.sgec.models.Evento;
-import com.casaculturaqxd.sgec.models.Localizacao;
+import java.io.File;
 
 public class CadastrarEventoController {
+    Stage stage;
+
     @FXML 
     TextField publicoEsperado;
     @FXML
@@ -37,7 +39,8 @@ public class CadastrarEventoController {
     CheckBox checkMeta3;
     @FXML
     CheckBox checkMeta4;
-
+    @FXML
+    RadioButton certificavel;
     //Botoes
     @FXML
     Button botaoNovaLocalizacao;
@@ -54,7 +57,6 @@ public class CadastrarEventoController {
     @FXML
     Button criarEvento;
 
-    ObservableList<Localizacao> locais;
     public TextFormatter<String> getNumericalFormatter(){
         return new TextFormatter<>(change -> {
             if(change.getText().matches("\\d+")){
@@ -88,14 +90,14 @@ public class CadastrarEventoController {
         minutos.setTextFormatter(getTimeFormatter());
 
         showCargaHoraria(checkMeta3.isSelected());
+        showCertificavel(checkMeta3.isSelected());
     }
 
     public void criarNovoEvento(){
-        
     }
 
     public void adicionarLocalizacao(){
-   }
+    }
 
     public void adicionarParticipante(){
 
@@ -107,7 +109,8 @@ public class CadastrarEventoController {
 
     }
     public void adicionarArquivo(){
-
+        FileChooser fileChooser = new FileChooser();
+        File arquivoSelecionado = fileChooser.showOpenDialog(stage);
     }
 
     public void showCargaHoraria(boolean value){
@@ -120,7 +123,14 @@ public class CadastrarEventoController {
         minutos.setVisible(value);
         textoMinutos.setVisible(value);
     }
+    public void showCertificavel(boolean value){
+        if(value == false){
+            certificavel.setSelected(value);
+        }
+        certificavel.setVisible(value);
+    }
     public void onClickMeta3(){
         showCargaHoraria(checkMeta3.isSelected());
+        showCertificavel(checkMeta3.isSelected());
     }
 }
