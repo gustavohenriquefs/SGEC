@@ -5,6 +5,7 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
@@ -12,6 +13,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+
 
 <AnchorPane id="container" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #E9E3CA;" stylesheets="@../css/pesquisarEventoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
@@ -22,7 +24,8 @@
             <Hyperlink layoutX="162.0" layoutY="14.0" text="Cadastrar Evento" textFill="WHITE" />
             <Hyperlink layoutX="260.0" layoutY="14.0" text="Pesquisar Grupos de Eventos" textFill="WHITE" />
             <Hyperlink layoutX="421.0" layoutY="14.0" text="Cadastrar Grupos de Eventos" textFill="WHITE" />
-         </children></Pane>
+         </children>
+      </Pane>
       <Label id="pesquisar" fx:id="pesquisar" layoutX="32.0" layoutY="67.0" text="Pesquisar Evento" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="67.0">
          <font>
             <Font name="System Bold" size="20.0" />
@@ -80,19 +83,24 @@
                   </Label>
                </children>
             </StackPane>
-            <HBox layoutX="28.0" layoutY="40.0" prefHeight="26.0" prefWidth="542.0">
+            <HBox alignment="TOP_CENTER" layoutX="28.0" layoutY="40.0" prefHeight="26.0" prefWidth="542.0">
                <children>
-                  <Label fx:id="metasResultados" prefWidth="130.0">
+                  <Label id="metasResultados" fx:id="metasResultados" prefWidth="130.0">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
                   </Label>
-                  <Label fx:id="inicioResultados" prefWidth="130.0" />
-                  <Label fx:id="finalResultados" prefWidth="130.0" />
+                  <Label id="inicioResultados" fx:id="inicioResultados" prefWidth="130.0" />
+                  <Label id="finalResultados" fx:id="finalResultados" prefWidth="130.0" />
                   <Label fx:id="localizacaoResultados" prefWidth="130.0" />
                </children>
             </HBox>
-            <HBox id="resultadosPesquisa" fx:id="resultadosPesquisa" layoutX="199.0" layoutY="74.0" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-         </children></AnchorPane>
+            <ScrollPane fx:id="campoResultados" hbarPolicy="ALWAYS" layoutY="100.0" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="100.0">
+               <content>
+                  <HBox fx:id="resultados" />
+               </content>
+            </ScrollPane>
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>
