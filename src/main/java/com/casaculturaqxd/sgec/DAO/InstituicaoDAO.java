@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 
-import com.casaculturaqxd.sgec.enums.Atribuicao;
 import com.casaculturaqxd.sgec.models.Instituicao;
 
 public class InstituicaoDAO {
@@ -14,6 +13,12 @@ public class InstituicaoDAO {
   
   public void setConnection(Connection conn) {
     this.conn = conn;
+
+    try {
+      conn.setAutoCommit(true);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   public Optional<Instituicao> getInstituicao(Instituicao instituicao) {
@@ -28,8 +33,7 @@ public class InstituicaoDAO {
       
       if (resultado.next()) {
         instituicao.setIdInstituicao(resultado.getInt("id_instituicao"));
-        instituicao.setAtribuicao(Atribuicao.valueOf(resultado.getString("atribuicao")));
-        instituicao.setNome(resultado.getString("nome"));
+        instituicao.setNome(resultado.getString("nome_instituicao"));
         instituicao.setDescricaoContribuicao(resultado.getString("descricao_contribuicao"));
         instituicao.setValorContribuicao(resultado.getInt("valor_contribuicao"));
       }
@@ -43,7 +47,7 @@ public class InstituicaoDAO {
   }
 
   public boolean inserirInstituicao(Instituicao instituicao) throws SQLException {
-    String inserirInstituicaoQuery = "INSERT INTO instituicao (nome, descricao_contribuicao, valor_contribuicao) VALUES (?, ?, ?)";
+    String inserirInstituicaoQuery = "INSERT INTO instituicao (nome_instituicao, descricao_contribuicao, valor_contribuicao) VALUES (?, ?, ?)";
     
     try {
       PreparedStatement statement = conn.prepareStatement(inserirInstituicaoQuery);
@@ -55,18 +59,14 @@ public class InstituicaoDAO {
       statement.execute();
       statement.close();
     } catch (Exception e) {
-      conn.rollback();
-
       return false;
-    } finally {
-      conn.commit();
     }
 
     return true;
   }
 
   public boolean atualizarInstituicao(Instituicao instituicao) throws SQLException {
-    String atualizarInstituicaoQuery = "UPDATE instituicao SET nome=?, descricao_contribuicao=?, valor_contribuicao=? WHERE id_instituicao=?";
+    String atualizarInstituicaoQuery = "UPDATE instituicao SET nome_instituicao=?, descricao_contribuicao=?, valor_contribuicao=? WHERE id_instituicao=?";
 
     try {
       PreparedStatement statement = conn.prepareStatement(atualizarInstituicaoQuery);
@@ -79,11 +79,7 @@ public class InstituicaoDAO {
       statement.execute();
       statement.close();
     } catch (Exception e) {
-      conn.rollback();
-
       return false;
-    } finally {
-      conn.commit();
     }
 
     return true;
@@ -100,11 +96,7 @@ public class InstituicaoDAO {
       statement.execute();
       statement.close();
     } catch (Exception e) {
-      conn.rollback();
-
       return false;
-    } finally {
-      conn.commit();
     }
 
     return true;
