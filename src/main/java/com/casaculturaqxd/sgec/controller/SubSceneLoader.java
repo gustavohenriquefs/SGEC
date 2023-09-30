@@ -12,7 +12,6 @@ import javafx.scene.layout.Pane;
 public class SubSceneLoader {
     FXMLLoader sceneLoader;
     public Pane getPage(String sceneName) throws IOException{
-        System.out.println(SubSceneLoader.class);
         try{
             URL pagePath = App.class.getResource("view/" + sceneName +".fxml");
             if(pagePath == null){
