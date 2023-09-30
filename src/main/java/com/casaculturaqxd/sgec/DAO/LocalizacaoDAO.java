@@ -37,4 +37,8 @@ public class LocalizacaoDAO {
       return null;
     }
   }
+
+  boolean inserirLocalizacao(Localizacao obj){
+    return true;
+  }
 }
