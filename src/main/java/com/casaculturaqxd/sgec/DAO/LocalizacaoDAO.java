@@ -11,7 +11,7 @@ public class LocalizacaoDAO {
     this.connection = connection;
   }
 
-  public void getLocalizacao(Localizacao localizacao){
-    
+  public Localizacao getLocalizacao(Localizacao localizacao){
+    return null;
   }
 }
