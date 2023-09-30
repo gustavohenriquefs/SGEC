@@ -86,6 +86,7 @@ public class LocalizacaoDAO {
       PreparedStatement stmt = connection.prepareStatement(sql);
       stmt.setInt(1, obj.getIdLocalizacao());
       stmt.execute();
+      stmt.close();
       return true;
     } catch (Exception e) {
       return false;
