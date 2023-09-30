@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TextField?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.media.MediaView?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <padding>
+      <Insets right="10.0" />
+   </padding>
+   <effect>
+      <DropShadow />
+   </effect>
+   <children>
+      <VBox layoutY="265.0" maxHeight="1.7976931348623157E308" prefHeight="135.0" prefWidth="600.0" spacing="20.0" style="-fx-border-color: #352929;">
+         <children>
+            <TextField />
+            <TextField />
+            <TextField />
+         </children>
+      </VBox>
+      <MediaView fitHeight="220.0" fitWidth="400.0" layoutX="100.0" layoutY="14.0" />
+   </children>
+</AnchorPane>
