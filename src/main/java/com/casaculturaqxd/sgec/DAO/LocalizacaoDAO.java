@@ -78,4 +78,8 @@ public class LocalizacaoDAO {
       return false;
     }
   }
+
+  boolean deletarLocalizacao(Localizacao obj){
+    return true;
+  }
 }
