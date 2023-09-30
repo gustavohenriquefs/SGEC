@@ -2,7 +2,8 @@ module com.casaculturaqxd.sgec {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.sql;
-    
+    requires javafx.media;
+
     opens com.casaculturaqxd.sgec to javafx.fxml;
     opens com.casaculturaqxd.sgec.controller to javafx.fxml;
     exports com.casaculturaqxd.sgec.controller to javafx.fxml;
