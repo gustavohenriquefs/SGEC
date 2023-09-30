@@ -16,13 +16,21 @@ import io.github.cdimascio.dotenv.Dotenv;
  * </p>
  */
 public class DatabasePostgres implements Database{
+    private static DatabasePostgres instance;
     private Connection connection;
     private String urlDataBase;
     private String nomeUsuario;
     private String senha;
     private Dotenv dotenv = Dotenv.load();
 
-    public DatabasePostgres(String urlKey, String userNameKey, String passwordKey) {
+    public static DatabasePostgres getInstance(String urlKey, String userNameKey, String passwordKey){
+        if(instance==null){
+            instance = new DatabasePostgres(urlKey, userNameKey, passwordKey);
+        }
+        return instance;
+    }
+
+    private DatabasePostgres(String urlKey, String userNameKey, String passwordKey) {
         this.urlDataBase = dotenv.get(urlKey);
         this.nomeUsuario = dotenv.get(userNameKey);
         this.senha       = dotenv.get(passwordKey);
