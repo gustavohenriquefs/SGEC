@@ -42,4 +42,27 @@ public class InstituicaoDAO {
     return Optional.of(instituicao);
   }
 
+  public boolean inserirInstituicao(Instituicao instituicao) throws SQLException {
+    String inserirInstituicaoQuery = "INSERT INTO instituicao (nome, descricao_contribuicao, valor_contribuicao) VALUES (?, ?, ?)";
+    
+    try {
+      PreparedStatement statement = conn.prepareStatement(inserirInstituicaoQuery);
+      
+      statement.setString(1, instituicao.getNome());
+      statement.setString(2, instituicao.getDescricaoContribuicao());
+      statement.setInt(3, instituicao.getValorContribuicao());
+
+      statement.execute();
+      statement.close();
+    } catch (Exception e) {
+      conn.rollback();
+
+      return false;
+    } finally {
+      conn.commit();
+    }
+
+    return true;
+  }
+
 }
