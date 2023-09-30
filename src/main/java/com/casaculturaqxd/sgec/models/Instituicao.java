@@ -9,7 +9,7 @@ import com.casaculturaqxd.sgec.enums.Atribuicao;
  * mas não Organizadora e Colaboradora ao mesmo tempo
  */
 public class Instituicao {
-    private int idInstituicao;
+    private Integer idInstituicao = null;
     private Atribuicao atribuicao;
     private String nome;
     private String descricaoContribuicao;
@@ -48,11 +48,11 @@ public class Instituicao {
         this.atribuicao = atribuicao;
     }
 
-    public int getIdInstituicao() {
+    public Integer getIdInstituicao() {
         return idInstituicao;
     }
 
-    public void setIdInstituicao(int idInstituicao) {
+    public void setIdInstituicao(Integer idInstituicao) {
         this.idInstituicao = idInstituicao;
     }
     
