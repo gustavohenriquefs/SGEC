@@ -8,7 +8,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -18,11 +20,12 @@ import java.io.IOException;
 
 
 public class CadastrarEventoController {
-    private final int MAX_LOCALIZACOES = 2;
+    private final int MAX_LOCALIZACOES = 4;
 
     Stage stage;
     @FXML
     VBox Localizacoes;
+    @FXML HBox Participantes;
     @FXML 
     TextField publicoEsperado;
     @FXML
@@ -64,6 +67,47 @@ public class CadastrarEventoController {
     @FXML
     Button criarEvento;
 
+    public void initialize(){
+        /* aplicando restrições aos inputs */
+        classificacaoEtaria.getItems().addAll(classificacoes);
+        publicoEsperado.setTextFormatter(getNumericalFormatter());
+        publicoAlcancado.setTextFormatter(getNumericalFormatter());
+        
+
+        showCertificavel(checkMeta3.isSelected());
+        /* desabilitando o botao de arquivo enquanto nao eh implementado*/
+        botaoArquivos.setDisable(true);
+        botaoArquivos.setVisible(false);
+    }
+
+    public void criarNovoEvento(){
+    }
+
+    public void adicionarLocalizacao() throws IOException{
+        if(Localizacoes.getChildren().size() >= MAX_LOCALIZACOES){
+            botaoNovaLocalizacao.setDisable(true);
+        }
+        SubSceneLoader loaderLocais = new SubSceneLoader();
+        GridPane novoLocal = (GridPane) loaderLocais.getPage("fields/fieldLocalizacao");
+        Localizacoes.getChildren().add(novoLocal);
+    }
+
+    public void adicionarParticipante() throws IOException{
+        SubSceneLoader loaderParticipantes = new SubSceneLoader();
+        AnchorPane novoParticipante = (AnchorPane) loaderParticipantes.getPage("fields/fieldParticipante");
+        Participantes.getChildren().add(novoParticipante);
+    }
+    public void adicionarOrganizador(){
+        
+    }
+    public void adicionarColaborador(){
+
+    }
+    public void adicionarArquivo(){
+        FileChooser fileChooser = new FileChooser();
+        File arquivoSelecionado = fileChooser.showOpenDialog(stage);
+    }
+
     public TextFormatter<String> getNumericalFormatter(){
         return new TextFormatter<>(change -> {
             if(change.getText().matches("\\d+")){
@@ -87,55 +131,9 @@ public class CadastrarEventoController {
             }
         });
     }
-    
-    public void initialize(){
-        /* aplicando restrições aos inputs */
-        classificacaoEtaria.getItems().addAll(classificacoes);
-        publicoEsperado.setTextFormatter(getNumericalFormatter());
-        publicoAlcancado.setTextFormatter(getNumericalFormatter());
-        horas.setTextFormatter(getTimeFormatter());
-        minutos.setTextFormatter(getTimeFormatter());
-
-        showCargaHoraria(checkMeta3.isSelected());
-        showCertificavel(checkMeta3.isSelected());
-    }
-
-    public void criarNovoEvento(){
-    }
-
-    public void adicionarLocalizacao() throws IOException{
-        if(Localizacoes.getChildren().size() >= MAX_LOCALIZACOES){
-            botaoNovaLocalizacao.setDisable(true);
-        }
-        SubSceneLoader loaderLocais = new SubSceneLoader();
-        GridPane novoLocal = (GridPane) loaderLocais.getPage("FieldLocalizacao");
-        Localizacoes.getChildren().add(novoLocal);
-        Localizacoes.layout();
-    }
-
-    public void adicionarParticipante(){
-
-    }
-    public void adicionarOrganizador(){
-        
-    }
-    public void adicionarColaborador(){
-
-    }
-    public void adicionarArquivo(){
-        FileChooser fileChooser = new FileChooser();
-        File arquivoSelecionado = fileChooser.showOpenDialog(stage);
-    }
 
     public void showCargaHoraria(boolean value){
-        if(value == false){
-            horas.clear();
-            minutos.clear();
-        }
-        horas.setVisible(value);
-        textoHoras.setVisible(value);
-        minutos.setVisible(value);
-        textoMinutos.setVisible(value);
+        
     }
     public void showCertificavel(boolean value){
         if(value == false){
@@ -147,4 +145,5 @@ public class CadastrarEventoController {
         showCargaHoraria(checkMeta3.isSelected());
         showCertificavel(checkMeta3.isSelected());
     }
+
 }
