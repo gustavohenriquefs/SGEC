@@ -61,6 +61,21 @@ public class LocalizacaoDAO {
   }
 
   boolean updateLocalizacao(Localizacao obj){
-    return true;
+    String sql = "UPDATE localizacao SET rua=?,numero_rua=?,bairro=?,cep=?,cidade=?,estado=?,pais=? WHERE id_localizacao=?";
+    try {
+      PreparedStatement stmt = connection.prepareStatement(sql);
+      stmt.setString(1, obj.getRua());
+      stmt.setInt(2, obj.getNumeroRua());
+      stmt.setString(3, obj.getBairro());
+      stmt.setString(4, obj.getCep());
+      stmt.setString(5, obj.getCidade());
+      stmt.setString(6, obj.getEstado());
+      stmt.setString(7, obj.getPais());
+      stmt.setInt(8, obj.getIdLocalizacao());
+      stmt.execute();
+      return true;
+    } catch (Exception e) {
+      return false;
+    }
   }
 }
