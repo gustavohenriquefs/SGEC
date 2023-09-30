@@ -59,4 +59,8 @@ public class LocalizacaoDAO {
       return false;
     }
   }
+
+  boolean updateLocalizacao(Localizacao obj){
+    return true;
+  }
 }
