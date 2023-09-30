@@ -3,6 +3,7 @@ package com.casaculturaqxd.sgec.DAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import com.casaculturaqxd.sgec.models.Localizacao;
 
@@ -39,6 +40,23 @@ public class LocalizacaoDAO {
   }
 
   boolean inserirLocalizacao(Localizacao obj){
-    return true;
+    try {
+      String sql = "insert into localizacao (id_localizacao,rua,numero_rua,bairro,cep,cidade,estado,pais)"
+              + " values(?,?,?,?,?,?,?,?)";
+      PreparedStatement stmt = connection.prepareStatement(sql);
+      stmt.setInt(1, obj.getIdLocalizacao());
+      stmt.setString(2, obj.getRua());
+      stmt.setInt(3, obj.getNumeroRua());
+      stmt.setString(4, obj.getBairro());
+      stmt.setString(5, obj.getCep());
+      stmt.setString(6, obj.getCidade());
+      stmt.setString(7, obj.getEstado());
+      stmt.setString(8, obj.getPais());
+      stmt.execute();
+      stmt.close();
+      return true;
+    } catch (SQLException e) {
+      return false;
+    }
   }
 }
