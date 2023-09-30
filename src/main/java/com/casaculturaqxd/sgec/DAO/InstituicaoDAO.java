@@ -89,4 +89,24 @@ public class InstituicaoDAO {
     return true;
   }
 
+  public boolean removerInstituicao(Instituicao instituicao) throws SQLException {
+    String removerInstituicaoQuery = "DELETE FROM instituicao WHERE id_instituicao=?";
+
+    try {
+      PreparedStatement statement = conn.prepareStatement(removerInstituicaoQuery);
+
+      statement.setInt(1, instituicao.getIdInstituicao());
+
+      statement.execute();
+      statement.close();
+    } catch (Exception e) {
+      conn.rollback();
+
+      return false;
+    } finally {
+      conn.commit();
+    }
+
+    return true;
+  }
 }
