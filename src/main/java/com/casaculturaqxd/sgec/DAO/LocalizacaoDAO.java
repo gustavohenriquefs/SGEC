@@ -81,6 +81,13 @@ public class LocalizacaoDAO {
 
   boolean deletarLocalizacao(Localizacao obj){
     String sql = "DELETE FROM localizacao WHERE id_localizacao=?";
-    return true;
+    try {
+      PreparedStatement stmt = connection.prepareStatement(sql);
+      stmt.setInt(1, obj.getIdLocalizacao());
+      stmt.execute();
+      return true;
+    } catch (Exception e) {
+      return false;
+    }
   }
 }
