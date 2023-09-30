@@ -12,12 +12,8 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -74,18 +70,6 @@
             <Insets left="20.0" />
          </VBox.margin>
       </Pane>
-      <HBox layoutX="3.0" layoutY="372.0" prefHeight="35.0" prefWidth="790.0">
-         <children>
-            <Label text="Localização" textFill="#352929">
-               <font>
-                  <Font name="System Bold" size="20.0" />
-               </font>
-               <HBox.margin>
-                  <Insets left="20.0" />
-               </HBox.margin>
-            </Label>
-         </children>
-      </HBox>
         <Pane layoutX="-2.0" layoutY="74.0" maxWidth="1408.0" prefHeight="239.0" prefWidth="1395.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="40.0">
             <children>
                 <Label layoutX="25.0" layoutY="6.0" prefHeight="17.0" prefWidth="40.0" text="Título" textFill="#352929" AnchorPane.leftAnchor="5.0" />
@@ -105,114 +89,60 @@
                <children>
                   <CheckBox fx:id="checkMeta1" mnemonicParsing="false" text="Fruição" />
                   <CheckBox fx:id="checkMeta2" mnemonicParsing="false" text="Fortalecimento Patrimônio Cultural" />
-                  <CheckBox fx:id="checkMeta3" onAction="#onClickMeta3" mnemonicParsing="false" text="Formação em Arte e Cultura" />
+                  <CheckBox fx:id="checkMeta3" mnemonicParsing="false" onAction="#onClickMeta3" text="Formação em Arte e Cultura" />
                   <CheckBox fx:id="checkMeta4" mnemonicParsing="false" text="Convocatória" />
                </children>
             </HBox>
             </children>
         </Pane>
-      <AnchorPane layoutX="2.0" layoutY="413.0" prefHeight="118.0" prefWidth="790.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="40.0" />
-      <GridPane fx:id="paneLocalizacoes" alignment="CENTER" layoutX="35.0" layoutY="417.0" maxWidth="1406.0" prefHeight="86.0" prefWidth="1377.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="40.0">
-         <columnConstraints>
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="898.2000122070312" minWidth="10.0" prefWidth="428.0000366210937" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="612.7999877929686" minWidth="10.0" prefWidth="490.39996337890625" />
-            <ColumnConstraints hgrow="SOMETIMES" maxWidth="475.59991455078125" minWidth="10.0" prefWidth="475.59991455078125" />
-         </columnConstraints>
-         <rowConstraints>
-            <RowConstraints maxHeight="52.8000244140625" minHeight="10.0" prefHeight="34.4" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="44.00000190734864" minHeight="10.0" prefHeight="32.800000000000004" vgrow="SOMETIMES" />
-         </rowConstraints>
-         <children>
-            <Label prefHeight="17.0" prefWidth="63.0" text="Rua" textFill="#352929">
-               <GridPane.margin>
-                  <Insets bottom="20.0" left="20.0" />
-               </GridPane.margin>
-            </Label>
-            <TextField fx:id="rua" maxHeight="10.0" minWidth="26.0" prefHeight="26.0" prefWidth="190.0">
-               <GridPane.margin>
-                  <Insets left="20.0" top="20.0" />
-               </GridPane.margin>
-            </TextField>
-            <TextField fx:id="bairro" layoutX="30.0" layoutY="34.0" minWidth="26.0" prefHeight="26.0" GridPane.columnIndex="1">
-               <GridPane.margin>
-                  <Insets left="20.0" top="20.0" />
-               </GridPane.margin>
-            </TextField>
-            <Label text="Bairro" textFill="#352929" GridPane.columnIndex="1">
-               <GridPane.margin>
-                  <Insets bottom="20.0" left="20.0" />
-               </GridPane.margin>
-            </Label>
-            <TextField fx:id="numero" layoutX="290.0" layoutY="34.0" maxHeight="10.0" minWidth="26.0" prefHeight="26.0" prefWidth="190.0" GridPane.columnIndex="2">
-               <GridPane.margin>
-                  <Insets left="20.0" top="20.0" />
-               </GridPane.margin>
-            </TextField>
-            <Label text="Número" textFill="#352929" GridPane.columnIndex="2">
-               <GridPane.margin>
-                  <Insets bottom="20.0" left="20.0" />
-               </GridPane.margin>
-            </Label>
-            <Label text="Cidade" textFill="#352929" GridPane.columnIndex="1" GridPane.rowIndex="1">
-               <GridPane.margin>
-                  <Insets bottom="20.0" left="20.0" />
-               </GridPane.margin>
-            </Label>
-            <Label text="Estado" textFill="#352929" GridPane.columnIndex="2" GridPane.rowIndex="1">
-               <GridPane.margin>
-                  <Insets bottom="20.0" left="20.0" />
-               </GridPane.margin>
-            </Label>
-            <TextField fx:id="cidade" layoutX="30.0" layoutY="80.0" maxHeight="10.0" minWidth="26.0" prefHeight="26.0" prefWidth="190.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-               <GridPane.margin>
-                  <Insets left="20.0" top="20.0" />
-               </GridPane.margin>
-            </TextField>
-            <TextField fx:id="estado" layoutX="290.0" layoutY="80.0" maxHeight="10.0" minWidth="26.0" prefHeight="26.0" prefWidth="190.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
-               <GridPane.margin>
-                  <Insets left="20.0" top="20.0" />
-               </GridPane.margin>
-            </TextField>
-            <TextField fx:id="cep" layoutX="30.0" layoutY="29.0" maxHeight="10.0" minWidth="26.0" prefHeight="26.0" prefWidth="190.0" promptText="Ex: 01001-000" GridPane.rowIndex="1">
-               <GridPane.margin>
-                  <Insets left="20.0" top="20.0" />
-               </GridPane.margin>
-            </TextField>
-            <Label layoutX="30.0" layoutY="13.0" prefHeight="18.0" prefWidth="30.0" text="CEP" textFill="#352929" GridPane.rowIndex="1">
-               <GridPane.margin>
-                  <Insets bottom="20.0" left="20.0" />
-               </GridPane.margin>
-            </Label>
-         </children>
-      </GridPane>
-      <StackPane layoutX="-45.0" layoutY="-100.0" prefHeight="152.0" prefWidth="835.0" VBox.vgrow="ALWAYS" />
-      <Button fx:id="botaoNovaLocalizacao" onAction="#adicionarLocalizacao" alignment="CENTER" layoutX="636.0" layoutY="531.0" mnemonicParsing="false" style="-fx-background-color: #2A3F25;" text="Adicionar nova localização +" textFill="WHITE" />
+            <VBox layoutX="10.0" layoutY="413.0" spacing="60.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="40.0">
+               <children>
+               <VBox fx:id="Localizacoes">
+                     <children>
+                  <HBox prefHeight="35.0" prefWidth="790.0">
+                     <children>
+                        <Label text="Localização" textFill="#352929">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="20.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Button fx:id="botaoNovaLocalizacao" alignment="CENTER" mnemonicParsing="false" onAction="#adicionarLocalizacao" style="-fx-background-color: #2A3F25;" text="Adicionar nova localização +" textFill="WHITE" />
+                     </children>
+                  </HBox>
+                     </children>
+                  </VBox>
+            <VBox>
+               <children>
+                        <HBox fx:id="Participantes" prefHeight="100.0" prefWidth="200.0" />
+                  <Button fx:id="botaoParticipantes" mnemonicParsing="false" onAction="#adicionarParticipante" prefHeight="46.0" prefWidth="152.0" style="-fx-background-color: #352929;" text="Adicionar participantes" textFill="WHITE" />
+               </children>
+            </VBox>
+            <VBox prefHeight="46.0" prefWidth="150.0">
+               <children>
+                  <Button fx:id="botaoOrganizadores" mnemonicParsing="false" onAction="#adicionarOrganizador" prefHeight="46.0" prefWidth="154.0" style="-fx-background-color: #352929;" text="Adicionar organizadores" textFill="WHITE" VBox.vgrow="ALWAYS" />
+               </children>
+            </VBox>
+            <VBox prefHeight="46.0" prefWidth="150.0">
+               <children>
+                  <Button fx:id="botaoColaboradores" mnemonicParsing="false" onAction="#adicionarColaborador" prefHeight="46.0" prefWidth="153.0" style="-fx-background-color: #352929;" text="Adicionar colaboradores" textFill="WHITE" VBox.vgrow="ALWAYS" />
+               </children>
+            </VBox>
+            <VBox prefHeight="46.0" prefWidth="150.0">
+               <children>
+                  <Button fx:id="botaoArquivos" mnemonicParsing="false" onAction="#adicionarArquivo" prefHeight="46.0" prefWidth="152.0" style="-fx-background-color: #352929;" text="Adicionar arquivos" textFill="WHITE" VBox.vgrow="ALWAYS" />
+               </children>
+            </VBox>
+               </children>
+            </VBox>
       <RadioButton fx:id="libras" layoutX="1279.0" layoutY="339.0" mnemonicParsing="false" text="Acessível em libras" textFill="#352929" AnchorPane.rightAnchor="40.0" />
       <RadioButton fx:id="certificavel" layoutX="1131.0" layoutY="339.0" mnemonicParsing="false" text="Certificável" textFill="#352929" AnchorPane.rightAnchor="250.0" />
-      <VBox layoutX="25.0" layoutY="575.0" prefHeight="46.0" prefWidth="150.0" AnchorPane.leftAnchor="25.0">
-         <children>
-            <Button fx:id="botaoOrganizadores" onAction="#adicionarOrganizador" mnemonicParsing="false" prefHeight="46.0" prefWidth="154.0" style="-fx-background-color: #352929;" text="Adicionar organizadores" textFill="WHITE" VBox.vgrow="ALWAYS" />
-         </children>
-      </VBox>
-      <VBox layoutX="25.0" layoutY="639.0" prefHeight="46.0" prefWidth="150.0" AnchorPane.leftAnchor="25.0">
-         <children>
-            <Button fx:id="botaoColaboradores" onAction="#adicionarColaborador" mnemonicParsing="false" prefHeight="46.0" prefWidth="153.0" style="-fx-background-color: #352929;" text="Adicionar colaboradores" textFill="WHITE" VBox.vgrow="ALWAYS" />
-         </children>
-      </VBox>
-      <VBox layoutX="25.0" layoutY="760.0" prefHeight="46.0" prefWidth="150.0" AnchorPane.leftAnchor="25.0">
-         <children>
-            <Button fx:id="botaoArquivos" onAction="#adicionarArquivo" mnemonicParsing="false" prefHeight="46.0" prefWidth="152.0" style="-fx-background-color: #352929;" text="Adicionar arquivos" textFill="WHITE" VBox.vgrow="ALWAYS" />
-         </children>
-      </VBox>
-      <VBox fx:id="Participantes" layoutX="25.0" layoutY="700.0">
-         <children>
-            <Button fx:id="botaoParticipantes" onAction="#adicionarParticipante" mnemonicParsing="false" prefHeight="46.0" prefWidth="152.0" style="-fx-background-color: #352929;" text="Adicionar participantes" textFill="WHITE" />
-         </children>
-      </VBox>
       <HBox layoutX="868.0" layoutY="735.0" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
          <children>
       <Button fx:id="cancelar" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="26.0" prefWidth="200.0" style="-fx-background-color: #352929;" text="Cancelar" textFill="WHITE" />
-      <Button fx:id="criarEvento" onAction="#criarNovoEvento" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="26.0" prefWidth="200.0" style="-fx-background-color: #2A3F25;" text="Criar" textFill="WHITE" />
+      <Button fx:id="criarEvento" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#criarNovoEvento" prefHeight="26.0" prefWidth="200.0" style="-fx-background-color: #2A3F25;" text="Criar" textFill="WHITE" />
          </children>
       </HBox>
    </children>
