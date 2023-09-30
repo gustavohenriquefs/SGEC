@@ -94,6 +94,17 @@ public class LocalizacaoDAO {
   }
 
   boolean vincularEvento(int idLocalizacao, int idEvento){
-    return true;
+    try {
+      String sql = "insert into localizacao_evento (id_localizacao,id_evento)"
+              + " values(?,?)";
+      PreparedStatement stmt = connection.prepareStatement(sql);
+      stmt.setInt(1, idLocalizacao);
+      stmt.setInt(2, idEvento);
+      stmt.execute();
+      stmt.close();
+      return true;
+    } catch (SQLException e) {
+      return false;
+    }
   }
 }
