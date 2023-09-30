@@ -65,4 +65,28 @@ public class InstituicaoDAO {
     return true;
   }
 
+  public boolean atualizarInstituicao(Instituicao instituicao) throws SQLException {
+    String atualizarInstituicaoQuery = "UPDATE instituicao SET nome=?, descricao_contribuicao=?, valor_contribuicao=? WHERE id_instituicao=?";
+
+    try {
+      PreparedStatement statement = conn.prepareStatement(atualizarInstituicaoQuery);
+
+      statement.setString(1, instituicao.getNome());
+      statement.setString(2, instituicao.getDescricaoContribuicao());
+      statement.setInt(3, instituicao.getValorContribuicao());
+      statement.setInt(4, instituicao.getIdInstituicao());
+
+      statement.execute();
+      statement.close();
+    } catch (Exception e) {
+      conn.rollback();
+
+      return false;
+    } finally {
+      conn.commit();
+    }
+
+    return true;
+  }
+
 }
