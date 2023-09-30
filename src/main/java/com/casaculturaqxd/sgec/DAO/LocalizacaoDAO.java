@@ -92,4 +92,8 @@ public class LocalizacaoDAO {
       return false;
     }
   }
+
+  boolean vincularEvento(int idLocalizacao, int idEvento){
+    return true;
+  }
 }
