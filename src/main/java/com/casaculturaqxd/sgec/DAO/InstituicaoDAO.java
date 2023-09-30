@@ -50,7 +50,7 @@ public class InstituicaoDAO {
       
       statement.setString(1, instituicao.getNome());
       statement.setString(2, instituicao.getDescricaoContribuicao());
-      statement.setInt(3, instituicao.getValorContribuicao());
+      statement.setFloat(3, instituicao.getValorContribuicao());
 
       statement.execute();
       statement.close();
@@ -73,7 +73,7 @@ public class InstituicaoDAO {
 
       statement.setString(1, instituicao.getNome());
       statement.setString(2, instituicao.getDescricaoContribuicao());
-      statement.setInt(3, instituicao.getValorContribuicao());
+      statement.setFloat(3, instituicao.getValorContribuicao());
       statement.setInt(4, instituicao.getIdInstituicao());
 
       statement.execute();
