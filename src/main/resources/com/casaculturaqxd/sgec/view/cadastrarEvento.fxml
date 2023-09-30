@@ -114,19 +114,23 @@
                   </HBox>
                      </children>
                   </VBox>
-            <VBox>
+            <VBox VBox.vgrow="ALWAYS">
                <children>
-                        <HBox fx:id="Participantes" prefHeight="100.0" prefWidth="200.0" />
-                  <Button fx:id="botaoParticipantes" mnemonicParsing="false" onAction="#adicionarParticipante" prefHeight="46.0" prefWidth="152.0" style="-fx-background-color: #352929;" text="Adicionar participantes" textFill="WHITE" />
+                        <HBox fx:id="Participantes" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="40.0">
+                           <children>
+                        <Button fx:id="botaoParticipantes" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#adicionarParticipante" prefHeight="46.0" prefWidth="152.0" style="-fx-background-color: #352929;" text="Adicionar participantes" textFill="WHITE" HBox.hgrow="ALWAYS" />
+                           </children></HBox>
                </children>
             </VBox>
             <VBox prefHeight="46.0" prefWidth="150.0">
                <children>
+               <HBox fx:id="Organizadores" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="40.0">
                   <Button fx:id="botaoOrganizadores" mnemonicParsing="false" onAction="#adicionarOrganizador" prefHeight="46.0" prefWidth="154.0" style="-fx-background-color: #352929;" text="Adicionar organizadores" textFill="WHITE" VBox.vgrow="ALWAYS" />
                </children>
             </VBox>
             <VBox prefHeight="46.0" prefWidth="150.0">
                <children>
+                  <HBox fx:id="Colaboradores" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="40.0">
                   <Button fx:id="botaoColaboradores" mnemonicParsing="false" onAction="#adicionarColaborador" prefHeight="46.0" prefWidth="153.0" style="-fx-background-color: #352929;" text="Adicionar colaboradores" textFill="WHITE" VBox.vgrow="ALWAYS" />
                </children>
             </VBox>
@@ -135,16 +139,16 @@
                   <Button fx:id="botaoArquivos" mnemonicParsing="false" onAction="#adicionarArquivo" prefHeight="46.0" prefWidth="152.0" style="-fx-background-color: #352929;" text="Adicionar arquivos" textFill="WHITE" VBox.vgrow="ALWAYS" />
                </children>
             </VBox>
+            <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
+               <children>
+            <Button fx:id="cancelar" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="26.0" prefWidth="200.0" style="-fx-background-color: #352929;" text="Cancelar" textFill="WHITE" />
+            <Button fx:id="criarEvento" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#criarNovoEvento" prefHeight="26.0" prefWidth="200.0" style="-fx-background-color: #2A3F25;" text="Criar" textFill="WHITE" />
+               </children>
+            </HBox>
                </children>
             </VBox>
       <RadioButton fx:id="libras" layoutX="1279.0" layoutY="339.0" mnemonicParsing="false" text="Acessível em libras" textFill="#352929" AnchorPane.rightAnchor="40.0" />
       <RadioButton fx:id="certificavel" layoutX="1131.0" layoutY="339.0" mnemonicParsing="false" text="Certificável" textFill="#352929" AnchorPane.rightAnchor="250.0" />
-      <HBox layoutX="868.0" layoutY="735.0" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
-         <children>
-      <Button fx:id="cancelar" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="26.0" prefWidth="200.0" style="-fx-background-color: #352929;" text="Cancelar" textFill="WHITE" />
-      <Button fx:id="criarEvento" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#criarNovoEvento" prefHeight="26.0" prefWidth="200.0" style="-fx-background-color: #2A3F25;" text="Criar" textFill="WHITE" />
-         </children>
-      </HBox>
    </children>
    </AnchorPane>
   </content>
