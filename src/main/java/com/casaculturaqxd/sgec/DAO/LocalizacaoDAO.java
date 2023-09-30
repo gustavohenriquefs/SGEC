@@ -73,6 +73,7 @@ public class LocalizacaoDAO {
       stmt.setString(7, obj.getPais());
       stmt.setInt(8, obj.getIdLocalizacao());
       stmt.execute();
+      stmt.close();
       return true;
     } catch (Exception e) {
       return false;
