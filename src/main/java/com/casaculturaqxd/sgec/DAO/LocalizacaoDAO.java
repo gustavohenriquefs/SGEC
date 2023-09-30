@@ -80,6 +80,7 @@ public class LocalizacaoDAO {
   }
 
   boolean deletarLocalizacao(Localizacao obj){
+    String sql = "DELETE FROM localizacao WHERE id_localizacao=?";
     return true;
   }
 }
