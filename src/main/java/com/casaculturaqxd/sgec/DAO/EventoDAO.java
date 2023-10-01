@@ -17,6 +17,62 @@ public class EventoDAO {
     this.connection = connection;
   }
 
+  public boolean inserirEvento(Evento evento) {
+    
+    if(evento.getLocais().size() == 0) {
+      return false;
+    } 
+
+    if(evento.getListaOrganizadores().size() == 0) {
+      return false;
+    }
+
+    evento.getListaColaboradores();
+
+    // evento.getListaArquivos();
+
+    // evento.getListaParticipantes();
+
+    try {
+      String sql = "insert into evento(id_evento,nome_evento,publico_esperado,publico_alcancado,descricao,data_inicial,data_final,horario,classificacao_etaria,imagem_preview,certificavel,carga_horaria,acessivel_em_libras) values(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+      
+      PreparedStatement stmt = connection.prepareStatement(sql);
+
+      stmt.setInt(    1, evento.getIdEvento());
+      stmt.setString( 2, evento.getNome());
+      stmt.setInt(    3, evento.getPublico_esperado());
+      stmt.setInt(    4, evento.getPublico_alcancado());
+      stmt.setString( 5, evento.getDescricao());
+      stmt.setDate(   6, java.sql.Date.valueOf(evento.getDataInicial()));
+      stmt.setDate(   7, java.sql.Date.valueOf(evento.getDataFinal()));
+      stmt.setTime(   8, Time.valueOf(evento.getHorario()));
+      stmt.setString( 9, evento.getClassificacaoEtaria().toString());
+      stmt.setString(10, null);
+      stmt.setBoolean(11, evento.isCertificavel());
+      stmt.setTime(   12, Time.valueOf(evento.getCargaHoraria()));
+      stmt.setBoolean(13, evento.isAcessivelEmLibras());
+
+      stmt.execute();
+      stmt.close();
+    } catch (SQLException e) {
+      return false;
+    }
+    
+    if(this.vincularLocais(evento.getLocais()) == false) {
+      return false;
+    }
+
+    if(this.vincularOrganizadores(evento.getListaOrganizadores()) == false) {
+      return false;
+    }
+
+    if(this.vincularColaboradores(evento.getListaColaboradores()) == false) {
+      return false;
+    }
+    
+    return true;
+  }
+
   private boolean vincularLocais(SortedSet<Integer> locais) {
     for(Integer local: locais) {
       if(!this.vincularLocal(local)) {
