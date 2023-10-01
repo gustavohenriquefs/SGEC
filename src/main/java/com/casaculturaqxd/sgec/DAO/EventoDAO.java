@@ -69,4 +69,29 @@ public class EventoDAO {
     return true;
   }
 
+  private boolean vincularColaboradores(SortedSet<Integer> colaboradores) {
+    for(Integer colaborador: colaboradores) {
+      if(!this.vincularColaborador(colaborador)) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  private boolean vincularColaborador(Integer colaborador) {
+    String vincColaboradoresSql = "INSERT INTO colaborador_evento(id_evento, id_instituicao) VALUES (?, ?);";
+
+    try {
+      PreparedStatement stmt = connection.prepareStatement(vincColaboradoresSql);
+      stmt.setInt(1, colaborador);
+      stmt.setInt(2, 1);
+      stmt.execute();
+      stmt.close();
+    } catch (SQLException e) {
+      return false;
+    }
+
+    return true;
+  }
 }
