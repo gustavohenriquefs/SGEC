@@ -16,10 +16,10 @@ public class Instituicao {
     private float valorContribuicao;
 
     
-    public Instituicao(String nome, String descricaoContribuicao, float f,Atribuicao atribuicao) {
+    public Instituicao(String nome, String descricaoContribuicao, float valorContribuicao,Atribuicao atribuicao) {
         this.nome = nome;
         this.descricaoContribuicao = descricaoContribuicao;
-        this.valorContribuicao = f;
+        this.valorContribuicao = valorContribuicao;
         this.atribuicao = atribuicao;
     }
 
