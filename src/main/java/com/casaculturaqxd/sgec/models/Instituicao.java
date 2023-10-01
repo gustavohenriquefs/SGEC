@@ -9,17 +9,17 @@ import com.casaculturaqxd.sgec.enums.Atribuicao;
  * mas não Organizadora e Colaboradora ao mesmo tempo
  */
 public class Instituicao {
-    private int idInstituicao;
+    private Integer idInstituicao = null;
     private Atribuicao atribuicao;
     private String nome;
     private String descricaoContribuicao;
-    private int valorContribuicao;
+    private float valorContribuicao;
 
     
-    public Instituicao(String nome, String descricaoContribuicao, int valorContribuicao,Atribuicao atribuicao) {
+    public Instituicao(String nome, String descricaoContribuicao, float f,Atribuicao atribuicao) {
         this.nome = nome;
         this.descricaoContribuicao = descricaoContribuicao;
-        this.valorContribuicao = valorContribuicao;
+        this.valorContribuicao = f;
         this.atribuicao = atribuicao;
     }
 
@@ -35,10 +35,10 @@ public class Instituicao {
     public void setDescricaoContribuicao(String descricaoContribuicao) {
         this.descricaoContribuicao = descricaoContribuicao;
     }
-    public int getValorContribuicao() {
+    public float getValorContribuicao() {
         return valorContribuicao;
     }
-    public void setValorContribuicao(int valorContribuicao) {
+    public void setValorContribuicao(float valorContribuicao) {
         this.valorContribuicao = valorContribuicao;
     }
     public Atribuicao getAtribuicao() {
@@ -48,11 +48,11 @@ public class Instituicao {
         this.atribuicao = atribuicao;
     }
 
-    public int getIdInstituicao() {
+    public Integer getIdInstituicao() {
         return idInstituicao;
     }
 
-    public void setIdInstituicao(int idInstituicao) {
+    public void setIdInstituicao(Integer idInstituicao) {
         this.idInstituicao = idInstituicao;
     }
     
