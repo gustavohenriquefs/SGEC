@@ -114,7 +114,7 @@
                   </HBox>
                      </children>
                   </VBox>
-            <VBox VBox.vgrow="ALWAYS">
+            <VBox alignment="CENTER_LEFT" VBox.vgrow="ALWAYS">
                <children>
                         <HBox fx:id="Participantes" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="40.0">
                            <children>
@@ -122,16 +122,18 @@
                            </children></HBox>
                </children>
             </VBox>
-            <VBox prefHeight="46.0" prefWidth="150.0">
+            <VBox alignment="CENTER_LEFT" prefHeight="46.0" prefWidth="150.0">
                <children>
-               <HBox fx:id="Organizadores" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="40.0">
-                  <Button fx:id="botaoOrganizadores" mnemonicParsing="false" onAction="#adicionarOrganizador" prefHeight="46.0" prefWidth="154.0" style="-fx-background-color: #352929;" text="Adicionar organizadores" textFill="WHITE" VBox.vgrow="ALWAYS" />
+               <HBox fx:id="Organizadores" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                  <Button fx:id="botaoOrganizadores" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#adicionarOrganizador" prefHeight="46.0" prefWidth="154.0" style="-fx-background-color: #352929;" text="Adicionar organizadores" textFill="WHITE" VBox.vgrow="ALWAYS" />
+               </HBox>
                </children>
             </VBox>
             <VBox prefHeight="46.0" prefWidth="150.0">
                <children>
-                  <HBox fx:id="Colaboradores" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="40.0">
-                  <Button fx:id="botaoColaboradores" mnemonicParsing="false" onAction="#adicionarColaborador" prefHeight="46.0" prefWidth="153.0" style="-fx-background-color: #352929;" text="Adicionar colaboradores" textFill="WHITE" VBox.vgrow="ALWAYS" />
+                  <HBox fx:id="Colaboradores" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                  <Button fx:id="botaoColaboradores" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#adicionarColaborador" prefHeight="46.0" prefWidth="153.0" style="-fx-background-color: #352929;" text="Adicionar colaboradores" textFill="WHITE" VBox.vgrow="ALWAYS" />
+                  </HBox>
                </children>
             </VBox>
             <VBox prefHeight="46.0" prefWidth="150.0">
@@ -141,7 +143,7 @@
             </VBox>
             <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
                <children>
-            <Button fx:id="cancelar" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="26.0" prefWidth="200.0" style="-fx-background-color: #352929;" text="Cancelar" textFill="WHITE" />
+            <Button fx:id="cancelar" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#cancelar" prefHeight="26.0" prefWidth="200.0" style="-fx-background-color: #352929;" text="Cancelar" textFill="WHITE" />
             <Button fx:id="criarEvento" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#criarNovoEvento" prefHeight="26.0" prefWidth="200.0" style="-fx-background-color: #2A3F25;" text="Criar" textFill="WHITE" />
                </children>
             </HBox>
