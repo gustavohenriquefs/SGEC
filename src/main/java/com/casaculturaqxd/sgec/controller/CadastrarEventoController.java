@@ -17,6 +17,9 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+
+import com.casaculturaqxd.sgec.App;
 
 
 public class CadastrarEventoController {
@@ -25,17 +28,20 @@ public class CadastrarEventoController {
     Stage stage;
     @FXML
     VBox Localizacoes;
-    @FXML HBox Participantes;
+    @FXML 
+    HBox Participantes;
+    @FXML 
+    HBox Organizadores;
+    @FXML 
+    HBox Colaboradores;
+    @FXML
+    TextField titulo;
     @FXML 
     TextField publicoEsperado;
     @FXML
     TextField publicoAlcancado;
-    @FXML 
-    Label textoHoras;
     @FXML
     TextField horas;
-    @FXML
-    Label textoMinutos;
     @FXML
     TextField minutos;
     @FXML
@@ -51,6 +57,7 @@ public class CadastrarEventoController {
     CheckBox checkMeta4;
     @FXML
     RadioButton certificavel;
+
     //Botoes
     @FXML
     Button botaoNovaLocalizacao;
@@ -81,6 +88,25 @@ public class CadastrarEventoController {
     }
 
     public void criarNovoEvento(){
+        /** 
+         * TODO: criar um model de evento usando o EventoBuilder,
+         * depois inserir no banco usando o EventoDAO
+         */
+        //EventoBuilder criadorEvento = new EventoBuilder();
+
+        //lista com os campos obrigatorios
+        ArrayList<String> textoCamposObrigatorios = new ArrayList<String>();
+
+        //EventoDAO.inserir(Evento product);
+        //App.setRoot("view/home");
+    }
+
+    public void cancelar() throws IOException{
+        /** 
+         * TODO: implementar uma fila na classe App, para retornar a ultima
+         * tela visitada
+         */
+        App.setRoot("view/home");
     }
 
     public void adicionarLocalizacao() throws IOException{
@@ -97,11 +123,20 @@ public class CadastrarEventoController {
         AnchorPane novoParticipante = (AnchorPane) loaderParticipantes.getPage("fields/fieldParticipante");
         Participantes.getChildren().add(novoParticipante);
     }
-    public void adicionarOrganizador(){
-        
-    }
-    public void adicionarColaborador(){
+    public void adicionarOrganizador() throws IOException{
+        //TODO: permitir adicionar uma instituicao existente, neste caso o preview dela
+        // que e adicionado a pagina
+        SubSceneLoader loaderOrganizadores = new SubSceneLoader();
+        AnchorPane novoOrganizador = (AnchorPane) loaderOrganizadores.getPage("fields/fieldInstituicao");
+        Organizadores.getChildren().add(novoOrganizador);
 
+    }
+    public void adicionarColaborador() throws IOException{
+        //TODO: permitir adicionar uma instituicao existente, neste caso o preview dela
+        // que e adicionado a pagina
+        SubSceneLoader loaderColaboradores = new SubSceneLoader();
+        AnchorPane novoColaborador = (AnchorPane) loaderColaboradores.getPage("fields/fieldInstituicao");
+        Colaboradores.getChildren().add(novoColaborador);
     }
     public void adicionarArquivo(){
         FileChooser fileChooser = new FileChooser();
@@ -133,7 +168,9 @@ public class CadastrarEventoController {
     }
 
     public void showCargaHoraria(boolean value){
-        
+        /*TODO: implementar o metodo quando a interface
+         * for atualizada com a carga horaria
+         */
     }
     public void showCertificavel(boolean value){
         if(value == false){
