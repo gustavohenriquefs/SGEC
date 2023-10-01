@@ -69,6 +69,10 @@ public class EventoDAO {
     if(this.vincularColaboradores(evento.getListaColaboradores()) == false) {
       return false;
     }
+
+    if(this.vincularParticipantes(evento.getListaParticipantes()) == false) {
+      return false;
+    }
     
     return true;
   }
@@ -141,6 +145,32 @@ public class EventoDAO {
     try {
       PreparedStatement stmt = connection.prepareStatement(vincColaboradoresSql);
       stmt.setInt(1, colaborador);
+      stmt.setInt(2, 1);
+      stmt.execute();
+      stmt.close();
+    } catch (SQLException e) {
+      return false;
+    }
+
+    return true;
+  }
+
+  private boolean vincularParticipantes(SortedSet<Integer> participantes) {
+    for(Integer participante: participantes) {
+      if(!this.vincularParticipante(participante)) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  private boolean vincularParticipante(Integer participante) {
+    String vincParticipantesSql = "INSERT INTO participante_evento(id_participante, id_evento) VALUES (?, ?);";
+
+    try {
+      PreparedStatement stmt = connection.prepareStatement(vincParticipantesSql);
+      stmt.setInt(1, participante);
       stmt.setInt(2, 1);
       stmt.execute();
       stmt.close();
