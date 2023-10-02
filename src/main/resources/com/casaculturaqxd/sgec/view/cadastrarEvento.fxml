@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.CadastrarEventoController">
+<ScrollPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="1122.0" prefWidth="1442.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.CadastrarEventoController">
   <content>
     <AnchorPane id="container" prefHeight="800.0" prefWidth="1440.0" stylesheets="@../css/cadastrarEventoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
@@ -57,20 +57,68 @@
             <HBox HBox.hgrow="ALWAYS" />
         </children>
       </VBox>
-      <Pane layoutX="10.0" layoutY="310.0" prefHeight="52.0" prefWidth="692.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="738.0" VBox.vgrow="ALWAYS">
-         <children>
-            <ChoiceBox fx:id="classificacaoEtaria" layoutX="22.0" layoutY="19.0" prefWidth="150.0" />
-            <Label layoutX="22.0" layoutY="-3.0" prefHeight="18.0" prefWidth="105.0" text="Classificação etária" textFill="#352929" />
-            <TextField fx:id="publicoEsperado" layoutX="240.0" layoutY="15.0" />
-            <Label layoutX="242.0" layoutY="-6.0" prefHeight="18.0" prefWidth="105.0" text="Público esperado" textFill="#352929" />
-            <TextField fx:id="publicoAlcancado" layoutX="512.0" layoutY="14.0" />
-            <Label layoutX="512.0" layoutY="-3.0" prefHeight="18.0" prefWidth="105.0" text="Público alcançado" textFill="#352929" />
-         </children>
-         <VBox.margin>
-            <Insets left="20.0" />
-         </VBox.margin>
-      </Pane>
-        <Pane layoutX="-2.0" layoutY="74.0" maxWidth="1408.0" prefHeight="239.0" prefWidth="1395.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="40.0">
+            <HBox alignment="CENTER" layoutX="29.0" layoutY="303.0" prefHeight="59.0" prefWidth="1371.0" spacing="400.0">
+               <children>
+                  <HBox>
+                     <children>
+                        <VBox>
+                           <children>
+                        <Label prefHeight="18.0" prefWidth="105.0" text="Público alcançado" textFill="#352929" />
+                        <TextField fx:id="publicoAlcancado" />
+                           </children>
+                        </VBox>
+                        <VBox>
+                           <children>
+                        <Label prefHeight="18.0" prefWidth="105.0" text="Público esperado" textFill="#352929" />
+                        <TextField fx:id="publicoEsperado" />
+                           </children>
+                        </VBox>
+                        <VBox>
+                           <children>
+                        <Label prefHeight="18.0" prefWidth="105.0" text="Classificação etária" textFill="#352929" />
+                        <ChoiceBox fx:id="classificacaoEtaria" prefWidth="150.0" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox alignment="BOTTOM_CENTER">
+                     <children>
+                        <VBox fx:id="cargaHoraria" alignment="CENTER">
+                           <children>
+                              <Label text="Carga horária">
+                                 <font>
+                                    <Font name="System Bold" size="12.0" />
+                                 </font>
+                              </Label>
+                              <HBox>
+                                 <children>
+                                    <VBox>
+                                       <children>
+                                          <Label fx:id="textoMinutos1" prefHeight="17.0" prefWidth="52.0" text="Minutos" textFill="#352929" />
+                                          <TextField fx:id="minutos1" />
+                                       </children>
+                                    </VBox>
+                                    <VBox>
+                                       <children>
+                                          <Label fx:id="textoHoras1" prefHeight="17.0" prefWidth="44.0" text="Horas" textFill="#352929" />
+                                          <TextField fx:id="horas1" />
+                                       </children>
+                                    </VBox>
+                                 </children>
+                              </HBox>
+                           </children>
+                        </VBox>
+                        <HBox alignment="CENTER" spacing="20.0">
+                           <children>
+                        <RadioButton fx:id="certificavel" mnemonicParsing="false" text="Certificável" textFill="#352929" />
+                        <RadioButton fx:id="libras" mnemonicParsing="false" text="Acessível em libras" textFill="#352929" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </HBox>
+               </children>
+            </HBox>
+        <Pane layoutY="80.0" maxWidth="1408.0" prefHeight="239.0" prefWidth="1395.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="45.0">
             <children>
                 <Label layoutX="25.0" layoutY="6.0" prefHeight="17.0" prefWidth="40.0" text="Título" textFill="#352929" AnchorPane.leftAnchor="5.0" />
                 <TextField fx:id="titulo" layoutX="23.0" layoutY="28.0" maxWidth="430.0" prefHeight="26.0" prefWidth="430.0" AnchorPane.leftAnchor="5.0" />
@@ -80,7 +128,7 @@
                 <Label fx:id="textoHoras" layoutX="425.0" layoutY="57.0" prefHeight="17.0" prefWidth="44.0" text="Horas" textFill="#352929" />
                 <DatePicker fx:id="dataInicial" layoutX="23.0" layoutY="78.0" maxWidth="200.0" AnchorPane.leftAnchor="5.0" />
                 <DatePicker fx:id="dataFinal" layoutX="223.0" layoutY="78.0" maxWidth="200.0" prefHeight="26.0" prefWidth="164.0" AnchorPane.leftAnchor="223.0" />
-                <TextArea fx:id="descricao" layoutX="25.0" layoutY="128.0" maxWidth="1408.0" prefHeight="101.0" prefWidth="1366.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="40.0" />
+                <TextArea fx:id="descricao" layoutX="25.0" layoutY="128.0" maxWidth="1408.0" prefHeight="82.0" prefWidth="1373.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="40.0" />
                 <Label layoutX="23.0" layoutY="111.0" prefHeight="17.0" prefWidth="63.0" text="Descrição" textFill="#352929" AnchorPane.leftAnchor="5.0" />
             <Label fx:id="textoMinutos" layoutX="611.0" layoutY="57.0" prefHeight="17.0" prefWidth="52.0" text="Minutos" textFill="#352929" AnchorPane.rightAnchor="116.39999999999998" />
             <TextField fx:id="horas" layoutX="425.0" layoutY="79.0" />
@@ -97,7 +145,7 @@
         </Pane>
             <VBox layoutX="10.0" layoutY="413.0" spacing="60.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="40.0">
                <children>
-               <VBox fx:id="Localizacoes">
+               <VBox fx:id="Localizacoes" spacing="15.0">
                      <children>
                   <HBox prefHeight="35.0" prefWidth="790.0">
                      <children>
@@ -149,8 +197,6 @@
             </HBox>
                </children>
             </VBox>
-      <RadioButton fx:id="libras" layoutX="1279.0" layoutY="339.0" mnemonicParsing="false" text="Acessível em libras" textFill="#352929" AnchorPane.rightAnchor="40.0" />
-      <RadioButton fx:id="certificavel" layoutX="1131.0" layoutY="339.0" mnemonicParsing="false" text="Certificável" textFill="#352929" AnchorPane.rightAnchor="250.0" />
    </children>
    </AnchorPane>
   </content>
