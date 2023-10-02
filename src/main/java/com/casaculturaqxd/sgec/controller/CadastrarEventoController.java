@@ -29,7 +29,7 @@ public class CadastrarEventoController {
 
     Stage stage;
     @FXML
-    VBox Localizacoes;
+    VBox Localizacoes, cargaHoraria;
     @FXML 
     HBox Participantes;
     @FXML 
@@ -37,52 +37,23 @@ public class CadastrarEventoController {
     @FXML 
     HBox Colaboradores;
     @FXML
-    TextField titulo;
+    TextField titulo, publicoEsperado, publicoAlcancado, horas, minutos;
     @FXML
     TextArea descricao;
     @FXML 
-    DatePicker dataInicial;
-    @FXML
-    DatePicker dataFinal;
-    @FXML 
-    TextField publicoEsperado;
-    @FXML
-    TextField publicoAlcancado;
-    @FXML
-    TextField horas;
-    @FXML
-    TextField minutos;
-    @FXML
-    VBox cargaHoraria;
+    DatePicker dataInicial, dataFinal;
     @FXML
     ChoiceBox<String> classificacaoEtaria;
     private String[] classificacoes = {"Livre","10 anos","12 anos","14 anos","16 anos","18 anos"};
     @FXML
-    CheckBox checkMeta1;
-    @FXML
-    CheckBox checkMeta2;
-    @FXML
-    CheckBox checkMeta3;
-    @FXML
-    CheckBox checkMeta4;
+    CheckBox checkMeta1, checkMeta2, checkMeta3, checkMeta4;
     @FXML
     RadioButton certificavel;
 
     //Botoes
     @FXML
-    Button botaoNovaLocalizacao;
-    @FXML
-    Button botaoOrganizadores;
-    @FXML
-    Button botaoColaboradores;
-    @FXML
-    Button botaoParticipantes;
-    @FXML
-    Button botaoArquivos;
-    @FXML
-    Button cancelar;
-    @FXML
-    Button criarEvento;
+    Button botaoNovaLocalizacao, botaoOrganizadores, botaoColaboradores,
+    botaoParticipantes, botaoArquivos, cancelar, criarEvento;
 
     public void initialize(){
         /* aplicando restrições aos inputs */
