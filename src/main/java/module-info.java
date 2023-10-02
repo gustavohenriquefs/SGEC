@@ -12,7 +12,6 @@ module com.casaculturaqxd.sgec {
     
     opens com.casaculturaqxd.sgec.controller to javafx.fxml;
     opens com.casaculturaqxd.sgec to javafx.fxml;
-
     requires io.github.cdimascio.dotenv.java;
 
 }
