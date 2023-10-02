@@ -11,10 +11,10 @@ public class Evento {
     private int idEvento;
     private String nome;
     private String descricao;
-    private int publico_esperado;
-    private int publico_alcancado;
-    private int participantes_esperado;
-    private int municipios_esperado;
+    private int publicoEsperado;
+    private int publicoAlcancado;
+    private int participantesEsperado;
+    private int municipiosEsperado;
     private LocalDate dataInicial;
     private LocalDate dataFinal;
     private LocalTime horario;
@@ -84,35 +84,35 @@ public class Evento {
         this.acessivelEmLibras = acessivelEmLibras;
     }
 
-    public int getPublico_esperado() {
-        return publico_esperado;
+    public int getPublicoEsperado() {
+        return publicoEsperado;
     }
     
-    public void setPublico_esperado(int publico_esperado) {
-        this.publico_esperado = publico_esperado;
+    public void setPublicoEsperado(int publicoEsperado) {
+        this.publicoEsperado = publicoEsperado;
     }
 
-    public int getParticipantes_esperado() {
-        return participantes_esperado;
+    public int getParticipantesEsperado() {
+        return participantesEsperado;
     }   
 
-    public void setParticipantes_esperado(int participantes_esperado) {
-        this.participantes_esperado = participantes_esperado;
+    public void setParticipantesEsperado(int participantesEsperado) {
+        this.participantesEsperado = participantesEsperado;
     }
 
-    public int getMunicipios_esperado() {
-        return municipios_esperado;
+    public int getMunicipiosEsperado() {
+        return municipiosEsperado;
     }
 
-    public void setMunicipios_esperado(int municipios_esperado) {
-        this.municipios_esperado = municipios_esperado;
+    public void setMunicipiosEsperado(int municipiosEsperado) {
+        this.municipiosEsperado = municipiosEsperado;
     }
 
-    public int getPublico_alcancado() {
-        return publico_alcancado;
+    public int getPublicoAlcancado() {
+        return publicoAlcancado;
     }
-    public void setPublico_alcancado(int publico_alcancado) {
-        this.publico_alcancado = publico_alcancado;
+    public void setPublicoAlcancado(int publicoAlcancado) {
+        this.publicoAlcancado = publicoAlcancado;
     }
 
     public ClassificacaoEtaria getClassificacaoEtaria() {

@@ -34,8 +34,8 @@ public class EventoDAO {
       String classificacaoEtaria = evento.getClassificacaoEtaria().getClassificacao();
 
       stmt.setString( 1, evento.getNome());
-      stmt.setInt(    2, evento.getPublico_esperado());
-      stmt.setInt(    3, evento.getPublico_alcancado());
+      stmt.setInt(    2, evento.getPublicoEsperado());
+      stmt.setInt(    3, evento.getPublicoAlcancado());
       stmt.setString( 4, evento.getDescricao());
       stmt.setDate(   5, java.sql.Date.valueOf(evento.getDataInicial()));
       stmt.setDate(   6, java.sql.Date.valueOf(evento.getDataFinal()));
@@ -222,8 +222,8 @@ public class EventoDAO {
         eventoRetorno = new Evento();
         eventoRetorno.setIdEvento(resultSet.getInt("id_evento"));
         eventoRetorno.setNome(resultSet.getString("nome_evento"));
-        eventoRetorno.setPublico_esperado(resultSet.getInt("publico_esperado"));
-        eventoRetorno.setPublico_alcancado(resultSet.getInt("publico_alcancado"));
+        eventoRetorno.setPublicoEsperado(resultSet.getInt("publico_esperado"));
+        eventoRetorno.setPublicoAlcancado(resultSet.getInt("publico_alcancado"));
         eventoRetorno.setDescricao(resultSet.getString("descricao"));
         eventoRetorno.setDataInicial(resultSet.getDate("data_inicial").toLocalDate());
         eventoRetorno.setDataFinal(resultSet.getDate("data_final").toLocalDate());
