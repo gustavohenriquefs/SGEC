@@ -7,7 +7,6 @@
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
@@ -48,9 +47,9 @@
                   </Hyperlink>
                </children>
             </Pane>
-            <HBox alignment="CENTER" layoutY="46.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="128.0" prefWidth="1596.0" style="-fx-background-color: FFFEF7;">
+            <HBox alignment="CENTER" layoutX="153.0" layoutY="55.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="203.0" prefWidth="1155.0" style="-fx-background-color: FFFEF7;">
                <children>
-                  <ImageView fx:id="capaEvento" fitHeight="128.0" fitWidth="1486.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS" />
+                  <ImageView fx:id="capaEvento" fitHeight="200.0" fitWidth="1000.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS" />
                </children>
             </HBox>
             <ChoiceBox id="classificacaoEtaria" fx:id="classificacaoEtaria" disable="true" layoutX="232.0" layoutY="355.0" prefWidth="150.0" />
@@ -180,13 +179,7 @@
                            </font>
                         </Label>
                         <Pane prefHeight="4.0" prefWidth="160.0" style="-fx-background-color: #A22D2E;" />
-                        <TableView id="numeroMunicipios" fx:id="tabelaIndicadoresGerais" minHeight="-Infinity" minWidth="-Infinity" prefHeight="155.0" prefWidth="1426.0" style="-fx-background-color: #FFFFFF;">
-                           <columns>
-                              <TableColumn fx:id="nomeIndicadores" prefWidth="498.39999920129776" />
-                              <TableColumn prefWidth="348.7999572753906" text="Esperado" />
-                              <TableColumn prefWidth="591.1998291015625" text="Alcançado" />
-                           </columns>
-                        </TableView>
+                        <TableView id="tabela" fx:id="tabelaIndicadoresGerais" minHeight="-Infinity" minWidth="-Infinity" prefHeight="155.0" prefWidth="1426.0" style="-fx-background-color: #FFFFFF;" />
                      </children>
                   </VBox>
                   <Pane layoutX="8.0" layoutY="76.0" prefHeight="4.0" prefWidth="160.0" style="-fx-background-color: #A22D2E;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
@@ -198,13 +191,7 @@
                            </font>
                         </Label>
                         <Pane prefHeight="5.0" prefWidth="360.0" style="-fx-background-color: #A22D2E;" />
-                        <TableView id="numeroMunicipios" fx:id="tabelaIndicadoresMeta1" minHeight="-Infinity" minWidth="-Infinity" prefHeight="155.0" prefWidth="1426.0" style="-fx-background-color: #FFFFFF;">
-                           <columns>
-                              <TableColumn fx:id="nomeIndicadores" prefWidth="498.39999920129776" />
-                              <TableColumn prefWidth="348.7999572753906" text="Esperado" />
-                              <TableColumn prefWidth="591.1998291015625" text="Alcançado" />
-                           </columns>
-                        </TableView>
+                        <TableView id="tabela" fx:id="tabelaIndicadoresMeta1" minHeight="-Infinity" minWidth="-Infinity" prefHeight="155.0" prefWidth="1426.0" style="-fx-background-color: #FFFFFF;" />
                      </children>
                   </VBox>
                   <VBox layoutY="493.0">
@@ -215,13 +202,7 @@
                            </font>
                         </Label>
                         <Pane prefHeight="6.0" prefWidth="560.0" style="-fx-background-color: #A22D2E;" />
-                        <TableView id="numeroMestres" fx:id="tabelaIndicadoresMeta2" minHeight="-Infinity" minWidth="-Infinity" prefHeight="155.0" prefWidth="1426.0" style="-fx-background-color: #FFFFFF;">
-                          <columns>
-                            <TableColumn prefWidth="498.39999920129776" />
-                            <TableColumn prefWidth="348.7999572753906" text="Esperado" />
-                              <TableColumn prefWidth="591.1998291015625" text="Alcançado" />
-                          </columns>
-                        </TableView>
+                        <TableView id="tabela" fx:id="tabelaIndicadoresMeta2" minHeight="-Infinity" minWidth="-Infinity" prefHeight="155.0" prefWidth="1426.0" style="-fx-background-color: #FFFFFF;" />
                      </children>
                   </VBox>
                </children>
