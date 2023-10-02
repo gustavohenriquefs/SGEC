@@ -1,13 +1,16 @@
 package com.casaculturaqxd.sgec.controller;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -17,7 +20,6 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import com.casaculturaqxd.sgec.App;
 
@@ -36,6 +38,12 @@ public class CadastrarEventoController {
     HBox Colaboradores;
     @FXML
     TextField titulo;
+    @FXML
+    TextArea descricao;
+    @FXML 
+    DatePicker dataInicial;
+    @FXML
+    DatePicker dataFinal;
     @FXML 
     TextField publicoEsperado;
     @FXML
@@ -44,6 +52,8 @@ public class CadastrarEventoController {
     TextField horas;
     @FXML
     TextField minutos;
+    @FXML
+    VBox cargaHoraria;
     @FXML
     ChoiceBox<String> classificacaoEtaria;
     private String[] classificacoes = {"Livre","10 anos","12 anos","14 anos","16 anos","18 anos"};
@@ -80,7 +90,7 @@ public class CadastrarEventoController {
         publicoEsperado.setTextFormatter(getNumericalFormatter());
         publicoAlcancado.setTextFormatter(getNumericalFormatter());
         
-
+        showCargaHoraria(checkMeta3.isSelected());
         showCertificavel(checkMeta3.isSelected());
         /* desabilitando o botao de arquivo enquanto nao eh implementado*/
         botaoArquivos.setDisable(true);
@@ -93,13 +103,19 @@ public class CadastrarEventoController {
          * depois inserir no banco usando o EventoDAO
          */
         //EventoBuilder criadorEvento = new EventoBuilder();
-
-        //lista com os campos obrigatorios
-        ArrayList<String> textoCamposObrigatorios = new ArrayList<String>();
-
-        //EventoDAO.inserir(Evento product);
-        //App.setRoot("view/home");
-    }
+        if(!hasLocal()){
+            Alert erroLocalizacao = new Alert(AlertType.ERROR, "Um evento deve possuir pelo menos uma localização associada");
+            erroLocalizacao.show();
+        }
+        if(!camposObrigatoriosPreenchidos()){
+            Alert erroLocalizacao = new Alert(AlertType.ERROR, "nem todos os campos obrigatorios foram preenchidos");
+            erroLocalizacao.show();
+        }
+        else{
+            //EventoDAO.inserir(Evento product);
+            //App.setRoot("view/home");
+        }   
+        }
 
     public void cancelar() throws IOException{
         /** 
@@ -143,6 +159,16 @@ public class CadastrarEventoController {
         File arquivoSelecionado = fileChooser.showOpenDialog(stage);
     }
 
+    public boolean camposObrigatoriosPreenchidos(){
+        if(classificacaoEtaria.getSelectionModel().getSelectedItem() == null
+           || descricao.getText().isEmpty()
+           || titulo.getText().isEmpty()
+           ||  dataInicial.getValue() == null 
+           ||dataFinal.getValue() == null){
+            return false; 
+        }
+        return true;
+    }
     public TextFormatter<String> getNumericalFormatter(){
         return new TextFormatter<>(change -> {
             if(change.getText().matches("\\d+")){
@@ -168,9 +194,7 @@ public class CadastrarEventoController {
     }
 
     public void showCargaHoraria(boolean value){
-        /*TODO: implementar o metodo quando a interface
-         * for atualizada com a carga horaria
-         */
+        cargaHoraria.setVisible(value);
     }
     public void showCertificavel(boolean value){
         if(value == false){
@@ -182,5 +206,7 @@ public class CadastrarEventoController {
         showCargaHoraria(checkMeta3.isSelected());
         showCertificavel(checkMeta3.isSelected());
     }
-
+    public boolean hasLocal(){
+        return Localizacoes.getChildren().isEmpty();
+    }
 }
