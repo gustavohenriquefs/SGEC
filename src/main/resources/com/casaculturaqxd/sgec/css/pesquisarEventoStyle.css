@@ -1,0 +1,17 @@
+@import "../css/colors/colorStyle.css";
+
+#container{
+    -fx-background-color: -bege;
+}
+#header{
+    -fx-background-color: -vermelho;
+}
+#pesquisar, #exibir, #filtro{
+    -fx-color: -black;
+}
+#resultadosPesquisa, #resultados{
+    -fx-background-color: -branco;
+}
+#botao{
+    -fx-background-color: -verde;
+}
