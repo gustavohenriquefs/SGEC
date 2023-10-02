@@ -59,4 +59,8 @@ public class Localizacao {
         this.idLocalizacao = idLocalizacao;
     }
     
+    public String toString(){
+        String[] fields = {rua,Integer.toString(numeroRua),bairro,cidade,cep,estado,pais};
+        return String.join(",",fields);
+    }
 }
