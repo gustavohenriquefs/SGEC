@@ -4,6 +4,7 @@ import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.Indicador;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -21,19 +22,21 @@ public class VisualizarEventoController {
     TextArea descricao;
     @FXML 
     Label titulo;
-
     //Tabelas de indicadores
     @FXML
     TableView<Indicador> tabelaIndicadoresGerais,tabelaIndicadoresMeta1,tabelaIndicadoresMeta2;
-
+    ObservableList<TableView<Indicador>> tabelas = FXCollections.observableArrayList();
+    
     public void initialize(){
         Indicador numeroPublico = new Indicador("Quantidade de público", 0, 100);
         Indicador numeroMestres = new Indicador("Número de mestres da cultura", 0, 15);
         Indicador numeroMunicipios = new Indicador("Número de municípios", 3, 3);
 
-        loadTable(tabelaIndicadoresGerais);
-        loadTable(tabelaIndicadoresMeta1);
-        loadTable(tabelaIndicadoresMeta2);
+        tabelas.addAll(tabelaIndicadoresGerais,tabelaIndicadoresMeta1,tabelaIndicadoresMeta2);
+        for(TableView<Indicador> tabela : tabelas){
+            loadTable(tabela);
+        }
+        
 
         addIndicador(tabelaIndicadoresGerais, numeroPublico);
         addIndicador(tabelaIndicadoresMeta1, numeroMestres);
@@ -50,7 +53,6 @@ public class VisualizarEventoController {
         
         TableColumn<Indicador,Integer> valorAlcancado = new TableColumn<>("Valor esperado");
         valorAlcancado.setCellValueFactory(new PropertyValueFactory<>("valorEsperado"));
-
         tabela.getColumns().add(nomeIndicador);
         tabela.getColumns().add(valorEsperado);
         tabela.getColumns().add(valorAlcancado);
