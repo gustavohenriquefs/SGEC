@@ -16,6 +16,6 @@ import java.sql.Connection;
  * </p>  
  */
 public interface Database {
-    Connection conectar();
+    Connection getConnection();
     void desconectar(Connection connection);
 }

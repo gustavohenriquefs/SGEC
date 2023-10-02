@@ -32,7 +32,7 @@ public class LoginController {
      */
     public void initialize(){
         loginButton.setDisable(true);
-        userDAO.setConnection(userConnection.conectar());
+        userDAO.setConnection(userConnection.getConnection());
     }
 
     /**
