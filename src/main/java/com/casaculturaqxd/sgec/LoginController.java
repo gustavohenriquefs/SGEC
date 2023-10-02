@@ -3,7 +3,7 @@ package com.casaculturaqxd.sgec;
 import java.io.IOException;
 
 import com.casaculturaqxd.sgec.DAO.UserDAO;
-import com.casaculturaqxd.sgec.jdbc.ConnectionFactory;
+import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.User;
 
 import javafx.fxml.FXML;
@@ -25,9 +25,7 @@ public class LoginController {
 
     private User usuario;
     private UserDAO userDAO = new UserDAO();
-    private final ConnectionFactory userConnection = new 
-            ConnectionFactory("URL","USER_NAME","PASSWORD");
-
+    private final DatabasePostgres userConnection = DatabasePostgres.getInstance("URL","USER_NAME","PASSWORD");
 
     /**
      * Carrega a página com o botão de login desabilitado
@@ -39,8 +37,7 @@ public class LoginController {
 
     /**
      * Cria um DAO que verifica no banco de dados se as credenciais 
-     * estão corretas, 
-     * @implNote TODO: compartilhar usuario para a tela de login
+     * estão corretas, se sim transita para a proxima tela.
      * @throws IOException
      */
     public void authUsuario() throws IOException{
