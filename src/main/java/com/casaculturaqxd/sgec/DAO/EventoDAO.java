@@ -4,11 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Time;
 import java.util.SortedSet;
 
 import com.casaculturaqxd.sgec.models.Evento;
-import com.casaculturaqxd.sgec.models.Localizacao;
 
 public class EventoDAO {
   private Connection connection;
@@ -19,67 +19,92 @@ public class EventoDAO {
 
   public boolean inserirEvento(Evento evento) {
     
-    if(evento.getLocais().size() == 0) {
-      return false;
-    } 
-
-    if(evento.getListaOrganizadores().size() == 0) {
+    if(evento.getLocais() == null || evento.getLocais().size() == 0) {
       return false;
     }
 
-    evento.getListaColaboradores();
-
-    // evento.getListaArquivos();
-
-    // evento.getListaParticipantes();
-
     try {
-      String sql = "insert into evento(id_evento,nome_evento,publico_esperado,publico_alcancado,descricao,data_inicial,data_final,horario,classificacao_etaria,imagem_preview,certificavel,carga_horaria,acessivel_em_libras) values(?,?,?,?,?,?,?,?,?,?,?,?,?)";
+      String sql = "INSERT INTO evento (nome_evento, publico_esperado, publico_alcancado, descricao, data_inicial, data_final, horario, classificacao_etaria, certificavel, carga_horaria, acessivel_em_libras) VALUES (?, ?, ?, ?, ?, ?, ?, ?::faixa_etaria, ?, ?, ?) RETURNING id_evento";
       
-      PreparedStatement stmt = connection.prepareStatement(sql);
+      PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
-      stmt.setInt(    1, evento.getIdEvento());
-      stmt.setString( 2, evento.getNome());
-      stmt.setInt(    3, evento.getPublico_esperado());
-      stmt.setInt(    4, evento.getPublico_alcancado());
-      stmt.setString( 5, evento.getDescricao());
-      stmt.setDate(   6, java.sql.Date.valueOf(evento.getDataInicial()));
-      stmt.setDate(   7, java.sql.Date.valueOf(evento.getDataFinal()));
-      stmt.setTime(   8, Time.valueOf(evento.getHorario()));
-      stmt.setString( 9, evento.getClassificacaoEtaria().toString());
-      stmt.setString(10, null);
-      stmt.setBoolean(11, evento.isCertificavel());
-      stmt.setTime(   12, Time.valueOf(evento.getCargaHoraria()));
-      stmt.setBoolean(13, evento.isAcessivelEmLibras());
+      String classificacaoEtaria = evento.getClassificacaoEtaria().getClassificacao();
 
-      stmt.execute();
+      stmt.setString( 1, evento.getNome());
+      stmt.setInt(    2, evento.getPublico_esperado());
+      stmt.setInt(    3, evento.getPublico_alcancado());
+      stmt.setString( 4, evento.getDescricao());
+      stmt.setDate(   5, java.sql.Date.valueOf(evento.getDataInicial()));
+      stmt.setDate(   6, java.sql.Date.valueOf(evento.getDataFinal()));
+      stmt.setTime(   7, Time.valueOf(evento.getHorario()));
+      stmt.setString( 8, classificacaoEtaria);
+      stmt.setBoolean(9, evento.isCertificavel());
+      stmt.setTime(   10, Time.valueOf(evento.getCargaHoraria()));
+      stmt.setBoolean(11, evento.isAcessivelEmLibras());
+      stmt.executeUpdate();
+      
+      ResultSet rs = stmt.getGeneratedKeys();
+
+      if (rs.next()) {
+          evento.setIdEvento(rs.getInt("id_evento"));
+      }
+
       stmt.close();
+      
     } catch (SQLException e) {
       return false;
     }
     
-    if(this.vincularLocais(evento.getLocais()) == false) {
-      return false;
+    if(evento.getLocais() != null) {
+      boolean vinculoLocais = this.vincularLocais(evento.getLocais(), evento.getIdEvento());
+
+      if(vinculoLocais == false) {
+        return false;
+      }
     }
 
-    if(this.vincularOrganizadores(evento.getListaOrganizadores()) == false) {
-      return false;
+    if(evento.getListaOrganizadores() != null) {
+      boolean vinculoOrganizadores = this.vincularOrganizadores(evento.getListaOrganizadores(), evento.getIdEvento());
+
+      if(vinculoOrganizadores == false) {
+        return false;
+      }
     }
 
-    if(this.vincularColaboradores(evento.getListaColaboradores()) == false) {
-      return false;
+    if(evento.getListaColaboradores() != null) {
+      boolean vinculoColaboradores = this.vincularColaboradores(evento.getListaColaboradores(), evento.getIdEvento());
+
+      if(vinculoColaboradores == false) {
+        return false;
+      }
     }
 
-    if(this.vincularParticipantes(evento.getListaParticipantes()) == false) {
-      return false;
+    if(evento.getListaParticipantes() != null) {
+      boolean vinculoParticipantes = this.vincularParticipantes(evento.getListaParticipantes(), evento.getIdEvento());
+
+      if(vinculoParticipantes == false) {
+        return false;
+      }
     }
-    
+
     return true;
+
+    // if(this.vincularOrganizadores(evento.getListaOrganizadores(), evento.getIdEvento()) == false) {
+    //   return false;
+    // }
+
+    // if(this.vincularColaboradores(evento.getListaColaboradores(), evento.getIdEvento()) == false) {
+    //   return false;
+    // }
+
+    // if(this.vincularParticipantes(evento.getListaParticipantes(), evento.getIdEvento()) == false) {
+    //   return false;
+    // }
   }
 
-  private boolean vincularLocais(SortedSet<Integer> locais) {
+  private boolean vincularLocais(SortedSet<Integer> locais, Integer idEvento) {
     for(Integer local: locais) {
-      if(!this.vincularLocal(local)) {
+      if(!this.vincularLocal(local, idEvento)) {
         return false;
       }
     }
@@ -87,13 +112,13 @@ public class EventoDAO {
     return true;
   }
   
-  private boolean vincularLocal(Integer local) {
+  private boolean vincularLocal(Integer local, Integer idEvento) {
     String vincLocaisSql = "INSERT INTO localizacao_evento(id_localizacao, id_evento) VALUES (?, ?)";
 
     try {
       PreparedStatement stmt = connection.prepareStatement(vincLocaisSql);
       stmt.setInt(1, local);
-      stmt.setInt(2, 1);
+      stmt.setInt(2, idEvento);
       stmt.execute();
       stmt.close();
     } catch (SQLException e) {
@@ -103,9 +128,9 @@ public class EventoDAO {
     return true;
   }
 
-  private boolean vincularOrganizadores(SortedSet<Integer> organizadores) {
+  private boolean vincularOrganizadores(SortedSet<Integer> organizadores, Integer idEvento) {
     for(Integer organizador: organizadores) {
-      if(!this.vincularOrganizador(organizador)) {
+      if(!this.vincularOrganizador(organizador, idEvento)) {
         return false;
       }
     }
@@ -113,13 +138,13 @@ public class EventoDAO {
     return true;
   }
 
-  private boolean vincularOrganizador(Integer organizador) {
+  private boolean vincularOrganizador(Integer organizador, Integer idEvento) {
     String vincOrganizadoresSql = "INSERT INTO organizador_evento(id_evento, id_instituicao) VALUES (?, ?);";
 
     try {
       PreparedStatement stmt = connection.prepareStatement(vincOrganizadoresSql);
       stmt.setInt(1, organizador);
-      stmt.setInt(2, 1);
+      stmt.setInt(2, idEvento);
       stmt.execute();
       stmt.close();
     } catch (SQLException e) {
@@ -129,9 +154,9 @@ public class EventoDAO {
     return true;
   }
 
-  private boolean vincularColaboradores(SortedSet<Integer> colaboradores) {
+  private boolean vincularColaboradores(SortedSet<Integer> colaboradores, Integer idEvento) {
     for(Integer colaborador: colaboradores) {
-      if(!this.vincularColaborador(colaborador)) {
+      if(!this.vincularColaborador(colaborador, idEvento)) {
         return false;
       }
     }
@@ -139,13 +164,13 @@ public class EventoDAO {
     return true;
   }
 
-  private boolean vincularColaborador(Integer colaborador) {
+  private boolean vincularColaborador(Integer colaborador, Integer idEvento) {
     String vincColaboradoresSql = "INSERT INTO colaborador_evento(id_evento, id_instituicao) VALUES (?, ?);";
 
     try {
       PreparedStatement stmt = connection.prepareStatement(vincColaboradoresSql);
       stmt.setInt(1, colaborador);
-      stmt.setInt(2, 1);
+      stmt.setInt(2, idEvento);
       stmt.execute();
       stmt.close();
     } catch (SQLException e) {
@@ -155,9 +180,9 @@ public class EventoDAO {
     return true;
   }
 
-  private boolean vincularParticipantes(SortedSet<Integer> participantes) {
+  private boolean vincularParticipantes(SortedSet<Integer> participantes, Integer idEvento) {
     for(Integer participante: participantes) {
-      if(!this.vincularParticipante(participante)) {
+      if(!this.vincularParticipante(participante, idEvento)) {
         return false;
       }
     }
@@ -165,13 +190,13 @@ public class EventoDAO {
     return true;
   }
 
-  private boolean vincularParticipante(Integer participante) {
+  private boolean vincularParticipante(Integer participante, Integer idEvento) {
     String vincParticipantesSql = "INSERT INTO participante_evento(id_participante, id_evento) VALUES (?, ?);";
 
     try {
       PreparedStatement stmt = connection.prepareStatement(vincParticipantesSql);
       stmt.setInt(1, participante);
-      stmt.setInt(2, 1);
+      stmt.setInt(2, idEvento);
       stmt.execute();
       stmt.close();
     } catch (SQLException e) {
