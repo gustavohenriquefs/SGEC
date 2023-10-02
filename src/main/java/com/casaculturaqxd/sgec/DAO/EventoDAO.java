@@ -6,8 +6,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Time;
+import java.util.Optional;
 import java.util.SortedSet;
+import java.util.TreeSet;
 
+import com.casaculturaqxd.sgec.enums.ClassificacaoEtaria;
 import com.casaculturaqxd.sgec.models.Evento;
 
 public class EventoDAO {
@@ -205,6 +208,109 @@ public class EventoDAO {
     } catch (SQLException e) {
       return false;
     }
+  }
+
+  public Optional<Evento> buscarEvento(Evento evento) {
+    try {
+      String sql = "select * from evento where id_evento=?";
+      PreparedStatement stmt = connection.prepareStatement(sql);
+      stmt.setInt(1, evento.getIdEvento());
+      ResultSet resultSet = stmt.executeQuery();
+      Evento eventoRetorno = null;
+      
+      if (resultSet.next()) {
+        eventoRetorno = new Evento();
+        eventoRetorno.setIdEvento(resultSet.getInt("id_evento"));
+        eventoRetorno.setNome(resultSet.getString("nome_evento"));
+        eventoRetorno.setPublico_esperado(resultSet.getInt("publico_esperado"));
+        eventoRetorno.setPublico_alcancado(resultSet.getInt("publico_alcancado"));
+        eventoRetorno.setDescricao(resultSet.getString("descricao"));
+        eventoRetorno.setDataInicial(resultSet.getDate("data_inicial").toLocalDate());
+        eventoRetorno.setDataFinal(resultSet.getDate("data_final").toLocalDate());
+        eventoRetorno.setHorario(resultSet.getTime("horario").toLocalTime());
+        eventoRetorno.setClassificacaoEtaria(ClassificacaoEtaria.valueOf(resultSet.getString("classificacao_etaria")));
+        eventoRetorno.setCertificavel(resultSet.getBoolean("certificavel"));
+        eventoRetorno.setCargaHoraria(resultSet.getTime("carga_horaria").toLocalTime());
+        eventoRetorno.setAcessivelEmLibras(resultSet.getBoolean("acessivel_em_libras"));
+        eventoRetorno.setLocais(this.buscarLocaisPorEvento(eventoRetorno.getIdEvento()));
+        eventoRetorno.setListaOrganizadores(this.buscarOrganizadoresPorEvento(eventoRetorno.getIdEvento()));
+        eventoRetorno.setListaColaboradores(this.buscarColaboradoresPorEvento(eventoRetorno.getIdEvento()));
+        eventoRetorno.setListaParticipantes(this.buscarLocaisPorEvento(eventoRetorno.getIdEvento()));
+      }
+      stmt.close();
+      return Optional.ofNullable(eventoRetorno);
+    } catch (SQLException e) {
+      return Optional.empty();
+    }
+  }
+
+  private SortedSet<Integer> buscarColaboradoresPorEvento(int idEvento) {
+    String sql = "select id_instituicao from colaborador_evento where id_evento=?";
+
+    SortedSet<Integer> colaboradores = new TreeSet<>();
+
+    try {
+      PreparedStatement stmt = connection.prepareStatement(sql);
+      
+      stmt.setInt(1, idEvento);
+      
+      ResultSet resultSet = stmt.executeQuery();
+
+      while (resultSet.next()) {
+        colaboradores.add(resultSet.getInt("id_instituicao"));
+      }
+      stmt.close();
+    } catch (SQLException e) {
+      return null;
+    }
+
+    return colaboradores;
+  }
+
+  private SortedSet<Integer> buscarOrganizadoresPorEvento(int idEvento) {
+    String sql = "select id_instituicao from organizador_evento where id_evento=?";
+
+    SortedSet<Integer> organizadores = new TreeSet<>();
+
+    try {
+      PreparedStatement stmt = connection.prepareStatement(sql);
+      
+      stmt.setInt(1, idEvento);
+      
+      ResultSet resultSet = stmt.executeQuery();
+
+      while (resultSet.next()) {
+        organizadores.add(resultSet.getInt("id_instituicao"));
+      }
+      stmt.close();
+    } catch (SQLException e) {
+      return null;
+    }
+
+    return organizadores;
+  }
+
+  private SortedSet<Integer> buscarLocaisPorEvento(Integer idEvento) {
+    String sql = "select id_localizacao from localizacao_evento where id_evento=?";
+
+    SortedSet<Integer> locais = new TreeSet<>();
+
+    try {
+      PreparedStatement stmt = connection.prepareStatement(sql);
+      
+      stmt.setInt(1, idEvento);
+      
+      ResultSet resultSet = stmt.executeQuery();
+
+      while (resultSet.next()) {
+        locais.add(resultSet.getInt("id_localizacao"));
+      }
+      stmt.close();
+    } catch (SQLException e) {
+      return null;
+    }
+
+    return locais;
   }
 
   public boolean alterarEvento(Evento evento) {
