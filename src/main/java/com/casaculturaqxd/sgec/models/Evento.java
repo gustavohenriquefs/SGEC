@@ -92,6 +92,22 @@ public class Evento {
         this.publico_esperado = publico_esperado;
     }
 
+    public int getParticipantes_esperado() {
+        return participantes_esperado;
+    }   
+
+    public void setParticipantes_esperado(int participantes_esperado) {
+        this.participantes_esperado = participantes_esperado;
+    }
+
+    public int getMunicipios_esperado() {
+        return municipios_esperado;
+    }
+
+    public void setMunicipios_esperado(int municipios_esperado) {
+        this.municipios_esperado = municipios_esperado;
+    }
+
     public int getPublico_alcancado() {
         return publico_alcancado;
     }
