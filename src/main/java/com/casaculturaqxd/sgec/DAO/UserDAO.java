@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import com.casaculturaqxd.sgec.models.User;
 
 public class UserDAO {
@@ -37,7 +36,6 @@ public class UserDAO {
     } catch (SQLException e) {
       return false;
     }
-    
   }
 
   public User getUsuario(User obj){
@@ -110,5 +108,4 @@ public class UserDAO {
       return false;
     }
   }
-
 }

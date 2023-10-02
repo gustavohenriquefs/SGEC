@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.UserDAO;
-import com.casaculturaqxd.sgec.jdbc.ConnectionFactory;
+import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.User;
 
 import javafx.fxml.FXML;
@@ -26,8 +26,8 @@ public class LoginController {
 
     private User usuarioLogin;
     private UserDAO userDAO = new UserDAO();
-    private final ConnectionFactory userConnection = new 
-            ConnectionFactory("URL","USER_NAME","PASSWORD");
+    private final DatabasePostgres userConnection = 
+            DatabasePostgres.getInstance("URL","USER_NAME","PASSWORD");
 
 
     /**
