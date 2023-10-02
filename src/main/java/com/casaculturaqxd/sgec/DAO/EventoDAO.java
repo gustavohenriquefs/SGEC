@@ -194,6 +194,19 @@ public class EventoDAO {
     return true;
   }
 
+  public boolean removerEvento(Evento evento) {
+    try {
+      String sql = "delete from evento where id_evento=?";
+      PreparedStatement stmt = connection.prepareStatement(sql);
+      stmt.setInt(1, evento.getIdEvento());
+      stmt.execute();
+      stmt.close();
+      return true;
+    } catch (SQLException e) {
+      return false;
+    }
+  }
+
   public boolean alterarEvento(Evento evento) {
     try {
       String sql = "update evento set nome_evento=?, publico_esperado=?, publico_alcancado=?, descricao=?, data_inicial=?, data_final=?, horario=?, classificacao_etaria=?, imagem_preview=?, certificavel=?, carga_horaria=?, acessivel_em_libras=?, localizacao_id_localizacao=? where id_evento=?";
