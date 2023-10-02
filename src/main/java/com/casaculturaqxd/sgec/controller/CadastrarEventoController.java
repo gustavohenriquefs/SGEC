@@ -37,7 +37,7 @@ public class CadastrarEventoController {
     @FXML 
     HBox Colaboradores;
     @FXML
-    TextField titulo, publicoEsperado, publicoAlcancado, horas, minutos;
+    TextField titulo, publicoEsperado, publicoAlcancado, horas, minutos, horasCargaHoraria ,numParticipantesEsperado,numMunicipiosEsperado;
     @FXML
     TextArea descricao;
     @FXML 
@@ -58,8 +58,13 @@ public class CadastrarEventoController {
     public void initialize(){
         /* aplicando restrições aos inputs */
         classificacaoEtaria.getItems().addAll(classificacoes);
+        horas.setTextFormatter(getTimeFormatter());
+        minutos.setTextFormatter(getTimeFormatter());
+        horasCargaHoraria.setTextFormatter(getTimeFormatter());
         publicoEsperado.setTextFormatter(getNumericalFormatter());
         publicoAlcancado.setTextFormatter(getNumericalFormatter());
+        numParticipantesEsperado.setTextFormatter(getNumericalFormatter());
+        numMunicipiosEsperado.setTextFormatter(getNumericalFormatter());
         
         showCargaHoraria(checkMeta3.isSelected());
         showCertificavel(checkMeta3.isSelected());

@@ -63,6 +63,12 @@
                      <children>
                         <VBox>
                            <children>
+                        <Label prefHeight="18.0" prefWidth="105.0" text="Classificação etária" textFill="#352929" />
+                        <ChoiceBox fx:id="classificacaoEtaria" prefWidth="150.0" />
+                           </children>
+                        </VBox>
+                        <VBox>
+                           <children>
                         <Label prefHeight="18.0" prefWidth="105.0" text="Público alcançado" textFill="#352929" />
                         <TextField fx:id="publicoAlcancado" />
                            </children>
@@ -71,12 +77,6 @@
                            <children>
                         <Label prefHeight="18.0" prefWidth="105.0" text="Público esperado" textFill="#352929" />
                         <TextField fx:id="publicoEsperado" />
-                           </children>
-                        </VBox>
-                        <VBox>
-                           <children>
-                        <Label prefHeight="18.0" prefWidth="105.0" text="Classificação etária" textFill="#352929" />
-                        <ChoiceBox fx:id="classificacaoEtaria" prefWidth="150.0" />
                            </children>
                         </VBox>
                      </children>
@@ -92,16 +92,11 @@
                               </Label>
                               <HBox>
                                  <children>
-                                    <VBox>
-                                       <children>
-                                          <Label fx:id="textoMinutos1" prefHeight="17.0" prefWidth="52.0" text="Minutos" textFill="#352929" />
-                                          <TextField fx:id="minutos1" />
-                                       </children>
-                                    </VBox>
+                                    <VBox />
                                     <VBox>
                                        <children>
                                           <Label fx:id="textoHoras1" prefHeight="17.0" prefWidth="44.0" text="Horas" textFill="#352929" />
-                                          <TextField fx:id="horas1" />
+                                          <TextField fx:id="horasCargaHoraria" />
                                        </children>
                                     </VBox>
                                  </children>
@@ -147,17 +142,24 @@
                <children>
                <VBox fx:id="Localizacoes" spacing="15.0">
                      <children>
-                  <HBox prefHeight="35.0" prefWidth="790.0">
+                  <HBox alignment="CENTER_LEFT" prefHeight="35.0" prefWidth="790.0" spacing="800.0">
                      <children>
-                        <Label text="Localização" textFill="#352929">
-                           <font>
-                              <Font name="System Bold" size="20.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets left="20.0" />
-                           </HBox.margin>
-                        </Label>
-                        <Button fx:id="botaoNovaLocalizacao" alignment="CENTER" mnemonicParsing="false" onAction="#adicionarLocalizacao" style="-fx-background-color: #2A3F25;" text="Adicionar nova localização +" textFill="WHITE" />
+                              <HBox alignment="CENTER_LEFT" spacing="50.0">
+                                 <children>
+                              <Label text="Localização" textFill="#352929">
+                                 <font>
+                                    <Font name="System Bold" size="20.0" />
+                                 </font>
+                              </Label>
+                              <Button fx:id="botaoNovaLocalizacao" alignment="CENTER" mnemonicParsing="false" onAction="#adicionarLocalizacao" style="-fx-background-color: #2A3F25;" text="Adicionar nova localização +" textFill="WHITE" />
+                                 </children>
+                              </HBox>
+                              <VBox>
+                                 <children>
+                                    <Label text="Número de municípios esperado" />
+                                    <TextField fx:id="numMunicipiosEsperado" />
+                                 </children>
+                              </VBox>
                      </children>
                   </HBox>
                      </children>
@@ -168,6 +170,12 @@
                            <children>
                         <Button fx:id="botaoParticipantes" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#adicionarParticipante" prefHeight="46.0" prefWidth="152.0" style="-fx-background-color: #352929;" text="Adicionar participantes" textFill="WHITE" HBox.hgrow="ALWAYS" />
                            </children></HBox>
+                        <VBox VBox.vgrow="NEVER">
+                           <children>
+                              <Label text="Número de participantes esperado" />
+                              <TextField fx:id="numParticipantesEsperado" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="174.0" VBox.vgrow="NEVER" />
+                           </children>
+                        </VBox>
                </children>
             </VBox>
             <VBox alignment="CENTER_LEFT" prefHeight="46.0" prefWidth="150.0">
