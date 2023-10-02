@@ -13,6 +13,8 @@ public class Evento {
     private String descricao;
     private int publico_esperado;
     private int publico_alcancado;
+    private int participantes_esperado;
+    private int municipios_esperado;
     private LocalDate dataInicial;
     private LocalDate dataFinal;
     private LocalTime horario;
@@ -85,6 +87,7 @@ public class Evento {
     public int getPublico_esperado() {
         return publico_esperado;
     }
+    
     public void setPublico_esperado(int publico_esperado) {
         this.publico_esperado = publico_esperado;
     }
@@ -97,8 +100,9 @@ public class Evento {
     }
 
     public ClassificacaoEtaria getClassificacaoEtaria() {
-        return classificacaoEtaria;
+        return this.classificacaoEtaria;
     }
+
     public void setClassificacaoEtaria(ClassificacaoEtaria classificacaoEtaria) {
         this.classificacaoEtaria = classificacaoEtaria;
     }
