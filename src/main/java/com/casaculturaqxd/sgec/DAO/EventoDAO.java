@@ -88,18 +88,6 @@ public class EventoDAO {
     }
 
     return true;
-
-    // if(this.vincularOrganizadores(evento.getListaOrganizadores(), evento.getIdEvento()) == false) {
-    //   return false;
-    // }
-
-    // if(this.vincularColaboradores(evento.getListaColaboradores(), evento.getIdEvento()) == false) {
-    //   return false;
-    // }
-
-    // if(this.vincularParticipantes(evento.getListaParticipantes(), evento.getIdEvento()) == false) {
-    //   return false;
-    // }
   }
 
   private boolean vincularLocais(SortedSet<Integer> locais, Integer idEvento) {
@@ -143,8 +131,8 @@ public class EventoDAO {
 
     try {
       PreparedStatement stmt = connection.prepareStatement(vincOrganizadoresSql);
-      stmt.setInt(1, organizador);
-      stmt.setInt(2, idEvento);
+      stmt.setInt(1, idEvento);
+      stmt.setInt(2, organizador);
       stmt.execute();
       stmt.close();
     } catch (SQLException e) {
@@ -169,8 +157,8 @@ public class EventoDAO {
 
     try {
       PreparedStatement stmt = connection.prepareStatement(vincColaboradoresSql);
-      stmt.setInt(1, colaborador);
-      stmt.setInt(2, idEvento);
+      stmt.setInt(1, idEvento);
+      stmt.setInt(2, colaborador);
       stmt.execute();
       stmt.close();
     } catch (SQLException e) {
