@@ -1,7 +1,6 @@
 package com.casaculturaqxd.builder;
 
 import java.util.Date;
-import java.util.Set;
 import java.util.SortedSet;
 
 import com.casaculturaqxd.sgec.models.Evento;
@@ -12,6 +11,10 @@ public class EventoBuilder implements Builder {
 
   public EventoBuilder(){
     resetar();
+  }
+
+  Evento getEvento(){
+    return evento;
   }
 
   @Override
