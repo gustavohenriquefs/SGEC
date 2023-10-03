@@ -37,8 +37,8 @@ public class EventoDAO {
       stmt.setInt(    2, evento.getPublicoEsperado());
       stmt.setInt(    3, evento.getPublicoAlcancado());
       stmt.setString( 4, evento.getDescricao());
-      stmt.setDate(   5, java.sql.Date.valueOf(evento.getDataInicial()));
-      stmt.setDate(   6, java.sql.Date.valueOf(evento.getDataFinal()));
+      stmt.setDate(   5, evento.getDataInicial());
+      stmt.setDate(   6, evento.getDataFinal());
       stmt.setTime(   7, Time.valueOf(evento.getHorario()));
       stmt.setString( 8, classificacaoEtaria);
       stmt.setBoolean(9, evento.isCertificavel());
@@ -225,8 +225,8 @@ public class EventoDAO {
         eventoRetorno.setPublicoEsperado(resultSet.getInt("publico_esperado"));
         eventoRetorno.setPublicoAlcancado(resultSet.getInt("publico_alcancado"));
         eventoRetorno.setDescricao(resultSet.getString("descricao"));
-        eventoRetorno.setDataInicial(resultSet.getDate("data_inicial").toLocalDate());
-        eventoRetorno.setDataFinal(resultSet.getDate("data_final").toLocalDate());
+        eventoRetorno.setDataInicial(resultSet.getDate("data_inicial"));
+        eventoRetorno.setDataFinal(resultSet.getDate("data_final"));
         eventoRetorno.setHorario(resultSet.getTime("horario").toLocalTime());
         eventoRetorno.setClassificacaoEtaria(ClassificacaoEtaria.valueOf(resultSet.getString("classificacao_etaria")));
         eventoRetorno.setCertificavel(resultSet.getBoolean("certificavel"));
@@ -322,8 +322,8 @@ public class EventoDAO {
       
       stmt.setString(1, evento.getNome());
       stmt.setString(2, evento.getDescricao());
-      stmt.setDate(3, java.sql.Date.valueOf(evento.getDataInicial()));
-      stmt.setDate(4, java.sql.Date.valueOf(evento.getDataFinal()));
+      stmt.setDate(3, evento.getDataInicial());
+      stmt.setDate(4, evento.getDataFinal());
       stmt.setTime(5, Time.valueOf(evento.getHorario()));
       stmt.setInt(6, evento.getIdEvento());
       stmt.execute();
