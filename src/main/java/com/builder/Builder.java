@@ -15,4 +15,5 @@ public interface Builder {
   void setPublicoAlcancado(int publicoAlcancado);
   void setClassificacaoEtaria(String classificacaoEtaria);
   void setColaboradores(Set<Instituicao> colaboradores);
+  void setOrganizadores(Set<Instituicao> organizadores);
 }
