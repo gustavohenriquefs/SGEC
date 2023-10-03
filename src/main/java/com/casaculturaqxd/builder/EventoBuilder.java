@@ -61,7 +61,7 @@ public class EventoBuilder implements Builder {
 
   @Override
   public void setOrganizadores(SortedSet<Instituicao> organizadores) {
-    // TODO Auto-generated method stub
+    evento.setListaOrganizadores(organizadores);
   }
   
 }
