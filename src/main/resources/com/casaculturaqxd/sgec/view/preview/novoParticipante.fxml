@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
@@ -11,28 +10,24 @@
    <children>
       <AnchorPane id="principal" fx:id="principal" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="300.0" prefWidth="602.0">
          <children>
-            <HBox fx:id="campoArtista" layoutX="20.0" layoutY="80.0" style="-fx-background-color: FF0000;" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="80.0">
+            <HBox fx:id="campoArtista" layoutX="20.0" layoutY="80.0" style="-fx-border-color: #000000;" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="80.0">
                <children>
                   <Label id="artista" fx:id="artista" minHeight="-Infinity" prefHeight="50.0" HBox.hgrow="ALWAYS" />
                </children>
             </HBox>
-            <HBox fx:id="campoArea" layoutX="20.0" layoutY="141.0" minHeight="-Infinity" prefHeight="80.0" style="-fx-background-color: #00FF00;" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
+            <HBox fx:id="campoArea" layoutX="20.0" layoutY="141.0" minHeight="-Infinity" prefHeight="80.0" style="-fx-border-color: #000000;" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
                <children>
                   <Label id="area" fx:id="area" prefHeight="80.0" style="-fx-background-color: FF0000;" HBox.hgrow="ALWAYS" />
                </children>
             </HBox>
-            <HBox fx:id="campoLink" layoutX="20.0" layoutY="241.0" style="-fx-background-color: #0000FF;" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
+            <HBox fx:id="campoLink" layoutX="20.0" layoutY="241.0" style="-fx-border-color: #000000;" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
                <children>
                   <Label id="link" fx:id="link" minHeight="-Infinity" prefHeight="50.0" style="-fx-background-color: FF0000;" />
                </children>
             </HBox>
-            <HBox fx:id="campoImagem" layoutX="20.0" layoutY="12.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
+            <HBox fx:id="campoImagem" layoutX="20.0" layoutY="5.0" prefHeight="69.0" prefWidth="564.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
                <children>
-                  <ImageView fx:id="imagem" fitHeight="60.0" fitWidth="562.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
-                     <image>
-                        <Image url="@../../imagens/imagem-casa.jpg" />
-                     </image>
-                  </ImageView>
+                  <ImageView fx:id="imagem" fitHeight="60.0" fitWidth="562.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS" />
                </children>
             </HBox>
          </children>
