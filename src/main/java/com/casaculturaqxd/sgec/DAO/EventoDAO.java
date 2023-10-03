@@ -310,24 +310,64 @@ public class EventoDAO {
       return null;
     }
 
+
     return locais;
   }
 
   public boolean alterarEvento(Evento evento) {
     try {
       String sql = "update evento set nome_evento=?, publico_esperado=?, publico_alcancado=?, descricao=?, data_inicial=?, data_final=?, horario=?, classificacao_etaria=?, imagem_preview=?, certificavel=?, carga_horaria=?, acessivel_em_libras=?, localizacao_id_localizacao=? where id_evento=?";
+      
       PreparedStatement stmt = connection.prepareStatement(sql);
-      stmt.setString( 1, evento.getNome());
-      stmt.setString( 2, evento.getDescricao());
-      stmt.setDate(   3, java.sql.Date.valueOf(evento.getDataInicial()));
-      stmt.setDate(   4, java.sql.Date.valueOf(evento.getDataFinal()));
-      stmt.setTime(   5, Time.valueOf(evento.getHorario()));
-      stmt.setInt(    6, evento.getIdEvento());
+      
+      stmt.setString(1, evento.getNome());
+      stmt.setString(2, evento.getDescricao());
+      stmt.setDate(3, java.sql.Date.valueOf(evento.getDataInicial()));
+      stmt.setDate(4, java.sql.Date.valueOf(evento.getDataFinal()));
+      stmt.setTime(5, Time.valueOf(evento.getHorario()));
+      stmt.setInt(6, evento.getIdEvento());
       stmt.execute();
       stmt.close();
-      return true;
     } catch (SQLException e) {
       return false;
     }
+    
+    SortedSet<Integer> locaisEventoIds = this.buscarLocaisPorEvento(evento.getIdEvento());
+    
+    for(Integer localId: locaisEventoIds) {
+      if(!evento.getLocais().contains(localId)) {
+        boolean localFoiDesvinculado = this.desvincularLocal(localId, evento.getIdEvento()); 
+
+        if(!localFoiDesvinculado) {
+          return false;
+        }
+      }
+    }
+    
+    for(Integer localId: evento.getLocais()) {
+      boolean localFoiVinculado = this.vincularLocal(localId, evento.getIdEvento());
+
+      if(!localFoiVinculado) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  private boolean  desvincularLocal(Integer localId, Integer idEvento) {
+    String vincLocaisSql = "DELETE FROM localizacao_evento WHERE id_localizacao=? AND id_evento=?";
+
+    try {
+      PreparedStatement stmt = connection.prepareStatement(vincLocaisSql);
+      stmt.setInt(1, localId);
+      stmt.setInt(2, idEvento);
+      stmt.execute();
+      stmt.close();
+    } catch (SQLException e) {
+      return false;
+    }
+
+    return true;
   }
 }
