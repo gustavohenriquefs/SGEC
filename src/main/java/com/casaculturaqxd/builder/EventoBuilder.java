@@ -22,6 +22,10 @@ public class EventoBuilder implements Builder {
     evento.setCargaHoraria(cargaHoraria);
   }
 
+  void setCertificavel(boolean certificavel){
+    evento.setCertificavel(certificavel);
+  }
+
   @Override
   public void resetar() {
     evento = new Evento();
