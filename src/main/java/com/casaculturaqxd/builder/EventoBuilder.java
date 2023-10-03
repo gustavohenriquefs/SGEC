@@ -30,7 +30,7 @@ public class EventoBuilder implements Builder {
 
   @Override
   public void setDataInicial(Date dataInicial) {
-    // TODO Auto-generated method stub
+    evento.setDataInicial(dataInicial);
   }
 
   @Override

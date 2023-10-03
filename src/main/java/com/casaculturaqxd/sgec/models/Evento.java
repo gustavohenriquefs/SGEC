@@ -1,7 +1,7 @@
 package com.casaculturaqxd.sgec.models;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Date;
 import java.util.SortedSet;
 
 import com.casaculturaqxd.sgec.enums.ClassificacaoEtaria;
@@ -13,8 +13,8 @@ public class Evento {
     private String descricao;
     private int publico_esperado;
     private int publico_alcancado;
-    private LocalDate dataInicial;
-    private LocalDate dataFinal;
+    private Date dataInicial;
+    private Date dataFinal;
     private LocalTime horario;
     private LocalTime cargaHoraria;
     private ClassificacaoEtaria classificacaoEtaria;
@@ -40,17 +40,17 @@ public class Evento {
         this.descricao = descricao;
     }
 
-    public LocalDate getDataInicial() {
+    public Date getDataInicial() {
         return dataInicial;
     }
-    public void setDataInicial(LocalDate dataInicial) {
+    public void setDataInicial(Date dataInicial) {
         this.dataInicial = dataInicial;
     }
 
-    public LocalDate getDataFinal() {
+    public Date getDataFinal() {
         return dataFinal;
     }
-    public void setDataFinal(LocalDate dataFinal) {
+    public void setDataFinal(Date dataFinal) {
         this.dataFinal = dataFinal;
     }
 
