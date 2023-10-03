@@ -17,7 +17,7 @@ public class Evento {
     private Date dataFinal;
     private LocalTime horario;
     private LocalTime cargaHoraria;
-    private ClassificacaoEtaria classificacaoEtaria;
+    private String classificacaoEtaria;
     private boolean certificavel;
     private boolean acessivelEmLibras;
     SortedSet<Localizacao> locais;
@@ -96,10 +96,10 @@ public class Evento {
         this.publico_alcancado = publico_alcancado;
     }
 
-    public ClassificacaoEtaria getClassificacaoEtaria() {
+    public String getClassificacaoEtaria() {
         return classificacaoEtaria;
     }
-    public void setClassificacaoEtaria(ClassificacaoEtaria classificacaoEtaria) {
+    public void setClassificacaoEtaria(String classificacaoEtaria) {
         this.classificacaoEtaria = classificacaoEtaria;
     }
 

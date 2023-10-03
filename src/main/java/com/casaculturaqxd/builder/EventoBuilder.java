@@ -50,7 +50,7 @@ public class EventoBuilder implements Builder {
 
   @Override
   public void setClassificacaoEtaria(String classificacaoEtaria) {
-    // TODO Auto-generated method stub
+    evento.setClassificacaoEtaria(null);
   }
 
   @Override
