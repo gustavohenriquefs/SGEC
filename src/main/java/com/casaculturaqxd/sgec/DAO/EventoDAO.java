@@ -290,6 +290,29 @@ public class EventoDAO {
     return organizadores;
   }
 
+  public int getNumeroMunicipiosDiferentes() {
+    String sql = "SELECT DISTINCT count(l.cidade) as num_municipios_distintos FROM localizacao_evento le LEFT JOIN localizacao l on l.id_localizacao = le.id_localizacao WHERE le.id_evento = ?";
+    int numMunicipiosDistintos = 0;
+
+    try {
+      PreparedStatement stmt = connection.prepareStatement(sql);
+      
+      stmt.setInt(1, 1);
+      
+      ResultSet resultSet = stmt.executeQuery();
+
+      if (resultSet.next()) {
+        numMunicipiosDistintos = resultSet.getInt("num_municipios_distintos");
+      }
+      
+      stmt.close();
+    } catch (SQLException e) {
+      return 0;
+    }
+
+    return numMunicipiosDistintos;
+  }
+
   private SortedSet<Integer> buscarLocaisPorEvento(Integer idEvento) {
     String sql = "select id_localizacao from localizacao_evento where id_evento=?";
 
