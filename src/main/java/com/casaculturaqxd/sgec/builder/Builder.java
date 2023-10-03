@@ -1,6 +1,6 @@
-package com.casaculturaqxd.builder;
+package com.casaculturaqxd.sgec.builder;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.SortedSet;
 
 import com.casaculturaqxd.sgec.models.Instituicao;

@@ -1,7 +1,7 @@
-package com.casaculturaqxd.builder;
+package com.casaculturaqxd.sgec.builder;
 
 import java.sql.Time;
-import java.util.Date;
+import java.sql.Date;
 import java.util.SortedSet;
 
 import com.casaculturaqxd.sgec.models.Evento;
@@ -16,7 +16,7 @@ public class EventoBuilder implements Builder {
     resetar();
   }
 
-  Evento getEvento(){
+  public Evento getEvento(){
     return evento;
   }
 
@@ -63,12 +63,12 @@ public class EventoBuilder implements Builder {
 
   @Override
   public void setPublicoEsperado(int publicoEsperado) {
-    evento.setPublico_esperado(publicoEsperado);
+    evento.setPublicoEsperado(publicoEsperado);
   }
 
   @Override
   public void setPublicoAlcancado(int publicoAlcancado) {
-    evento.setPublico_alcancado(publicoAlcancado);
+    evento.setPublicoAlcancado(publicoAlcancado);
   }
 
   @Override
