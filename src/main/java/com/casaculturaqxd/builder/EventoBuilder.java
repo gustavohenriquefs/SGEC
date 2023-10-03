@@ -10,12 +10,12 @@ public class EventoBuilder implements Builder {
   Evento evento;
 
   public EventoBuilder(){
-    evento = new Evento();
+    resetar();
   }
 
   @Override
   public void resetar() {
-    // TODO Auto-generated method stub
+    evento = new Evento();
   }
 
   @Override
