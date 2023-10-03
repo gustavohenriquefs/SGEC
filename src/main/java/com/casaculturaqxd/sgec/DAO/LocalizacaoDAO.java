@@ -52,6 +52,11 @@ public class LocalizacaoDAO {
       stmt.setString(7, obj.getEstado());
       stmt.setString(8, obj.getPais());
       stmt.execute();
+      ResultSet rs = stmt.getGeneratedKeys();
+      if (rs.next()) {
+        obj.setIdLocalizacao(rs.getInt("id_evento"));
+      }
+
       stmt.close();
       return true;
     } catch (SQLException e) {
