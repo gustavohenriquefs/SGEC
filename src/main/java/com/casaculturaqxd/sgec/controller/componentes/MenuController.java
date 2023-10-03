@@ -8,7 +8,9 @@ public class MenuController {
 
     public void goToHome() throws IOException{
         try {
-            App.setRoot("view/home");       
+            App.setRoot("view/home");
+        } catch (Exception e) {
+            // TODO: handle exception
         }
     }
 
