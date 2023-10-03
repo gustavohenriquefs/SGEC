@@ -6,7 +6,7 @@
 
 <VBox id="header" minHeight="0.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <AnchorPane id="header" fx:id="header" prefHeight="51.0" prefWidth="602.0" style="-fx-background-color: #A22D2E;" stylesheets="@../../css/HomeStyle.css">
+        <AnchorPane id="header" fx:id="header" prefHeight="51.0" prefWidth="602.0" style="-fx-background-color: #A22D2E;">
             <children>
                 <Hyperlink layoutX="29.0" layoutY="8.0" text="Home" textFill="#fffef7" />
                 <Hyperlink layoutX="70.0" layoutY="8.0" text="Pesquisar evento" textFill="#fffef7" />
