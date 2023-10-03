@@ -1,4 +1,4 @@
-package com.builder;
+package com.casaculturaqxd.builder;
 
 import java.util.Date;
 import java.util.Set;
