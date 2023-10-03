@@ -7,6 +7,7 @@ import java.util.SortedSet;
 import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.Instituicao;
 import com.casaculturaqxd.sgec.models.Localizacao;
+import com.casaculturaqxd.sgec.models.Participante;
 
 public class EventoBuilder implements Builder {
   Evento evento;
@@ -29,6 +30,10 @@ public class EventoBuilder implements Builder {
 
   void setLocalizacoes(SortedSet<Localizacao> localizacoes){
     evento.setLocais(localizacoes);
+  }
+
+  void setParticipantes(SortedSet<Participante> participantes){
+    evento.setListaParticipantes(participantes);
   }
 
   @Override
