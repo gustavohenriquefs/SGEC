@@ -3,9 +3,11 @@ package com.casaculturaqxd.builder;
 import java.util.Date;
 import java.util.Set;
 
+import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.Instituicao;
 
 public class EventoBuilder implements Builder {
+  Evento evento;
 
   @Override
   public void resetar() {
