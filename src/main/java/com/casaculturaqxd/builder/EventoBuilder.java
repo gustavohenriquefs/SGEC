@@ -73,7 +73,7 @@ public class EventoBuilder implements Builder {
 
   @Override
   public void setClassificacaoEtaria(String classificacaoEtaria) {
-    evento.setClassificacaoEtaria(null);
+    evento.setClassificacaoEtaria(classificacaoEtaria);
   }
 
   @Override
