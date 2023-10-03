@@ -35,7 +35,7 @@ public class EventoBuilder implements Builder {
 
   @Override
   public void setDataFinal(Date dataFinal) {
-    // TODO Auto-generated method stub
+    evento.setDataFinal(dataFinal);
   }
 
   @Override
