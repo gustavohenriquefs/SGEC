@@ -7,3 +7,6 @@
     -fx-white-space: normal;
     -fx-wrap-text: true;
 }
+.meusLabels {
+    -fx-border-color: #392E2E;
+}
