@@ -1,7 +1,6 @@
 package com.casaculturaqxd.sgec.models;
 
 import java.sql.Time;
-import java.time.LocalTime;
 import java.util.Date;
 import java.util.SortedSet;
 

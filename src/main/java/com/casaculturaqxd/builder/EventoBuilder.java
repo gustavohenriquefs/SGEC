@@ -6,6 +6,7 @@ import java.util.SortedSet;
 
 import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.Instituicao;
+import com.casaculturaqxd.sgec.models.Localizacao;
 
 public class EventoBuilder implements Builder {
   Evento evento;
@@ -24,6 +25,10 @@ public class EventoBuilder implements Builder {
 
   void setCertificavel(boolean certificavel){
     evento.setCertificavel(certificavel);
+  }
+
+  void setLocalizacoes(SortedSet<Localizacao> localizacoes){
+    evento.setLocais(localizacoes);
   }
 
   @Override
