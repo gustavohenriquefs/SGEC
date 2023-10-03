@@ -1,10 +1,9 @@
 package com.casaculturaqxd.sgec.models;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
+import java.sql.Time;
+import java.util.Date;
 import java.util.SortedSet;
 
-import com.casaculturaqxd.sgec.enums.ClassificacaoEtaria;
 import com.casaculturaqxd.sgec.models.arquivo.Arquivo;
 
 public class Evento {
@@ -13,11 +12,11 @@ public class Evento {
     private String descricao;
     private int publico_esperado;
     private int publico_alcancado;
-    private LocalDate dataInicial;
-    private LocalDate dataFinal;
-    private LocalTime horario;
-    private LocalTime cargaHoraria;
-    private ClassificacaoEtaria classificacaoEtaria;
+    private Date dataInicial;
+    private Date dataFinal;
+    private Time horario;
+    private Time cargaHoraria;
+    private String classificacaoEtaria;
     private boolean certificavel;
     private boolean acessivelEmLibras;
     SortedSet<Localizacao> locais;
@@ -40,31 +39,31 @@ public class Evento {
         this.descricao = descricao;
     }
 
-    public LocalDate getDataInicial() {
+    public Date getDataInicial() {
         return dataInicial;
     }
-    public void setDataInicial(LocalDate dataInicial) {
+    public void setDataInicial(Date dataInicial) {
         this.dataInicial = dataInicial;
     }
 
-    public LocalDate getDataFinal() {
+    public Date getDataFinal() {
         return dataFinal;
     }
-    public void setDataFinal(LocalDate dataFinal) {
+    public void setDataFinal(Date dataFinal) {
         this.dataFinal = dataFinal;
     }
 
-    public LocalTime getHorario() {
+    public Time getHorario() {
         return horario;
     }
-    public void setHorario(LocalTime horario) {
+    public void setHorario(Time horario) {
         this.horario = horario;
     }
 
-    public LocalTime getCargaHoraria() {
+    public Time getCargaHoraria() {
         return cargaHoraria;
     }
-    public void setCargaHoraria(LocalTime cargaHoraria) {
+    public void setCargaHoraria(Time cargaHoraria) {
         this.cargaHoraria = cargaHoraria;
     }
 
@@ -96,10 +95,10 @@ public class Evento {
         this.publico_alcancado = publico_alcancado;
     }
 
-    public ClassificacaoEtaria getClassificacaoEtaria() {
+    public String getClassificacaoEtaria() {
         return classificacaoEtaria;
     }
-    public void setClassificacaoEtaria(ClassificacaoEtaria classificacaoEtaria) {
+    public void setClassificacaoEtaria(String classificacaoEtaria) {
         this.classificacaoEtaria = classificacaoEtaria;
     }
 
