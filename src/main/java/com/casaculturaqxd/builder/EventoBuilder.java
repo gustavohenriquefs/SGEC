@@ -20,7 +20,7 @@ public class EventoBuilder implements Builder {
 
   @Override
   public void setNome(String nome) {
-    // TODO Auto-generated method stub
+    evento.setNome(nome);
   }
 
   @Override
