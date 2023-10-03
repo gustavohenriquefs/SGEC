@@ -10,4 +10,5 @@ public interface Builder {
   void setDataFinal(Date dataFinal);
   void setPublicoEsperado(int publicoEsperado);
   void setPublicoAlcancado(int publicoAlcancado);
+  void setClassificacaoEtaria(String classificacaoEtaria);
 }
