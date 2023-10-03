@@ -57,7 +57,7 @@
             <HBox HBox.hgrow="ALWAYS" />
         </children>
       </VBox>
-            <HBox alignment="CENTER" layoutX="29.0" layoutY="303.0" prefHeight="59.0" prefWidth="1371.0" spacing="400.0">
+            <HBox alignment="CENTER" layoutX="45.0" layoutY="309.0" prefHeight="59.0" prefWidth="1371.0" spacing="400.0">
                <children>
                   <HBox>
                      <children>
@@ -81,9 +81,9 @@
                         </VBox>
                      </children>
                   </HBox>
-                  <HBox alignment="BOTTOM_CENTER">
+                  <HBox alignment="BOTTOM_CENTER" spacing="30.0">
                      <children>
-                        <VBox fx:id="cargaHoraria" alignment="CENTER">
+                        <VBox fx:id="cargaHoraria" alignment="CENTER" visible="false">
                            <children>
                               <Label text="Carga horária">
                                  <font>
@@ -105,8 +105,8 @@
                         </VBox>
                         <HBox alignment="CENTER" spacing="20.0">
                            <children>
-                        <RadioButton fx:id="certificavel" mnemonicParsing="false" text="Certificável" textFill="#352929" />
-                        <RadioButton fx:id="libras" mnemonicParsing="false" text="Acessível em libras" textFill="#352929" />
+                        <RadioButton fx:id="certificavel" mnemonicParsing="false" text="Certificável" textFill="#352929" visible="false" />
+                        <RadioButton fx:id="acessivelEmLibras" mnemonicParsing="false" text="Acessível em libras" textFill="#352929" />
                            </children>
                         </HBox>
                      </children>
@@ -151,7 +151,7 @@
                                     <Font name="System Bold" size="20.0" />
                                  </font>
                               </Label>
-                              <Button fx:id="botaoNovaLocalizacao" alignment="CENTER" mnemonicParsing="false" onAction="#adicionarLocalizacao" style="-fx-background-color: #2A3F25;" text="Adicionar nova localização +" textFill="WHITE" />
+                              <Button fx:id="botaoNovaLocalizacao" alignment="CENTER" mnemonicParsing="false" onAction="#adicionarCampoLocalizacao" style="-fx-background-color: #2A3F25;" text="Adicionar nova localização +" textFill="WHITE" />
                                  </children>
                               </HBox>
                               <VBox>
@@ -168,7 +168,7 @@
                <children>
                         <HBox fx:id="Participantes" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="40.0">
                            <children>
-                        <Button fx:id="botaoParticipantes" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#adicionarParticipante" prefHeight="46.0" prefWidth="152.0" style="-fx-background-color: #352929;" text="Adicionar participantes" textFill="WHITE" HBox.hgrow="ALWAYS" />
+                        <Button fx:id="botaoParticipantes" disable="true" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#adicionarParticipante" prefHeight="46.0" prefWidth="152.0" style="-fx-background-color: #352929;" text="Adicionar participantes" textFill="WHITE" visible="false" HBox.hgrow="ALWAYS" />
                            </children></HBox>
                         <VBox VBox.vgrow="NEVER">
                            <children>
@@ -181,20 +181,20 @@
             <VBox alignment="CENTER_LEFT" prefHeight="46.0" prefWidth="150.0">
                <children>
                <HBox fx:id="Organizadores" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
-                  <Button fx:id="botaoOrganizadores" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#adicionarOrganizador" prefHeight="46.0" prefWidth="154.0" style="-fx-background-color: #352929;" text="Adicionar organizadores" textFill="WHITE" VBox.vgrow="ALWAYS" />
+                  <Button fx:id="botaoOrganizadores" disable="true" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#adicionarOrganizador" prefHeight="46.0" prefWidth="154.0" style="-fx-background-color: #352929;" text="Adicionar organizadores" textFill="WHITE" visible="false" VBox.vgrow="ALWAYS" />
                </HBox>
                </children>
             </VBox>
             <VBox prefHeight="46.0" prefWidth="150.0">
                <children>
                   <HBox fx:id="Colaboradores" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
-                  <Button fx:id="botaoColaboradores" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#adicionarColaborador" prefHeight="46.0" prefWidth="153.0" style="-fx-background-color: #352929;" text="Adicionar colaboradores" textFill="WHITE" VBox.vgrow="ALWAYS" />
+                  <Button fx:id="botaoColaboradores" disable="true" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#adicionarColaborador" prefHeight="46.0" prefWidth="153.0" style="-fx-background-color: #352929;" text="Adicionar colaboradores" textFill="WHITE" visible="false" VBox.vgrow="ALWAYS" />
                   </HBox>
                </children>
             </VBox>
             <VBox prefHeight="46.0" prefWidth="150.0">
                <children>
-                  <Button fx:id="botaoArquivos" mnemonicParsing="false" onAction="#adicionarArquivo" prefHeight="46.0" prefWidth="152.0" style="-fx-background-color: #352929;" text="Adicionar arquivos" textFill="WHITE" VBox.vgrow="ALWAYS" />
+                  <Button fx:id="botaoArquivos" disable="true" mnemonicParsing="false" onAction="#adicionarArquivo" prefHeight="46.0" prefWidth="152.0" style="-fx-background-color: #352929;" text="Adicionar arquivos" textFill="WHITE" visible="false" VBox.vgrow="ALWAYS" />
                </children>
             </VBox>
             <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
