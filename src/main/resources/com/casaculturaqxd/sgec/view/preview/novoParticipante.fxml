@@ -12,20 +12,20 @@
          <children>
             <HBox id="campoNomeInstituicao" fx:id="campoNomeInstituicao" layoutX="20.0" layoutY="45.0" prefHeight="101.0" prefWidth="562.0" AnchorPane.bottomAnchor="513.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="45.0">
                <children>
-                  <Label id="artista" fx:id="artista" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="559.0" style="-fx-background-color: E9E3CA;" wrapText="true" HBox.hgrow="ALWAYS" />
+                  <Label id="artista" fx:id="artista" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="559.0" wrapText="true" HBox.hgrow="ALWAYS" />
                </children>
             </HBox>
             <HBox id="campoDescricao" fx:id="campoDescricao" layoutX="20.0" layoutY="159.0" prefHeight="214.0" prefWidth="562.0" AnchorPane.bottomAnchor="241.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="159.0">
                <children>
-                  <Label id="area" fx:id="area" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="207.0" prefWidth="562.0" style="-fx-background-color: E9E3CA;" wrapText="true" HBox.hgrow="ALWAYS" />
+                  <Label id="area" fx:id="area" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="207.0" prefWidth="562.0" wrapText="true" HBox.hgrow="ALWAYS" />
                </children>
             </HBox>
-            <HBox layoutX="20.0" layoutY="426.0" prefHeight="91.0" prefWidth="562.0" style="-fx-background-color: E9E3CA;" AnchorPane.bottomAnchor="142.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="426.0">
+            <HBox layoutX="20.0" layoutY="426.0" prefHeight="91.0" prefWidth="562.0" AnchorPane.bottomAnchor="142.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="426.0">
                <children>
                   <Label id="link" fx:id="link" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="561.0" wrapText="true" HBox.hgrow="ALWAYS" />
                </children>
             </HBox>
-            <HBox layoutX="20.0" layoutY="529.7999877929688" prefHeight="115.0" prefWidth="154.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
+            <HBox layoutX="20.0" layoutY="530.0" maxHeight="110.0" maxWidth="400.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="360.0" AnchorPane.leftAnchor="20.0">
                <children>
                   <ImageView fx:id="imagem" fitHeight="115.0" fitWidth="564.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS" />
                </children>
