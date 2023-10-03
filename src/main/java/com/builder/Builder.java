@@ -9,4 +9,5 @@ public interface Builder {
   void setDataInicial(Date dataInicial);
   void setDataFinal(Date dataFinal);
   void setPublicoEsperado(int publicoEsperado);
+  void setPublicoAlcancado(int publicoAlcancado);
 }
