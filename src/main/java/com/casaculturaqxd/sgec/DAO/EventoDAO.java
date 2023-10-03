@@ -31,8 +31,6 @@ public class EventoDAO {
       
       PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
-      String classificacaoEtaria = evento.getClassificacaoEtaria().getClassificacao();
-
       stmt.setString( 1, evento.getNome());
       stmt.setInt(    2, evento.getPublicoEsperado());
       stmt.setInt(    3, evento.getPublicoAlcancado());
@@ -40,7 +38,7 @@ public class EventoDAO {
       stmt.setDate(   5, evento.getDataInicial());
       stmt.setDate(   6, evento.getDataFinal());
       stmt.setTime(   7, evento.getHorario());
-      stmt.setString( 8, classificacaoEtaria);
+      stmt.setString( 8, evento.getClassificacaoEtaria());
       stmt.setBoolean(9, evento.isCertificavel());
       stmt.setTime(   10, evento.getCargaHoraria());
       stmt.setBoolean(11, evento.isAcessivelEmLibras());
@@ -228,7 +226,7 @@ public class EventoDAO {
         eventoRetorno.setDataInicial(resultSet.getDate("data_inicial"));
         eventoRetorno.setDataFinal(resultSet.getDate("data_final"));
         eventoRetorno.setHorario(resultSet.getTime("horario"));
-        eventoRetorno.setClassificacaoEtaria(ClassificacaoEtaria.valueOf(resultSet.getString("classificacao_etaria")));
+        eventoRetorno.setClassificacaoEtaria(resultSet.getString("classificacao_etaria"));
         eventoRetorno.setCertificavel(resultSet.getBoolean("certificavel"));
         eventoRetorno.setCargaHoraria(resultSet.getTime("carga_horaria"));
         eventoRetorno.setAcessivelEmLibras(resultSet.getBoolean("acessivel_em_libras"));
@@ -304,7 +302,7 @@ public class EventoDAO {
       if (resultSet.next()) {
         numMunicipiosDistintos = resultSet.getInt("num_municipios_distintos");
       }
-      
+
       stmt.close();
     } catch (SQLException e) {
       return 0;
