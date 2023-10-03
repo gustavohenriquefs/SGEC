@@ -39,10 +39,10 @@ public class EventoDAO {
       stmt.setString( 4, evento.getDescricao());
       stmt.setDate(   5, evento.getDataInicial());
       stmt.setDate(   6, evento.getDataFinal());
-      stmt.setTime(   7, Time.valueOf(evento.getHorario()));
+      stmt.setTime(   7, evento.getHorario());
       stmt.setString( 8, classificacaoEtaria);
       stmt.setBoolean(9, evento.isCertificavel());
-      stmt.setTime(   10, Time.valueOf(evento.getCargaHoraria()));
+      stmt.setTime(   10, evento.getCargaHoraria());
       stmt.setBoolean(11, evento.isAcessivelEmLibras());
       stmt.executeUpdate();
       
@@ -227,10 +227,10 @@ public class EventoDAO {
         eventoRetorno.setDescricao(resultSet.getString("descricao"));
         eventoRetorno.setDataInicial(resultSet.getDate("data_inicial"));
         eventoRetorno.setDataFinal(resultSet.getDate("data_final"));
-        eventoRetorno.setHorario(resultSet.getTime("horario").toLocalTime());
+        eventoRetorno.setHorario(resultSet.getTime("horario"));
         eventoRetorno.setClassificacaoEtaria(ClassificacaoEtaria.valueOf(resultSet.getString("classificacao_etaria")));
         eventoRetorno.setCertificavel(resultSet.getBoolean("certificavel"));
-        eventoRetorno.setCargaHoraria(resultSet.getTime("carga_horaria").toLocalTime());
+        eventoRetorno.setCargaHoraria(resultSet.getTime("carga_horaria"));
         eventoRetorno.setAcessivelEmLibras(resultSet.getBoolean("acessivel_em_libras"));
         eventoRetorno.setLocais(this.buscarLocaisPorEvento(eventoRetorno.getIdEvento()));
         eventoRetorno.setListaOrganizadores(this.buscarOrganizadoresPorEvento(eventoRetorno.getIdEvento()));
@@ -324,7 +324,7 @@ public class EventoDAO {
       stmt.setString(2, evento.getDescricao());
       stmt.setDate(3, evento.getDataInicial());
       stmt.setDate(4, evento.getDataFinal());
-      stmt.setTime(5, Time.valueOf(evento.getHorario()));
+      stmt.setTime(5, evento.getHorario());
       stmt.setInt(6, evento.getIdEvento());
       stmt.execute();
       stmt.close();
