@@ -1,5 +1,6 @@
 package com.casaculturaqxd.builder;
 
+import java.sql.Time;
 import java.util.Date;
 import java.util.SortedSet;
 
@@ -15,6 +16,10 @@ public class EventoBuilder implements Builder {
 
   Evento getEvento(){
     return evento;
+  }
+
+  void setCargaHoraria(Time cargaHoraria){
+    evento.setCargaHoraria(cargaHoraria);
   }
 
   @Override
