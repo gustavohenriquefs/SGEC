@@ -7,4 +7,5 @@ public interface Builder {
   void setNome(String nome);
   void setDescricao(String descricao);
   void setDataInicial(Date dataInicial);
+  void setDataFinal(Date dataFinal);
 }
