@@ -27,7 +27,7 @@ public class EventoDAO {
     }
 
     try {
-      String sql = "INSERT INTO evento (nome_evento, publico_esperado, publico_alcancado, descricao, data_inicial, data_final, horario, classificacao_etaria, certificavel, carga_horaria, acessivel_em_libras) VALUES (?, ?, ?, ?, ?, ?, ?, ?::faixa_etaria, ?, ?, ?) RETURNING id_evento";
+      String sql = "INSERT INTO evento (nome_evento, publico_esperado, publico_alcancado, descricao, data_inicial, data_final, horario, classificacao_etaria, certificavel, carga_horaria, acessivel_em_libras, num_participantes_esperado, num_municipios_esperado) VALUES (?, ?, ?, ?, ?, ?, ?, ?::faixa_etaria, ?, ?, ?, ?, ?) RETURNING id_evento";
       
       PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
@@ -42,6 +42,9 @@ public class EventoDAO {
       stmt.setBoolean(9, evento.isCertificavel());
       stmt.setTime(   10, evento.getCargaHoraria());
       stmt.setBoolean(11, evento.isAcessivelEmLibras());
+      stmt.setInt(    12, evento.getParticipantesEsperado());
+      stmt.setInt(    13, evento.getMunicipiosEsperado());
+
       stmt.executeUpdate();
       
       ResultSet rs = stmt.getGeneratedKeys();
@@ -230,6 +233,8 @@ public class EventoDAO {
         eventoRetorno.setCertificavel(resultSet.getBoolean("certificavel"));
         eventoRetorno.setCargaHoraria(resultSet.getTime("carga_horaria"));
         eventoRetorno.setAcessivelEmLibras(resultSet.getBoolean("acessivel_em_libras"));
+        eventoRetorno.setParticipantesEsperado(resultSet.getInt("num_participantes_esperado"));
+        eventoRetorno.setMunicipiosEsperado(resultSet.getInt("num_municipios_esperado"));
         eventoRetorno.setLocais(this.buscarLocaisPorEvento(eventoRetorno.getIdEvento()));
         eventoRetorno.setListaOrganizadores(this.buscarOrganizadoresPorEvento(eventoRetorno.getIdEvento()));
         eventoRetorno.setListaColaboradores(this.buscarColaboradoresPorEvento(eventoRetorno.getIdEvento()));
@@ -337,7 +342,7 @@ public class EventoDAO {
 
   public boolean alterarEvento(Evento evento) {
     try {
-      String sql = "update evento set nome_evento=?, publico_esperado=?, publico_alcancado=?, descricao=?, data_inicial=?, data_final=?, horario=?, classificacao_etaria=?::faixa_etaria, certificavel=?, carga_horaria=?, acessivel_em_libras=? where id_evento=?";
+      String sql = "update evento set nome_evento=?, publico_esperado=?, publico_alcancado=?, descricao=?, data_inicial=?, data_final=?, horario=?, classificacao_etaria=?::faixa_etaria, certificavel=?, carga_horaria=?, acessivel_em_libras=?, num_participantes_esperado = ?, num_municipios_esperado = ? where id_evento=?";
       
       PreparedStatement stmt = connection.prepareStatement(sql);
       
@@ -352,7 +357,9 @@ public class EventoDAO {
       stmt.setBoolean(9, evento.isCertificavel());
       stmt.setTime(10, evento.getCargaHoraria());
       stmt.setBoolean(11, evento.isAcessivelEmLibras());
-      stmt.setInt(12, evento.getIdEvento());
+      stmt.setInt(12, evento.getParticipantesEsperado());
+      stmt.setInt(13, evento.getMunicipiosEsperado());
+      stmt.setInt(14, evento.getIdEvento());
       stmt.execute();
       stmt.close();
     } catch (SQLException e) {
