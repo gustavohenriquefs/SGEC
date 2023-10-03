@@ -8,4 +8,5 @@ public interface Builder {
   void setDescricao(String descricao);
   void setDataInicial(Date dataInicial);
   void setDataFinal(Date dataFinal);
+  void setPublicoEsperado(int publicoEsperado);
 }
