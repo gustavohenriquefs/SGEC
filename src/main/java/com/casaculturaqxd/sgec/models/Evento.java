@@ -1,17 +1,21 @@
 package com.casaculturaqxd.sgec.models;
 
+
+import java.sql.Date;
 import java.sql.Time;
-import java.util.Date;
+
 import java.util.SortedSet;
 
 import com.casaculturaqxd.sgec.models.arquivo.Arquivo;
 
 public class Evento {
-    private int idEvento;
+    private Integer idEvento;
     private String nome;
     private String descricao;
-    private int publico_esperado;
-    private int publico_alcancado;
+    private int publicoEsperado;
+    private int publicoAlcancado;
+    private int participantesEsperado;
+    private int municipiosEsperado;
     private Date dataInicial;
     private Date dataFinal;
     private Time horario;
@@ -19,10 +23,10 @@ public class Evento {
     private String classificacaoEtaria;
     private boolean certificavel;
     private boolean acessivelEmLibras;
-    SortedSet<Localizacao> locais;
-    SortedSet<Participante> listaParticipantes;  
-    SortedSet<Instituicao> listaOrganizadores;
-    SortedSet<Instituicao> listaColaboradores;
+    SortedSet<Integer> locais;
+    SortedSet<Integer> listaParticipantes;  
+    SortedSet<Integer> listaOrganizadores;
+    SortedSet<Integer> listaColaboradores;
     SortedSet<Arquivo> listaArquivos;
 
     public String getNome() {
@@ -81,76 +85,94 @@ public class Evento {
         this.acessivelEmLibras = acessivelEmLibras;
     }
 
-    public int getPublico_esperado() {
-        return publico_esperado;
+    public int getPublicoEsperado() {
+        return publicoEsperado;
     }
-    public void setPublico_esperado(int publico_esperado) {
-        this.publico_esperado = publico_esperado;
+    
+    public void setPublicoEsperado(int publicoEsperado) {
+        this.publicoEsperado = publicoEsperado;
     }
 
-    public int getPublico_alcancado() {
-        return publico_alcancado;
+    public int getParticipantesEsperado() {
+        return participantesEsperado;
+    }   
+
+    public void setParticipantesEsperado(int participantesEsperado) {
+        this.participantesEsperado = participantesEsperado;
     }
-    public void setPublico_alcancado(int publico_alcancado) {
-        this.publico_alcancado = publico_alcancado;
+
+    public int getMunicipiosEsperado() {
+        return municipiosEsperado;
+    }
+
+    public void setMunicipiosEsperado(int municipiosEsperado) {
+        this.municipiosEsperado = municipiosEsperado;
+    }
+
+    public int getPublicoAlcancado() {
+        return publicoAlcancado;
+    }
+    public void setPublicoAlcancado(int publicoAlcancado) {
+        this.publicoAlcancado = publicoAlcancado;
     }
 
     public String getClassificacaoEtaria() {
         return classificacaoEtaria;
     }
     public void setClassificacaoEtaria(String classificacaoEtaria) {
+
         this.classificacaoEtaria = classificacaoEtaria;
     }
 
-    public SortedSet<Localizacao> getLocais() {
+    public SortedSet<Integer> getLocais() {
         return locais;
     }
-    public void setLocais(SortedSet<Localizacao> locais) {
+    public void setLocais(SortedSet<Integer> locais) {
         this.locais = locais;
     }
-    public void addLocal(Localizacao local){
+    public void addLocal(Integer local){
         this.locais.add(local);
     }
-    public boolean removeLocal(Localizacao local){
+    public boolean removeLocal(Integer local){
         return this.locais.remove(local);
     }
 
-    public SortedSet<Participante> getListaParticipantes() {
+    public SortedSet<Integer> getListaParticipantes() {
         return listaParticipantes;
     }
-    public void setListaParticipantes(SortedSet<Participante> listaParticipantes) {
+    public void setListaParticipantes(SortedSet<Integer> listaParticipantes) {
         this.listaParticipantes = listaParticipantes;
     }
-    public void addParticipante(Participante participante){
+    public void addParticipante(Integer participante){
         this.listaParticipantes.add(participante);
     }
-    public boolean removeParticipante(Participante participante){
+    public boolean removeParticipante(Integer participante){
         return this.listaParticipantes.remove(participante);
     }
 
-    public SortedSet<Instituicao> getListaOrganizadores() {
+    public SortedSet<Integer> getListaOrganizadores() {
         return listaOrganizadores;
     }
-    public void setListaOrganizadores(SortedSet<Instituicao> listaOrganizadores) {
+    public void setListaOrganizadores(SortedSet<Integer> listaOrganizadores) {
         this.listaOrganizadores = listaOrganizadores;
     }
-    public void addOrganizador(Instituicao organizador){
+    public void addOrganizador(Integer organizador){
         this.listaOrganizadores.add(organizador);
     }
     public boolean removeOrganizador(Instituicao organizador){
         return this.listaOrganizadores.remove(organizador);
     }
 
-    public SortedSet<Instituicao> getListaColaboradores() {
+    public SortedSet<Integer> getListaColaboradores() {
         return listaColaboradores;
     }
-    public void setListaColaboradores(SortedSet<Instituicao> listaColaboradores) {
+    public void setListaColaboradores(SortedSet<Integer> listaColaboradores) {
         this.listaColaboradores = listaColaboradores;
     }
-    public void addColaborador(Instituicao colaborador){
+    public void addColaborador(Integer colaborador){
         this.listaColaboradores.add(colaborador);
     }
-    public boolean removeColaborador(Instituicao colaborador){
+    public boolean removeColaborador(Integer colaborador){
         return this.listaColaboradores.remove(colaborador);
     }
 
@@ -166,10 +188,10 @@ public class Evento {
     public boolean removeArquivo(Arquivo arquivo){
         return this.listaArquivos.remove(arquivo);
     }
-    public int getIdEvento() {
+    public Integer getIdEvento() {
         return idEvento;
     }
-    public void setIdEvento(int idEvento) {
+    public void setIdEvento(Integer idEvento) {
         this.idEvento = idEvento;
     }
     

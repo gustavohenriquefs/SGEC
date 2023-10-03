@@ -14,7 +14,7 @@ public enum ClassificacaoEtaria {
         this.classificacaoEtaria = classificacaoEtaria;
     }
     
-    String getClassificacao(){
-        return this.classificacaoEtaria;
+    public String getClassificacao() {
+        return classificacaoEtaria;
     }
 }
