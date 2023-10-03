@@ -9,6 +9,10 @@ import com.casaculturaqxd.sgec.models.Instituicao;
 public class EventoBuilder implements Builder {
   Evento evento;
 
+  public EventoBuilder(){
+    evento = new Evento();
+  }
+
   @Override
   public void resetar() {
     // TODO Auto-generated method stub
