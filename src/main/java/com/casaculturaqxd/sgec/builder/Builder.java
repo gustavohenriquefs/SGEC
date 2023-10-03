@@ -3,7 +3,6 @@ package com.casaculturaqxd.sgec.builder;
 import java.sql.Date;
 import java.util.SortedSet;
 
-import com.casaculturaqxd.sgec.models.Instituicao;
 
 public interface Builder {
   void resetar();
@@ -14,6 +13,6 @@ public interface Builder {
   void setPublicoEsperado(int publicoEsperado);
   void setPublicoAlcancado(int publicoAlcancado);
   void setClassificacaoEtaria(String classificacaoEtaria);
-  void setColaboradores(SortedSet<Instituicao> colaboradores);
-  void setOrganizadores(SortedSet<Instituicao> organizadores);
+  void setColaboradores(SortedSet<Integer> colaboradores);
+  void setOrganizadores(SortedSet<Integer> organizadores);
 }
