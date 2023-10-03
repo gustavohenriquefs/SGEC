@@ -45,7 +45,7 @@ public class EventoBuilder implements Builder {
 
   @Override
   public void setPublicoAlcancado(int publicoAlcancado) {
-    // TODO Auto-generated method stub
+    evento.setPublico_alcancado(publicoAlcancado);
   }
 
   @Override
