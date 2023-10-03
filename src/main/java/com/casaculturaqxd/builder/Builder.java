@@ -1,7 +1,7 @@
 package com.casaculturaqxd.builder;
 
 import java.util.Date;
-import java.util.Set;
+import java.util.SortedSet;
 
 import com.casaculturaqxd.sgec.models.Instituicao;
 
@@ -14,6 +14,6 @@ public interface Builder {
   void setPublicoEsperado(int publicoEsperado);
   void setPublicoAlcancado(int publicoAlcancado);
   void setClassificacaoEtaria(String classificacaoEtaria);
-  void setColaboradores(Set<Instituicao> colaboradores);
-  void setOrganizadores(Set<Instituicao> organizadores);
+  void setColaboradores(SortedSet<Instituicao> colaboradores);
+  void setOrganizadores(SortedSet<Instituicao> organizadores);
 }

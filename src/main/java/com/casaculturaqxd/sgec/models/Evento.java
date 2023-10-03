@@ -4,7 +4,6 @@ import java.time.LocalTime;
 import java.util.Date;
 import java.util.SortedSet;
 
-import com.casaculturaqxd.sgec.enums.ClassificacaoEtaria;
 import com.casaculturaqxd.sgec.models.arquivo.Arquivo;
 
 public class Evento {

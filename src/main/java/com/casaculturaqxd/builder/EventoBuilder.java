@@ -2,6 +2,7 @@ package com.casaculturaqxd.builder;
 
 import java.util.Date;
 import java.util.Set;
+import java.util.SortedSet;
 
 import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.Instituicao;
@@ -54,12 +55,12 @@ public class EventoBuilder implements Builder {
   }
 
   @Override
-  public void setColaboradores(Set<Instituicao> colaboradores) {
-    // TODO Auto-generated method stub
+  public void setColaboradores(SortedSet<Instituicao> colaboradores) {
+    evento.setListaColaboradores(colaboradores);
   }
 
   @Override
-  public void setOrganizadores(Set<Instituicao> organizadores) {
+  public void setOrganizadores(SortedSet<Instituicao> organizadores) {
     // TODO Auto-generated method stub
   }
   
