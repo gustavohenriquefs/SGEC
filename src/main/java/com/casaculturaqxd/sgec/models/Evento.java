@@ -1,10 +1,11 @@
 package com.casaculturaqxd.sgec.models;
 
+
 import java.sql.Date;
 import java.sql.Time;
+
 import java.util.SortedSet;
 
-import com.casaculturaqxd.sgec.enums.ClassificacaoEtaria;
 import com.casaculturaqxd.sgec.models.arquivo.Arquivo;
 
 public class Evento {
@@ -19,7 +20,7 @@ public class Evento {
     private Date dataFinal;
     private Time horario;
     private Time cargaHoraria;
-    private ClassificacaoEtaria classificacaoEtaria;
+    private String classificacaoEtaria;
     private boolean certificavel;
     private boolean acessivelEmLibras;
     SortedSet<Integer> locais;
@@ -115,11 +116,11 @@ public class Evento {
         this.publicoAlcancado = publicoAlcancado;
     }
 
-    public ClassificacaoEtaria getClassificacaoEtaria() {
-        return this.classificacaoEtaria;
+    public String getClassificacaoEtaria() {
+        return classificacaoEtaria;
     }
+    public void setClassificacaoEtaria(String classificacaoEtaria) {
 
-    public void setClassificacaoEtaria(ClassificacaoEtaria classificacaoEtaria) {
         this.classificacaoEtaria = classificacaoEtaria;
     }
 

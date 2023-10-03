@@ -15,7 +15,7 @@ import io.github.cdimascio.dotenv.Dotenv;
  * antes de tentar atualizar uma das credenciais.
  * </p>
  */
-public class DatabasePostgres implements Database{
+public class DatabasePostgres implements Database {
     private static DatabasePostgres instance;
     private Connection connection;
     private String urlDataBase;
@@ -23,8 +23,8 @@ public class DatabasePostgres implements Database{
     private String senha;
     private Dotenv dotenv = Dotenv.load();
 
-    public static DatabasePostgres getInstance(String urlKey, String userNameKey, String passwordKey){
-        if(instance==null){
+    public static DatabasePostgres getInstance(String urlKey, String userNameKey, String passwordKey) {
+        if (instance == null) {
             instance = new DatabasePostgres(urlKey, userNameKey, passwordKey);
         }
         return instance;
@@ -33,19 +33,19 @@ public class DatabasePostgres implements Database{
     private DatabasePostgres(String urlKey, String userNameKey, String passwordKey) {
         this.urlDataBase = dotenv.get(urlKey);
         this.nomeUsuario = dotenv.get(userNameKey);
-        this.senha       = dotenv.get(passwordKey);
-    }
+        this.senha = dotenv.get(passwordKey);
 
-    public Connection conectar() {
         try {
-            Class.forName("org.postgresql.Driver");
-            this.connection = DriverManager.getConnection(urlDataBase, nomeUsuario,senha);
-            return this.connection;
-        } catch (SQLException | ClassNotFoundException erro) {
+            this.connection = DriverManager.getConnection(urlDataBase, nomeUsuario, senha);
+        } catch (SQLException erro) {
             throw new RuntimeException(erro);
         }
     }
-    
+
+    public Connection getConnection() {
+        return this.connection;
+    }
+
     public void desconectar(Connection connection) {
         try {
             connection.close();
@@ -54,44 +54,36 @@ public class DatabasePostgres implements Database{
         }
     }
 
-    public void setUrlDataBase(String urlKey) {
-        if(variavelEnvExists(urlKey)){
-            desconectar(connection);            
+    public void setUrlDataBase(String urlKey) throws IncorrectEnvironmentVariableException{
+        if (variavelEnvExists(urlKey)) {
+            desconectar(connection);
             this.urlDataBase = dotenv.get(urlKey);
-        }
-        else{
-            throw new RuntimeException("variavel de ambiente inexistente");
+        } else {
+            throw new IncorrectEnvironmentVariableException();
         }
     }
 
-    public void setNomeUsuario(String userNameKey) {
-        if(variavelEnvExists(userNameKey)){
-            desconectar(connection);            
+    public void setNomeUsuario(String userNameKey) throws IncorrectEnvironmentVariableException {
+        if (variavelEnvExists(userNameKey)) {
+            desconectar(connection);
             this.nomeUsuario = dotenv.get(userNameKey);
-            
-        }
-        else{
-            throw new RuntimeException("variavel de ambiente inexistente");
+
+        } else {
+            throw new IncorrectEnvironmentVariableException();
         }
     }
 
-    public void setSenha(String passwordKey) {
-        if(variavelEnvExists(passwordKey)){
-            desconectar(connection);            
+    public void setSenha(String passwordKey) throws IncorrectEnvironmentVariableException {
+        if (variavelEnvExists(passwordKey)) {
+            desconectar(connection);
             this.senha = dotenv.get(passwordKey);
-        }
-        else{
-            throw new RuntimeException("variavel de ambiente inexistente");
+        } else {
+            throw new IncorrectEnvironmentVariableException();
         }
     }
 
-    private boolean variavelEnvExists(String envKey){
-        if(dotenv.get(envKey) == null){
-            return false;
-        }
-        else{
-            return true;
-        }
+    private boolean variavelEnvExists(String envKey) {
+        return dotenv.get(envKey) == null;
     }
 
 }

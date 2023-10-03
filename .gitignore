@@ -30,3 +30,6 @@ replay_pid*
 /target/
 /.vscode/
 nbactions.xml
+
+#astah lock file
+*.asta.lock
