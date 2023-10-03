@@ -5,12 +5,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Time;
 import java.util.Optional;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import com.casaculturaqxd.sgec.enums.ClassificacaoEtaria;
 import com.casaculturaqxd.sgec.models.Evento;
 
 public class EventoDAO {
