@@ -25,7 +25,7 @@ public class EventoBuilder implements Builder {
 
   @Override
   public void setDescricao(String descricao) {
-    // TODO Auto-generated method stub
+    evento.setDescricao(descricao);
   }
 
   @Override
