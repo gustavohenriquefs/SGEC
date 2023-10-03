@@ -1,0 +1,12 @@
+@import url(../css/colors/colorStyle.css);
+
+#principal, #container {
+    -fx-background-color: -branco;
+}
+#botao{
+    -fx-background-color: -verde;
+}
+#descricao, #instituicao, #valor {
+    -fx-white-space: normal;
+    -fx-wrap-text: true;
+}
