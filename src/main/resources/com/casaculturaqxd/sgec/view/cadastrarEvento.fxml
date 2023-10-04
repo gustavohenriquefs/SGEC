@@ -59,7 +59,7 @@
       </VBox>
             <HBox alignment="CENTER" layoutX="45.0" layoutY="309.0" prefHeight="59.0" prefWidth="1371.0" spacing="400.0">
                <children>
-                  <HBox>
+                  <HBox spacing="25.0">
                      <children>
                         <VBox>
                            <children>
@@ -151,7 +151,7 @@
                                     <Font name="System Bold" size="20.0" />
                                  </font>
                               </Label>
-                              <Button fx:id="botaoNovaLocalizacao" alignment="CENTER" mnemonicParsing="false" onAction="#adicionarCampoLocalizacao" style="-fx-background-color: #2A3F25;" text="Adicionar nova localização +" textFill="WHITE" />
+                              <Button fx:id="botaoNovaLocalizacao" alignment="CENTER" mnemonicParsing="false" onAction="#carregarCampoLocalizacao" style="-fx-background-color: #2A3F25;" text="Adicionar nova localização +" textFill="WHITE" />
                                  </children>
                               </HBox>
                               <VBox>
