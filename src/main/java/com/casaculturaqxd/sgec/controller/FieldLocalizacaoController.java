@@ -1,10 +1,12 @@
 package com.casaculturaqxd.sgec.controller;
 
 
+
 import java.io.IOException;
-import java.net.URL;
 
 import com.casaculturaqxd.sgec.App;
+import com.casaculturaqxd.sgec.DAO.LocalizacaoDAO;
+import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.Localizacao;
 
 import javafx.fxml.FXML;
@@ -14,11 +16,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.layout.GridPane;
 
 
 public class FieldLocalizacaoController {
+    DatabasePostgres db = DatabasePostgres.getInstance("URL","USER_NAME","PASSWORD");
     @FXML
-    Button remover; 
+    GridPane paneLocalizacoes;
+    @FXML
+    Button botaoRemover; 
     @FXML 
     TextField rua, bairro, numero, cidade, cep, estado, pais;
 
@@ -41,8 +47,8 @@ public class FieldLocalizacaoController {
         }));
     }
 
-    public void remover(){
-      
+    public void remover() throws IOException{
+      FXMLLoader loaderSuperScene = new FXMLLoader(App.class.getResource("view/cadastrarEvento.fxml"));
     }
 
     public Localizacao getLocalizacao(){
@@ -64,7 +70,13 @@ public class FieldLocalizacaoController {
             novoLocal.setEstado(estado.getText());
             novoLocal.setPais(pais.getText());
         }
-        return novoLocal;
+        System.out.println(novoLocal);
+        LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO();
+        localizacaoDAO.setConnection(db.getConnection());
+        if(localizacaoDAO.inserirLocalizacao(novoLocal)){
+            return novoLocal;
+        }
+        return null;
     }
 
 }
