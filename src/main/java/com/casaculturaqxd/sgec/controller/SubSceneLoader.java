@@ -24,4 +24,7 @@ public class SubSceneLoader {
         }
         return sceneLoader.load();
     }
+    public FXMLLoader getLoader(){
+        return sceneLoader;
+    }
 }
