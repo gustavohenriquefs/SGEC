@@ -5,12 +5,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Time;
 import java.util.Optional;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import com.casaculturaqxd.sgec.enums.ClassificacaoEtaria;
 import com.casaculturaqxd.sgec.models.Evento;
 
 public class EventoDAO {
@@ -48,7 +46,6 @@ public class EventoDAO {
       stmt.executeUpdate();
       
       ResultSet rs = stmt.getGeneratedKeys();
-
       if (rs.next()) {
           evento.setIdEvento(rs.getInt("id_evento"));
       }
@@ -67,15 +64,15 @@ public class EventoDAO {
       }
     }
 
-    if(evento.getListaOrganizadores() != null) {
+    /* if(evento.getListaOrganizadores() != null) {
       boolean vinculoOrganizadores = this.vincularOrganizadores(evento.getListaOrganizadores(), evento.getIdEvento());
 
       if(vinculoOrganizadores == false) {
         return false;
       }
-    }
+    } */
 
-    if(evento.getListaColaboradores() != null) {
+    /* if(evento.getListaColaboradores() != null) {
       boolean vinculoColaboradores = this.vincularColaboradores(evento.getListaColaboradores(), evento.getIdEvento());
 
       if(vinculoColaboradores == false) {
@@ -89,7 +86,7 @@ public class EventoDAO {
       if(vinculoParticipantes == false) {
         return false;
       }
-    }
+    } */
 
     return true;
   }
