@@ -1,0 +1,12 @@
+@import url(../css/colors/colorStyle.css);
+
+#principal, #container {
+    -fx-background-color: -branco;
+}
+#descricao, #valor, #nomeInstituicao {
+    -fx-white-space: normal;
+    -fx-wrap-text: true;
+}
+.meusLabels {
+    -fx-border-color: -preto;
+}
