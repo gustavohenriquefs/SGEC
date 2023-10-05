@@ -1,7 +1,6 @@
 package com.casaculturaqxd.sgec.controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -22,6 +21,12 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.EventoDAO;
@@ -35,7 +40,8 @@ public class CadastrarEventoController {
     DatabasePostgres db = DatabasePostgres.getInstance("URL","USER_NAME","PASSWORD");
     EventoBuilder builderEvento = new EventoBuilder();
     EventoDAO eventoDAO = new EventoDAO();
-
+    ArrayList<FieldLocalizacaoController> controllersLocais = new ArrayList<FieldLocalizacaoController>();
+    DateFormat formatterHorario;
     Stage stage;
     @FXML
     VBox Localizacoes, cargaHoraria;
@@ -61,7 +67,10 @@ public class CadastrarEventoController {
     botaoParticipantes, botaoArquivos, cancelar, criarEvento;
 
     public void initialize() throws IOException{
-        adicionarCampoLocalizacao();
+        formatterHorario = new SimpleDateFormat("HH:mm");
+
+        //inicia com o local obrigatorio carregado na pagina
+        carregarCampoLocalizacao();
         classificacaoEtaria.getItems().addAll(classificacoes);
         addInputConstraints();
 
@@ -69,35 +78,7 @@ public class CadastrarEventoController {
         showCertificavel(checkMeta3.isSelected());
     }
 
-    public void criarNovoEvento() throws IOException{
-        builderEvento.resetar();
-        eventoDAO.setConnection(db.getConnection());
-
-            builderEvento.setNome(titulo.getText());
-            builderEvento.setClassificacaoEtaria(classificacaoEtaria.getSelectionModel().getSelectedItem());
-            builderEvento.setDataInicial( Date.valueOf(dataInicial.getValue()));
-            builderEvento.setDataFinal(Date.valueOf(dataFinal.getValue()));
-            if(!publicoEsperado.getText().isEmpty()){
-            builderEvento.setPublicoEsperado(Integer.parseInt(publicoEsperado.getText()));
-            }
-            if(!publicoAlcancado.getText().isEmpty()){
-            builderEvento.setPublicoAlcancado(Integer.parseInt(publicoAlcancado.getText()));    
-            }
-            builderEvento.setCertificavel(certificavel.isSelected());
-            builderEvento.setAcessivelEmLibras(acessivelEmLibras.isSelected());
-            if(!numMunicipiosEsperado.getText().isEmpty()){
-                builderEvento.setMunicipiosEsperado(Integer.parseInt(numMunicipiosEsperado.getText()));
-            }
-            if(!numParticipantesEsperado.getText().isEmpty()){
-            builderEvento.setParticipantesEsperado(Integer.parseInt(numParticipantesEsperado.getText()));
-            }
-        Evento novoEvento = builderEvento.getEvento();
-        System.out.println(novoEvento);
-        if(eventoDAO.inserirEvento(novoEvento)){
-            novoEvento = eventoDAO.buscarEvento(novoEvento).get();
-            App.setRoot("view/home");
-        }
-
+    public void criarNovoEvento() throws IOException, ParseException{
         if(emptyLocalizacoes()){
             Alert erroLocalizacao = new Alert(AlertType.ERROR, "Um evento deve possuir pelo menos uma localização associada");
             erroLocalizacao.show();
@@ -105,8 +86,50 @@ public class CadastrarEventoController {
         if(!camposObrigatoriosPreenchidos()){
             Alert erroLocalizacao = new Alert(AlertType.ERROR, "nem todos os campos obrigatorios foram preenchidos");
             erroLocalizacao.show();
+        }
+
+        builderEvento.resetar();
+        eventoDAO.setConnection(db.getConnection());
+
+            builderEvento.setNome(titulo.getText());
+            builderEvento.setDescricao(titulo.getText());
+            builderEvento.setClassificacaoEtaria(classificacaoEtaria.getSelectionModel().getSelectedItem());
+            if(dataInicial.getValue() != null){
+            builderEvento.setDataInicial( Date.valueOf(dataInicial.getValue()));
             }
-        }     
+            if(dataFinal.getValue() != null){
+            builderEvento.setDataFinal(Date.valueOf(dataFinal.getValue()));
+            }
+            if(!publicoEsperado.getText().isEmpty()){
+            builderEvento.setPublicoEsperado(Integer.parseInt(publicoEsperado.getText()));
+            }
+            if(!publicoAlcancado.getText().isEmpty()){
+            builderEvento.setPublicoAlcancado(Integer.parseInt(publicoAlcancado.getText()));    
+            }
+            builderEvento.setCertificavel(certificavel.isSelected());
+            if(!horasCargaHoraria.getText().isEmpty()){
+            builderEvento.setCargaHoraria(new java.sql.Time(formatterHorario.parse(horasCargaHoraria.getText()+":00:00").getTime()));
+            }
+            builderEvento.setAcessivelEmLibras(acessivelEmLibras.isSelected());
+            if(!numMunicipiosEsperado.getText().isEmpty()){
+                builderEvento.setMunicipiosEsperado(Integer.parseInt(numMunicipiosEsperado.getText()));
+            }
+            if(!numParticipantesEsperado.getText().isEmpty()){
+            builderEvento.setParticipantesEsperado(Integer.parseInt(numParticipantesEsperado.getText()));
+            }
+        TreeSet<Integer> idLocais = new TreeSet<>();
+        for(FieldLocalizacaoController controller : controllersLocais){
+            idLocais.add(controller.getLocalizacao().getIdLocalizacao());
+        }
+        builderEvento.setLocalizacoes(idLocais);
+        Evento novoEvento = builderEvento.getEvento();
+        if(eventoDAO.inserirEvento(novoEvento)){
+            novoEvento = eventoDAO.buscarEvento(novoEvento).get();
+            App.setRoot("view/home");
+        }
+
+    }
+             
 
     public void cancelar() throws IOException{
         /** 
@@ -117,17 +140,18 @@ public class CadastrarEventoController {
         App.setRoot("view/home");
     }
 
-    public void adicionarCampoLocalizacao() throws IOException{
+    public void carregarCampoLocalizacao() throws IOException{
         if(Localizacoes.getChildren().size() >= MAX_LOCALIZACOES){
             botaoNovaLocalizacao.setDisable(true);
         }
         SubSceneLoader loaderLocais = new SubSceneLoader();
         GridPane novoLocal = (GridPane) loaderLocais.getPage("fields/fieldLocalizacao");
         Localizacoes.getChildren().add(novoLocal);
+        FieldLocalizacaoController controller = loaderLocais.getLoader().getController();
+        controllersLocais.add(controller);
+        System.out.println(controllersLocais);
     }
-    public void removerUltimaLocalizacao() throws IOException{
-        int ultimoLocal = Localizacoes.getChildren().size();
-        Localizacoes.getChildren().remove(ultimoLocal-1);
+    public void removerLocalizacao() throws IOException{
     }
     
     public void adicionarParticipante() throws IOException{
@@ -157,10 +181,9 @@ public class CadastrarEventoController {
 
     public boolean camposObrigatoriosPreenchidos(){
         if(classificacaoEtaria.getSelectionModel().getSelectedItem() == null
-           || descricao.getText().isEmpty()
            || titulo.getText().isEmpty()
            ||  dataInicial.getValue() == null 
-           ||dataFinal.getValue() == null){
+           || dataFinal.getValue() == null){
             return false; 
         }
         return true;
