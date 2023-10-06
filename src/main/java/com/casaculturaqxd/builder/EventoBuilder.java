@@ -1,13 +1,10 @@
 package com.casaculturaqxd.builder;
 
 import java.sql.Time;
-import java.util.Date;
+import java.sql.Date;
 import java.util.SortedSet;
 
 import com.casaculturaqxd.sgec.models.Evento;
-import com.casaculturaqxd.sgec.models.Instituicao;
-import com.casaculturaqxd.sgec.models.Localizacao;
-import com.casaculturaqxd.sgec.models.Participante;
 
 public class EventoBuilder implements Builder {
   Evento evento;
@@ -28,11 +25,11 @@ public class EventoBuilder implements Builder {
     evento.setCertificavel(certificavel);
   }
 
-  void setLocalizacoes(SortedSet<Localizacao> localizacoes){
+  void setLocalizacoes(SortedSet<Integer> localizacoes){
     evento.setLocais(localizacoes);
   }
 
-  void setParticipantes(SortedSet<Participante> participantes){
+  void setParticipantes(SortedSet<Integer> participantes){
     evento.setListaParticipantes(participantes);
   }
 
@@ -63,12 +60,12 @@ public class EventoBuilder implements Builder {
 
   @Override
   public void setPublicoEsperado(int publicoEsperado) {
-    evento.setPublico_esperado(publicoEsperado);
+    evento.setPublicoEsperado(publicoEsperado);
   }
 
   @Override
   public void setPublicoAlcancado(int publicoAlcancado) {
-    evento.setPublico_alcancado(publicoAlcancado);
+    evento.setPublicoAlcancado(publicoAlcancado);
   }
 
   @Override
@@ -77,12 +74,12 @@ public class EventoBuilder implements Builder {
   }
 
   @Override
-  public void setColaboradores(SortedSet<Instituicao> colaboradores) {
+  public void setColaboradores(SortedSet<Integer> colaboradores) {
     evento.setListaColaboradores(colaboradores);
   }
 
   @Override
-  public void setOrganizadores(SortedSet<Instituicao> organizadores) {
+  public void setOrganizadores(SortedSet<Integer> organizadores) {
     evento.setListaOrganizadores(organizadores);
   }
   
