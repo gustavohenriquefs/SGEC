@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.sql.Date;
 import java.sql.Time;
 
+
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.EventoDAO;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
@@ -92,6 +93,7 @@ public class VisualizarEventoController {
         addIndicador(tabelaIndicadoresMeta1, numeroMestres);
         addIndicador(tabelaIndicadoresMeta2, numeroMunicipios);
 
+
         /* TODO: adicionar funcionalidade de arquivos e
          *  reativar o botao
          */
@@ -136,7 +138,10 @@ public class VisualizarEventoController {
             evento.setCertificavel(certificavel.isSelected());
             evento.setHorario(Time.valueOf(horario.getText()));
             evento.setCargaHoraria(Time.valueOf(cargaHoraria.getText()));
-
+            evento.setPublicoAlcancado(getValorAlcancado(tabelaIndicadoresGerais));
+            evento.setPublicoEsperado(getValorEsperado(tabelaIndicadoresGerais));
+            evento.setParticipantesEsperado(getValorEsperado(tabelaIndicadoresMeta1));
+            evento.setMunicipiosEsperado(getValorEsperado(tabelaIndicadoresMeta2));;
             eventoDAO.alterarEvento(evento);
 
             Alert sucessoAtualizacao = new Alert(AlertType.INFORMATION);
@@ -170,7 +175,7 @@ public class VisualizarEventoController {
     private void loadTable(TableView<Indicador> tabela){
         TableColumn<Indicador,String> nomeIndicador = new TableColumn<>("Nome do indicador");
         nomeIndicador.setCellValueFactory(new PropertyValueFactory<>("nome"));
-        
+
         TableColumn<Indicador,Integer> valorEsperado = new TableColumn<>("Valor esperado");
         valorEsperado.setCellValueFactory(new PropertyValueFactory<>("valorEsperado"));
         valorEsperado.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
@@ -185,6 +190,14 @@ public class VisualizarEventoController {
     }
     private void addIndicador(TableView<Indicador> tabela, Indicador indicador){
         tabela.setItems(FXCollections.observableArrayList(indicador));
+    }
+
+    private Integer getValorEsperado(TableView<Indicador> tabela){
+        return (Integer) tabela.getColumns().get(1).getCellData(0);
+    }
+    private Integer getValorAlcancado(TableView<Indicador> tabela){
+        return (Integer) tabela.getColumns().get(2).getCellData(0);
+   
     }
 
     /**
