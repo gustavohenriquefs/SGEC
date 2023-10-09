@@ -1,6 +1,7 @@
 package com.casaculturaqxd.sgec.controller;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -25,7 +26,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.SortedSet;
 import java.util.TreeSet;
 
 import com.casaculturaqxd.sgec.App;
@@ -46,7 +46,7 @@ public class CadastrarEventoController {
     @FXML
     VBox Localizacoes, cargaHoraria;
     @FXML 
-    HBox Participantes, Organizadores, Colaboradores;
+    HBox header, Participantes, Organizadores, Colaboradores;
     @FXML
     TextField titulo, publicoEsperado, publicoAlcancado, horas, minutos, horasCargaHoraria ,numParticipantesEsperado,numMunicipiosEsperado;
     @FXML
@@ -69,6 +69,8 @@ public class CadastrarEventoController {
     public void initialize() throws IOException{
         formatterHorario = new SimpleDateFormat("HH:mm");
 
+        FXMLLoader loaderMenu = new FXMLLoader(App.class.getResource("view/componentes/menu.fxml"));
+        header.getChildren().add(loaderMenu.load());
         //inicia com o local obrigatorio carregado na pagina
         carregarCampoLocalizacao();
         classificacaoEtaria.getItems().addAll(classificacoes);

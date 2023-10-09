@@ -21,29 +21,9 @@
   <content>
     <AnchorPane id="container" prefHeight="800.0" prefWidth="1440.0" stylesheets="@../css/cadastrarEventoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Pane fx:id="header" prefHeight="35.0" prefWidth="790.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-         <children>
-            <Hyperlink layoutX="25.0" layoutY="4.0" text="Home" textFill="#fffef7" />
-            <Hyperlink layoutX="78.0" layoutY="7.0" text="Pesquisar" textFill="#fffef7">
-               <padding>
-                  <Insets bottom="0.0" />
-               </padding>
-            </Hyperlink>
-            <Hyperlink layoutX="144.0" layoutY="7.0" text="Cadastrar Evento" textFill="#fffef7">
-               <padding>
-                  <Insets bottom="0.0" />
-               </padding>
-            </Hyperlink>
-            <Hyperlink layoutX="254.0" layoutY="7.0" text="Metas" textFill="#fffef7">
-               <padding>
-                  <Insets bottom="0.0" />
-               </padding>
-            </Hyperlink>
-         </children>
-         <VBox.margin>
-            <Insets />
-         </VBox.margin>
-      </Pane>
+      <HBox fx:id="header" prefHeight="35.0" prefWidth="790.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         
+      </HBox>
       <Label layoutX="29.0" layoutY="45.0" prefHeight="35.0" prefWidth="124.0" text="Criar Evento" textFill="#352929" AnchorPane.leftAnchor="29.0">
          <font>
             <Font name="System Bold" size="20.0" />
