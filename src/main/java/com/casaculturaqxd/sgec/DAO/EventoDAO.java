@@ -1,6 +1,7 @@
 package com.casaculturaqxd.sgec.DAO;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -611,5 +612,66 @@ public class EventoDAO {
     }
 
     return true;
+  }
+
+  public ArrayList<Evento> obterEventos() {
+    return this.obterEventos(null, true, 5);
+  }
+
+  public ArrayList<Evento> obterEventos(String campoUsadoOrdenar, boolean ehAscendente) {
+    return this.obterEventos(campoUsadoOrdenar, ehAscendente, 5);
+  }
+
+  public ArrayList<Evento> obterEventos(String campoUsadoOrdenar, boolean ehAscendente, Integer limite) {
+    if(campoUsadoOrdenar == null) {
+      campoUsadoOrdenar = "cadastrado_em";
+    }
+
+    String sql = "select * from evento order by ";
+    sql += campoUsadoOrdenar;
+    sql += ehAscendente ? " asc" : " desc";
+    sql += " limit ?"; 
+    // qual o outro tipo de ordenação além do desc? 
+    ArrayList<Evento> eventos = new ArrayList<>();
+
+    try {
+
+      PreparedStatement stmt = connection.prepareStatement(sql);
+
+      stmt.setInt(1, limite);
+
+      ResultSet resultSet = stmt.executeQuery();
+
+      while (resultSet.next()) {
+        Evento evento = new Evento();
+
+        evento.setIdEvento(resultSet.getInt("id_evento"));
+        evento.setNome(resultSet.getString("nome_evento"));
+        evento.setPublicoEsperado(resultSet.getInt("publico_esperado"));
+        evento.setPublicoAlcancado(resultSet.getInt("publico_alcancado"));
+        evento.setDescricao(resultSet.getString("descricao"));
+        evento.setDataInicial(resultSet.getDate("data_inicial"));
+        evento.setDataFinal(resultSet.getDate("data_final"));
+        evento.setHorario(resultSet.getTime("horario"));
+        evento.setClassificacaoEtaria(resultSet.getString("classificacao_etaria"));
+        evento.setCertificavel(resultSet.getBoolean("certificavel"));
+        evento.setCargaHoraria(resultSet.getTime("carga_horaria"));
+        evento.setAcessivelEmLibras(resultSet.getBoolean("acessivel_em_libras"));
+        evento.setParticipantesEsperado(resultSet.getInt("num_participantes_esperado"));
+        evento.setMunicipiosEsperado(resultSet.getInt("num_municipios_esperado"));
+        evento.setCadastradoEm(resultSet.getDate("cadastrado_em"));
+
+        evento.setLocais(this.buscarLocaisPorEvento(evento.getIdEvento()));
+        evento.setListaOrganizadores(this.buscarOrganizadoresPorEvento(evento.getIdEvento()));
+        evento.setListaColaboradores(this.buscarColaboradoresPorEvento(evento.getIdEvento()));
+        evento.setListaParticipantes(this.buscarLocaisPorEvento(evento.getIdEvento()));
+        eventos.add(evento);
+      }
+      stmt.close();
+    } catch (SQLException e) {
+      return null;
+    }
+
+    return eventos;
   }
 }
