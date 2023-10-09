@@ -21,7 +21,7 @@
   <content>
     <AnchorPane id="principal" fx:id="principal" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="1560.0" prefWidth="1560.0">
          <children>
-            <VBox layoutX="293.0" prefHeight="108.0" prefWidth="800.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <VBox fx:id="header" layoutX="293.0" prefHeight="108.0" prefWidth="800.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
             <Label layoutX="21.0" layoutY="129.0" text="Cadastrar Grupo de Evento" AnchorPane.leftAnchor="20.0">
                <font>
                   <Font name="System Bold" size="20.0" />
