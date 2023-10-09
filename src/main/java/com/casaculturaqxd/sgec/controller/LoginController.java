@@ -1,7 +1,8 @@
-package com.casaculturaqxd.sgec;
+package com.casaculturaqxd.sgec.controller;
 
 import java.io.IOException;
 
+import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.UserDAO;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.User;
@@ -43,6 +44,7 @@ public class LoginController {
     public void authUsuario() throws IOException{
         usuario = new User(email.getText(),senha.getText());
         if(userDAO.validar(usuario)){
+            App.setUsuario(usuario);
             App.setRoot("view/home");
         }
         else{

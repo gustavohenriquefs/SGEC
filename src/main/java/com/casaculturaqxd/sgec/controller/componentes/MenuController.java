@@ -19,7 +19,8 @@ public class MenuController {
     }
 
     public void goToCadastrarEvento() throws IOException{
-        App.setRoot("view/cadastrarEvento");
+        if(App.getUsuario().isEditor())
+            App.setRoot("view/cadastrarEvento");
     }
 
     public void goToPesquisarGrupoEventos() throws IOException{
@@ -27,6 +28,7 @@ public class MenuController {
     }
 
     public void goToCadastrarGrupoEventos() throws IOException{
-        App.setRoot("view/cadastrarGrupoEventos");
+        if(App.getUsuario().isEditor())
+            App.setRoot("view/cadastrarGrupoEventos");
     }
 }

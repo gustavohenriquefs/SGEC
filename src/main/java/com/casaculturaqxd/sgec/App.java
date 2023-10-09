@@ -9,12 +9,15 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+import com.casaculturaqxd.sgec.models.User;
+
 /**
  * JavaFX App
  */
 public class App extends Application {
 
     private static Scene scene;
+    private static User usuarioLogado;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -26,6 +29,16 @@ public class App extends Application {
         
         stage.setMaximized(true);
         stage.show();
+    }
+
+    public static void setUsuario(User novoUsuario) {
+        if (novoUsuario != null) {
+            usuarioLogado = novoUsuario;
+        }
+    }
+
+    public static User getUsuario() {
+        return usuarioLogado;
     }
 
     public static void setRoot(String fxml) throws IOException {
