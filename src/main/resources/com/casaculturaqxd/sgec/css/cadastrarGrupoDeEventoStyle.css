@@ -1,0 +1,12 @@
+@import url(../css/colors/colorStyle.css);
+
+#container, #principal {
+    fx-background-color: #E9E3CA;
+}
+.texto {
+    -fx-text-fill: -preto;
+}
+.botoes{
+    -fx-background-color: -preto;
+    -fx-text-fill: -branco;
+}
