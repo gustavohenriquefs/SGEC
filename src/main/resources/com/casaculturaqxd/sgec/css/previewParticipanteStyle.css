@@ -3,10 +3,10 @@
 #principal, #container {
     -fx-background-color: -branco;
 }
-#botao{
-    -fx-background-color: -verde;
-}
-#descricao, #instituicao, #valor {
+#artista, #link, #area {
     -fx-white-space: normal;
     -fx-wrap-text: true;
+}
+.meusLabels {
+    -fx-border-color: #392E2E;
 }

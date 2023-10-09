@@ -3,7 +3,6 @@ package com.casaculturaqxd.sgec.builder;
 import java.sql.Date;
 import java.util.SortedSet;
 
-
 public interface Builder {
   void resetar();
   void setNome(String nome);
