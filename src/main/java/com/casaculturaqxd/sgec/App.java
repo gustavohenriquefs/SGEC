@@ -15,7 +15,7 @@ import java.io.IOException;
 public class App extends Application {
 
     private static Scene scene;
-    public static String usuarioLogado;
+    private static String usuarioLogado;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -33,6 +33,10 @@ public class App extends Application {
         if (novoUsuario != null) {
             usuarioLogado = novoUsuario;
         }
+    }
+
+    public static String getUsuario() {
+        return usuarioLogado;
     }
 
     public static void setRoot(String fxml) throws IOException {
