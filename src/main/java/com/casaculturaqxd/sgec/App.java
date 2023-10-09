@@ -15,7 +15,7 @@ import java.io.IOException;
 public class App extends Application {
 
     private static Scene scene;
-    public static final String usuarioLogado = "";
+    public static String usuarioLogado;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -27,6 +27,12 @@ public class App extends Application {
         
         stage.setMaximized(true);
         stage.show();
+    }
+
+    public static void setUsuario(String novoUsuario) {
+        if (novoUsuario != null) {
+            usuarioLogado = novoUsuario;
+        }
     }
 
     public static void setRoot(String fxml) throws IOException {
