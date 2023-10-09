@@ -17,9 +17,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<ScrollPane id="container" fx:id="container" hbarPolicy="ALWAYS" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1560.0" prefWidth="1560.0" stylesheets="@../css/cadastrarGrupoDeEventoStyle.css" vbarPolicy="ALWAYS" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/20.0.1">
+<ScrollPane id="container" fx:id="container" hbarPolicy="ALWAYS" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1560.0" prefWidth="1560.0" stylesheets="@../css/cadastrarGrupoDeEventoStyle.css" vbarPolicy="ALWAYS" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
   <content>
-    <AnchorPane id="principal" fx:id="principal" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="1560.0" prefWidth="1560.0" style="-fx-background-color: #E9E3CA;;" stylesheets="@../css/cadastrarGrupoDeEventoStyle.css">
+    <AnchorPane id="principal" fx:id="principal" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="1560.0" prefWidth="1560.0">
          <children>
             <VBox layoutX="293.0" prefHeight="108.0" prefWidth="800.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
             <Label layoutX="21.0" layoutY="129.0" text="Cadastrar Grupo de Evento" AnchorPane.leftAnchor="20.0">
@@ -27,7 +27,7 @@
                   <Font name="System Bold" size="20.0" />
                </font>
             </Label>
-            <HBox layoutX="20.0" layoutY="173.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="740.0" spacing="5.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
+            <HBox layoutX="20.0" layoutY="173.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="740.0" spacing="10.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
                <children>
                   <HBox HBox.hgrow="ALWAYS">
                      <children>
@@ -117,9 +117,9 @@
                   </TextField>
                </children>
             </HBox>
-            <ComboBox fx:id="classificacaoEtaria" layoutX="22.0" layoutY="608.0" prefWidth="150.0" promptText="Classificação Etária" AnchorPane.leftAnchor="20.0" />
-            <Button fx:id="cancelar" layoutX="1396.0" layoutY="2112.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="124.0" style="-fx-background-color: #352929;" text="Cancelar" textFill="#fffef7" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="138.0" />
-            <GridPane fx:id="adicionar" layoutX="209.0" layoutY="755.0" prefHeight="783.0" prefWidth="1560.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <ComboBox id="classificacaoEtaria" fx:id="classificacaoEtaria" layoutX="22.0" layoutY="608.0" prefWidth="150.0" promptText="Classificação Etária" AnchorPane.leftAnchor="20.0" />
+            <Button id="cancelar" fx:id="cancelar" layoutX="1241.0" layoutY="1513.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="124.0" style="-fx-background-color: #352929;" text="Cancelar" textFill="#fffef7" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="195.0" />
+            <GridPane id="adicionar" fx:id="adicionar" layoutX="209.0" layoutY="755.0" prefHeight="783.0" prefWidth="1560.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="775.199951171875" minWidth="10.0" prefWidth="524.7999267578125" />
                 <ColumnConstraints hgrow="SOMETIMES" maxWidth="1035.2000732421875" minWidth="10.0" prefWidth="1035.2000732421875" />
@@ -130,15 +130,24 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button fx:id="adicionarEventos" mnemonicParsing="false" style="-fx-background-color: #352929;" styleClass="botoes" text="Adicionar Eventos" textFill="WHITE" />
+                  <Button fx:id="adicionarEventos" mnemonicParsing="false" style="-fx-background-color: #352929;" styleClass="botoes" text="Adicionar Eventos" textFill="WHITE">
+                     <GridPane.margin>
+                        <Insets left="20.0" />
+                     </GridPane.margin></Button>
                   <HBox fx:id="eventos" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" />
-                  <Button fx:id="adicionarColaboradores" mnemonicParsing="false" styleClass="botoes" text="Adicionar Colaboradores" GridPane.rowIndex="1" />
-                  <Button mnemonicParsing="false" styleClass="botoes" text="Adicionar Organizadores" GridPane.rowIndex="2" />
+                  <Button fx:id="adicionarColaboradores" mnemonicParsing="false" styleClass="botoes" text="Adicionar Colaboradores" GridPane.rowIndex="1">
+                     <GridPane.margin>
+                        <Insets left="20.0" />
+                     </GridPane.margin></Button>
+                  <Button mnemonicParsing="false" styleClass="botoes" text="Adicionar Organizadores" GridPane.rowIndex="2">
+                     <GridPane.margin>
+                        <Insets left="29.0" />
+                     </GridPane.margin></Button>
                   <HBox fx:id="colaboradores" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                   <HBox fx:id="organizadores" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                </children>
             </GridPane>
-            <Button fx:id="criar" layoutX="1308.0" layoutY="1524.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="124.0" style="-fx-background-color: #2A3F25;" text="Criar" textFill="#fffef7" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="10.0" />
+            <Button id="criar" fx:id="criar" layoutX="1390.0" layoutY="1513.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="124.0" style="-fx-background-color: #2A3F25;" text="Criar" textFill="#fffef7" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="46.0" />
             <Label layoutX="23.0" layoutY="479.0" text="Público Esperado">
                <font>
                   <Font name="System Bold" size="12.0" />
