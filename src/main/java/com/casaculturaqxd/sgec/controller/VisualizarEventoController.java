@@ -2,9 +2,8 @@ package com.casaculturaqxd.sgec.controller;
 
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.sql.Date;
+import java.sql.Time;
 
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.EventoDAO;
@@ -14,37 +13,33 @@ import com.casaculturaqxd.sgec.models.Indicador;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 
 public class VisualizarEventoController {
     private Evento evento;
     private DatabasePostgres db = DatabasePostgres.getInstance("URL","USER_NAME","PASSWORD");
     private EventoDAO eventoDAO = new EventoDAO();; 
     @FXML
-    AnchorPane page;
-    @FXML
-    AnchorPane headerField;
-    @FXML
-    AnchorPane secaoArquivos;
+    AnchorPane page,headerField, secaoArquivos;
     @FXML 
     TextArea descricao;
     @FXML 
@@ -52,13 +47,15 @@ public class VisualizarEventoController {
     @FXML 
     DatePicker dataInicial, dataFinal;
     @FXML
-    TextField cargaHoraria;
+    TextField cargaHoraria, horario;
     @FXML 
     CheckBox certificavel, libras;
     @FXML
     ChoiceBox<String> classificacaoEtaria;
     @FXML
     private String[] classificacoes = {"Livre","10 anos","12 anos","14 anos","16 anos","18 anos"};
+    //Tabela com todos os campos de input
+    ObservableList<Control> camposInput = FXCollections.observableArrayList();  
     //Tabelas de indicadores
     @FXML
     TableView<Indicador> tabelaIndicadoresGerais,tabelaIndicadoresMeta1,tabelaIndicadoresMeta2;
@@ -68,7 +65,9 @@ public class VisualizarEventoController {
     Button novoParticipante,novoOrganizador,novoColaborador,salvarAlteracoes,adicionarArquivo,visualizarTodos;
 
     public void initialize() throws IOException{
-        System.out.println(getAllNodes(page));
+        addControls(page, camposInput);
+        addPropriedadeAlterar(camposInput);
+
         FXMLLoader carregarMenu = new FXMLLoader(App.class.getResource("view/componentes/menu.fxml"));
         headerField.getChildren().add(carregarMenu.load());
 
@@ -91,7 +90,7 @@ public class VisualizarEventoController {
         addIndicador(tabelaIndicadoresMeta1, numeroMestres);
         addIndicador(tabelaIndicadoresMeta2, numeroMunicipios);
 
-        /* TODO: adicionar funcionalidade de alterar evento e
+        /* TODO: adicionar funcionalidade de arquivos e
          *  reativar o botao
          */
         temporaryHideUnimplementedFields();
@@ -101,14 +100,18 @@ public class VisualizarEventoController {
         titulo.setText(evento.getNome());
         descricao.setText(evento.getDescricao());
         classificacaoEtaria.getSelectionModel().select(evento.getClassificacaoEtaria());
+        if(evento.getHorario() != null){
+            horario.setText(evento.getHorario().toString());
+        }
         if(evento.getDataInicial() != null){
         dataInicial.setValue(evento.getDataInicial().toLocalDate());
         }
         if(evento.getDataFinal() != null){
         dataFinal.setValue(evento.getDataFinal().toLocalDate());
         }
+
         if(evento.getCargaHoraria() != null){
-        cargaHoraria.setText(evento.getCargaHoraria().toString());
+        cargaHoraria.setText(String.valueOf(evento.getCargaHoraria().toString()));
         }
         certificavel.setSelected(evento.isCertificavel());
         libras.setSelected(evento.isAcessivelEmLibras());
@@ -118,7 +121,49 @@ public class VisualizarEventoController {
         this.evento = evento;
     }
     public boolean salvarAlteracoes(){
+        alterarEvento();
         return eventoDAO.alterarEvento(evento);
+    }
+    public void alterarEvento(){
+        try{
+            evento.setDescricao(descricao.getText());
+            evento.setDataInicial(Date.valueOf(dataInicial.getValue()));
+            evento.setDataFinal(Date.valueOf(dataFinal.getValue()));
+            evento.setClassificacaoEtaria(classificacaoEtaria.getSelectionModel().getSelectedItem());
+            evento.setAcessivelEmLibras(libras.isSelected());
+            evento.setCertificavel(certificavel.isSelected());
+            evento.setHorario(Time.valueOf(horario.getText()));
+            evento.setCargaHoraria(Time.valueOf(cargaHoraria.getText()));
+
+            eventoDAO.alterarEvento(evento);
+
+            Alert sucessoAtualizacao = new Alert(AlertType.INFORMATION);
+            sucessoAtualizacao.setContentText("Alterações salvas");
+            sucessoAtualizacao.show();
+        }
+        catch(Exception e){
+            Alert erroAtualizacao = new Alert(AlertType.ERROR);
+            erroAtualizacao.setContentText("Erro ao alterar evento");
+            erroAtualizacao.show();
+        }
+    }
+    /**
+     * <p>
+     * adiciona a propriedade de tornar um campo editável após o clique
+     * <\p>
+     */
+    private void addPropriedadeAlterar(ObservableList<Control> listaInputs){
+        for(Control input : listaInputs){
+            input.setOnMouseClicked(new EventHandler<MouseEvent>()
+        {
+            @Override
+            public void handle(MouseEvent event) {
+                input.setDisable(false);
+                salvarAlteracoes.setDisable(false);
+            }
+        });
+
+        }
     }
     private void loadTable(TableView<Indicador> tabela){
         TableColumn<Indicador,String> nomeIndicador = new TableColumn<>("Nome do indicador");
@@ -141,22 +186,17 @@ public class VisualizarEventoController {
 
     /**
      * <p>
-     * Retorna todos os elementos que suportam interacao do usuario 
-     * presentes na pagina <p>
+     * Retorna todos os elementos que suportam interacao do usuario
+     * presentes na pagina,
+     * exceto botoes, labels e tableviews <p>
     */
-    public static ArrayList<Node> getAllNodes(Parent root) {
-    ArrayList<Node> nodes = new ArrayList<>();
-    addAllDescendents(root, nodes);
-    return nodes;
-    }
-
-    private static void addAllDescendents(Parent parent, ArrayList<Node> nodes) {
+    public void addControls(Parent parent, ObservableList<Control> list) {
         for (Node node : parent.getChildrenUnmodifiable()) {
-            if(!(node instanceof Label || node instanceof Button || node instanceof Pane)){
-            nodes.add(node);
+            if (node instanceof Control && !(node instanceof Button || node instanceof Label || node instanceof TableView)) {
+                list.add((Control) node);
+            } else if (node instanceof Parent) {
+                addControls((Parent) node, list);
             }
-            if (node instanceof Parent)
-                addAllDescendents((Parent)node, nodes);
         }
     }
     
