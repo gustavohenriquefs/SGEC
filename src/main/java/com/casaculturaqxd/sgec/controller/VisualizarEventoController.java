@@ -31,8 +31,10 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.util.converter.IntegerStringConverter;
 
 public class VisualizarEventoController {
     private Evento evento;
@@ -171,9 +173,10 @@ public class VisualizarEventoController {
         
         TableColumn<Indicador,Integer> valorEsperado = new TableColumn<>("Valor esperado");
         valorEsperado.setCellValueFactory(new PropertyValueFactory<>("valorEsperado"));
-        
+        valorEsperado.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
         TableColumn<Indicador,Integer> valorAlcancado = new TableColumn<>("Valor alcançado");
         valorAlcancado.setCellValueFactory(new PropertyValueFactory<>("valorAlcancado"));
+        valorAlcancado.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
 
         tabela.getColumns().add(nomeIndicador);
         tabela.getColumns().add(valorEsperado);
@@ -192,7 +195,7 @@ public class VisualizarEventoController {
     */
     public void addControls(Parent parent, ObservableList<Control> list) {
         for (Node node : parent.getChildrenUnmodifiable()) {
-            if (node instanceof Control && !(node instanceof Button || node instanceof Label || node instanceof TableView)) {
+            if (node instanceof Control && !(node instanceof Button || node instanceof Label)) {
                 list.add((Control) node);
             } else if (node instanceof Parent) {
                 addControls((Parent) node, list);
