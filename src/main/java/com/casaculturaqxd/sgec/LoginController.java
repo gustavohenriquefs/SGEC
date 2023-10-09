@@ -43,6 +43,7 @@ public class LoginController {
     public void authUsuario() throws IOException{
         usuario = new User(email.getText(),senha.getText());
         if(userDAO.validar(usuario)){
+            App.setUsuario(usuario);
             App.setRoot("view/home");
         }
         else{
