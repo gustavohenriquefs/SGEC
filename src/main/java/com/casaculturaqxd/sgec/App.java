@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Stack;
 
 import com.casaculturaqxd.sgec.models.User;
 
@@ -15,7 +16,7 @@ import com.casaculturaqxd.sgec.models.User;
  * JavaFX App
  */
 public class App extends Application {
-
+    private static Stack<Parent> lastVisitedPages = new Stack<Parent>();
     private static Scene scene;
     private static User usuarioLogado;
 
@@ -42,6 +43,8 @@ public class App extends Application {
     }
 
     public static void setRoot(String fxml) throws IOException {
+        lastVisitedPages.add(loadFXML(fxml));
+        System.out.println(lastVisitedPages);
         scene.setRoot(loadFXML(fxml));
     }
 
