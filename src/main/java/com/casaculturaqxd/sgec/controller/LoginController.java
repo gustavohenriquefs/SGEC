@@ -1,4 +1,4 @@
-package com.casaculturaqxd.sgec.controller.componentes;
+package com.casaculturaqxd.sgec.controller;
 
 import java.io.IOException;
 
