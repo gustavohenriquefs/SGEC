@@ -1,12 +1,20 @@
 @import url(../css/colors/colorStyle.css);
 
 #container, #principal {
-    fx-background-color: #E9E3CA;
+    -fx-background-color: -bege;
 }
 .texto {
     -fx-text-fill: -preto;
 }
 .botoes{
-    -fx-background-color: -preto;
     -fx-text-fill: -branco;
+    -fx-margin-left: 20px;
+}
+.criar {
+    -fx-background-color: -verde;
+    -fx-text-fill: -branco;
+}
+.cancelar {
+    -fx-background-color: -preto;
+    -fx-text-fill: -branco; 
 }
