@@ -6,7 +6,6 @@ module com.casaculturaqxd.sgec {
     exports com.casaculturaqxd.sgec.controller.componentes to javafx.fxml;
     exports com.casaculturaqxd.sgec.controller.preview to javafx.fxml;
 
-    exports com.casaculturaqxd.sgec.controller.preview to javafx.fxml;
     requires java.logging;
     requires java.sql;
     requires transitive javafx.base;
