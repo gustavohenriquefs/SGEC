@@ -330,7 +330,7 @@ public class EventoDAO {
     return organizadores;
   }
 
-  public int getNumeroMunicipiosDiferentes() {
+  public int getNumeroMunicipiosDiferentes(Integer idEvento) {
     String sql = "SELECT DISTINCT count(l.cidade) as num_municipios_distintos FROM localizacao_evento le LEFT JOIN localizacao l on l.id_localizacao = le.id_localizacao WHERE le.id_evento = ?";
     int numMunicipiosDistintos = 0;
 

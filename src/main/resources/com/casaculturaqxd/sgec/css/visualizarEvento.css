@@ -2,6 +2,9 @@
     -fx-background-color: #A22D2E;
 }
 
+#tabela .table-column {
+    -fx-alignment: CENTER;
+  }
 #imagens, #descricao, #listaParticipantes, #listaOrganizadores, #listaColaboradores, #arquivos {
     -fx-background-color: white;
 }

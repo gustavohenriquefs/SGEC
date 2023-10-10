@@ -38,7 +38,7 @@
             </HBox>
             <HBox fx:id="campoBotao" layoutX="20.0" layoutY="251.0" AnchorPane.leftAnchor="20.0">
                <children>
-                  <Button id="botao" fx:id="botao" mnemonicParsing="false" prefHeight="26.0" prefWidth="234.0" text="Ver detalhes" textFill="WHITE" />
+                  <Button id="botao" fx:id="detalhes" onAction="#verDetalhes" mnemonicParsing="false" prefHeight="26.0" prefWidth="234.0" text="Ver detalhes" textFill="WHITE" />
                </children>
             </HBox>
          </children>
