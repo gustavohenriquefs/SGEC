@@ -92,29 +92,35 @@ public class VisualizarEventoController {
          */
         temporaryHideUnimplementedFields();
     }
+
     private void loadContent() throws IOException{
         
         classificacaoEtaria.getItems().addAll(classificacoes);
         titulo.setText(evento.getNome());
         descricao.setText(evento.getDescricao());
         classificacaoEtaria.getSelectionModel().select(evento.getClassificacaoEtaria());
+        
         if(evento.getHorario() != null){
             horario.setText(evento.getHorario().toString());
         }
-        if(evento.getDataInicial() != null){
-        dataInicial.setValue(evento.getDataInicial().toLocalDate());
+        
+        if(evento.getDataInicial() != null) {
+            dataInicial.setValue(evento.getDataInicial().toLocalDate());
         }
+        
         if(evento.getDataFinal() != null){
-        dataFinal.setValue(evento.getDataFinal().toLocalDate());
+            dataFinal.setValue(evento.getDataFinal().toLocalDate());
         }
 
         if(evento.getCargaHoraria() != null){
-        cargaHoraria.setText(String.valueOf(evento.getCargaHoraria().toString()));
+            cargaHoraria.setText(String.valueOf(evento.getCargaHoraria().toString()));
         }
+        
         certificavel.setSelected(evento.isCertificavel());
         libras.setSelected(evento.isAcessivelEmLibras());
 
         FXMLLoader loaderLocal = new FXMLLoader(App.class.getResource("view/preview/previewLocalizacao.fxml"));
+        
         if(evento.getLocais() != null){
             for(Integer idLocal : evento.getLocais()){
                 Localizacao local = new Localizacao();
@@ -128,9 +134,11 @@ public class VisualizarEventoController {
         }
 
         tabelas.addAll(tabelaIndicadoresGerais,tabelaIndicadoresMeta1,tabelaIndicadoresMeta2);
+        
         for(TableView<Indicador> tabela : tabelas){
             loadTable(tabela);
         }
+        
         numeroPublico = new Indicador("Quantidade de público", evento.getPublicoEsperado(), evento.getPublicoAlcancado());
         numeroMestres = new Indicador("Número de mestres da cultura", evento.getParticipantesEsperado(), evento.getListaParticipantes().size());
         numeroMunicipios = new Indicador("Número de municípios", evento.getMunicipiosEsperado(), eventoDAO.getNumeroMunicipiosDiferentes(evento.getIdEvento()));
@@ -140,14 +148,16 @@ public class VisualizarEventoController {
         addIndicador(tabelaIndicadoresMeta2, numeroMunicipios);
     }
 
-    private void setEvento(Evento evento) throws IOException{
+    public void setEvento(Evento evento) throws IOException{
         this.evento = evento;
         loadContent();
     }
+
     public boolean salvarAlteracoes(){
         alterarEvento();
         return eventoDAO.alterarEvento(evento);
     }
+
     public void alterarEvento(){
         try{
             evento.setDescricao(descricao.getText());

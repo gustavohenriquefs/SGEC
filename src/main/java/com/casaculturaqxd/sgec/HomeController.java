@@ -3,14 +3,17 @@ package com.casaculturaqxd.sgec;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 import com.casaculturaqxd.sgec.DAO.EventoDAO;
+import com.casaculturaqxd.sgec.controller.preview.PreviewEventoController;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.Evento;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
@@ -18,22 +21,35 @@ import javafx.scene.layout.VBox;
 public class HomeController {
 
     @FXML
-    private GridPane gridMetas;
+    private ResourceBundle resources;
 
     @FXML
-    private GridPane gridUltimosEventos;
+    private URL location;
+
+    @FXML
+    private GridPane gridMetas;
 
     @FXML
     private Pane header;
 
     @FXML
+    private HBox listaEventos;
+
+    @FXML
     private RowConstraints titulo1;
 
     @FXML
-    private RowConstraints titulo2;
+    private HBox menuContainer;
 
     @FXML
-    public void initialize() {
+    public void initialize() throws IOException {
+
+      FXMLLoader carregarMenu = new FXMLLoader(App.class.getResource("view/componentes/menu.fxml"));
+      
+      VBox menu = carregarMenu.load();
+
+      this.menuContainer.getChildren().add(menu);
+
       this.initGridUltimosEventos();
     }
 
@@ -48,21 +64,17 @@ public class HomeController {
     }
 
     private void adicionarEventoEmGrid(Evento evento, int idxEvento) {
-      int idxColuna = idxEvento % 3;
-      int idxLinha = idxEvento / 3;
-
       try {
 
         FXMLLoader childLoader = obterFXMLPreviewEventoExistenteLoader();
 
         VBox childNode = childLoader.load();
         
-        PreviewEventoExistenteController childController = childLoader.getController();
+        PreviewEventoController childController = childLoader.getController();
 
         childController.setEvento(evento);
 
-        gridUltimosEventos.add(childNode, idxColuna, idxLinha);
-
+        listaEventos.getChildren().add(childNode);
       } catch (IOException e) {
           e.printStackTrace();
       }

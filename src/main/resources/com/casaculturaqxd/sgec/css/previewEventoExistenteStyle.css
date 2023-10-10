@@ -1,15 +1,15 @@
 @import url(../css/colors/colorStyle.css);
 
 #container {
-    -fx-background-color: -branco;
+    -fx-background-color: #FFFEF7;
 }
-.data{
-    -fx-background-color: -laranja;
+.data {
+    -fx-background-color: #D67C40;
 }
 #titulo {
-    -fx-background-color: -branco;
+    -fx-background-color: #FFFEF7;
 }
 #botao {
-    -fx-background-color: -verde;
-    -fx-color: -branco;
+    -fx-background-color:  #2A3F25;
+    -fx-color: #FFFEF7;
 }
