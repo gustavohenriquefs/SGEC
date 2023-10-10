@@ -85,10 +85,7 @@ public class VisualizarEventoController {
 
         eventoDAO.setConnection(db.getConnection());
         localizacaoDAO.setConnection(db.getConnection());
-        Evento eventoMock = new Evento();
         //capturando evento de mock do banco
-        eventoMock.setIdEvento(1);
-        setEvento(eventoDAO.buscarEvento(eventoMock).get());
 
         /* TODO: adicionar funcionalidade de arquivos e
          *  reativar o botao
