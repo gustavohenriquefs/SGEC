@@ -18,11 +18,10 @@ public class LocalizacaoDAO {
   }
 
   public Localizacao getLocalizacao(Localizacao obj){
-    String sql = "SELECT * FROM localizacao WHERE idLocalizacao=?";
+    String sql = "SELECT * FROM localizacao WHERE id_localizacao=?";
     try {
       PreparedStatement stmt = connection.prepareStatement(sql);
       stmt.setInt(1, obj.getIdLocalizacao());
-      System.out.println(stmt);
       ResultSet resultado = stmt.executeQuery();
       if (resultado.next()) {
         obj.setIdLocalizacao(resultado.getInt("id_localizacao"));

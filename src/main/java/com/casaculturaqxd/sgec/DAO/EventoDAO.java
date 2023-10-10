@@ -1,10 +1,12 @@
 package com.casaculturaqxd.sgec.DAO;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -208,6 +210,44 @@ public class EventoDAO {
     }
   }
 
+  public ArrayList<Evento> listarUltimosEventos() {
+    String sql = "select * from evento where nome_evento <> '' order by data_inicial desc limit 5";
+    ArrayList<Evento> eventos = new ArrayList<>();
+
+    try {
+      PreparedStatement stmt = connection.prepareStatement(sql);
+      ResultSet resultSet = stmt.executeQuery();
+
+      while (resultSet.next()) {
+        Evento evento = new Evento();
+        evento.setIdEvento(resultSet.getInt("id_evento"));
+        evento.setNome(resultSet.getString("nome_evento"));
+        evento.setPublicoEsperado(resultSet.getInt("publico_esperado"));
+        evento.setPublicoAlcancado(resultSet.getInt("publico_alcancado"));
+        evento.setDescricao(resultSet.getString("descricao"));
+        evento.setDataInicial(resultSet.getDate("data_inicial"));
+        evento.setDataFinal(resultSet.getDate("data_final"));
+        evento.setHorario(resultSet.getTime("horario"));
+        evento.setClassificacaoEtaria(resultSet.getString("classificacao_etaria"));
+        evento.setCertificavel(resultSet.getBoolean("certificavel"));
+        evento.setCargaHoraria(resultSet.getTime("carga_horaria"));
+        evento.setAcessivelEmLibras(resultSet.getBoolean("acessivel_em_libras"));
+        evento.setParticipantesEsperado(resultSet.getInt("num_participantes_esperado"));
+        evento.setMunicipiosEsperado(resultSet.getInt("num_municipios_esperado"));
+        evento.setLocais(this.buscarLocaisPorEvento(evento.getIdEvento()));
+        evento.setListaOrganizadores(this.buscarOrganizadoresPorEvento(evento.getIdEvento()));
+        evento.setListaColaboradores(this.buscarColaboradoresPorEvento(evento.getIdEvento()));
+        evento.setListaParticipantes(this.buscarLocaisPorEvento(evento.getIdEvento()));
+        eventos.add(evento);
+      }
+      stmt.close();
+    } catch (SQLException e) {
+      return null;
+    }
+
+    return eventos;
+  }
+
   public Optional<Evento> buscarEvento(Evento evento) {
     try {
       String sql = "select * from evento where id_evento=?";
@@ -290,7 +330,7 @@ public class EventoDAO {
     return organizadores;
   }
 
-  public int getNumeroMunicipiosDiferentes() {
+  public int getNumeroMunicipiosDiferentes(Integer idEvento) {
     String sql = "SELECT DISTINCT count(l.cidade) as num_municipios_distintos FROM localizacao_evento le LEFT JOIN localizacao l on l.id_localizacao = le.id_localizacao WHERE le.id_evento = ?";
     int numMunicipiosDistintos = 0;
 
@@ -571,5 +611,66 @@ public class EventoDAO {
     }
 
     return true;
+  }
+
+  public ArrayList<Evento> obterEventos() {
+    return this.obterEventos(null, true, 5);
+  }
+
+  public ArrayList<Evento> obterEventos(String campoUsadoOrdenar, boolean ehAscendente) {
+    return this.obterEventos(campoUsadoOrdenar, ehAscendente, 5);
+  }
+
+  public ArrayList<Evento> obterEventos(String campoUsadoOrdenar, boolean ehAscendente, Integer limite) {
+    if(campoUsadoOrdenar == null) {
+      campoUsadoOrdenar = "cadastrado_em";
+    }
+
+    String sql = "select * from evento order by ";
+    sql += campoUsadoOrdenar;
+    sql += ehAscendente ? " asc" : " desc";
+    sql += " limit ?"; 
+    // qual o outro tipo de ordenação além do desc? 
+    ArrayList<Evento> eventos = new ArrayList<>();
+
+    try {
+
+      PreparedStatement stmt = connection.prepareStatement(sql);
+
+      stmt.setInt(1, limite);
+
+      ResultSet resultSet = stmt.executeQuery();
+
+      while (resultSet.next()) {
+        Evento evento = new Evento();
+
+        evento.setIdEvento(resultSet.getInt("id_evento"));
+        evento.setNome(resultSet.getString("nome_evento"));
+        evento.setPublicoEsperado(resultSet.getInt("publico_esperado"));
+        evento.setPublicoAlcancado(resultSet.getInt("publico_alcancado"));
+        evento.setDescricao(resultSet.getString("descricao"));
+        evento.setDataInicial(resultSet.getDate("data_inicial"));
+        evento.setDataFinal(resultSet.getDate("data_final"));
+        evento.setHorario(resultSet.getTime("horario"));
+        evento.setClassificacaoEtaria(resultSet.getString("classificacao_etaria"));
+        evento.setCertificavel(resultSet.getBoolean("certificavel"));
+        evento.setCargaHoraria(resultSet.getTime("carga_horaria"));
+        evento.setAcessivelEmLibras(resultSet.getBoolean("acessivel_em_libras"));
+        evento.setParticipantesEsperado(resultSet.getInt("num_participantes_esperado"));
+        evento.setMunicipiosEsperado(resultSet.getInt("num_municipios_esperado"));
+        evento.setCadastradoEm(resultSet.getDate("cadastrado_em"));
+
+        evento.setLocais(this.buscarLocaisPorEvento(evento.getIdEvento()));
+        evento.setListaOrganizadores(this.buscarOrganizadoresPorEvento(evento.getIdEvento()));
+        evento.setListaColaboradores(this.buscarColaboradoresPorEvento(evento.getIdEvento()));
+        evento.setListaParticipantes(this.buscarLocaisPorEvento(evento.getIdEvento()));
+        eventos.add(evento);
+      }
+      stmt.close();
+    } catch (SQLException e) {
+      return null;
+    }
+
+    return eventos;
   }
 }
