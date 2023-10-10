@@ -9,6 +9,7 @@
 .botoes{
     -fx-text-fill: -branco;
     -fx-margin-left: 20px;
+    -fx-background-color: -preto;
 }
 .criar {
     -fx-background-color: -verde;
