@@ -66,6 +66,8 @@ public class VisualizarEventoController {
     private String[] classificacoes = {"Livre","10 anos","12 anos","14 anos","16 anos","18 anos"};
     //Tabela com todos os campos de input
     ObservableList<Control> camposInput = FXCollections.observableArrayList();  
+    //Indicadores
+    Indicador numeroPublico,numeroMestres,numeroMunicipios;
     //Tabelas de indicadores
     @FXML
     TableView<Indicador> tabelaIndicadoresGerais,tabelaIndicadoresMeta1,tabelaIndicadoresMeta2;
@@ -132,9 +134,9 @@ public class VisualizarEventoController {
         for(TableView<Indicador> tabela : tabelas){
             loadTable(tabela);
         }
-        Indicador numeroPublico = new Indicador("Quantidade de público", evento.getPublicoEsperado(), evento.getPublicoAlcancado());
-        Indicador numeroMestres = new Indicador("Número de mestres da cultura", evento.getParticipantesEsperado(), evento.getListaParticipantes().size());
-        Indicador numeroMunicipios = new Indicador("Número de municípios", evento.getMunicipiosEsperado(), eventoDAO.getNumeroMunicipiosDiferentes(evento.getIdEvento()));
+        numeroPublico = new Indicador("Quantidade de público", evento.getPublicoEsperado(), evento.getPublicoAlcancado());
+        numeroMestres = new Indicador("Número de mestres da cultura", evento.getParticipantesEsperado(), evento.getListaParticipantes().size());
+        numeroMunicipios = new Indicador("Número de municípios", evento.getMunicipiosEsperado(), eventoDAO.getNumeroMunicipiosDiferentes(evento.getIdEvento()));
 
         addIndicador(tabelaIndicadoresGerais, numeroPublico);
         addIndicador(tabelaIndicadoresMeta1, numeroMestres);
@@ -159,10 +161,10 @@ public class VisualizarEventoController {
             evento.setCertificavel(certificavel.isSelected());
             evento.setHorario(Time.valueOf(horario.getText()));
             evento.setCargaHoraria(Time.valueOf(cargaHoraria.getText()));
-            evento.setPublicoAlcancado(getValorAlcancado(tabelaIndicadoresGerais));
-            evento.setPublicoEsperado(getValorEsperado(tabelaIndicadoresGerais));
-            evento.setParticipantesEsperado(getValorEsperado(tabelaIndicadoresMeta1));
-            evento.setMunicipiosEsperado(getValorEsperado(tabelaIndicadoresMeta2));;
+            evento.setPublicoAlcancado(numeroPublico.getValorAlcancado());
+            evento.setPublicoEsperado(numeroPublico.getValorEsperado());
+            evento.setParticipantesEsperado(numeroMestres.getValorEsperado());
+            evento.setMunicipiosEsperado(numeroMunicipios.getValorEsperado());;
             eventoDAO.alterarEvento(evento);
 
             Alert sucessoAtualizacao = new Alert(AlertType.INFORMATION);
@@ -200,10 +202,21 @@ public class VisualizarEventoController {
         TableColumn<Indicador,Integer> valorEsperado = new TableColumn<>("Valor esperado");
         valorEsperado.setCellValueFactory(new PropertyValueFactory<>("valorEsperado"));
         valorEsperado.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
-
+        valorEsperado.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Indicador, Integer>>() {
+            @Override public void handle(TableColumn.CellEditEvent<Indicador, Integer> t) {
+                ((Indicador)t.getTableView().getItems().get(
+                        t.getTablePosition().getRow())).setValorEsperado(t.getNewValue());
+            }
+        });
         TableColumn<Indicador,Integer> valorAlcancado = new TableColumn<>("Valor alcançado");
         valorAlcancado.setCellValueFactory(new PropertyValueFactory<>("valorAlcancado"));
         valorAlcancado.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+        valorAlcancado.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Indicador, Integer>>() {
+            @Override public void handle(TableColumn.CellEditEvent<Indicador, Integer> t) {
+                ((Indicador)t.getTableView().getItems().get(
+                        t.getTablePosition().getRow())).setValorAlcancado(t.getNewValue());
+            }
+        });
 
         tabela.getColumns().add(nomeIndicador);
         tabela.getColumns().add(valorEsperado);
@@ -212,14 +225,6 @@ public class VisualizarEventoController {
     }
     private void addIndicador(TableView<Indicador> tabela, Indicador indicador){
         tabela.setItems(FXCollections.observableArrayList(indicador));
-    }
-
-    private Integer getValorEsperado(TableView<Indicador> tabela){
-        return (Integer) tabela.getColumns().get(1).getCellData(0);
-    }
-    private Integer getValorAlcancado(TableView<Indicador> tabela){
-        return (Integer) tabela.getColumns().get(2).getCellData(0);
-   
     }
 
     /**

@@ -40,75 +40,84 @@
                   </VBox>
                </children>
             </HBox>
-            <TextArea id="descricao" fx:id="descricao" layoutX="-2.0" layoutY="475.0" prefHeight="160.0" prefWidth="1426.0" style="-fx-background-color: #FFFFFF;" AnchorPane.leftAnchor="-2.0" AnchorPane.topAnchor="475.0" />
-            <AnchorPane id="Participantes" layoutX="2.0" layoutY="643.0" prefHeight="179.0" prefWidth="1562.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="646.0">
+            <VBox layoutX="-2.0" layoutY="389.0" spacing="30.0">
                <children>
-                  <VBox alignment="CENTER">
+                  <VBox>
                      <children>
-                        <StackPane id="listaParticipantes" fx:id="listaParticipantes" prefHeight="140.0" prefWidth="1426.0">
-                           <children>
-                              <Label text="Participantes" StackPane.alignment="TOP_LEFT">
-                                 <StackPane.margin>
-                                    <Insets left="20.0" top="10.0" />
-                                 </StackPane.margin>
-                                 <font>
-                                    <Font name="System Bold" size="20.0" />
-                                 </font>
-                              </Label>
-                           </children>
-                        </StackPane>
-                        <Button id="botaoNovoParticipante" fx:id="novoParticipante" mnemonicParsing="false" style="-fx-background-color: #2A3F25;" text="Adicionar novo participante +" textFill="WHITE" />
+                        <Label text="Descrição">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                        </Label>
+                        <TextArea id="descricao" fx:id="descricao" prefHeight="160.0" prefWidth="1426.0" style="-fx-background-color: #FFFFFF;" />
                      </children>
                   </VBox>
-               </children>
-            </AnchorPane>
-            <AnchorPane id="Organizaodores" layoutY="821.0" prefHeight="168.0" prefWidth="1427.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="135.0">
-               <children>
-                  <VBox alignment="CENTER">
+                  <VBox fx:id="frameLocais" prefHeight="45.0" prefWidth="1428.0" />
+                  <AnchorPane id="Participantes" prefHeight="179.0" prefWidth="1562.0">
                      <children>
-                        <StackPane id="listaOrganizadores" fx:id="listaOrganizadores" prefHeight="136.0" prefWidth="1426.0">
+                        <VBox alignment="CENTER">
                            <children>
-                              <Label text="Organizadores" StackPane.alignment="TOP_LEFT">
-                                 <font>
-                                    <Font name="System Bold" size="20.0" />
-                                 </font>
-                                 <StackPane.margin>
-                                    <Insets left="20.0" top="10.0" />
-                                 </StackPane.margin>
-                              </Label>
+                              <StackPane id="listaParticipantes" fx:id="listaParticipantes" prefHeight="140.0" prefWidth="1426.0" visible="false">
+                                 <children>
+                                    <Label text="Participantes" StackPane.alignment="TOP_LEFT">
+                                       <StackPane.margin>
+                                          <Insets left="20.0" top="10.0" />
+                                       </StackPane.margin>
+                                       <font>
+                                          <Font name="System Bold" size="20.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </StackPane>
+                              <Button id="botaoNovoParticipante" fx:id="novoParticipante" mnemonicParsing="false" style="-fx-background-color: #2A3F25;" text="Adicionar novo participante +" textFill="WHITE" visible="false" />
                            </children>
-                        </StackPane>
-                        <Button id="botaoNovoOrganizador" fx:id="novoOrganizador" mnemonicParsing="false" style="-fx-background-color: #2A3F25;" text="Adicionar novo organizador +" textFill="WHITE" />
+                        </VBox>
                      </children>
-                  </VBox>
-               </children>
-            </AnchorPane>
-            <Label layoutX="16.0" layoutY="445.0" text="Descrição">
-               <font>
-                  <Font name="System Bold" size="20.0" />
-               </font>
-            </Label>
-            <AnchorPane id="colaboradores" layoutX="-2.0" layoutY="1000.0" prefHeight="168.0" prefWidth="1426.0">
-               <children>
-                  <VBox alignment="CENTER">
+                  </AnchorPane>
+                  <AnchorPane id="Organizaodores" prefHeight="168.0" prefWidth="1427.0">
                      <children>
-                        <StackPane id="listaColaboradores" fx:id="listaColaboradores" prefHeight="140.0" prefWidth="1426.0">
+                        <VBox alignment="CENTER">
                            <children>
-                              <Label text="Colaboradores" StackPane.alignment="TOP_LEFT">
-                                 <font>
-                                    <Font name="System Bold" size="20.0" />
-                                 </font>
-                                 <StackPane.margin>
-                                    <Insets left="20.0" top="10.0" />
-                                 </StackPane.margin>
-                              </Label>
+                              <StackPane id="listaOrganizadores" fx:id="listaOrganizadores" prefHeight="136.0" prefWidth="1426.0" visible="false">
+                                 <children>
+                                    <Label text="Organizadores" StackPane.alignment="TOP_LEFT">
+                                       <font>
+                                          <Font name="System Bold" size="20.0" />
+                                       </font>
+                                       <StackPane.margin>
+                                          <Insets left="20.0" top="10.0" />
+                                       </StackPane.margin>
+                                    </Label>
+                                 </children>
+                              </StackPane>
+                              <Button id="botaoNovoOrganizador" fx:id="novoOrganizador" mnemonicParsing="false" style="-fx-background-color: #2A3F25;" text="Adicionar novo organizador +" textFill="WHITE" visible="false" />
                            </children>
-                        </StackPane>
-                        <Button id="botaoColaboradores" fx:id="novoColaborador" mnemonicParsing="false" prefWidth="176.0" style="-fx-background-color: #2A3F25;" text="Adicionar novo colaborador +" textFill="WHITE" />
+                        </VBox>
                      </children>
-                  </VBox>
+                  </AnchorPane>
+                  <AnchorPane id="colaboradores" prefHeight="168.0" prefWidth="1426.0">
+                     <children>
+                        <VBox alignment="CENTER">
+                           <children>
+                              <StackPane id="listaColaboradores" fx:id="listaColaboradores" prefHeight="140.0" prefWidth="1426.0" visible="false">
+                                 <children>
+                                    <Label text="Colaboradores" StackPane.alignment="TOP_LEFT">
+                                       <font>
+                                          <Font name="System Bold" size="20.0" />
+                                       </font>
+                                       <StackPane.margin>
+                                          <Insets left="20.0" top="10.0" />
+                                       </StackPane.margin>
+                                    </Label>
+                                 </children>
+                              </StackPane>
+                              <Button id="botaoColaboradores" fx:id="novoColaborador" mnemonicParsing="false" prefWidth="176.0" style="-fx-background-color: #2A3F25;" text="Adicionar novo colaborador +" textFill="WHITE" visible="false" />
+                           </children>
+                        </VBox>
+                     </children>
+                  </AnchorPane>
                </children>
-            </AnchorPane>
+            </VBox>
             <AnchorPane fx:id="secaoArquivos" layoutY="1841.0">
                <children>
                   <VBox alignment="CENTER" layoutY="54.0">
@@ -208,7 +217,7 @@
                   </VBox>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="headerField" layoutX="-14.0" layoutY="-4.0" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="52.0" prefWidth="1452.0" />
+            <AnchorPane fx:id="headerField" layoutX="-2.0" layoutY="-4.0" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="52.0" prefWidth="1440.0" />
          </children>
       </AnchorPane>
    </content>
