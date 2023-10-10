@@ -34,22 +34,17 @@
                         <TextField fx:id="titulo" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="400.0" HBox.hgrow="ALWAYS" />
                      </children>
                   </HBox>
-                  <CheckBox fx:id="meta1" mnemonicParsing="false" text="Meta 1" HBox.hgrow="ALWAYS">
+                  <CheckBox fx:id="fruicao" mnemonicParsing="false" text="Fruição" HBox.hgrow="ALWAYS">
                      <HBox.margin>
                         <Insets top="5.0" />
                      </HBox.margin>
                   </CheckBox>
-                  <CheckBox fx:id="meta2" layoutX="410.0" layoutY="15.0" mnemonicParsing="false" text="Meta 2" HBox.hgrow="ALWAYS">
+                  <CheckBox fx:id="fortalecimento" layoutX="410.0" layoutY="15.0" mnemonicParsing="false" text="Fortalecimento de patrimônio cultural" HBox.hgrow="ALWAYS">
                      <HBox.margin>
                         <Insets top="5.0" />
                      </HBox.margin>
                   </CheckBox>
-                  <CheckBox fx:id="meta3" layoutX="470.0" layoutY="15.0" mnemonicParsing="false" text="Meta 3" HBox.hgrow="ALWAYS">
-                     <HBox.margin>
-                        <Insets top="5.0" />
-                     </HBox.margin>
-                  </CheckBox>
-                  <CheckBox fx:id="meta4" layoutX="530.0" layoutY="15.0" mnemonicParsing="false" text="Meta 4" HBox.hgrow="ALWAYS">
+                  <CheckBox fx:id="formacao" layoutX="470.0" layoutY="15.0" mnemonicParsing="false" text="Formação em arte e cultura" HBox.hgrow="ALWAYS">
                      <HBox.margin>
                         <Insets top="5.0" />
                      </HBox.margin>
@@ -130,7 +125,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
               </rowConstraints>
                <children>
-                  <Button fx:id="adicionarEventos" mnemonicParsing="false" style="-fx-background-color: #352929;" styleClass="botoes" text="Adicionar Eventos" textFill="WHITE">
+                  <Button fx:id="adicionarEventos" mnemonicParsing="false" styleClass="botoes" text="Adicionar Eventos" textFill="WHITE">
                      <GridPane.margin>
                         <Insets left="20.0" />
                      </GridPane.margin></Button>
