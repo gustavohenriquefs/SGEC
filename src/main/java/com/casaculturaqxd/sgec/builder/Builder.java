@@ -1,4 +1,4 @@
-package com.casaculturaqxd.builder;
+package com.casaculturaqxd.sgec.builder;
 
 import java.sql.Date;
 import java.util.SortedSet;
