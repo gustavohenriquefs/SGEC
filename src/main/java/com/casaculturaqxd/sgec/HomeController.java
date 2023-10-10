@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import com.casaculturaqxd.sgec.DAO.EventoDAO;
+import com.casaculturaqxd.sgec.controller.preview.PreviewEventoController;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.Evento;
 
@@ -38,7 +39,17 @@ public class HomeController {
     private RowConstraints titulo1;
 
     @FXML
-    public void initialize() {
+    private HBox menuContainer;
+
+    @FXML
+    public void initialize() throws IOException {
+
+      FXMLLoader carregarMenu = new FXMLLoader(App.class.getResource("view/componentes/menu.fxml"));
+      
+      VBox menu = carregarMenu.load();
+
+      this.menuContainer.getChildren().add(menu);
+
       this.initGridUltimosEventos();
     }
 
@@ -59,9 +70,10 @@ public class HomeController {
 
         VBox childNode = childLoader.load();
         
-        PreviewEventoExistenteController childController = childLoader.getController();
+        PreviewEventoController childController = childLoader.getController();
 
         childController.setEvento(evento);
+
         listaEventos.getChildren().add(childNode);
       } catch (IOException e) {
           e.printStackTrace();
