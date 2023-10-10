@@ -48,7 +48,6 @@ public class EventoDAO {
       stmt.executeUpdate();
       
       ResultSet rs = stmt.getGeneratedKeys();
-
       if (rs.next()) {
           evento.setIdEvento(rs.getInt("id_evento"));
       }
@@ -67,15 +66,15 @@ public class EventoDAO {
       }
     }
 
-    if(evento.getListaOrganizadores() != null) {
+    /* if(evento.getListaOrganizadores() != null) {
       boolean vinculoOrganizadores = this.vincularOrganizadores(evento.getListaOrganizadores(), evento.getIdEvento());
 
       if(vinculoOrganizadores == false) {
         return false;
       }
-    }
+    } */
 
-    if(evento.getListaColaboradores() != null) {
+    /* if(evento.getListaColaboradores() != null) {
       boolean vinculoColaboradores = this.vincularColaboradores(evento.getListaColaboradores(), evento.getIdEvento());
 
       if(vinculoColaboradores == false) {
@@ -89,7 +88,7 @@ public class EventoDAO {
       if(vinculoParticipantes == false) {
         return false;
       }
-    }
+    } */
 
     return true;
   }

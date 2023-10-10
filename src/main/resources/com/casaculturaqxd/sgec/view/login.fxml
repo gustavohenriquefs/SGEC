@@ -12,11 +12,11 @@
    <children>
       <Pane fx:id="form" layoutX="195.0" layoutY="109.0" maxWidth="200.0" prefHeight="210.0" prefWidth="219.0">
          <children>
-            <PasswordField fx:id="senha" layoutX="26.0" layoutY="139.0" onKeyReleased="#keyReleasedProperty"/>
+            <PasswordField fx:id="senha" layoutX="26.0" layoutY="139.0" onKeyReleased="#keyReleasedProperty" />
             <TextField fx:id="email" layoutX="26.0" layoutY="81.0" onKeyReleased="#keyReleasedProperty" />
             <Label layoutX="25.0" layoutY="64.0" text="E-mail" />
             <Label layoutX="25.0" layoutY="122.0" text="Senha" />
-            <Button fx:id="loginButton" layoutX="77.0" layoutY="174.0" prefHeight="25.0" prefWidth="47.0" text="Login" onAction="#authUsuario"/>
+            <Button fx:id="loginButton" defaultButton="true" layoutX="77.0" layoutY="174.0" onAction="#authUsuario" prefHeight="25.0" prefWidth="47.0" text="Login" />
             <Label layoutX="58.0" layoutY="31.0" text="Bem-Vindo!">
                <font>
                   <Font size="16.0" />

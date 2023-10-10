@@ -1,4 +1,4 @@
-package com.casaculturaqxd.builder;
+package com.casaculturaqxd.sgec.builder;
 
 import java.sql.Time;
 import java.sql.Date;
@@ -13,26 +13,35 @@ public class EventoBuilder implements Builder {
     resetar();
   }
 
-  Evento getEvento(){
+  public Evento getEvento(){
     return evento;
   }
 
-  void setCargaHoraria(Time cargaHoraria){
+  public void setCargaHoraria(Time cargaHoraria){
     evento.setCargaHoraria(cargaHoraria);
   }
 
-  void setCertificavel(boolean certificavel){
+  public void setCertificavel(boolean certificavel){
     evento.setCertificavel(certificavel);
   }
 
-  void setLocalizacoes(SortedSet<Integer> localizacoes){
+  public void setLocalizacoes(SortedSet<Integer> localizacoes){
     evento.setLocais(localizacoes);
   }
 
-  void setParticipantes(SortedSet<Integer> participantes){
+  public void setParticipantes(SortedSet<Integer> participantes){
     evento.setListaParticipantes(participantes);
   }
+  public void setAcessivelEmLibras(boolean acessivel){
+    evento.setAcessivelEmLibras(acessivel);
+  }
 
+  public void setMunicipiosEsperado(int municipiosEsperado){
+    evento.setMunicipiosEsperado(municipiosEsperado);
+  }
+  public void setParticipantesEsperado(int participantesEsperado) {
+    evento.setParticipantesEsperado(participantesEsperado);
+  }
   @Override
   public void resetar() {
     evento = new Evento();

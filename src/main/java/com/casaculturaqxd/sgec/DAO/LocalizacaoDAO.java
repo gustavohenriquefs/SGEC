@@ -4,6 +4,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import com.casaculturaqxd.sgec.models.Localizacao;
 
 public class LocalizacaoDAO {
@@ -37,23 +41,29 @@ public class LocalizacaoDAO {
     }
   }
 
-  boolean inserirLocalizacao(Localizacao obj){
+  public boolean inserirLocalizacao(Localizacao obj){
     try {
-      String sql = "insert into localizacao (id_localizacao,rua,numero_rua,bairro,cep,cidade,estado,pais)"
-              + " values(?,?,?,?,?,?,?,?)";
-      PreparedStatement stmt = connection.prepareStatement(sql);
-      stmt.setInt(1, obj.getIdLocalizacao());
-      stmt.setString(2, obj.getRua());
-      stmt.setInt(3, obj.getNumeroRua());
-      stmt.setString(4, obj.getBairro());
-      stmt.setString(5, obj.getCep());
-      stmt.setString(6, obj.getCidade());
-      stmt.setString(7, obj.getEstado());
-      stmt.setString(8, obj.getPais());
+      String sql = "insert into localizacao (rua,numero_rua,bairro,cep,cidade,estado,pais)"
+              + " values(?,?,?,?,?,?,?)";
+      PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+      stmt.setString(1, obj.getRua());
+      stmt.setInt(2, obj.getNumeroRua());
+      stmt.setString(3, obj.getBairro());
+      stmt.setString(4, obj.getCep());
+      stmt.setString(5, obj.getCidade());
+      stmt.setString(6, obj.getEstado());
+      stmt.setString(7, obj.getPais());
       stmt.execute();
+      ResultSet rs = stmt.getGeneratedKeys();
+      if (rs.next()) {
+        obj.setIdLocalizacao(rs.getInt("id_localizacao"));
+      }
+
       stmt.close();
       return true;
     } catch (SQLException e) {
+      Logger erro  = Logger.getLogger("erroSQl");
+      erro.log(Level.SEVERE, "excecao levantada:", e);
       return false;
     }
   }

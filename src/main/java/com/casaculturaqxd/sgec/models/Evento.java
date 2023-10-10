@@ -197,12 +197,25 @@ public class Evento {
         this.idEvento = idEvento;
     }
 
+    @Override
+    public String toString() {
+        return "Evento [idEvento=" + idEvento + ", nome=" + nome + ", descricao=" + descricao + ", publicoEsperado="
+                + publicoEsperado + ", publicoAlcancado=" + publicoAlcancado + ", participantesEsperado="
+                + participantesEsperado + ", municipiosEsperado=" + municipiosEsperado + ", dataInicial=" + dataInicial
+                + ", dataFinal=" + dataFinal + ", horario=" + horario + ", cargaHoraria=" + cargaHoraria
+                + ", classificacaoEtaria=" + classificacaoEtaria + ", certificavel=" + certificavel
+                + ", acessivelEmLibras=" + acessivelEmLibras + ", locais=" + locais + ", listaParticipantes="
+                + listaParticipantes + ", listaOrganizadores=" + listaOrganizadores + ", listaColaboradores="
+                + listaColaboradores + ", listaArquivos=" + listaArquivos + "]";
+
+
     public Date getCadastradoEm() {
         return cadastradoEm;
     }
 
     public void setCadastradoEm(Date cadastradoEm) {
         this.cadastradoEm = cadastradoEm;
+
     }
     
 }

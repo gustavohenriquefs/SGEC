@@ -12,11 +12,13 @@ module com.casaculturaqxd.sgec {
     requires transitive javafx.controls;
     requires transitive javafx.fxml;
     requires transitive javafx.graphics;
-    
+    requires javafx.media;
+
     opens com.casaculturaqxd.sgec to javafx.fxml;
     opens com.casaculturaqxd.sgec.controller to javafx.fxml;
-    opens com.casaculturaqxd.sgec.controller.componentes to javafx.fxml;
+  
     opens com.casaculturaqxd.sgec.controller.preview to javafx.fxml;
+    opens com.casaculturaqxd.sgec.controller.componentes to javafx.fxml;
     requires io.github.cdimascio.dotenv.java;
 
 }
