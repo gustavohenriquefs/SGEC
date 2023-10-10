@@ -8,9 +8,12 @@ import java.sql.Time;
 
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.EventoDAO;
+import com.casaculturaqxd.sgec.DAO.LocalizacaoDAO;
+import com.casaculturaqxd.sgec.controller.preview.PreviewLocalizacaoController;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.Indicador;
+import com.casaculturaqxd.sgec.models.Localizacao;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -35,14 +38,18 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.util.converter.IntegerStringConverter;
 
 public class VisualizarEventoController {
     private Evento evento;
     private DatabasePostgres db = DatabasePostgres.getInstance("URL","USER_NAME","PASSWORD");
-    private EventoDAO eventoDAO = new EventoDAO();; 
+    private EventoDAO eventoDAO = new EventoDAO();
+    private LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO();
     @FXML
     AnchorPane page,headerField, secaoArquivos;
+    @FXML
+    VBox frameLocais;
     @FXML 
     TextArea descricao;
     @FXML 
@@ -75,31 +82,19 @@ public class VisualizarEventoController {
         headerField.getChildren().add(carregarMenu.load());
 
         eventoDAO.setConnection(db.getConnection());
+        localizacaoDAO.setConnection(db.getConnection());
         Evento eventoMock = new Evento();
         //capturando evento de mock do banco
         eventoMock.setIdEvento(1);
         setEvento(eventoDAO.buscarEvento(eventoMock).get());
-        loadContent();
-
-        tabelas.addAll(tabelaIndicadoresGerais,tabelaIndicadoresMeta1,tabelaIndicadoresMeta2);
-        for(TableView<Indicador> tabela : tabelas){
-            loadTable(tabela);
-        }
-        Indicador numeroPublico = new Indicador("Quantidade de público", evento.getPublicoEsperado(), evento.getPublicoAlcancado());
-        Indicador numeroMestres = new Indicador("Número de mestres da cultura", evento.getParticipantesEsperado(), evento.getListaParticipantes().size());
-        Indicador numeroMunicipios = new Indicador("Número de municípios", evento.getMunicipiosEsperado(), eventoDAO.getNumeroMunicipiosDiferentes(evento.getIdEvento()));
-
-        addIndicador(tabelaIndicadoresGerais, numeroPublico);
-        addIndicador(tabelaIndicadoresMeta1, numeroMestres);
-        addIndicador(tabelaIndicadoresMeta2, numeroMunicipios);
-
 
         /* TODO: adicionar funcionalidade de arquivos e
          *  reativar o botao
          */
         temporaryHideUnimplementedFields();
     }
-    private void loadContent(){
+    private void loadContent() throws IOException{
+        
         classificacaoEtaria.getItems().addAll(classificacoes);
         titulo.setText(evento.getNome());
         descricao.setText(evento.getDescricao());
@@ -119,10 +114,36 @@ public class VisualizarEventoController {
         }
         certificavel.setSelected(evento.isCertificavel());
         libras.setSelected(evento.isAcessivelEmLibras());
+
+        FXMLLoader loaderLocal = new FXMLLoader(App.class.getResource("view/preview/previewLocalizacao.fxml"));
+        if(evento.getLocais() != null){
+            for(Integer idLocal : evento.getLocais()){
+                Localizacao local = new Localizacao();
+                local.setIdLocalizacao(idLocal);
+                local = localizacaoDAO.getLocalizacao(local);
+                Parent previewLocal = loaderLocal.load();
+                PreviewLocalizacaoController controller = loaderLocal.getController();
+                controller.setLocalizacao(local);
+                frameLocais.getChildren().add(previewLocal);
+            }
+        }
+
+        tabelas.addAll(tabelaIndicadoresGerais,tabelaIndicadoresMeta1,tabelaIndicadoresMeta2);
+        for(TableView<Indicador> tabela : tabelas){
+            loadTable(tabela);
+        }
+        Indicador numeroPublico = new Indicador("Quantidade de público", evento.getPublicoEsperado(), evento.getPublicoAlcancado());
+        Indicador numeroMestres = new Indicador("Número de mestres da cultura", evento.getParticipantesEsperado(), evento.getListaParticipantes().size());
+        Indicador numeroMunicipios = new Indicador("Número de municípios", evento.getMunicipiosEsperado(), eventoDAO.getNumeroMunicipiosDiferentes(evento.getIdEvento()));
+
+        addIndicador(tabelaIndicadoresGerais, numeroPublico);
+        addIndicador(tabelaIndicadoresMeta1, numeroMestres);
+        addIndicador(tabelaIndicadoresMeta2, numeroMunicipios);
     }
 
-    private void setEvento(Evento evento){
+    private void setEvento(Evento evento) throws IOException{
         this.evento = evento;
+        loadContent();
     }
     public boolean salvarAlteracoes(){
         alterarEvento();
@@ -179,6 +200,7 @@ public class VisualizarEventoController {
         TableColumn<Indicador,Integer> valorEsperado = new TableColumn<>("Valor esperado");
         valorEsperado.setCellValueFactory(new PropertyValueFactory<>("valorEsperado"));
         valorEsperado.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+
         TableColumn<Indicador,Integer> valorAlcancado = new TableColumn<>("Valor alcançado");
         valorAlcancado.setCellValueFactory(new PropertyValueFactory<>("valorAlcancado"));
         valorAlcancado.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
