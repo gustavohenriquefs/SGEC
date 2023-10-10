@@ -23,6 +23,8 @@ public class Evento {
     private String classificacaoEtaria;
     private boolean certificavel;
     private boolean acessivelEmLibras;
+    private Date cadastradoEm;
+
     SortedSet<Integer> locais;
     SortedSet<Integer> listaParticipantes;  
     SortedSet<Integer> listaOrganizadores;
@@ -193,6 +195,14 @@ public class Evento {
     }
     public void setIdEvento(Integer idEvento) {
         this.idEvento = idEvento;
+    }
+
+    public Date getCadastradoEm() {
+        return cadastradoEm;
+    }
+
+    public void setCadastradoEm(Date cadastradoEm) {
+        this.cadastradoEm = cadastradoEm;
     }
     
 }
