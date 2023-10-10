@@ -8,13 +8,17 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Stack;
+
+import com.casaculturaqxd.sgec.models.User;
 
 /**
  * JavaFX App
  */
 public class App extends Application {
-
+    private static Stack<Parent> lastVisitedPages = new Stack<Parent>();
     private static Scene scene;
+    private static User usuarioLogado;
 
     @Override
     public void start(Stage stage) throws IOException {
@@ -28,7 +32,19 @@ public class App extends Application {
         stage.show();
     }
 
+    public static void setUsuario(User novoUsuario) {
+        if (novoUsuario != null) {
+            usuarioLogado = novoUsuario;
+        }
+    }
+
+    public static User getUsuario() {
+        return usuarioLogado;
+    }
+
     public static void setRoot(String fxml) throws IOException {
+        lastVisitedPages.add(loadFXML(fxml));
+        System.out.println(lastVisitedPages);
         scene.setRoot(loadFXML(fxml));
     }
 

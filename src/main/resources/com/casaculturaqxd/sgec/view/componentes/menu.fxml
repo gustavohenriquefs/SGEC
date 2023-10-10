@@ -1,18 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox id="header" minHeight="0.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.componentes.MenuController">
+<VBox id="header" minHeight="0.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.componentes.MenuController">
     <children>
-        <AnchorPane id="header" fx:id="header" prefHeight="51.0" prefWidth="602.0" style="-fx-background-color: #A22D2E;">
+        <AnchorPane id="header" fx:id="header" minWidth="1200.0" prefHeight="51.0" prefWidth="602.0" style="-fx-background-color: #A22D2E;">
             <children>
-                <Hyperlink fx:id="home" layoutX="29.0" layoutY="8.0" onAction="#goToHome" text="Home" textFill="#fffef7" />
-                <Hyperlink fx:id="pesquisarEvento" layoutX="77.0" layoutY="8.0" onAction="#goToPesquisarEvento" text="Pesquisar evento" textFill="#fffef7" />
-                <Hyperlink fx:id="cadastrarEvento" layoutX="182.0" layoutY="8.0" onAction="#goToCadastrarEvento" text="Cadastrar evento" textFill="#fffef7" />
-                <Hyperlink fx:id="pesquisarGrupoEventos" layoutX="280.0" layoutY="8.0" onAction="#goToPesquisarGrupoEventos" text="Pesquisar grupos de eventos" textFill="#fffef7" />
-                <Hyperlink fx:id="cadastrarGrupoEventos" layoutX="440.0" layoutY="8.0" onAction="#goToCadastrarGrupoEventos" text="Cadastrar grupos de eventos" textFill="#fffef7" />
+            <HBox layoutX="29.0" layoutY="8.0" spacing="30.0">
+               <children>
+                      <Hyperlink fx:id="home" layoutX="29.0" layoutY="8.0" onAction="#goToHome" text="Home" textFill="#fffef7" AnchorPane.leftAnchor="29.0" AnchorPane.rightAnchor="1120.0" />
+                      <Hyperlink fx:id="pesquisarEvento" layoutX="77.0" layoutY="8.0" onAction="#goToPesquisarEvento" text="Pesquisar evento" textFill="#fffef7" />
+                      <Hyperlink fx:id="cadastrarEvento" layoutX="182.0" layoutY="8.0" onAction="#goToCadastrarEvento" text="Cadastrar evento" textFill="#fffef7" />
+                      <Hyperlink fx:id="pesquisarGrupoEventos" layoutX="280.0" layoutY="8.0" onAction="#goToPesquisarGrupoEventos" text="Pesquisar grupos de eventos" textFill="#fffef7" />
+                      <Hyperlink fx:id="cadastrarGrupoEventos" layoutX="440.0" layoutY="8.0" onAction="#goToCadastrarGrupoEventos" text="Cadastrar grupos de eventos" textFill="#fffef7" />
+               </children>
+            </HBox>
             </children>
         </AnchorPane>
     </children>

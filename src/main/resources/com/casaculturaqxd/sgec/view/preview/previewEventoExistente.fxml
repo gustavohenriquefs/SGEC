@@ -9,7 +9,7 @@
 <?import javafx.scene.text.Font?>
 
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="600.0" stylesheets="@../../css/previewEventoExistenteStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.PreviewEventoExistenteController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="600.0" stylesheets="@../../css/previewEventoExistenteStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.preview.PreviewEventoController">
    <children>
       <AnchorPane id="container" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="300.0" prefWidth="600.0">
          <children>
@@ -38,7 +38,7 @@
             </HBox>
             <HBox fx:id="campoBotao" layoutX="20.0" layoutY="251.0" AnchorPane.leftAnchor="20.0">
                <children>
-                  <Button id="botao" fx:id="botao" mnemonicParsing="false" prefHeight="26.0" prefWidth="234.0" text="Ver detalhes" textFill="WHITE" />
+                  <Button id="botao" fx:id="detalhes" onAction="#verDetalhes" mnemonicParsing="false" prefHeight="26.0" prefWidth="234.0" text="Ver detalhes" textFill="WHITE" />
                </children>
             </HBox>
          </children>
