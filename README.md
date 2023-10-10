@@ -24,3 +24,5 @@ A documentação do Backlog está disponível no link anterior junto a todos os 
 - [Robson Diógenes](https://github.com/robsonad07) - robsonad07@alu.ufc.br
   
   
+## Créditos
+Imagem de localização: <a href="https://www.freepik.com/icon/security-pin_6125244#fromView=keyword&term=Local&page=1&position=14">Icon by Muhammad_Usman</a>
