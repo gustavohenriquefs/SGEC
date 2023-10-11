@@ -17,6 +17,9 @@
 .texto {
     -fx-font-size: 16px;
 }
+.lista {
+    -fx-background-color: -branco;
+}
 .faixas {
     -fx-background-color: -vermelho;
 }
