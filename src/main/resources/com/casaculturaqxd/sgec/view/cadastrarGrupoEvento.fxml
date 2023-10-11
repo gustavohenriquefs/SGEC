@@ -146,11 +146,11 @@
                <children>
                   <HBox prefHeight="230.0" prefWidth="1560.0">
                      <children>
-                        <VBox alignment="BOTTOM_RIGHT" prefHeight="213.0" prefWidth="1545.0">
+                        <VBox alignment="CENTER_LEFT" prefHeight="213.0" prefWidth="1545.0">
                            <children>
                               <Button fx:id="adicionarEventos" mnemonicParsing="false" styleClass="botoes" text="Adicionar Eventos" textFill="WHITE">
                                  <VBox.margin>
-                                    <Insets bottom="10.0" right="50.0" />
+                                    <Insets left="20.0" />
                                  </VBox.margin>
                               </Button>
                            </children>
@@ -159,11 +159,11 @@
                   </HBox>
                   <HBox prefHeight="230.0" prefWidth="200.0">
                      <children>
-                        <VBox alignment="BOTTOM_RIGHT" HBox.hgrow="ALWAYS">
+                        <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
                            <children>
                               <Button fx:id="adicionarColaboradores" alignment="BOTTOM_RIGHT" mnemonicParsing="false" styleClass="botoes" text="Adicionar Colaboradores">
                                  <VBox.margin>
-                                    <Insets bottom="10.0" right="50.0" />
+                                    <Insets left="20.0" />
                                  </VBox.margin>
                               </Button>
                            </children>
@@ -172,11 +172,11 @@
                   </HBox>
                   <HBox prefHeight="230.0" prefWidth="1560.0" spacing="30.0">
                      <children>
-                        <VBox alignment="BOTTOM_RIGHT" prefHeight="214.0" prefWidth="1544.0">
+                        <VBox alignment="CENTER_LEFT" prefHeight="214.0" prefWidth="1544.0">
                            <children>
                               <Button alignment="BOTTOM_LEFT" mnemonicParsing="false" styleClass="botoes" text="Adicionar Organizadores">
                                  <VBox.margin>
-                                    <Insets bottom="10.0" right="50.0" />
+                                    <Insets left="20.0" />
                                  </VBox.margin>
                               </Button>
                            </children>
