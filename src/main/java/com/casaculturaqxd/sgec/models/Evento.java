@@ -207,6 +207,7 @@ public class Evento {
                 + ", acessivelEmLibras=" + acessivelEmLibras + ", locais=" + locais + ", listaParticipantes="
                 + listaParticipantes + ", listaOrganizadores=" + listaOrganizadores + ", listaColaboradores="
                 + listaColaboradores + ", listaArquivos=" + listaArquivos + "]";
+    }
 
 
     public Date getCadastradoEm() {
