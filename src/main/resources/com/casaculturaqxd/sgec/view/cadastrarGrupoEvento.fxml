@@ -46,7 +46,7 @@
                         <Insets top="5.0" />
                      </HBox.margin>
                   </CheckBox>
-                  <CheckBox mnemonicParsing="false" text="Convocatória">
+                  <CheckBox fx:id="convocatoria" mnemonicParsing="false" text="Convocatória">
                      <HBox.margin>
                         <Insets top="5.0" />
                      </HBox.margin>
@@ -107,11 +107,6 @@
                         <Insets />
                      </HBox.margin>
                   </TextField>
-                  <TextField fx:id="acoesDeselvolvidasAlcancadas">
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin>
-                  </TextField>
                </children>
             </HBox>
             <ComboBox id="classificacaoEtaria" fx:id="classificacaoEtaria" layoutX="22.0" layoutY="608.0" prefWidth="150.0" promptText="Classificação Etária" AnchorPane.leftAnchor="20.0" />
@@ -138,11 +133,6 @@
                </font>
             </Label>
             <Label layoutX="738.0" layoutY="479.0" text="Ações Desenvolvidas(Esperado)">
-               <font>
-                  <Font name="System Bold" size="11.0" />
-               </font>
-            </Label>
-            <Label layoutX="918.0" layoutY="479.0" text="Ações Desenvolvidas(Alcançado)">
                <font>
                   <Font name="System Bold" size="11.0" />
                </font>
