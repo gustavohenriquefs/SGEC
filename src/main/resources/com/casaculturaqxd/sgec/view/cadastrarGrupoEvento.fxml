@@ -46,6 +46,11 @@
                         <Insets top="5.0" />
                      </HBox.margin>
                   </CheckBox>
+                  <CheckBox mnemonicParsing="false" text="Convocatória">
+                     <HBox.margin>
+                        <Insets top="5.0" />
+                     </HBox.margin>
+                  </CheckBox>
                </children>
             </HBox>
             <Label layoutX="20.0" layoutY="159.0" text="Título" AnchorPane.leftAnchor="20.0">
