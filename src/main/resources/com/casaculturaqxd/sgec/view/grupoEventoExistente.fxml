@@ -47,14 +47,18 @@
                      </children>
                   </VBox>
                   <VBox fx:id="frameLocais" prefHeight="45.0" prefWidth="1428.0" />
-                  <Label alignment="TOP_LEFT" styleClass="texto" text="Organizadores">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font>
+                  <HBox>
                      <VBox.margin>
                         <Insets left="10.0" />
                      </VBox.margin>
-                  </Label>
+                     <children>
+                        <Label prefHeight="26.0" prefWidth="118.0" text="Organizadores">
+                           <font>
+                              <Font name="System Bold" size="16.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
                   <AnchorPane id="Organizaodores" prefHeight="466.0" prefWidth="1428.0">
                      <children>
                         <VBox alignment="CENTER" layoutY="-14.0" prefHeight="368.0" prefWidth="1426.0" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -84,16 +88,17 @@
                               </StackPane>
                               <HBox>
                                  <children>
-                                    <Label styleClass="texto" text="Colaboradores">
+                                    <Label prefHeight="26.0" prefWidth="118.0" text="Colaboradores">
                                        <font>
-                                          <Font name="System Bold" size="12.0" />
+                                          <Font name="System Bold" size="16.0" />
                                        </font>
                                        <HBox.margin>
-                                          <Insets bottom="25.0" left="10.0" />
+                                          <Insets bottom="25.0" left="20.0" />
                                        </HBox.margin>
                                     </Label>
                                  </children>
                               </HBox>
+                              <HBox />
                               <Pane prefHeight="75.0" prefWidth="1426.0" styleClass="faixas" />
                               <VBox prefHeight="200.0" prefWidth="100.0">
                                  <children>
