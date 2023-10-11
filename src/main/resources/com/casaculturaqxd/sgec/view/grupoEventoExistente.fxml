@@ -139,7 +139,7 @@
                   <VBox alignment="CENTER" layoutY="54.0" />
                   <HBox layoutX="21.0" prefHeight="25.0" prefWidth="1406.0" spacing="1200.0" />
                   <Pane layoutX="-266.0" layoutY="37.0" prefHeight="6.0" prefWidth="560.0" style="-fx-background-color: #A22D2E;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-                  <Label layoutX="14.0" layoutY="14.0" text="Convocatórias">
+                  <Label layoutX="15.0" layoutY="14.0" text="Convocatórias">
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font>
