@@ -16,7 +16,6 @@
 }
 .texto {
     -fx-font-size: 16px;
-    -fx-font-style: bold;
 }
 .faixas {
     -fx-background-color: -vermelho;
