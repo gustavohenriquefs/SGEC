@@ -47,15 +47,18 @@
                      </children>
                   </VBox>
                   <VBox fx:id="frameLocais" prefHeight="45.0" prefWidth="1428.0" />
+                  <Label alignment="TOP_LEFT" styleClass="texto" text="Organizadores">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets left="10.0" />
+                     </VBox.margin>
+                  </Label>
                   <AnchorPane id="Organizaodores" prefHeight="466.0" prefWidth="1428.0">
                      <children>
                         <VBox alignment="CENTER" layoutY="-14.0" prefHeight="368.0" prefWidth="1426.0" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
-                              <Label alignment="TOP_LEFT" styleClass="texto" text="Organizadores">
-                                 <font>
-                                    <Font name="System Bold" size="12.0" />
-                                 </font>
-                              </Label>
                               <Pane prefHeight="75.0" prefWidth="1426.0" styleClass="faixas" />
                               <VBox prefHeight="200.0" prefWidth="1426.0">
                                  <children>
@@ -79,10 +82,18 @@
                                     </Label>
                                  </children>
                               </StackPane>
-                              <Label styleClass="texto" text="Colaboradores">
-                                 <font>
-                                    <Font name="System Bold" size="12.0" />
-                                 </font></Label>
+                              <HBox>
+                                 <children>
+                                    <Label styleClass="texto" text="Colaboradores">
+                                       <font>
+                                          <Font name="System Bold" size="12.0" />
+                                       </font>
+                                       <HBox.margin>
+                                          <Insets bottom="25.0" left="10.0" />
+                                       </HBox.margin>
+                                    </Label>
+                                 </children>
+                              </HBox>
                               <Pane prefHeight="75.0" prefWidth="1426.0" styleClass="faixas" />
                               <VBox prefHeight="200.0" prefWidth="100.0">
                                  <children>
@@ -206,11 +217,9 @@
                         <TableView id="tabela" fx:id="tabelaIndicadoresMeta2" editable="true" minHeight="-Infinity" minWidth="-Infinity" prefHeight="155.0" prefWidth="1426.0" style="-fx-background-color: #FFFFFF;" />
                      </children>
                   </VBox>
-                  <Button id="visualizarTodos" fx:id="visualizarTodos" layoutX="51.0" layoutY="683.0" mnemonicParsing="false" styleClass="botoes" text="Visualizar todos" textFill="WHITE" />
                </children>
             </AnchorPane>
             <AnchorPane fx:id="headerField" layoutX="-2.0" layoutY="-4.0" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="52.0" prefWidth="1440.0" />
-            <Button fx:id="adicionarArquivo" alignment="CENTER" layoutX="655.0" layoutY="2161.0" mnemonicParsing="false" styleClass="botoes" text="Adicionar novo arquivo +" textFill="WHITE" />
             <StackPane id="arquivos" fx:id="acoes" layoutX="-41.0" layoutY="2021.0" prefHeight="131.0" prefWidth="1469.0" />
             <Pane layoutX="-46.0" layoutY="2014.0" prefHeight="7.0" prefWidth="1473.0" style="-fx-background-color: #A22D2E;" />
             <Label layoutX="14.0" layoutY="1987.0" prefHeight="26.0" prefWidth="147.0" text="Ações das Metas">
