@@ -64,7 +64,7 @@
                         <VBox alignment="CENTER" layoutY="-14.0" prefHeight="368.0" prefWidth="1426.0" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <children>
                               <Pane prefHeight="75.0" prefWidth="1426.0" styleClass="faixas" />
-                              <VBox fx:id="organizadores" prefHeight="200.0" prefWidth="1426.0">
+                              <VBox fx:id="organizadores" prefHeight="200.0" prefWidth="1426.0" styleClass="lista">
                                  <children>
                                     <HBox>
                                        <VBox.margin>
@@ -100,7 +100,7 @@
                               </HBox>
                               <HBox />
                               <Pane prefHeight="75.0" prefWidth="1426.0" styleClass="faixas" />
-                              <VBox fx:id="colaboradores" prefHeight="200.0" prefWidth="100.0">
+                              <VBox fx:id="colaboradores" prefHeight="200.0" prefWidth="100.0" styleClass="lista">
                                  <children>
                                     <HBox />
                                  </children>
