@@ -139,11 +139,15 @@
                   <VBox alignment="CENTER" layoutY="54.0" />
                   <HBox layoutX="21.0" prefHeight="25.0" prefWidth="1406.0" spacing="1200.0" />
                   <Pane layoutX="-266.0" layoutY="37.0" prefHeight="6.0" prefWidth="560.0" style="-fx-background-color: #A22D2E;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-                  <Label layoutX="15.0" layoutY="14.0" text="Convocatórias">
-                     <font>
-                        <Font name="System Bold" size="16.0" />
-                     </font>
-                  </Label>
+                  <HBox layoutX="15.0" layoutY="14.0">
+                     <children>
+                        <Label text="Convocatórias">
+                           <font>
+                              <Font name="System Bold" size="16.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
                </children>
             </AnchorPane>
             <Button id="salvarAlteracoes" fx:id="salvarAlteracoes" disable="true" layoutX="1320.0" layoutY="1883.0" mnemonicParsing="false" onAction="#salvarAlteracoes" style="-fx-background-color: #2A3F25;" text="Salvar alterações" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="135.0" />
