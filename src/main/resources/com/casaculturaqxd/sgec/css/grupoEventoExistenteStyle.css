@@ -1,8 +1,5 @@
 @import url(../css/colors/colorStyle.css);
 
-#header {
-    -fx-background-color: -vermelho;
-}
 #container, #principal {
     -fx-background-color: -bege;
 }
