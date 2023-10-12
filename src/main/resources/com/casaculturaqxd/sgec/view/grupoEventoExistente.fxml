@@ -11,22 +11,51 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<ScrollPane prefHeight="2200.0" prefWidth="1440.0" stylesheets="@../css/grupoEventoExistenteStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.VisualizarEventoController">
+<ScrollPane id="container" fx:id="container" hbarPolicy="ALWAYS" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="2400.0" prefWidth="1560.0" stylesheets="@../css/grupoEventoExistenteStyle.css" vbarPolicy="ALWAYS" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/20.0.1">
    <content>
-      <AnchorPane id="container" fx:id="page" prefHeight="2200.0" prefWidth="1560.0" style="-fx-background-color: #E9E3CA;" stylesheets="@../css/visualizarEvento.css">
+      <AnchorPane id="principal" fx:id="principal" prefHeight="2400.0" prefWidth="1560.0">
          <children>
-            <HBox alignment="CENTER" layoutX="153.0" layoutY="48.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="203.0" prefWidth="1155.0" style="-fx-background-color: FFFEF7;">
+            <VBox id="header" fx:id="header" layoutX="812.0" layoutY="14.0" prefHeight="60.0" prefWidth="100.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <BorderPane layoutX="472.0" layoutY="117.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="100.0">
+               <center>
+                  <HBox BorderPane.alignment="CENTER">
+                     <children>
+                        <ImageView fx:id="imagemCapa" fitHeight="165.0" fitWidth="1560.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS" />
+                     </children>
+                  </HBox>
+               </center>
+               <bottom>
+                  <Button fx:id="adicionarCapa" mnemonicParsing="false" styleClass="botoes" text="Adicionar capa" BorderPane.alignment="CENTER" />
+               </bottom>
+            </BorderPane>
+            <HBox layoutY="395.0" prefHeight="25.0" prefWidth="1380.0" spacing="30.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="0.0">
                <children>
-                  <ImageView fx:id="capaEvento" fitHeight="200.0" fitWidth="1000.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS" />
+                  <DatePicker fx:id="dataInicial" editable="false" />
+                  <DatePicker fx:id="dataFinal" editable="false" />
+                  <VBox />
+                  <VBox HBox.hgrow="ALWAYS">
+                     <children>
+                        <Label text="Atende  à(s) metas:" />
+                        <HBox spacing="20.0">
+                           <children>
+                              <CheckBox mnemonicParsing="false" text="Fruição" />
+                              <CheckBox mnemonicParsing="false" text="Fortalecimento de patrimônio cultural" />
+                              <CheckBox mnemonicParsing="false" text="Formação em Arte e Cultura" />
+                              <CheckBox mnemonicParsing="false" text="Convocatória" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
                </children>
             </HBox>
-            <HBox layoutX="21.0" layoutY="347.0" spacing="40.0">
+            <HBox layoutX="14.0" layoutY="456.0" spacing="40.0" AnchorPane.leftAnchor="20.0">
                <children>
                   <CheckBox id="certificavel" fx:id="certificavel" mnemonicParsing="false" style="-fx-opacity: 1" text="Certificável" />
                   <CheckBox id="libras" fx:id="libras" mnemonicParsing="false" style="-fx-opacity: 1" text="Libras" />
@@ -34,158 +63,81 @@
                   <VBox />
                </children>
             </HBox>
-            <VBox layoutX="-2.0" layoutY="389.0" spacing="30.0">
+            <Label fx:id="tituloEvento" layoutX="20.0" layoutY="333.0" text="Label" AnchorPane.leftAnchor="20.0">
+               <font>
+                  <Font name="System Bold" size="36.0" />
+               </font>
+            </Label>
+            <ScrollPane fx:id="descricao" hbarPolicy="ALWAYS" layoutY="521.0" vbarPolicy="ALWAYS" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="40.0">
+               <content>
+                  <TextArea fx:id="descricao" prefHeight="150.0" prefWidth="1506.0" />
+               </content>
+            </ScrollPane>
+            <Label layoutX="27.0" layoutY="498.0" text="Descrição" AnchorPane.leftAnchor="20.0">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Label>
+            <AnchorPane id="Organizaodores" prefHeight="466.0" prefWidth="1428.0" />
+            <VBox alignment="CENTER" layoutY="718.0" prefHeight="400.0" prefWidth="1426.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="40.0">
                <children>
-                  <VBox>
+                  <HBox>
                      <children>
-                        <Label text="Descrição">
+                        <Label alignment="TOP_LEFT" styleClass="texto" text="Organizadores">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <Pane prefHeight="77.0" prefWidth="1426.0" styleClass="faixas" />
+                  <Pane prefHeight="6.0" prefWidth="1426.0" styleClass="faixas">
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </Pane>
+                  <VBox prefHeight="200.0" prefWidth="1426.0">
+                     <children>
+                        <TableView fx:id="organizadores" prefHeight="200.0" prefWidth="1426.0">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                        </TableView>
+                     </children>
+                  </VBox>
+                  <Button fx:id="adicionarOrganizadores" mnemonicParsing="false" styleClass="botoes" text="Adicionar Organizador +" />
+                  <StackPane id="listaOrganizadores" fx:id="listaOrganizadores" prefHeight="136.0" prefWidth="1426.0" visible="false">
+                     <children>
+                        <Label text="Organizadores" StackPane.alignment="TOP_LEFT">
                            <font>
                               <Font name="System Bold" size="20.0" />
                            </font>
+                           <StackPane.margin>
+                              <Insets left="20.0" top="10.0" />
+                           </StackPane.margin>
                         </Label>
-                        <TextArea id="descricao" fx:id="descricao" prefHeight="160.0" prefWidth="1426.0" style="-fx-background-color: #FFFFFF;" />
+                     </children>
+                  </StackPane>
+                  <HBox>
+                     <children>
+                        <Label styleClass="texto" text="Colaboradores">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <Pane prefHeight="74.0" prefWidth="1426.0" styleClass="faixas" />
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <TableView fx:id="colaboradores" prefHeight="154.0" prefWidth="1426.0" />
                      </children>
                   </VBox>
-                  <VBox fx:id="frameLocais" prefHeight="45.0" prefWidth="1428.0" />
-                  <HBox>
-                     <VBox.margin>
-                        <Insets left="10.0" />
-                     </VBox.margin>
-                     <children>
-                        <Label prefHeight="26.0" prefWidth="118.0" text="Organizadores">
-                           <font>
-                              <Font name="System Bold" size="16.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </HBox>
-                  <AnchorPane id="Organizaodores" prefHeight="466.0" prefWidth="1428.0">
-                     <children>
-                        <VBox alignment="CENTER" layoutY="-14.0" prefHeight="368.0" prefWidth="1426.0" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0">
-                           <children>
-                              <Pane prefHeight="75.0" prefWidth="1426.0" styleClass="faixas" />
-                              <VBox fx:id="organizadores" prefHeight="200.0" prefWidth="1426.0" styleClass="lista">
-                                 <children>
-                                    <HBox>
-                                       <VBox.margin>
-                                          <Insets />
-                                       </VBox.margin>
-                                    </HBox>
-                                 </children>
-                              </VBox>
-                              <Button fx:id="adicionarOrganizadores" mnemonicParsing="false" styleClass="botoes" text="Adicionar Organizador +" />
-                              <StackPane id="listaOrganizadores" fx:id="listaOrganizadores" prefHeight="136.0" prefWidth="1426.0" visible="false">
-                                 <children>
-                                    <Label text="Organizadores" StackPane.alignment="TOP_LEFT">
-                                       <font>
-                                          <Font name="System Bold" size="20.0" />
-                                       </font>
-                                       <StackPane.margin>
-                                          <Insets left="20.0" top="10.0" />
-                                       </StackPane.margin>
-                                    </Label>
-                                 </children>
-                              </StackPane>
-                              <HBox>
-                                 <children>
-                                    <Label prefHeight="26.0" prefWidth="118.0" text="Colaboradores">
-                                       <font>
-                                          <Font name="System Bold" size="16.0" />
-                                       </font>
-                                       <HBox.margin>
-                                          <Insets bottom="25.0" left="20.0" />
-                                       </HBox.margin>
-                                    </Label>
-                                 </children>
-                              </HBox>
-                              <HBox />
-                              <Pane prefHeight="75.0" prefWidth="1426.0" styleClass="faixas" />
-                              <VBox fx:id="colaboradores" prefHeight="200.0" prefWidth="100.0" styleClass="lista">
-                                 <children>
-                                    <HBox />
-                                 </children>
-                              </VBox>
-                              <Button fx:id="adicionarColaboradores" mnemonicParsing="false" styleClass="botoes" text="Adicionar Colaboradores +" />
-                              <Button id="botaoNovoOrganizador" fx:id="novoOrganizador" mnemonicParsing="false" style="-fx-background-color: #2A3F25;" text="Adicionar novo organizador +" textFill="WHITE" visible="false" />
-                           </children>
-                        </VBox>
-                     </children>
-                  </AnchorPane>
-                  <AnchorPane id="colaboradores" prefHeight="168.0" prefWidth="1426.0">
-                     <children>
-                        <VBox alignment="CENTER">
-                           <children>
-                              <StackPane id="listaColaboradores" fx:id="listaColaboradores" prefHeight="140.0" prefWidth="1426.0" visible="false">
-                                 <children>
-                                    <Label text="Colaboradores" StackPane.alignment="TOP_LEFT">
-                                       <font>
-                                          <Font name="System Bold" size="20.0" />
-                                       </font>
-                                       <StackPane.margin>
-                                          <Insets left="20.0" top="10.0" />
-                                       </StackPane.margin>
-                                    </Label>
-                                 </children>
-                              </StackPane>
-                              <Button id="botaoColaboradores" fx:id="novoColaborador" mnemonicParsing="false" prefWidth="176.0" style="-fx-background-color: #2A3F25;" text="Adicionar novo colaborador +" textFill="WHITE" visible="false" />
-                           </children>
-                        </VBox>
-                     </children>
-                  </AnchorPane>
+                  <Button fx:id="adicionarColaboradores" mnemonicParsing="false" styleClass="botoes" text="Adicionar Colaboradores +" />
+                  <Button id="botaoNovoOrganizador" fx:id="novoOrganizador" mnemonicParsing="false" style="-fx-background-color: #2A3F25;" text="Adicionar novo organizador +" textFill="WHITE" visible="false" />
                </children>
             </VBox>
-            <AnchorPane fx:id="secaoArquivos" layoutY="1841.0">
-               <children>
-                  <VBox alignment="CENTER" layoutY="54.0" />
-                  <HBox layoutX="21.0" prefHeight="25.0" prefWidth="1406.0" spacing="1200.0" />
-                  <Pane layoutX="-266.0" layoutY="37.0" prefHeight="6.0" prefWidth="560.0" style="-fx-background-color: #A22D2E;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
-                  <HBox layoutX="15.0" layoutY="14.0">
-                     <children>
-                        <Label text="Convocatórias">
-                           <font>
-                              <Font name="System Bold" size="16.0" />
-                           </font>
-                        </Label>
-                     </children>
-                  </HBox>
-               </children>
-            </AnchorPane>
-            <Button id="salvarAlteracoes" fx:id="salvarAlteracoes" disable="true" layoutX="1320.0" layoutY="1883.0" mnemonicParsing="false" onAction="#salvarAlteracoes" style="-fx-background-color: #2A3F25;" text="Salvar alterações" textFill="WHITE" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="135.0" />
-            <VBox layoutX="4.0" layoutY="249.0" prefHeight="95.0" prefWidth="1430.0">
-               <children>
-                  <Button fx:id="adicionarCapa" alignment="CENTER" mnemonicParsing="false" styleClass="botoes" text="Adicionar Capa">
-                     <VBox.margin>
-                        <Insets left="750.0" />
-                     </VBox.margin>
-                  </Button>
-                  <Label id="titulo" fx:id="titulo" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="44.0" prefWidth="78.0" text="Título">
-                     <font>
-                        <Font size="30.0" />
-                     </font>
-                  </Label>
-                  <HBox prefHeight="25.0" prefWidth="1380.0" spacing="30.0">
-                     <children>
-                        <DatePicker fx:id="dataInicial" editable="false" />
-                        <DatePicker fx:id="dataFinal" editable="false" />
-                        <VBox />
-                        <VBox>
-                           <children>
-                              <Label text="Atende  à(s) metas:" />
-                              <HBox spacing="20.0">
-                                 <children>
-                                    <CheckBox mnemonicParsing="false" text="Fruição" />
-                                    <CheckBox mnemonicParsing="false" text="Fortalecimento de patrimônio cultural" />
-                                    <CheckBox mnemonicParsing="false" text="Formação em Arte e Cultura" />
-                                    <CheckBox mnemonicParsing="false" text="Convocatória" />
-                                 </children>
-                              </HBox>
-                           </children>
-                        </VBox>
-                     </children>
-                  </HBox>
-               </children>
-            </VBox>
-            <AnchorPane layoutY="1136.0" prefHeight="705.0" prefWidth="1425.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="135.0">
+            <AnchorPane layoutX="14.0" layoutY="1143.0" prefHeight="1071.0" prefWidth="1560.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <children>
                   <Label layoutX="20.0" layoutY="30.0" text="Indicadores">
                      <font>
@@ -223,24 +175,49 @@
                            </font>
                         </Label>
                         <Pane prefHeight="6.0" prefWidth="560.0" style="-fx-background-color: #A22D2E;" />
-                        <TableView id="tabela" fx:id="tabelaIndicadoresMeta2" editable="true" minHeight="-Infinity" minWidth="-Infinity" prefHeight="155.0" prefWidth="1426.0" style="-fx-background-color: #FFFFFF;" />
+                        <TableView id="tabela" fx:id="fortalecimento" editable="true" minHeight="-Infinity" minWidth="-Infinity" prefHeight="155.0" prefWidth="1426.0" style="-fx-background-color: #FFFFFF;" />
+                     </children>
+                  </VBox>
+                  <VBox layoutX="-2.0" layoutY="688.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="130.0">
+                     <children>
+                        <Label text="Convocatórias">
+                           <font>
+                              <Font name="System Bold" size="16.0" />
+                           </font>
+                        </Label>
+                        <Pane prefHeight="6.0" prefWidth="560.0" style="-fx-background-color: #A22D2E;" />
+                        <TableView id="tabela" fx:id="convocatorias" editable="true" minHeight="-Infinity" minWidth="-Infinity" prefHeight="155.0" prefWidth="1426.0" style="-fx-background-color: #FFFFFF;" />
+                     </children>
+                  </VBox>
+                  <VBox layoutX="2.0" layoutY="875.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="130.0">
+                     <children>
+                        <Label text="Ações Metas">
+                           <font>
+                              <Font name="System Bold" size="16.0" />
+                           </font>
+                        </Label>
+                        <Pane prefHeight="6.0" prefWidth="560.0" style="-fx-background-color: #A22D2E;" />
+                        <HBox id="acoes" fx:id="acoes" prefHeight="140.0" prefWidth="1430.0" VBox.vgrow="ALWAYS" />
                      </children>
                   </VBox>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="headerField" layoutX="-2.0" layoutY="-4.0" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="52.0" prefWidth="1440.0" />
-            <StackPane id="arquivos" fx:id="acoes" layoutX="-41.0" layoutY="2021.0" prefHeight="131.0" prefWidth="1469.0" />
-            <Pane layoutX="-46.0" layoutY="2014.0" prefHeight="7.0" prefWidth="1473.0" style="-fx-background-color: #A22D2E;" />
-            <Label layoutX="14.0" layoutY="1987.0" prefHeight="26.0" prefWidth="147.0" text="Ações das Metas">
-               <font>
-                  <Font name="System Bold" size="16.0" />
-               </font>
-            </Label>
-            <VBox layoutX="61.0" layoutY="1887.0" prefHeight="102.0" prefWidth="1562.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="130.0">
-               <children>
-                  <TableView fx:id="convocatorias" />
-               </children>
-            </VBox>
+            <BorderPane layoutX="186.0" layoutY="2270.0" prefHeight="130.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+               <bottom>
+                  <Button mnemonicParsing="false" styleClass="botoes" text="Adicionar novo arquivo +" BorderPane.alignment="CENTER">
+                     <BorderPane.margin>
+                        <Insets bottom="20.0" />
+                     </BorderPane.margin>
+                  </Button>
+               </bottom>
+               <right>
+                  <Button fx:id="alteracoes" mnemonicParsing="false" styleClass="botoes" text="Salvar alterações" BorderPane.alignment="BOTTOM_RIGHT">
+                     <BorderPane.margin>
+                        <Insets bottom="-40.0" right="50.0" />
+                     </BorderPane.margin>
+                  </Button>
+               </right>
+            </BorderPane>
          </children>
       </AnchorPane>
    </content>
