@@ -1,0 +1,21 @@
+@import url(../css/colors/colorStyle.css);
+
+#header {
+    -fx-background-color: -vermelho;
+}
+#container, #principal {
+    -fx-background-color: -bege;
+}
+.botoes {
+    -fx-background-color: -verde;
+    -fx-text-fill: -branco;
+}
+#acoes {
+    -fx-background-color: -branco;
+}
+.faixas {
+    -fx-background-color: -vermelho;
+}
+.listas {
+    -fx-background-color: -branco;
+}
