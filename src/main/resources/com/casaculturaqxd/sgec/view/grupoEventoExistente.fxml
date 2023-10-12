@@ -207,15 +207,12 @@
                   </VBox>
                </children>
             </AnchorPane>
-            <BorderPane layoutX="186.0" layoutY="2270.0" prefHeight="130.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-               <right>
-                  <Button fx:id="alteracoes" mnemonicParsing="false" styleClass="botoes" text="Salvar alterações" BorderPane.alignment="BOTTOM_RIGHT">
-                     <BorderPane.margin>
-                        <Insets bottom="-40.0" right="50.0" />
-                     </BorderPane.margin>
-                  </Button>
-               </right>
-            </BorderPane>
+            <HBox alignment="BOTTOM_RIGHT" layoutX="415.0" layoutY="2286.0" prefHeight="100.0" prefWidth="200.0" spacing="30.0" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="50.0">
+               <children>
+                  <Button id="cancelar" fx:id="cancelar" mnemonicParsing="false" text="Cancelar" />
+                  <Button fx:id="salvarAlteracoes" mnemonicParsing="false" styleClass="botoes" text="Salvar alterações" />
+               </children>
+            </HBox>
          </children>
       </AnchorPane>
    </content>
