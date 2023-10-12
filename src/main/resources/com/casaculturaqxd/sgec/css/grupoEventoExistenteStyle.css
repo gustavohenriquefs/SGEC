@@ -1,28 +1,18 @@
 @import url(../css/colors/colorStyle.css);
 
 #header {
-    -fx-background-color: #A22D2E;
+    -fx-background-color: -vermelho;
 }
-
-#tabela .table-column {
-    -fx-alignment: CENTER;
-  }
+#container, #principal {
+    -fx-background-color: -bege;
+}
 .botoes {
     -fx-background-color: -verde;
     -fx-text-fill: -branco;
 }
-#imagens, #descricao, #listaParticipantes, #listaOrganizadores, #listaColaboradores, #arquivos {
-    -fx-background-color: white;
-}
-.texto {
-    -fx-font-size: 16px;
-}
-.lista {
+#acoes {
     -fx-background-color: -branco;
 }
 .faixas {
     -fx-background-color: -vermelho;
-}
-#container {
-    -fx-background-color: #E9E3CA;
 }
