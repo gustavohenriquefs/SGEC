@@ -17,3 +17,7 @@
 .listas {
     -fx-background-color: -branco;
 }
+#cancelar {
+    -fx-background-color: -preto;
+    -fx-text-fill: -branco;
+}
