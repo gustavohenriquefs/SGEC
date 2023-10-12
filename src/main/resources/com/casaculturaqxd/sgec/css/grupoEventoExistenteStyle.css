@@ -12,6 +12,7 @@
 }
 .faixas {
     -fx-background-color: -vermelho;
+    -fx-pref-height: 3px;
 }
 .listas {
     -fx-background-color: -branco;
