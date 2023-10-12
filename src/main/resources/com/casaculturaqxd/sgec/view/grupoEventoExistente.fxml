@@ -18,7 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<ScrollPane id="container" fx:id="container" hbarPolicy="ALWAYS" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="2400.0" prefWidth="1560.0" stylesheets="@../css/grupoEventoExistenteStyle.css" vbarPolicy="ALWAYS" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/20.0.1">
+<ScrollPane id="container" fx:id="container" hbarPolicy="ALWAYS" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="2400.0" prefWidth="1560.0" stylesheets="@../css/grupoEventoExistenteStyle.css" vbarPolicy="ALWAYS" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <content>
       <AnchorPane id="principal" fx:id="principal" prefHeight="2400.0" prefWidth="1560.0">
          <children>
@@ -66,12 +66,12 @@
                   <Font name="System Bold" size="36.0" />
                </font>
             </Label>
-            <ScrollPane fx:id="descricao" hbarPolicy="ALWAYS" layoutY="521.0" vbarPolicy="ALWAYS" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="40.0">
+            <ScrollPane fx:id="campoDescricao" hbarPolicy="ALWAYS" layoutY="521.0" vbarPolicy="ALWAYS" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="40.0">
                <content>
                   <TextArea fx:id="descricao" prefHeight="150.0" prefWidth="1506.0" />
                </content>
             </ScrollPane>
-            <Label layoutX="27.0" layoutY="498.0" text="Descrição" AnchorPane.leftAnchor="20.0">
+            <Label layoutX="27.0" layoutY="498.0" styleClass="texto" text="Descrição" AnchorPane.leftAnchor="20.0">
                <font>
                   <Font name="System Bold" size="16.0" />
                </font>
@@ -81,9 +81,9 @@
                <children>
                   <HBox>
                      <children>
-                        <Label alignment="TOP_LEFT" styleClass="texto" text="Organizadores">
+                        <Label alignment="TOP_LEFT" text="Organizadores">
                            <font>
-                              <Font name="System Bold" size="12.0" />
+                              <Font name="System Bold" size="16.0" />
                            </font>
                         </Label>
                      </children>
@@ -94,7 +94,7 @@
                         <Insets />
                      </VBox.margin>
                   </Pane>
-                  <VBox prefHeight="200.0" prefWidth="1426.0" styleClass="listas">
+                  <VBox fx:id="organizadores" prefHeight="200.0" prefWidth="1426.0" styleClass="listas">
                      <children>
                         <HBox>
                            <VBox.margin>
@@ -118,15 +118,15 @@
                   </StackPane>
                   <HBox>
                      <children>
-                        <Label styleClass="texto" text="Colaboradores">
+                        <Label text="Colaboradores">
                            <font>
-                              <Font name="System Bold" size="12.0" />
+                              <Font name="System Bold" size="16.0" />
                            </font>
                         </Label>
                      </children>
                   </HBox>
                   <Pane prefHeight="74.0" prefWidth="1426.0" styleClass="faixas" />
-                  <VBox prefHeight="200.0" prefWidth="100.0" styleClass="listas">
+                  <VBox fx:id="colaboradores" prefHeight="200.0" prefWidth="100.0" styleClass="listas">
                      <children>
                         <HBox />
                      </children>
@@ -149,11 +149,11 @@
                               <Font name="System Bold" size="16.0" />
                            </font>
                         </Label>
-                        <Pane prefHeight="4.0" prefWidth="160.0" style="-fx-background-color: #A22D2E;" />
+                        <Pane prefHeight="4.0" prefWidth="160.0" styleClass="faixas" />
                         <TableView id="tabela" fx:id="publico" editable="true" minHeight="-Infinity" minWidth="-Infinity" prefHeight="155.0" prefWidth="1426.0" style="-fx-background-color: #FFFFFF;" />
                      </children>
                   </VBox>
-                  <Pane layoutX="8.0" layoutY="76.0" prefHeight="4.0" prefWidth="160.0" style="-fx-background-color: #A22D2E;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+                  <Pane layoutX="8.0" layoutY="76.0" prefHeight="4.0" prefWidth="160.0" styleClass="faixas" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
                   <VBox layoutY="297.0">
                      <children>
                         <Label prefHeight="22.0" prefWidth="137.0" text="Fruição (meta 1)">
@@ -161,7 +161,7 @@
                               <Font name="System Bold" size="16.0" />
                            </font>
                         </Label>
-                        <Pane prefHeight="5.0" prefWidth="360.0" style="-fx-background-color: #A22D2E;" />
+                        <Pane prefHeight="5.0" prefWidth="360.0" styleClass="faixas" />
                         <TableView id="tabela" fx:id="fruicao" editable="true" minHeight="-Infinity" minWidth="-Infinity" prefHeight="155.0" prefWidth="1426.0" style="-fx-background-color: #FFFFFF;" />
                      </children>
                   </VBox>
@@ -172,7 +172,7 @@
                               <Font name="System Bold" size="16.0" />
                            </font>
                         </Label>
-                        <Pane prefHeight="6.0" prefWidth="560.0" style="-fx-background-color: #A22D2E;" />
+                        <Pane prefHeight="6.0" prefWidth="560.0" styleClass="faixas" />
                         <TableView id="tabela" fx:id="fortalecimento" editable="true" minHeight="-Infinity" minWidth="-Infinity" prefHeight="155.0" prefWidth="1426.0" style="-fx-background-color: #FFFFFF;" />
                      </children>
                   </VBox>
@@ -183,7 +183,7 @@
                               <Font name="System Bold" size="16.0" />
                            </font>
                         </Label>
-                        <Pane prefHeight="6.0" prefWidth="560.0" style="-fx-background-color: #A22D2E;" />
+                        <Pane prefHeight="6.0" prefWidth="560.0" styleClass="faixas" />
                         <TableView id="tabela" fx:id="convocatorias" editable="true" minHeight="-Infinity" minWidth="-Infinity" prefHeight="155.0" prefWidth="1426.0" style="-fx-background-color: #FFFFFF;" />
                      </children>
                   </VBox>
@@ -194,20 +194,20 @@
                               <Font name="System Bold" size="16.0" />
                            </font>
                         </Label>
-                        <Pane prefHeight="6.0" prefWidth="560.0" style="-fx-background-color: #A22D2E;" />
-                        <HBox id="acoes" fx:id="acoes" prefHeight="140.0" prefWidth="1430.0" VBox.vgrow="ALWAYS" />
+                        <Pane prefHeight="6.0" prefWidth="560.0" styleClass="faixas" />
+                        <HBox id="acoes" fx:id="acoes" alignment="CENTER_LEFT" prefHeight="140.0" prefWidth="1430.0" VBox.vgrow="ALWAYS">
+                           <children>
+                              <Button fx:id="adicionarEvento" mnemonicParsing="false" styleClass="botoes" text="Adicionar novo evento +">
+                                 <HBox.margin>
+                                    <Insets left="20.0" />
+                                 </HBox.margin>
+                              </Button>
+                           </children></HBox>
                      </children>
                   </VBox>
                </children>
             </AnchorPane>
             <BorderPane layoutX="186.0" layoutY="2270.0" prefHeight="130.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-               <bottom>
-                  <Button mnemonicParsing="false" styleClass="botoes" text="Adicionar novo arquivo +" BorderPane.alignment="CENTER">
-                     <BorderPane.margin>
-                        <Insets bottom="20.0" />
-                     </BorderPane.margin>
-                  </Button>
-               </bottom>
                <right>
                   <Button fx:id="alteracoes" mnemonicParsing="false" styleClass="botoes" text="Salvar alterações" BorderPane.alignment="BOTTOM_RIGHT">
                      <BorderPane.margin>
