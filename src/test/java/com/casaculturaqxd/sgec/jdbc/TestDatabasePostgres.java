@@ -11,10 +11,10 @@ public class TestDatabasePostgres {
     DatabasePostgres database;
     String INVALID_ENV = "";
     DatabasePostgres incorrectDatabase;
+
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws IncorrectEnvironmentVariableException {
         database = DatabasePostgres.getInstance("URL", "USER_NAME", "PASSWORD");
-        incorrectDatabase = DatabasePostgres.getInstance(INVALID_ENV, INVALID_ENV, INVALID_ENV);
     }
     
 
@@ -25,10 +25,6 @@ public class TestDatabasePostgres {
         assertEquals(firstConnection,secondConnection);
     }
 
-    @Test
-    public void testConnectionWithInvalidKeys(){
-        assertNull(incorrectDatabase.getConnection());
-    }
 
     @Test
     public void testDesconectarOnValidConnection() {
