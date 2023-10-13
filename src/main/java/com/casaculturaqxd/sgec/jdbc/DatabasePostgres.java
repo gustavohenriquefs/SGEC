@@ -56,7 +56,6 @@ public class DatabasePostgres implements Database {
 
     public void setUrlDataBase(String urlKey) throws IncorrectEnvironmentVariableException{
         if (variavelEnvExists(urlKey)) {
-            System.out.println("Sucesso");
             desconectar(connection);
             this.urlDataBase = dotenv.get(urlKey);
         } else {
