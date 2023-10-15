@@ -1,11 +1,7 @@
 package com.casaculturaqxd.sgec.models.arquivo;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.sql.Date;
-
-import javafx.scene.image.Image;
 
 public class ServiceFile {
     private Integer serviceFileId;
@@ -13,6 +9,7 @@ public class ServiceFile {
     private String service;
     private String bucket;
     private Date ultimaModificacao;
+    private File preview;
     private File content;
     
     public ServiceFile(File content,String bucket) {
@@ -20,13 +17,11 @@ public class ServiceFile {
         this.bucket = bucket;
     }
 
-    public Image getContentPreview() throws FileNotFoundException{
-        return new Image(new FileInputStream(content));
-    }
     
     public Integer getServiceFileId() {
         return serviceFileId;
     }
+
     public void setServiceFileId(Integer serviceFileId) {
         this.serviceFileId = serviceFileId;
     }
