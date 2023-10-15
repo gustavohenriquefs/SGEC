@@ -1,15 +1,20 @@
 package com.casaculturaqxd.sgec.service;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.S3Object;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 
 import io.github.cdimascio.dotenv.Dotenv;
@@ -18,7 +23,7 @@ public class S3Service implements Service{
    private AmazonS3 client;
    private Dotenv dotenv = Dotenv.load();
 
-   public S3Service(String envAcessKey, String envSecretKey) {
+   protected S3Service(String envAcessKey, String envSecretKey) {
       var credenciais = new BasicAWSCredentials(dotenv.get(envAcessKey),dotenv.get(envSecretKey));
 
       client = AmazonS3ClientBuilder.standard()
@@ -29,7 +34,7 @@ public class S3Service implements Service{
 
    @Override
    public void criarBucket(String nomeBucket) throws IllegalArgumentException {
-      if(client.doesBucketExistV2(nomeBucket)){
+      if(!client.doesBucketExistV2(nomeBucket)){
          client.createBucket(nomeBucket);
       }
       else{
@@ -49,16 +54,67 @@ public class S3Service implements Service{
 
    @Override
    public void enviarArquivo(String nomeBucket, String chaveDestino, File arquivo) throws IllegalArgumentException, IOException {
+      if(!client.doesObjectExist(nomeBucket, chaveDestino)){
+         client.putObject(nomeBucket, chaveDestino, arquivo);
+      }
+      else{
+         throw new IllegalArgumentException();
+      }
    }
+   
+   /**
+    * captura o conteudo do objeto em uma InputStream
+    * depois cria um arquivo temporário com esse conteúdo,
+    * por fim retorna um service file desse conteudo
+    */
    public ServiceFile getArquivo(String nomeBucket, String chaveArquivo){
-      S3Object object = client.getObject(nomeBucket, chaveArquivo);
+      var object = client.getObject(nomeBucket, chaveArquivo);
+      InputStream content = object.getObjectContent();
+      File newFile;
+
+      try {
+         newFile = File.createTempFile(chaveArquivo,findFileSuffix(chaveArquivo));
+         newFile.deleteOnExit();
+         OutputStream output = new FileOutputStream(newFile, false); 
+         content.transferTo(output);
+         return new ServiceFile(newFile,nomeBucket);
+      } catch (IOException e) {
+         e.printStackTrace();
+      }
+      
+      return null;
    }
+
+   /**
+    * Baseado no codigo disponivel neste
+      <a href="https://github.com/feltex/aws-s3">link</a>
+    */
    @Override
    public List<String> listarArquivos(String nomeBucket) throws IllegalArgumentException {
+      var listaObjetos = client.listObjects(nomeBucket);
+      return listaObjetos.getObjectSummaries()
+                .stream()
+                .map(sumario -> sumario.getKey())
+                .collect(Collectors.toList());
    }
 
    @Override
    public void deletarArquivo(String nomeBucket, String chaveArquivo) throws IllegalArgumentException {
-      client.deleteObject(nomeBucket, chaveArquivo);
+      if(client.doesObjectExist(nomeBucket, chaveArquivo)){
+         client.deleteObject(nomeBucket, chaveArquivo);
+      }
+      else{
+         throw new IllegalArgumentException();
+      }
+   }
+
+   private String findFileSuffix(String fileName){
+      Pattern pattern = Pattern.compile("\\..*");
+      Matcher matcher = pattern.matcher(fileName);
+      if (matcher.find()) {
+        String suffix = matcher.group(0);
+        return suffix;
+      }
+      return null;
    }
 }
