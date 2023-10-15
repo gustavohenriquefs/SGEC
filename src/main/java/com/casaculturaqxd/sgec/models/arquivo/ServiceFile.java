@@ -58,4 +58,12 @@ public class ServiceFile {
         this.ultimaModificacao = ultimaModificacao;
     }
 
+
+    @Override
+    public String toString() {
+        return "ServiceFile [serviceFileId=" + serviceFileId + ", fileKey=" + fileKey + ", service=" + service
+                + ", bucket=" + bucket + ", ultimaModificacao=" + ultimaModificacao + ", preview=" + preview
+                + ", content=" + content + "]";
+    }
+
 }
