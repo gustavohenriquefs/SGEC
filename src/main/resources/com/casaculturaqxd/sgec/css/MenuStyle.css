@@ -1,6 +1,6 @@
 @import url(../css/colors/colorStyle.css);
 
-#container, #principal {
+#principal {
     -fx-background-color: -vermelho;
     -fx-text-fill: -branco;
 }
