@@ -21,20 +21,20 @@
                </effect>
             </ImageView>
          </graphic></Menu>
-      <Menu fx:id="home" mnemonicParsing="false" text="Home" />
-      <Menu fx:id="cadastrar" mnemonicParsing="false" text="Cadastrar">
+      <Menu fx:id="home" mnemonicParsing="false" style="-fx-text-fill: #FFFFFF;" text="Home" />
+      <Menu fx:id="cadastrar" mnemonicParsing="false" style="-fx-text-fill: #FFFFFF;" text="Cadastrar">
          <items>
             <MenuItem fx:id="cadastrarEvento" mnemonicParsing="false" text="Evento" />
             <MenuItem fx:id="cadastrarGrupo" mnemonicParsing="false" text="Grupo de eventos" />
          </items>
       </Menu>
-      <Menu fx:id="pesquisar" mnemonicParsing="false" text="Pesquisar">
+      <Menu fx:id="pesquisar" mnemonicParsing="false" style="-fx-text-fill: #FFFFFF;" text="Pesquisar">
          <items>
             <MenuItem fx:id="pesquisarEvento" mnemonicParsing="false" text="Evento" />
             <MenuItem fx:id="pesquisarGrupo" mnemonicParsing="false" text="Grupo de eventos" />
          </items>
       </Menu>
-      <Menu fx:id="opcoes" mnemonicParsing="false" text="Opções">
+      <Menu fx:id="opcoes" mnemonicParsing="false" style="-fx-text-fill: #FFFFFF;" text="Opções">
          <items>
             <MenuItem fx:id="alterar" mnemonicParsing="false" text="Alterar informações pessoais" />
             <MenuItem fx:id="sair" mnemonicParsing="false" text="Sair" />
@@ -42,7 +42,7 @@
       </Menu>
       <Menu fx:id="nomeUsuario" mnemonicParsing="false">
          <graphic>
-            <Label fx:id="campoNomeUsuario" text="Nome do usuário" />
+            <Label fx:id="campoNomeUsuario" style="-fx-text-fill: #E9E3CA;" text="Nome do usuário" textFill="WHITE" />
          </graphic>
       </Menu>
    </menus>
