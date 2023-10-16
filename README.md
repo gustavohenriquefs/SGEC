@@ -28,4 +28,4 @@ A documentação do Backlog está disponível no link anterior junto a todos os 
 Imagem de localização: <a href="https://www.freepik.com/icon/security-pin_6125244#fromView=keyword&term=Local&page=1&position=14">Icon by Muhammad_Usman</a>
 
 ## Link do plugin usado para a seta de volta
-Imagem da leftArro <a href="https://www.figma.com/community/plugin/774202616885508874/font-awesome-icons">LeftArrow</a>
+Imagem da leftArro <a href="https://images.app.goo.gl/NkXbvK76VHFTzero6">LeftArrow</a>
