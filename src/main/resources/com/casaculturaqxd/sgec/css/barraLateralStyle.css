@@ -1,8 +1,0 @@
-@import url(../css/colors/colorStyle.css);
-
-#container, #principal {
-    -fx-background-color: -bege;
-}
-.texto {
-    -fx-Text-Fill: -preto;
-}
