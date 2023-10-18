@@ -29,8 +29,9 @@ public class UserDAOTest {
     public void tearDown() {
         //remover do banco o obj usado no teste
         //mantendo o registro conhecido
-        if(obj.getIdUsuario()!=1) 
-        userDAO.deletar(obj);
+        if(obj.getIdUsuario()!=1){
+            userDAO.deletar(obj);
+        }
     }
     
     @Test
@@ -113,7 +114,8 @@ public class UserDAOTest {
     public void testUpdateValidUsuario() {
         obj = new User();
         obj.setIdUsuario(1);
-
+        obj = userDAO.getUsuario(obj);
+        
         assertTrue(userDAO.update(obj));
     }
     @Test
@@ -128,7 +130,6 @@ public class UserDAOTest {
     public void testDeletarValidUsuario() {
         obj = new User("new_test_user", "newtest@mail", "newtestpassword", false);
         userDAO.inserir(obj);
-        System.out.println(obj.getIdUsuario());
         assertTrue(userDAO.deletar(obj));
     }
 
