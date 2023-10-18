@@ -22,7 +22,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("view/login"), 640, 480);
+        scene = new Scene(loadFXML("view/home"), 640, 480);
         Image image = new Image(App.class.getResourceAsStream("imagens/logo_cego_aderaldo.png"));
         stage.getIcons().add(image);
         stage.setTitle("SGEC");
