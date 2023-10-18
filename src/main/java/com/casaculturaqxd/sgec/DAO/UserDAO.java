@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+
 import com.casaculturaqxd.sgec.models.User;
 
 public class UserDAO {
@@ -23,7 +25,7 @@ public class UserDAO {
       String sql = "insert into usuario (nome_usuario,email,senha,editor)"
               + " values(?,?,?,?)";
       //2° passo - conectar o banco de dados e organizar o comando sql
-      PreparedStatement stmt = connection.prepareStatement(sql);
+      PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
       stmt.setString(1, obj.getNomeUsuario());
       stmt.setString(2, obj.getEmail());
       stmt.setString(3, obj.getSenha());
@@ -95,8 +97,10 @@ public class UserDAO {
       stmt.setString(3, obj.getSenha());
       stmt.setBoolean(4, obj.isEditor());
       stmt.setInt(5, obj.getIdUsuario());
-      stmt.execute();
-      return true;
+
+      int numModificacoes = stmt.executeUpdate();
+      return numModificacoes>0;
+
     } catch (Exception e) {
       return false;
     }
@@ -107,8 +111,8 @@ public class UserDAO {
     try {
       PreparedStatement stmt = connection.prepareStatement(sql);
       stmt.setInt(1, obj.getIdUsuario());
-      stmt.execute();
-      return true;
+      int numRemocoes = stmt.executeUpdate();
+      return numRemocoes>0;
     } catch (Exception e) {
       return false;
     }
