@@ -20,17 +20,23 @@ public class UserDAO {
   public boolean inserir(User obj){
     try {
       //1° passo - criar comando sql
-      String sql = "insert into usuario (id_usuario,nome_usuario,email,senha,editor)"
-              + " values(?,?,?,?,?)";
+      String sql = "insert into usuario (nome_usuario,email,senha,editor)"
+              + " values(?,?,?,?)";
       //2° passo - conectar o banco de dados e organizar o comando sql
       PreparedStatement stmt = connection.prepareStatement(sql);
-      stmt.setInt(1, obj.getIdUsuario());
-      stmt.setString(2, obj.getNomeUsuario());
-      stmt.setString(3, obj.getEmail());
-      stmt.setString(4, obj.getSenha());
-      stmt.setBoolean(5, obj.isEditor());
+      stmt.setString(1, obj.getNomeUsuario());
+      stmt.setString(2, obj.getEmail());
+      stmt.setString(3, obj.getSenha());
+      stmt.setBoolean(4, obj.isEditor());
       //3° passo - executar o comando sql
-      stmt.execute();
+      stmt.executeUpdate();
+      
+      ResultSet rs = stmt.getGeneratedKeys();
+      //caso a insercao seja realizada, atualiza o parametro com o id  
+      if (rs.next()) {
+          obj.setIdUsuario(rs.getInt("id_usuario"));
+      }
+
       stmt.close();
       return true;
     } catch (SQLException e) {
@@ -43,7 +49,6 @@ public class UserDAO {
     try {
       PreparedStatement stmt = connection.prepareStatement(sql);
       stmt.setInt(1, obj.getIdUsuario());
-      System.out.println(stmt);
       ResultSet resultado = stmt.executeQuery();
       if (resultado.next()) {
         obj.setIdUsuario(resultado.getInt("id_usuario"));
