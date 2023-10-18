@@ -8,13 +8,16 @@ public class User {
     private String senha;
     private boolean editor;
     
+    public User(){
+
+    }
+    
     public User(String email, String senha) {
         this.email = email;
         this.senha = senha;
     }
 
-    public User(int idUsuario, String nomeUsuario, String email, String senha, boolean editor) {
-        this.idUsuario = idUsuario;
+    public User(String nomeUsuario, String email, String senha, boolean editor) {
         this.nomeUsuario = nomeUsuario;
         this.email = email;
         this.senha = senha;
