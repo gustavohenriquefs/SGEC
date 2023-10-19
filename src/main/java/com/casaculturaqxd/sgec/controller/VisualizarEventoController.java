@@ -29,6 +29,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
@@ -47,7 +48,7 @@ public class VisualizarEventoController {
     private EventoDAO eventoDAO = new EventoDAO();
     private LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO();
     @FXML
-    AnchorPane page,headerField, secaoArquivos;
+    AnchorPane root,headerField, secaoArquivos;
     @FXML
     VBox frameLocais;
     @FXML 
@@ -77,11 +78,10 @@ public class VisualizarEventoController {
     Button novoParticipante,novoOrganizador,novoColaborador,salvarAlteracoes,adicionarArquivo,visualizarTodos;
 
     public void initialize() throws IOException{
-        addControls(page, camposInput);
+        addControls(root, camposInput);
         addPropriedadeAlterar(camposInput);
 
-        FXMLLoader carregarMenu = new FXMLLoader(App.class.getResource("view/componentes/menu.fxml"));
-        headerField.getChildren().add(carregarMenu.load());
+        loadMenu();
 
         eventoDAO.setConnection(db.getConnection());
         localizacaoDAO.setConnection(db.getConnection());
@@ -91,6 +91,11 @@ public class VisualizarEventoController {
          *  reativar o botao
          */
         temporaryHideUnimplementedFields();
+    }
+
+    private void loadMenu() throws IOException{
+        FXMLLoader carregarMenu = new FXMLLoader(App.class.getResource("view/componentes/menu.fxml"));
+        root.getChildren().add(1,carregarMenu.load());
     }
 
     private void loadContent() throws IOException{
@@ -259,4 +264,39 @@ public class VisualizarEventoController {
             node.setVisible(false);
         } 
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
 }
