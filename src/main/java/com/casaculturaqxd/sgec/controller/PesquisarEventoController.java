@@ -11,9 +11,9 @@ import javafx.scene.layout.HBox;
 
 public class PesquisarEventoController {
     @FXML
-    AnchorPane root;
+    private AnchorPane root;
     @FXML
-    HBox header;
+    private HBox header;
 
     public void initialize() throws IOException{
         loadMenu();

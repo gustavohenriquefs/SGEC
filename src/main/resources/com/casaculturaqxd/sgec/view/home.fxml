@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
@@ -11,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox id="container" prefHeight="576.0" prefWidth="780.0" stylesheets="@../css/HomeStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.HomeController">
+<VBox id="container" fx:id="root" prefHeight="576.0" prefWidth="780.0" stylesheets="@../css/HomeStyle.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.HomeController">
    <children>
       <HBox fx:id="menuContainer">
          <VBox.margin>
@@ -55,7 +60,7 @@
             </Label>
             <ScrollPane prefHeight="271.0" prefWidth="756.0">
               <content>
-                <AnchorPane minHeight="200.0" minWidth="0.0" prefHeight="434.0" prefWidth="752.0">
+                <AnchorPane fx:id="root" minHeight="200.0" minWidth="0.0" prefHeight="434.0" prefWidth="752.0">
                      <children>
                         <HBox fx:id="listaEventos" minHeight="400.0" prefHeight="400.0" />
                      </children>

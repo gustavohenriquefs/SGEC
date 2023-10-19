@@ -21,6 +21,9 @@ import javafx.scene.layout.VBox;
 public class HomeController {
 
     @FXML
+    private VBox root;
+
+    @FXML
     private ResourceBundle resources;
 
     @FXML
@@ -43,13 +46,7 @@ public class HomeController {
 
     @FXML
     public void initialize() throws IOException {
-
-      FXMLLoader carregarMenu = new FXMLLoader(App.class.getResource("view/componentes/menu.fxml"));
-      
-      VBox menu = carregarMenu.load();
-
-      this.menuContainer.getChildren().add(menu);
-
+      this.loadMenu();
       this.initGridUltimosEventos();
     }
 
@@ -94,5 +91,59 @@ public class HomeController {
       
       return eventoDAO.listarUltimosEventos();
     }
+
+    private void loadMenu() throws IOException{
+      FXMLLoader carregarMenu = new FXMLLoader(App.class.getResource("view/componentes/menu.fxml"));
+      root.getChildren().add(1,carregarMenu.load());
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
   
 }
