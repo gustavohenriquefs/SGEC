@@ -16,7 +16,7 @@ import com.casaculturaqxd.sgec.models.User;
  * JavaFX App
  */
 public class App extends Application {
-    private static Stack<Parent> lastVisitedPages = new Stack<Parent>();
+    public static Stack<Parent> lastVisitedPages = new Stack<Parent>();
     private static Scene scene;
     private static User usuarioLogado;
 

@@ -31,4 +31,22 @@ public class MenuController {
         if(App.getUsuario().isEditor())
             App.setRoot("view/cadastrarGrupoEvento");
     }
+
+    public void backTela() throws IOException{
+        if(!App.lastVisitedPages.empty())
+            App.lastVisitedPages.pop();
+        if(!App.lastVisitedPages.empty())
+            App.setRoot(App.lastVisitedPages.lastElement()); 
+    }
+
+    public void goToConfiguracoes() throws IOException{
+        if(App.getUsuario() != null)
+            App.setRoot("view/configuracoes");
+    }
+
+    public void logout() throws IOException{
+        App.setUsuario(null);
+        App.setRoot("view/login");
+    }
+
 }
