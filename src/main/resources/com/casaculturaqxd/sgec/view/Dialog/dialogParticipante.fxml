@@ -30,7 +30,9 @@
                   <Label text="Nome artista" />
                   <TextField fx:id="nomeArtista" maxWidth="-Infinity" prefWidth="300.0" />
                   <Label text="Minibio do artista" />
-                  <TextArea fx:id="minibioArtista" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="300.0" />
+                  <TextArea fx:id="minibioArtista" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="300.0" >
+                    <wrapText>true</wrapText>
+                  </TextArea>
                   <Label text="Área de atuação" />
                   <TextField fx:id="areaAtuacao" maxWidth="-Infinity" prefWidth="300.0" />
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
@@ -47,4 +49,7 @@
     <expandableContent>
       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="320.0" />
     </expandableContent>
+   <graphic>
+      <Button mnemonicParsing="false" text="Button" />
+   </graphic>
 </DialogPane>
