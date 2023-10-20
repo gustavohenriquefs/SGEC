@@ -5,22 +5,24 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 
-<DialogPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="480.0" stylesheets="@../../css/dialogParticipanteStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
-    <header>
-      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="320.0">
+<DialogPane prefHeight="235.0" prefWidth="614.0" stylesheets="@../../css/dialogOpcoesParticipanteStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <content>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" />
+   </content>
+   <header>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0">
          <children>
-            <VBox alignment="CENTER" layoutX="178.0" layoutY="70.0" prefHeight="100.0" prefWidth="480.0" spacing="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="320.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <Button id="consultar" fx:id="consultar" mnemonicParsing="false" text="Consultar mapas culturais" />
-                  <Button id="cadastrar" fx:id="cadastrar" mnemonicParsing="false" text="Cadastrar Manualmente" />
+                  <VBox alignment="CENTER" layoutX="178.0" layoutY="70.0" prefHeight="100.0" prefWidth="480.0" spacing="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                     <children>
+                        <Button id="consultar" fx:id="consultar" mnemonicParsing="false" text="Consultar mapas culturais" />
+                        <Button id="cadastrar" fx:id="cadastrar" mnemonicParsing="false" text="Cadastrar Manualmente" />
+                     </children>
+                  </VBox>
                </children>
-            </VBox>
-         </children></AnchorPane>
-    </header>
-    <content>
-      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="320.0" />
-    </content>
-    <expandableContent>
-      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="320.0" />
-    </expandableContent>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+   </header>
 </DialogPane>
