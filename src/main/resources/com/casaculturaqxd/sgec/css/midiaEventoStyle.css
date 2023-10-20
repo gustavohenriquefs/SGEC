@@ -1,0 +1,15 @@
+@import url(../css/colors/colorStyle.css);
+
+.root {
+    -fx-background-color: -bege;
+}
+#principal {
+    -fx-background-color: -branco;
+}
+.opcoes {
+    -fx-background-color: -branco;
+}
+.botoes {
+    -fx-background-color: -verde;
+    -fx-text-fill: -branco;
+}
