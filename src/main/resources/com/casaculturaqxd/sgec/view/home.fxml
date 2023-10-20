@@ -60,7 +60,7 @@
             </Label>
             <ScrollPane prefHeight="271.0" prefWidth="756.0">
               <content>
-                <AnchorPane fx:id="root" minHeight="200.0" minWidth="0.0" prefHeight="434.0" prefWidth="752.0">
+                <AnchorPane minHeight="200.0" minWidth="0.0" prefHeight="434.0" prefWidth="752.0">
                      <children>
                         <HBox fx:id="listaEventos" minHeight="400.0" prefHeight="400.0" />
                      </children>
