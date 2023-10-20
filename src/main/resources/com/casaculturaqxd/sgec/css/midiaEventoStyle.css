@@ -9,6 +9,9 @@
 .opcoes {
     -fx-background-color: -branco;
 }
+.opcoes:hover {
+    -fx-text-fill: -laranja;
+}
 .botoes {
     -fx-background-color: -verde;
     -fx-text-fill: -branco;
