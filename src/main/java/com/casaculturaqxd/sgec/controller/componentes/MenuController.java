@@ -5,9 +5,17 @@ import java.io.IOException;
 import com.casaculturaqxd.sgec.App;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.MenuBar;
 
 public class MenuController {
 
+    MenuBar menu;
+
+    public MenuBar getMenu(){
+        return menu;
+    }
+
+    @FXML
     public void goToHome() throws IOException{
         try {
             App.setRoot("view/home");
@@ -16,19 +24,23 @@ public class MenuController {
         }
     }
 
+    @FXML
     public void goToPesquisarEvento() throws IOException{
         App.setRoot("view/pesquisarEvento");
     }
 
+    @FXML
     public void goToCadastrarEvento() throws IOException{
         if(App.getUsuario().isEditor())
             App.setRoot("view/cadastrarEvento");
     }
 
+    @FXML
     public void goToPesquisarGrupoEventos() throws IOException{
         App.setRoot("view/pesquisarGrupoEventos");
     }
 
+    @FXML
     public void goToCadastrarGrupoEventos() throws IOException{
         if(App.getUsuario().isEditor())
             App.setRoot("view/cadastrarGrupoEvento");
