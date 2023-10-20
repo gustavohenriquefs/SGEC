@@ -8,11 +8,11 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 
-<MenuBar id="principal" fx:id="menu" prefHeight="40.0" prefWidth="429.0" style="-fx-background-color: #A22D2E;" stylesheets="@../../css/MenuStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<MenuBar id="principal" fx:id="menu" prefHeight="40.0" fx:controller="com.casaculturaqxd.sgec.controller.componentes.MenuController" prefWidth="429.0" style="-fx-background-color: #A22D2E;" stylesheets="@../../css/MenuStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <menus>
       <Menu fx:id="home" mnemonicParsing="false">
          <graphic>
-            <ImageView fx:id="voltar" onAction="backTela" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="voltar" onAction="#backTela" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../imagens/left-arrow_271218.png" />
                </image>
@@ -36,8 +36,8 @@
       </Menu>
       <Menu fx:id="opcoes" mnemonicParsing="false" style="-fx-text-fill: #FFFFFF;" text="Opções">
          <items>
-            <MenuItem fx:id="alterar" onAction="goToConfiguracoes" mnemonicParsing="false" text="Alterar informações pessoais" />
-            <MenuItem fx:id="sair" onAction="logout" mnemonicParsing="false" text="Sair" />
+            <MenuItem fx:id="alterar" onAction="#goToConfiguracoes" mnemonicParsing="false" text="Alterar informações pessoais" />
+            <MenuItem fx:id="sair" onAction="#logout" mnemonicParsing="false" text="Sair" />
          </items>
       </Menu>
       <Menu fx:id="nomeUsuario" mnemonicParsing="false">

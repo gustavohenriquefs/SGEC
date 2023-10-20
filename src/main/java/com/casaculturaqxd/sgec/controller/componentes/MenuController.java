@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import com.casaculturaqxd.sgec.App;
 
+import javafx.fxml.FXML;
+
 public class MenuController {
 
     public void goToHome() throws IOException{
@@ -32,6 +34,7 @@ public class MenuController {
             App.setRoot("view/cadastrarGrupoEvento");
     }
 
+    @FXML
     public void backTela() throws IOException{
         if(!App.lastVisitedPages.empty())
             App.lastVisitedPages.pop();
@@ -39,11 +42,13 @@ public class MenuController {
             App.setRoot(App.lastVisitedPages.lastElement()); 
     }
 
+    @FXML
     public void goToConfiguracoes() throws IOException{
         if(App.getUsuario() != null)
             App.setRoot("view/configuracoes");
     }
 
+    @FXML
     public void logout() throws IOException{
         App.setUsuario(null);
         App.setRoot("view/login");
