@@ -10,29 +10,16 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<DialogPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="649.0" prefWidth="480.0" stylesheets="@../../css/dialogParticipanteStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
-    <header>
-      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="320.0">
+<DialogPane prefHeight="499.0" prefWidth="614.0" stylesheets="@../../css/dialogParticipanteStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <content>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0">
          <children>
-            <VBox alignment="CENTER" layoutX="150.0" layoutY="-24.0" prefHeight="154.0" prefWidth="480.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-               <children>
-                  <ImageView fx:id="imagem" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
-                  <Button id="adicionar" fx:id="adicionar" mnemonicParsing="false" text="Adicionar Imagem" />
-               </children>
-            </VBox>
-         </children></AnchorPane>
-    </header>
-    <content>
-      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="320.0">
-         <children>
-            <VBox layoutX="140.0" layoutY="33.0" prefHeight="200.0" prefWidth="100.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <VBox alignment="CENTER" layoutX="20.0" prefHeight="269.0" prefWidth="594.0" spacing="5.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
                <children>
                   <Label text="Nome artista" />
                   <TextField fx:id="nomeArtista" maxWidth="-Infinity" prefWidth="300.0" />
                   <Label text="Minibio do artista" />
-                  <TextArea fx:id="minibioArtista" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="300.0" >
-                    <wrapText>true</wrapText>
-                  </TextArea>
+                  <TextArea fx:id="minibioArtista" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="300.0" wrapText="true" />
                   <Label text="Área de atuação" />
                   <TextField fx:id="areaAtuacao" maxWidth="-Infinity" prefWidth="300.0" />
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
@@ -44,12 +31,23 @@
                   </HBox>
                </children>
             </VBox>
-         </children></AnchorPane>
-    </content>
-    <expandableContent>
-      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="320.0" />
-    </expandableContent>
-   <graphic>
-      <Button mnemonicParsing="false" text="Button" />
-   </graphic>
+         </children>
+      </AnchorPane>
+   </content>
+   <header>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="320.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <VBox alignment="CENTER" layoutX="150.0" layoutY="-24.0" prefHeight="154.0" prefWidth="480.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <ImageView fx:id="imagem" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                        <Button id="adicionar" fx:id="adicionar" mnemonicParsing="false" text="Adicionar Imagem" />
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+   </header>
 </DialogPane>
