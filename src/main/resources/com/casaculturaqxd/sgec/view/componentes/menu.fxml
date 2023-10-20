@@ -21,17 +21,17 @@
                </effect>
             </ImageView>
          </graphic></Menu>
-      <Menu fx:id="home" mnemonicParsing="false" style="-fx-text-fill: #FFFFFF;" text="Home" />
+      <Menu fx:id="home" onAction="#goToHome" mnemonicParsing="false" style="-fx-text-fill: #FFFFFF;" text="Home" />
       <Menu fx:id="cadastrar" mnemonicParsing="false" style="-fx-text-fill: #FFFFFF;" text="Cadastrar">
          <items>
-            <MenuItem fx:id="cadastrarEvento" mnemonicParsing="false" text="Evento" />
-            <MenuItem fx:id="cadastrarGrupo" mnemonicParsing="false" text="Grupo de eventos" />
+            <MenuItem fx:id="cadastrarEvento" onAction="#goToCadastrarEvento" mnemonicParsing="false" text="Evento" />
+            <MenuItem fx:id="cadastrarGrupo" onAction="#goToCadastrarGrupoEventos" mnemonicParsing="false" text="Grupo de eventos" />
          </items>
       </Menu>
       <Menu fx:id="pesquisar" mnemonicParsing="false" style="-fx-text-fill: #FFFFFF;" text="Pesquisar">
          <items>
-            <MenuItem fx:id="pesquisarEvento" mnemonicParsing="false" text="Evento" />
-            <MenuItem fx:id="pesquisarGrupo" mnemonicParsing="false" text="Grupo de eventos" />
+            <MenuItem fx:id="pesquisarEvento" onAction="#goToPesquisarEvento" mnemonicParsing="false" text="Evento" />
+            <MenuItem fx:id="pesquisarGrupo" onAction="#goToPesquisarGrupoEventos" mnemonicParsing="false" text="Grupo de eventos" />
          </items>
       </Menu>
       <Menu fx:id="opcoes" mnemonicParsing="false" style="-fx-text-fill: #FFFFFF;" text="Opções">
