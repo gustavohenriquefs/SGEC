@@ -8,7 +8,9 @@ public class MenuController {
 
     public void goToHome() throws IOException{
         try {
-            App.setRoot("view/home");       
+            App.setRoot("view/home");
+        } catch (Exception e) {
+            // TODO: handle exception
         }
     }
 
@@ -17,7 +19,8 @@ public class MenuController {
     }
 
     public void goToCadastrarEvento() throws IOException{
-        App.setRoot("view/cadastrarEvento");
+        if(App.getUsuario().isEditor())
+            App.setRoot("view/cadastrarEvento");
     }
 
     public void goToPesquisarGrupoEventos() throws IOException{
@@ -25,6 +28,7 @@ public class MenuController {
     }
 
     public void goToCadastrarGrupoEventos() throws IOException{
-        App.setRoot("view/cadastrarGrupoEventos");
+        if(App.getUsuario().isEditor())
+            App.setRoot("view/cadastrarGrupoEvento");
     }
 }

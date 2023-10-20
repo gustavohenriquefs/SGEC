@@ -59,4 +59,10 @@ public class Localizacao {
         this.idLocalizacao = idLocalizacao;
     }
     
+    public String toString(){
+        String[] firstLine = {rua,Integer.toString(numeroRua),bairro};
+        String secondLine = "\n"+cidade+" ("+cep+") "+estado+"-"+pais;
+        String[] fields = {String.join(", ",firstLine),secondLine};
+        return String.join(" ",fields);
+    }
 }

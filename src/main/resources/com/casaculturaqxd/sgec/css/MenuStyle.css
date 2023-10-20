@@ -1,0 +1,15 @@
+@import url(../css/colors/colorStyle.css);
+
+#principal {
+    -fx-background-color: -vermelho;
+    -fx-text-fill: -branco;
+}
+.imagens {
+    -fx-background-color: -vermelho;
+}
+.menu .label{
+    -fx-text-fill: -branco;
+}
+#nomeUsuario {
+    -fx-text-fill: -branco;
+}

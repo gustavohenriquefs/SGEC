@@ -6,7 +6,6 @@ import java.sql.Time;
 
 import java.util.SortedSet;
 
-import com.casaculturaqxd.sgec.models.arquivo.Arquivo;
 
 public class Evento {
     private Integer idEvento;
@@ -23,11 +22,13 @@ public class Evento {
     private String classificacaoEtaria;
     private boolean certificavel;
     private boolean acessivelEmLibras;
+    private Date cadastradoEm;
+
     SortedSet<Integer> locais;
     SortedSet<Integer> listaParticipantes;  
     SortedSet<Integer> listaOrganizadores;
     SortedSet<Integer> listaColaboradores;
-    SortedSet<Arquivo> listaArquivos;
+    SortedSet<Integer> listaArquivos;
 
     public String getNome() {
         return nome;
@@ -176,16 +177,16 @@ public class Evento {
         return this.listaColaboradores.remove(colaborador);
     }
 
-    public SortedSet<Arquivo> getListaArquivos() {
+    public SortedSet<Integer> getListaArquivos() {
         return listaArquivos;
     }
-    public void setListaArquivos(SortedSet<Arquivo> listaArquivos) {
+    public void setListaArquivos(SortedSet<Integer> listaArquivos) {
         this.listaArquivos = listaArquivos;
     }
-    public void addArquivo(Arquivo arquivo){
+    public void addArquivo(Integer arquivo){
         this.listaArquivos.add(arquivo);
     }
-    public boolean removeArquivo(Arquivo arquivo){
+    public boolean removeArquivo(Integer arquivo){
         return this.listaArquivos.remove(arquivo);
     }
     public Integer getIdEvento() {
@@ -193,6 +194,27 @@ public class Evento {
     }
     public void setIdEvento(Integer idEvento) {
         this.idEvento = idEvento;
+    }
+
+    @Override
+    public String toString() {
+        return "Evento [idEvento=" + idEvento + ", nome=" + nome + ", descricao=" + descricao + ", publicoEsperado="
+                + publicoEsperado + ", publicoAlcancado=" + publicoAlcancado + ", participantesEsperado="
+                + participantesEsperado + ", municipiosEsperado=" + municipiosEsperado + ", dataInicial=" + dataInicial
+                + ", dataFinal=" + dataFinal + ", horario=" + horario + ", cargaHoraria=" + cargaHoraria
+                + ", classificacaoEtaria=" + classificacaoEtaria + ", certificavel=" + certificavel
+                + ", acessivelEmLibras=" + acessivelEmLibras + ", locais=" + locais + ", listaParticipantes="
+                + listaParticipantes + ", listaOrganizadores=" + listaOrganizadores + ", listaColaboradores="
+                + listaColaboradores + ", listaArquivos=" + listaArquivos + "]";
+    }
+
+    public Date getCadastradoEm() {
+        return cadastradoEm;
+    }
+
+    public void setCadastradoEm(Date cadastradoEm) {
+        this.cadastradoEm = cadastradoEm;
+
     }
     
 }

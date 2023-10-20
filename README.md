@@ -1,11 +1,11 @@
 #  Gestão de Eventos Culturais da Casa de Saberes Cego Aderaldo (GEC) 
 
-![casa de saberes](css.png)
+![casa de saberes](src/main/resources/com/casaculturaqxd/sgec/imagens/casa-noite.jpg)
 
 A Casa de Saberes Cego Aderaldo é um espaço institucional da Secretaria da Cultura do Estado do Ceara (Secult), localizado em Quixadá-CE, é um ambiente voltado à arte, à educação e ao patrimônio cultural. Construída coletivamente, dialoga com os diversos agentes, segmentos, setores e instituições da região do Sertão Central, buscando fomentar a pesquisa, a formação, a difusão e a fruição das expressões culturais.
 
 ## Sobre O SGEC
-![Sobre o GEC](GEC.png)
+![Sobre o GEC](src/main/resources/com/casaculturaqxd/sgec/imagens/logo-gec.png)
 
 O SGEC é um projeto de extensão da disciplina de PIES I (Projeto Integrado 1 de Engenharia de Software) na UFC-Quixadá. Portanto é multidisciplinar, abrangendo áreas da Engenharia de Software que foram anteriormente estudadas pelos universitários desenvolvedores do sistema, como IHC, FBD, FUP, POO, ED, entre outras. Esse sistema de gestão tem como seu objetivo principal fornecer uma interface para que os membros administrativos e da comunicação da Casa de Saberes Cego Aderaldo possam armazenar as informações dos diferentes tipos de eventos realizados por eles. E assim auxiliar a preservar o patrimônio cultural, além de facilitar as operações de divulgação e prestação de contas para o Instituto Dragão do Mar de Fotaleza-CE.
 
@@ -24,3 +24,8 @@ A documentação do Backlog está disponível no link anterior junto a todos os 
 - [Robson Diógenes](https://github.com/robsonad07) - robsonad07@alu.ufc.br
   
   
+## Créditos
+Imagem de localização: <a href="https://www.freepik.com/icon/security-pin_6125244#fromView=keyword&term=Local&page=1&position=14">Icon by Muhammad_Usman</a>
+
+## Link do plugin usado para a seta de volta
+Imagem da leftArro <a href="https://images.app.goo.gl/NkXbvK76VHFTzero6">LeftArrow</a>

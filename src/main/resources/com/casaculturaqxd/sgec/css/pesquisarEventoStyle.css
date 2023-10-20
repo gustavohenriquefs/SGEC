@@ -3,9 +3,6 @@
 #container{
     -fx-background-color: -bege;
 }
-#header{
-    -fx-background-color: -vermelho;
-}
 #pesquisar, #exibir, #filtro{
     -fx-color: -black;
 }

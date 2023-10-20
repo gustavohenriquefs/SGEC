@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+
+
+<HBox alignment="CENTER_LEFT" minHeight="-Infinity" minWidth="-Infinity" prefHeight="44.0" prefWidth="600.0" spacing="20.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.preview.PreviewLocalizacaoController">
+   <children>
+      <ImageView fitHeight="46.0" fitWidth="37.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../imagens/security-pin_6125244.png" />
+         </image>
+      </ImageView>
+      <Label text="Label" fx:id="descricaoLocal" >
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+   </children>
+</HBox>
