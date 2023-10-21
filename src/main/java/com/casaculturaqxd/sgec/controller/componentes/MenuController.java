@@ -5,23 +5,13 @@ import java.io.IOException;
 import com.casaculturaqxd.sgec.App;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.MenuBar;
 
 public class MenuController {
 
-    MenuBar menu;
-
-    public MenuBar getMenu(){
-        return menu;
-    }
-
     @FXML
     public void goToHome() throws IOException{
-        try {
-            App.setRoot("view/home");
-        } catch (Exception e) {
-            // TODO: handle exception
-        }
+        App.setRoot("view/home");
+    
     }
 
     @FXML
@@ -31,7 +21,7 @@ public class MenuController {
 
     @FXML
     public void goToCadastrarEvento() throws IOException{
-        if(App.getUsuario().isEditor())
+       // if(App.getUsuario().isEditor())
             App.setRoot("view/cadastrarEvento");
     }
 
@@ -42,15 +32,15 @@ public class MenuController {
 
     @FXML
     public void goToCadastrarGrupoEventos() throws IOException{
-        if(App.getUsuario().isEditor())
+        //if(App.getUsuario().isEditor())
             App.setRoot("view/cadastrarGrupoEvento");
     }
 
     @FXML
     public void backTela() throws IOException{
-        if(!App.lastVisitedPages.empty())
+        if(App.lastVisitedPages.empty() == false)
             App.lastVisitedPages.pop();
-        if(!App.lastVisitedPages.empty())
+        if(App.lastVisitedPages.empty() == false)
             App.setRoot(App.lastVisitedPages.lastElement()); 
     }
 

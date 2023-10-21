@@ -44,7 +44,7 @@ public class CadastrarEventoController {
     DateFormat formatterHorario;
     Stage stage;
     @FXML
-    AnchorPane root;
+    VBox root;
     @FXML
     VBox Localizacoes, cargaHoraria;
     @FXML 
@@ -83,7 +83,7 @@ public class CadastrarEventoController {
 
     private void loadMenu() throws IOException{
         FXMLLoader carregarMenu = new FXMLLoader(App.class.getResource("view/componentes/menu.fxml"));
-        root.getChildren().add(1,carregarMenu.load());
+        root.getChildren().add(0,carregarMenu.load());
     }
 
     public void criarNovoEvento() throws IOException, ParseException{

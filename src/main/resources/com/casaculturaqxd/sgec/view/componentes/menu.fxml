@@ -10,7 +10,7 @@
 
 <MenuBar id="principal" fx:id="menu" prefHeight="40.0" prefWidth="429.0" style="-fx-background-color: #A22D2E;" stylesheets="@../../css/MenuStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.componentes.MenuController">
    <menus>
-      <Menu fx:id="home" mnemonicParsing="false">
+      <Menu fx:id="backTela" onShowing="#backTela" mnemonicParsing="false">
          <graphic>
             <ImageView fx:id="voltar" onMouseClicked="#backTela" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -20,8 +20,16 @@
                   <ColorAdjust brightness="1.0" />
                </effect>
             </ImageView>
-         </graphic></Menu>
-      <Menu fx:id="home" onAction="#goToHome" mnemonicParsing="false" style="-fx-text-fill: #FFFFFF;" text="Home" />
+         </graphic>
+         <items>
+            <MenuItem mnemonicParsing="false"/>
+         </items>
+      </Menu>
+      <Menu fx:id="home" onShowing="#goToHome" mnemonicParsing="false" style="-fx-text-fill: #FFFFFF;" text="Home">
+         <items>
+            <MenuItem mnemonicParsing="false"/>
+         </items>
+      </Menu>
       <Menu fx:id="cadastrar" mnemonicParsing="false" style="-fx-text-fill: #FFFFFF;" text="Cadastrar">
          <items>
             <MenuItem fx:id="cadastrarEvento" onAction="#goToCadastrarEvento" mnemonicParsing="false" text="Evento" />

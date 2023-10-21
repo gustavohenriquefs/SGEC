@@ -6,12 +6,12 @@ import com.casaculturaqxd.sgec.App;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 public class PesquisarEventoController {
     @FXML
-    private AnchorPane root;
+    private VBox root;
     @FXML
     private HBox header;
 
@@ -21,7 +21,7 @@ public class PesquisarEventoController {
 
     private void loadMenu() throws IOException{
         FXMLLoader carregarMenu = new FXMLLoader(App.class.getResource("view/componentes/menu.fxml"));
-        root.getChildren().add(1,carregarMenu.load());
+        root.getChildren().add(0,carregarMenu.load());
     }
 
 }

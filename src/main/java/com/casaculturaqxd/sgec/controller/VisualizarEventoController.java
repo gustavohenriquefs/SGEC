@@ -48,7 +48,9 @@ public class VisualizarEventoController {
     private EventoDAO eventoDAO = new EventoDAO();
     private LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO();
     @FXML
-    AnchorPane root,headerField, secaoArquivos;
+    VBox root;
+    @FXML
+    AnchorPane headerField, secaoArquivos;
     @FXML
     VBox frameLocais;
     @FXML 
@@ -95,7 +97,7 @@ public class VisualizarEventoController {
 
     private void loadMenu() throws IOException{
         FXMLLoader carregarMenu = new FXMLLoader(App.class.getResource("view/componentes/menu.fxml"));
-        root.getChildren().add(1,carregarMenu.load());
+        root.getChildren().add(0,carregarMenu.load());
     }
 
     private void loadContent() throws IOException{
