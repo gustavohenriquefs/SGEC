@@ -29,14 +29,14 @@
                   </VBox>
                   <HBox layoutY="60.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="60.0">
                      <children>
-                        <SplitPane dividerPositions="0.5" nodeOrientation="RIGHT_TO_LEFT" HBox.hgrow="ALWAYS">
+                        <SplitPane dividerPositions="1.5" nodeOrientation="RIGHT_TO_LEFT" HBox.hgrow="ALWAYS">
                            <items>
                               <ScrollPane id="divisao" hbarPolicy="ALWAYS" nodeOrientation="LEFT_TO_RIGHT" prefHeight="814.0" prefWidth="359.0" vbarPolicy="ALWAYS" />
                               <AnchorPane prefHeight="935.0" prefWidth="740.0">
                                  <children>
                                     <HBox alignment="CENTER" layoutX="270.0" layoutY="198.0" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <children>
-                                          <VBox alignment="TOP_CENTER" maxWidth="380.0" prefHeight="200.0" prefWidth="359.0" spacing="10.0" HBox.hgrow="ALWAYS">
+                                          <VBox alignment="TOP_CENTER" maxWidth="380.0" prefHeight="200.0" prefWidth="320.0" spacing="10.0" HBox.hgrow="ALWAYS">
                                              <children>
                                                 <HBox alignment="CENTER">
                                                    <children>
