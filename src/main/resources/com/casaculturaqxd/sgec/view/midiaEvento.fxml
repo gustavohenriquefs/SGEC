@@ -23,7 +23,7 @@
                            <children>
                               <VBox layoutX="202.0" layoutY="-65.0" prefHeight="60.0" prefWidth="760.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
-                                    <Label text="Pesquisar Arquivos" />
+                                    <Label text="Pesquisar Eventos" />
                                     <HBox prefHeight="57.0" prefWidth="760.0" spacing="20.0">
                                        <children>
                                           <TextField fx:id="nomeArquivo" maxWidth="534.0" prefHeight="26.0" prefWidth="534.0" promptText="Nome" HBox.hgrow="ALWAYS" />
@@ -38,15 +38,19 @@
                                        <items>
                                           <ScrollPane id="divisao" hbarPolicy="ALWAYS" nodeOrientation="LEFT_TO_RIGHT" prefHeight="814.0" prefWidth="359.0" vbarPolicy="ALWAYS">
                                              <content>
-                                                <HBox prefHeight="846.0" prefWidth="1167.0">
+                                                <HBox prefHeight="845.0" prefWidth="675.0">
                                                    <children>
-                                                      <FlowPane alignment="TOP_CENTER" columnHalignment="CENTER" hgap="450.0" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="50.0" prefWidth="1164.0" HBox.hgrow="ALWAYS">
+                                                      <FlowPane prefHeight="200.0" prefWidth="200.0" />
+                                                      <HBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="1160.0" spacing="400.0">
                                                          <children>
                                                             <Label text="Nome" />
                                                             <Label text="Adicionado em" />
-                                                            <Label text="Tamanho" />
+                                                            <Label text="Label" />
                                                          </children>
-                                                      </FlowPane>
+                                                         <HBox.margin>
+                                                            <Insets />
+                                                         </HBox.margin>
+                                                      </HBox>
                                                    </children>
                                                 </HBox>
                                              </content>
