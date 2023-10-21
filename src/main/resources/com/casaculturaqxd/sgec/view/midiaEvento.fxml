@@ -10,7 +10,6 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-
 <VBox fx:id="root" alignment="CENTER" styleClass="fundo" stylesheets="@../css/midiaEventoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <ScrollPane styleClass="fundo">
@@ -67,7 +66,7 @@
                                                          <children>
                                                             <HBox alignment="CENTER">
                                                                <children>
-                                                                  <Button fx:id="imegens" mnemonicParsing="false" prefHeight="26.0" prefWidth="321.0" styleClass="opcoes" text="Imagens">
+                                                                  <Button fx:id="imagens" mnemonicParsing="false" prefHeight="26.0" prefWidth="321.0" styleClass="opcoes" text="Imagens">
                                                                      <HBox.margin>
                                                                         <Insets top="20.0" />
                                                                      </HBox.margin>
