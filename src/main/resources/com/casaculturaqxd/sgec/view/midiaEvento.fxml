@@ -23,11 +23,11 @@
                            <children>
                               <VBox layoutX="202.0" layoutY="-65.0" prefHeight="60.0" prefWidth="760.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
-                                    <Label text="Pesquisar Eventos" />
+                                    <Label text="Pesquisar Arquivos" />
                                     <HBox prefHeight="57.0" prefWidth="760.0" spacing="20.0">
                                        <children>
                                           <TextField fx:id="nomeArquivo" maxWidth="534.0" prefHeight="26.0" prefWidth="534.0" promptText="Nome" HBox.hgrow="ALWAYS" />
-                                          <Button fx:id="bsucarArquivos" mnemonicParsing="false" styleClass="botoes" text="Buscar" />
+                                          <Button fx:id="buscarArquivos" mnemonicParsing="false" styleClass="botoes" text="Buscar" />
                                        </children>
                                     </HBox>
                                  </children>
@@ -38,7 +38,7 @@
                                        <items>
                                           <ScrollPane id="divisao" hbarPolicy="ALWAYS" nodeOrientation="LEFT_TO_RIGHT" prefHeight="814.0" prefWidth="359.0" vbarPolicy="ALWAYS">
                                              <content>
-                                                <HBox prefHeight="845.0" prefWidth="675.0">
+                                                <VBox>
                                                    <children>
                                                       <HBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="1160.0" spacing="400.0">
                                                          <children>
@@ -46,17 +46,10 @@
                                                             <Label text="Adicionado em" />
                                                             <Label text="Tamanho" />
                                                          </children>
-                                                         <HBox.margin>
-                                                            <Insets />
-                                                         </HBox.margin>
                                                       </HBox>
-                                                      <FlowPane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
-                                                         <HBox.margin>
-                                                            <Insets top="50.0" />
-                                                         </HBox.margin>
-                                                      </FlowPane>
+                                                      <FlowPane fx:id="filesContainer" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1160.0" />
                                                    </children>
-                                                </HBox>
+                                                </VBox>
                                              </content>
                                           </ScrollPane>
                                           <AnchorPane prefHeight="935.0" prefWidth="740.0">
@@ -81,7 +74,7 @@
                                                             </HBox>
                                                             <HBox alignment="CENTER">
                                                                <children>
-                                                                  <Button fx:id="audio" mnemonicParsing="false" prefHeight="26.0" prefWidth="322.0" styleClass="opcoes" text="Aúdio" HBox.hgrow="ALWAYS" />
+                                                                  <Button fx:id="audio" mnemonicParsing="false" prefHeight="26.0" prefWidth="322.0" styleClass="opcoes" text="Áudio" HBox.hgrow="ALWAYS" />
                                                                </children>
                                                             </HBox>
                                                             <HBox alignment="CENTER">
