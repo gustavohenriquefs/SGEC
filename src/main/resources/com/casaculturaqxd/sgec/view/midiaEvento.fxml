@@ -40,17 +40,21 @@
                                              <content>
                                                 <HBox prefHeight="845.0" prefWidth="675.0">
                                                    <children>
-                                                      <FlowPane prefHeight="200.0" prefWidth="200.0" />
                                                       <HBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="1160.0" spacing="400.0">
                                                          <children>
                                                             <Label text="Nome" />
                                                             <Label text="Adicionado em" />
-                                                            <Label text="Label" />
+                                                            <Label text="Tamanho" />
                                                          </children>
                                                          <HBox.margin>
                                                             <Insets />
                                                          </HBox.margin>
                                                       </HBox>
+                                                      <FlowPane prefHeight="200.0" prefWidth="200.0" HBox.hgrow="ALWAYS">
+                                                         <HBox.margin>
+                                                            <Insets top="50.0" />
+                                                         </HBox.margin>
+                                                      </FlowPane>
                                                    </children>
                                                 </HBox>
                                              </content>
