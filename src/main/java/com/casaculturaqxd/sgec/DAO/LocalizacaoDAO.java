@@ -13,6 +13,10 @@ import com.casaculturaqxd.sgec.models.Localizacao;
 public class LocalizacaoDAO {
   private Connection connection;
 
+  public Connection getConnection() {
+    return connection;
+  }
+  
   public void setConnection(Connection connection) {
     this.connection = connection;
   }
@@ -115,4 +119,21 @@ public class LocalizacaoDAO {
       return false;
     }
   }
+
+  boolean desvincularEvento(Integer idLocalizacao, Integer idEvento) {
+    String vincLocaisSql = "DELETE FROM localizacao_evento WHERE id_localizacao=? AND id_evento=?";
+
+    try {
+      PreparedStatement stmt = connection.prepareStatement(vincLocaisSql);
+      stmt.setInt(1, idLocalizacao);
+      stmt.setInt(2, idEvento);
+      stmt.execute();
+      stmt.close();
+    } catch (SQLException e) {
+      return false;
+    }
+
+    return true;
+  }
+
 }
