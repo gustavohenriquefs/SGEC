@@ -39,21 +39,16 @@
                                              <content>
                                                 <HBox prefHeight="845.0" prefWidth="675.0">
                                                    <children>
-                                                      <VBox alignment="TOP_CENTER" prefHeight="846.0" prefWidth="230.0">
+                                                      <HBox maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="1160.0" spacing="400.0">
                                                          <children>
                                                             <Label text="Nome" />
-                                                         </children>
-                                                      </VBox>
-                                                      <VBox alignment="TOP_CENTER" prefHeight="846.0" prefWidth="241.0">
-                                                         <children>
                                                             <Label text="Adicionado em" />
-                                                         </children>
-                                                      </VBox>
-                                                      <VBox alignment="TOP_CENTER" prefHeight="846.0" prefWidth="204.0">
-                                                         <children>
                                                             <Label text="Tamanho" />
                                                          </children>
-                                                      </VBox>
+                                                         <HBox.margin>
+                                                            <Insets />
+                                                         </HBox.margin>
+                                                      </HBox>
                                                    </children>
                                                 </HBox>
                                              </content>
