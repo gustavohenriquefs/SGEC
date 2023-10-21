@@ -12,75 +12,75 @@
 
 <AnchorPane centerShape="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="800.0" stylesheets="@../css/midiaEventoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <HBox alignment="CENTER" layoutX="20.0" layoutY="50.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="50.0">
+      <HBox id="principal" alignment="TOP_CENTER" layoutX="20.0" layoutY="50.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="50.0">
          <children>
-            <VBox id="principal" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+            <AnchorPane prefHeight="930.0" prefWidth="760.0" HBox.hgrow="ALWAYS">
                <children>
-                  <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="930.0" prefWidth="760.0">
+                  <VBox layoutX="202.0" layoutY="-65.0" prefHeight="60.0" prefWidth="760.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <VBox alignment="CENTER" layoutX="110.0" layoutY="14.0" prefHeight="61.0" prefWidth="760.0" spacing="10.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="20.0">
+                        <Label text="Pesquisar Eventos" />
+                        <HBox prefHeight="57.0" prefWidth="760.0" spacing="20.0">
                            <children>
-                              <Label text="Pesquisar arquivos" />
-                              <HBox prefHeight="182.0" prefWidth="760.0" spacing="20.0" VBox.vgrow="ALWAYS">
-                                 <children>
-                                    <TextField fx:id="nomeArquivo" maxWidth="534.0" prefHeight="26.0" prefWidth="534.0" HBox.hgrow="ALWAYS" />
-                                    <Button fx:id="bsucarArquivos" mnemonicParsing="false" styleClass="botoes" text="Buscar" />
-                                 </children>
-                              </HBox>
-                              <SplitPane dividerPositions="0.5" prefWidth="1000.0" VBox.vgrow="ALWAYS" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0">
-                                 <items>
-                                    <AnchorPane prefHeight="935.0" prefWidth="740.0">
-                                       <children>
-                                          <HBox layoutX="270.0" layoutY="198.0" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                             <children>
-                                                <VBox alignment="TOP_CENTER" maxWidth="380.0" prefHeight="200.0" prefWidth="359.0" spacing="10.0" HBox.hgrow="ALWAYS">
-                                                   <children>
-                                                      <HBox alignment="CENTER">
-                                                         <children>
-                                                            <Button fx:id="imegens" mnemonicParsing="false" prefHeight="26.0" prefWidth="321.0" styleClass="opcoes" text="Imagens">
-                                                               <HBox.margin>
-                                                                  <Insets top="20.0" />
-                                                               </HBox.margin>
-                                                            </Button>
-                                                         </children>
-                                                      </HBox>
-                                                      <HBox alignment="CENTER">
-                                                         <children>
-                                                            <Button fx:id="videos" mnemonicParsing="false" prefHeight="26.0" prefWidth="322.0" styleClass="opcoes" text="Vídeos" />
-                                                         </children>
-                                                      </HBox>
-                                                      <HBox alignment="CENTER">
-                                                         <children>
-                                                            <Button fx:id="audio" mnemonicParsing="false" prefHeight="26.0" prefWidth="322.0" styleClass="opcoes" text="Aúdio" HBox.hgrow="ALWAYS" />
-                                                         </children>
-                                                      </HBox>
-                                                      <HBox alignment="CENTER">
-                                                         <children>
-                                                            <Button fx:id="documentos" mnemonicParsing="false" prefHeight="26.0" prefWidth="322.0" styleClass="opcoes" text="Documentos" HBox.hgrow="ALWAYS" />
-                                                         </children>
-                                                      </HBox>
-                                                      <Button fx:id="adicionarArquivos" mnemonicParsing="false" styleClass="botoes" text="Adicionar Arquivos +" />
-                                                   </children>
-                                                </VBox>
-                                             </children>
-                                          </HBox>
-                                       </children>
-                                    </AnchorPane>
-                                    <ScrollPane id="divisao" hbarPolicy="ALWAYS" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="814.0" prefWidth="359.0" vbarPolicy="ALWAYS" />
-                                 </items>
-                                 <VBox.margin>
-                                    <Insets />
-                                 </VBox.margin>
-                              </SplitPane>
+                              <TextField fx:id="nomeArquivo" maxWidth="534.0" prefHeight="26.0" prefWidth="534.0" promptText="Nome" HBox.hgrow="ALWAYS" />
+                              <Button fx:id="bsucarArquivos" mnemonicParsing="false" styleClass="botoes" text="Buscar" />
                            </children>
-                        </VBox>
+                        </HBox>
                      </children>
-                  </AnchorPane>
+                  </VBox>
+                  <HBox layoutY="60.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="60.0">
+                     <children>
+                        <SplitPane dividerPositions="0.5" nodeOrientation="RIGHT_TO_LEFT" HBox.hgrow="ALWAYS">
+                           <items>
+                              <ScrollPane id="divisao" hbarPolicy="ALWAYS" nodeOrientation="LEFT_TO_RIGHT" prefHeight="814.0" prefWidth="359.0" vbarPolicy="ALWAYS" />
+                              <AnchorPane prefHeight="935.0" prefWidth="740.0">
+                                 <children>
+                                    <HBox alignment="CENTER" layoutX="270.0" layoutY="198.0" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <children>
+                                          <VBox alignment="TOP_CENTER" maxWidth="380.0" prefHeight="200.0" prefWidth="359.0" spacing="10.0" HBox.hgrow="ALWAYS">
+                                             <children>
+                                                <HBox alignment="CENTER">
+                                                   <children>
+                                                      <Button fx:id="imegens" mnemonicParsing="false" prefHeight="26.0" prefWidth="321.0" styleClass="opcoes" text="Imagens">
+                                                         <HBox.margin>
+                                                            <Insets top="20.0" />
+                                                         </HBox.margin>
+                                                      </Button>
+                                                   </children>
+                                                </HBox>
+                                                <HBox alignment="CENTER">
+                                                   <children>
+                                                      <Button fx:id="videos" mnemonicParsing="false" prefHeight="26.0" prefWidth="322.0" styleClass="opcoes" text="Vídeos" />
+                                                   </children>
+                                                </HBox>
+                                                <HBox alignment="CENTER">
+                                                   <children>
+                                                      <Button fx:id="audio" mnemonicParsing="false" prefHeight="26.0" prefWidth="322.0" styleClass="opcoes" text="Aúdio" HBox.hgrow="ALWAYS" />
+                                                   </children>
+                                                </HBox>
+                                                <HBox alignment="CENTER">
+                                                   <children>
+                                                      <Button fx:id="documentos" mnemonicParsing="false" prefHeight="26.0" prefWidth="322.0" styleClass="opcoes" text="Documentos" HBox.hgrow="ALWAYS" />
+                                                   </children>
+                                                </HBox>
+                                                <Button fx:id="adicionarArquivos" mnemonicParsing="false" styleClass="botoes" text="Adicionar Arquivos +" />
+                                             </children>
+                                          </VBox>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </AnchorPane>
+                           </items>
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </SplitPane>
+                     </children>
+                  </HBox>
                </children>
                <HBox.margin>
                   <Insets />
                </HBox.margin>
-            </VBox>
+            </AnchorPane>
          </children>
       </HBox>
    </children>
