@@ -25,10 +25,10 @@
             <MenuItem mnemonicParsing="false"/>
          </items>
       </Menu>
-      <Menu fx:id="home" onShowing="#goToHome" mnemonicParsing="false" style="-fx-text-fill: #FFFFFF;" text="Home">
-         <items>
-            <MenuItem mnemonicParsing="false"/>
-         </items>
+      <Menu fx:id="home" mnemonicParsing="false" style="-fx-text-fill: #FFFFFF;">
+         <graphic>
+            <Label onMouseClicked="#goToHome" text="Home" textFill="WHITE" />
+         </graphic>
       </Menu>
       <Menu fx:id="cadastrar" mnemonicParsing="false" style="-fx-text-fill: #FFFFFF;" text="Cadastrar">
          <items>
