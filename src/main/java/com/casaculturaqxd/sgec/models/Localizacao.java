@@ -10,6 +10,18 @@ public class Localizacao {
     private String estado;
     private String pais;
 
+    public Localizacao(String rua, String cidade, String estado, String pais) {
+        this.rua = rua;
+        this.cidade = cidade;
+        this.estado = estado;
+        this.pais = pais;
+    }
+
+
+    public Localizacao() {
+    }
+
+
     public String getRua() {
         return rua;
     }
