@@ -48,10 +48,16 @@ public class App extends Application {
     }
 
     public static void setRoot(Parent objVisualizacao) throws IOException {
-        if(lastVisitedPages.empty() == true)
+        String lastPageId = lastVisitedPages.lastElement().getId();
+        if(lastVisitedPages.empty() == true &&
+          objVisualizacao.getId() != loadFXML("view/login").getId()){
+
             lastVisitedPages.add(objVisualizacao);
-        else if(lastVisitedPages.lastElement() != objVisualizacao)
+        }   
+        else if(lastPageId != objVisualizacao.getId() &&
+          objVisualizacao.getId() != loadFXML("view/login").getId()){
             lastVisitedPages.add(objVisualizacao);
+          }   
         scene.setRoot(objVisualizacao);
     }
 
