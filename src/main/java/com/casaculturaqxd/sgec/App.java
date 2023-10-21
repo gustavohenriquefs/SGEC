@@ -23,7 +23,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("view/home"), 640, 480);
+        scene = new Scene(loadFXML("view/login"), 640, 480);
         Image image = new Image(App.class.getResourceAsStream("imagens/logo_cego_aderaldo.png"));
         stage.getIcons().add(image);
         stage.setTitle("SGEC");
@@ -41,6 +41,10 @@ public class App extends Application {
 
     public static User getUsuario() {
         return usuarioLogado;
+    }
+
+    public static Stack<Parent> getLastVisitedPages() {
+        return lastVisitedPages;
     }
 
     public static void setRoot(Parent objVisualizacao) throws IOException {
