@@ -22,7 +22,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="root" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.CadastrarEventoController">
+<VBox fx:id="root" id="pageCadastrarEvento" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.CadastrarEventoController">
    <children>
       <ScrollPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="1122.0" prefWidth="1442.0" >
          <content>

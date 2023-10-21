@@ -14,7 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="root" stylesheets="@../css/cadastrarGrupoEventoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="root" id="pageCadastrarGrupoEvento" stylesheets="@../css/cadastrarGrupoEventoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <ScrollPane id="container" fx:id="container" hbarPolicy="ALWAYS" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1560.0" prefWidth="1560.0" vbarPolicy="ALWAYS">
    <content>
       <AnchorPane id="principal" fx:id="principal" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="1560.0" prefWidth="1560.0">
