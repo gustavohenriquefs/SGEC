@@ -11,11 +11,11 @@
 <?import javafx.scene.layout.VBox?>
 
 
-<VBox id="raiz" fx:id="root" styleClass="root" stylesheets="@../css/midiaEventoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="root" alignment="CENTER" styleClass="fundo" stylesheets="@../css/midiaEventoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <ScrollPane styleClass="root">
+      <ScrollPane styleClass="fundo">
          <content>
-            <AnchorPane centerShape="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="800.0">
+            <AnchorPane id="raiz" centerShape="false" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1560.0">
                <children>
                   <HBox id="principal" alignment="TOP_CENTER" layoutX="20.0" layoutY="50.0" styleClass="root" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="50.0">
                      <children>
@@ -34,7 +34,7 @@
                               </VBox>
                               <HBox layoutY="60.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="60.0">
                                  <children>
-                                    <SplitPane dividerPositions="0.6" nodeOrientation="RIGHT_TO_LEFT" HBox.hgrow="ALWAYS">
+                                    <SplitPane dividerPositions="0.8" nodeOrientation="RIGHT_TO_LEFT" HBox.hgrow="ALWAYS">
                                        <items>
                                           <ScrollPane id="divisao" hbarPolicy="ALWAYS" nodeOrientation="LEFT_TO_RIGHT" prefHeight="814.0" prefWidth="359.0" vbarPolicy="ALWAYS">
                                              <content>
