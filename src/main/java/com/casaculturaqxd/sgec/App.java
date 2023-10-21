@@ -52,10 +52,17 @@ public class App extends Application {
     }
 
     public static void setRoot(String fxml) throws IOException {
-        if(lastVisitedPages.empty() == true)
+        String lastPageId = lastVisitedPages.lastElement().getId();
+        if(lastVisitedPages.empty() == true && 
+           loadFXML(fxml).getId() != loadFXML("view/login").getId()){
+
             lastVisitedPages.add(loadFXML(fxml));
-        if(lastVisitedPages.lastElement() != loadFXML(fxml))
+        }
+        if(lastPageId != loadFXML(fxml).getId() && 
+           lastPageId != loadFXML("view/login").getId()){
+
             lastVisitedPages.add(loadFXML(fxml));
+        }
         System.out.println(lastVisitedPages);
         scene.setRoot(loadFXML(fxml));
     }
