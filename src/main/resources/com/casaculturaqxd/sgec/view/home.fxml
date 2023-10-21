@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox id="container" fx:id="root" prefHeight="576.0" prefWidth="780.0" stylesheets="@../css/HomeStyle.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.HomeController">
+<VBox id="pageHome" fx:id="root" prefHeight="576.0" prefWidth="780.0" stylesheets="@../css/HomeStyle.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.HomeController">
    <children>
       <HBox fx:id="menuContainer">
          <VBox.margin>
