@@ -1,0 +1,26 @@
+@import url(../css/colors/colorStyle.css);
+
+
+#raiz {
+    -fx-background-color: -bege;
+}
+.fundo {
+    -fx-background-color: -bege;
+}
+.root {
+    -fx-background-color: -bege;
+}
+#principal {
+    -fx-background-color: -branco;
+}
+.opcoes {
+    -fx-background-color: -branco;
+    -fx-text-fill: -preto;
+}
+.opcoes:hover {
+    -fx-text-fill: -laranja;
+}
+.botoes {
+    -fx-background-color: -verde;
+    -fx-text-fill: -branco;
+}
