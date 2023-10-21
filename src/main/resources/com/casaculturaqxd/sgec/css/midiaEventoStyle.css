@@ -8,6 +8,7 @@
 }
 .opcoes {
     -fx-background-color: -branco;
+    -fx-text-fill: -preto;
 }
 .opcoes:hover {
     -fx-text-fill: -laranja;
