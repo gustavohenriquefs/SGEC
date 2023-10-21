@@ -23,7 +23,7 @@
                            <children>
                               <VBox layoutX="202.0" layoutY="-65.0" prefHeight="60.0" prefWidth="760.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
-                                    <Label text="Pesquisar Eventos" />
+                                    <Label text="Pesquisar Arquivos" />
                                     <HBox prefHeight="57.0" prefWidth="760.0" spacing="20.0">
                                        <children>
                                           <TextField fx:id="nomeArquivo" maxWidth="534.0" prefHeight="26.0" prefWidth="534.0" promptText="Nome" HBox.hgrow="ALWAYS" />
