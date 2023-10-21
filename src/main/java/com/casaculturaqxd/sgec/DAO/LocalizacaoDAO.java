@@ -57,7 +57,8 @@ public class LocalizacaoDAO {
       stmt.setString(5, obj.getCidade());
       stmt.setString(6, obj.getEstado());
       stmt.setString(7, obj.getPais());
-      stmt.execute();
+      stmt.executeUpdate();
+      
       ResultSet rs = stmt.getGeneratedKeys();
       if (rs.next()) {
         obj.setIdLocalizacao(rs.getInt("id_localizacao"));
