@@ -39,10 +39,10 @@ public class MenuController {
 
     @FXML
     public void backTela() throws IOException{
-        if(App.lastVisitedPages.empty() == false)
-            App.lastVisitedPages.pop();
-        if(App.lastVisitedPages.empty() == false)
-            App.setRoot(App.lastVisitedPages.lastElement()); 
+        if(App.lastVisitedPages.empty() == false
+           && !App.lastVisitedPages.lastElement().getId().equals(App.getRoot().getId()))
+
+            App.setRoot(App.lastVisitedPages.pop()); 
     }
 
     @FXML
