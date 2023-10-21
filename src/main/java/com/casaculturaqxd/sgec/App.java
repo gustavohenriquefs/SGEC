@@ -44,12 +44,18 @@ public class App extends Application {
     }
 
     public static void setRoot(Parent objVisualizacao) throws IOException {
-        lastVisitedPages.add(objVisualizacao);
+        if(lastVisitedPages.empty() == true)
+            lastVisitedPages.add(objVisualizacao);
+        else if(lastVisitedPages.lastElement() != objVisualizacao)
+            lastVisitedPages.add(objVisualizacao);
         scene.setRoot(objVisualizacao);
     }
 
     public static void setRoot(String fxml) throws IOException {
-        lastVisitedPages.add(loadFXML(fxml));
+        if(lastVisitedPages.empty() == true)
+            lastVisitedPages.add(loadFXML(fxml));
+        if(lastVisitedPages.lastElement() != loadFXML(fxml))
+            lastVisitedPages.add(loadFXML(fxml));
         System.out.println(lastVisitedPages);
         scene.setRoot(loadFXML(fxml));
     }

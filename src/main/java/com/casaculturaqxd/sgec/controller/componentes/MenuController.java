@@ -21,7 +21,7 @@ public class MenuController {
 
     @FXML
     public void goToCadastrarEvento() throws IOException{
-       // if(App.getUsuario().isEditor())
+        if(App.getUsuario().isEditor())
             App.setRoot("view/cadastrarEvento");
     }
 
@@ -32,8 +32,9 @@ public class MenuController {
 
     @FXML
     public void goToCadastrarGrupoEventos() throws IOException{
+        //desabilitado por enquanto
         //if(App.getUsuario().isEditor())
-            App.setRoot("view/cadastrarGrupoEvento");
+            //App.setRoot("view/cadastrarGrupoEvento");
     }
 
     @FXML
