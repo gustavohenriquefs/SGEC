@@ -2,6 +2,7 @@ package com.casaculturaqxd.sgec.DAO;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -52,8 +53,8 @@ public class LocalizacaoDAOTest {
 
     @Test
     public void testInserirValidLocalizacao() {
-        local = new Localizacao("rua_teste","cidade_teste","estado_teste","pais_teste");
-        
+        local = new Localizacao("new_rua_teste","new_cidade_teste","new_estado_teste","new_pais_teste");
+
         assertAll(
             ()-> assertTrue(localizacaoDAO.inserirLocalizacao(local)),
             ()-> assertNotEquals(0,local.getIdLocalizacao())
@@ -62,37 +63,39 @@ public class LocalizacaoDAOTest {
 
     @Test
     public void testInserirLocalizacaoSemRua() {
-
+        local = new Localizacao(null,"new_cidade_teste", "new_estado_teste","new_pais_teste");
         assertAll(
-            ()-> assertTrue(localizacaoDAO.inserirLocalizacao(local)),
-            ()-> assertNotEquals(0,local.getIdLocalizacao())
+            ()-> assertFalse(localizacaoDAO.inserirLocalizacao(local)),
+            ()-> assertEquals(0,local.getIdLocalizacao())
         );
     }
 
     @Test
     public void testInserirLocalizacaoSemCidade() {
-
+        local = new Localizacao("new_rua_teste",null, "new_estado_teste","new_pais_teste");
         assertAll(
-            ()-> assertTrue(localizacaoDAO.inserirLocalizacao(local)),
-            ()-> assertNotEquals(0,local.getIdLocalizacao())
+            ()-> assertFalse(localizacaoDAO.inserirLocalizacao(local)),
+            ()-> assertEquals(0,local.getIdLocalizacao())
         );
     }
 
     @Test
     public void testInserirLocalizacaoSemEstado() {
+        local = new Localizacao("new_rua_teste","new_cidade_teste", null,"new_pais_teste");
 
         assertAll(
-            ()-> assertTrue(localizacaoDAO.inserirLocalizacao(local)),
-            ()-> assertNotEquals(0,local.getIdLocalizacao())
+            ()-> assertFalse(localizacaoDAO.inserirLocalizacao(local)),
+            ()-> assertEquals(0,local.getIdLocalizacao())
         );
     }
 
     @Test
     public void testInserirLocalizacaoSemPais() {
-
+        local = new Localizacao("new_rua_teste","new_cidade_este", "new_estado_teste",null);
+        
         assertAll(
-            ()-> assertTrue(localizacaoDAO.inserirLocalizacao(local)),
-            ()-> assertNotEquals(0,local.getIdLocalizacao())
+            ()-> assertFalse(localizacaoDAO.inserirLocalizacao(local)),
+            ()-> assertEquals(0,local.getIdLocalizacao())
         );
     }
 
