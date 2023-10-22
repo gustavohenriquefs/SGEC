@@ -76,20 +76,24 @@ public class LocalizacaoDAO {
   }
 
   boolean updateLocalizacao(Localizacao obj){
-    String sql = "UPDATE localizacao SET rua=?,numero_rua=?,bairro=?,cep=?,cidade=?,estado=?,pais=? WHERE id_localizacao=?";
+    String sql = "UPDATE localizacao SET nome_localizacao=?,rua=?,numero_rua=?,bairro=?,cep=?,cidade=?,estado=?,pais=? WHERE id_localizacao=?";
     try {
       PreparedStatement stmt = connection.prepareStatement(sql);
-      stmt.setString(1, obj.getRua());
-      stmt.setInt(2, obj.getNumeroRua());
-      stmt.setString(3, obj.getBairro());
-      stmt.setString(4, obj.getCep());
-      stmt.setString(5, obj.getCidade());
-      stmt.setString(6, obj.getEstado());
-      stmt.setString(7, obj.getPais());
-      stmt.setInt(8, obj.getIdLocalizacao());
-      stmt.execute();
+      stmt.setString(1, obj.getNome());
+      stmt.setString(2, obj.getRua());
+      stmt.setInt(3, obj.getNumeroRua());
+      stmt.setString(4, obj.getBairro());
+      stmt.setString(5, obj.getCep());
+      stmt.setString(6, obj.getCidade());
+      stmt.setString(7, obj.getEstado());
+      stmt.setString(8, obj.getPais());
+      stmt.setInt(9, obj.getIdLocalizacao());
+
+      int numModificacoes = stmt.executeUpdate();
       stmt.close();
-      return true;
+
+      return numModificacoes>0;
+
     } catch (Exception e) {
       return false;
     }
@@ -100,9 +104,12 @@ public class LocalizacaoDAO {
     try {
       PreparedStatement stmt = connection.prepareStatement(sql);
       stmt.setInt(1, obj.getIdLocalizacao());
-      stmt.execute();
+      
+      int numRemocoes = stmt.executeUpdate();
       stmt.close();
-      return true;
+
+      return numRemocoes>0;
+
     } catch (Exception e) {
       return false;
     }
