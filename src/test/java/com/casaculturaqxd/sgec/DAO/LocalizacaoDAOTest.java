@@ -20,7 +20,7 @@ public class LocalizacaoDAOTest {
     private static DatabasePostgres db = DatabasePostgres.getInstance("URL_TEST","USER_NAME_TEST","PASSWORD_TEST");
     private static LocalizacaoDAO localizacaoDAO;
     private static Localizacao local;
-    private static int validIdLocal = 1,validIdEvento = 1, invalidIdLocal= -1,invalidIdEvento = -1;
+    private static int validIdLocal = 1,updatableIdLocal = 2,validIdEvento = 1, invalidIdLocal= -1,invalidIdEvento = -1;
 
     @BeforeAll
     public static void setUpClass(){
@@ -217,21 +217,55 @@ public class LocalizacaoDAOTest {
 
     @Test
     public void testUpdateValidLocalizacao() {
+        local = new Localizacao();
+        local.setIdLocalizacao(updatableIdLocal);
+        String updateString = "update_value",updateCep = "00000-000";
+        local.setNome(updateString);
+        local.setRua(updateString);
+        local.setNumeroRua(updatableIdLocal);
+        local.setBairro(updateString);
+        local.setCidade(updateString);
+        local.setCep(updateCep);
+        local.setEstado(updateString);
+        local.setPais(updateString);
 
+        assertTrue(localizacaoDAO.updateLocalizacao(local));
+        
+        Localizacao result = localizacaoDAO.getLocalizacao(local);
+        assertAll(
+            ()-> assertEquals(updateString,result.getNome()),
+            ()-> assertEquals(updateString,result.getRua()),
+            ()-> assertEquals(updatableIdLocal,result.getNumeroRua()),
+            ()-> assertEquals(updateString,result.getBairro()),
+            ()-> assertEquals(updateString,result.getCidade()),
+            ()-> assertEquals(updateCep,result.getCep()),
+            ()-> assertEquals(updateString,result.getEstado()),
+            ()-> assertEquals(updateString,result.getPais())
+        );
     }
     
     @Test
     public void testUpdateInvalidLocalizacao() {
-        
+        local = new Localizacao();
+        local.setIdLocalizacao(invalidIdLocal);
+
+        assertFalse(localizacaoDAO.updateLocalizacao(local));
     }
 
     @Test
     public void testDeletarValidLocalizacao(){
-
+        local = new Localizacao("remotion_teste_local","remotion_teste_rua","remotion_teste_cidade",
+                        "remotion_teste_estado","remotion_teste_pais");
+        localizacaoDAO.inserirLocalizacao(local);
+        
+        assertTrue(localizacaoDAO.deletarLocalizacao(local));
     }
 
     @Test
     public void testDeletarInvalidLocalizacao() {
-
+        local = new Localizacao();
+        local.setIdLocalizacao(invalidIdLocal);  
+              
+        assertFalse(localizacaoDAO.deletarLocalizacao(local));
     }
 }
