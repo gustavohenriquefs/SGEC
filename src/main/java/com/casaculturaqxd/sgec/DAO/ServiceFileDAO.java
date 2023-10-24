@@ -17,4 +17,8 @@ public class ServiceFileDAO {
     this.service = service;
     serviceType = ServiceType.S3;
   }
+
+  public void setConnection(Connection connection){
+    this.connection = connection;
+  }
 }
