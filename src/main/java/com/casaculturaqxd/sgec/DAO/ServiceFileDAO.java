@@ -27,7 +27,7 @@ public class ServiceFileDAO {
     this.connection = connection;
   }
 
-   public boolean inserirArquivo(ServiceFile arquivo){
+  public boolean inserirArquivo(ServiceFile arquivo){
     try {
       service.enviarArquivo(bucket, arquivo.getFileKey(), arquivo.getContent());
       //1° passo - criar comando sql
@@ -50,9 +50,9 @@ public class ServiceFileDAO {
     } catch (Exception e) {
       return false;
     }
-   }
+  }
 
-   public ServiceFile getArquivo(ServiceFile arquivo){
+  public ServiceFile getArquivo(ServiceFile arquivo){
     try {
       service.getArquivo(arquivo.getBucket(), arquivo.getFileKey());
       String sql = "select * from service_file where id_service_file=?";
@@ -72,5 +72,19 @@ public class ServiceFileDAO {
     } catch (Exception e) {
       return null;
     }
-   }
+  }
+
+  public boolean deleteArquivo(ServiceFile arquivo){
+    try {
+      service.deletarArquivo(arquivo.getBucket(), arquivo.getFileKey());
+      String sql = "delete from service_file where id_service_file=?";
+      PreparedStatement stmt = connection.prepareStatement(sql);
+      stmt.setInt(1, arquivo.getServiceFileId());
+      stmt.execute();
+      stmt.close();
+      return true;
+    } catch (Exception e) {
+      return false;
+    }
+  }
 }
