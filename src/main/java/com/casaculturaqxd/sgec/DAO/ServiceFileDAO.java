@@ -3,6 +3,7 @@ package com.casaculturaqxd.sgec.DAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 import com.casaculturaqxd.sgec.enums.ServiceType;
@@ -84,6 +85,20 @@ public class ServiceFileDAO {
       stmt.close();
       return true;
     } catch (Exception e) {
+      return false;
+    }
+  }
+
+  private boolean vincularArquivos(ServiceFile arquivo, Evento evento){
+    String sql = "INSERT INTO service_file_evento(id_evento, id_service_file) VALUES (?, ?);";
+    try {
+      PreparedStatement stmt = connection.prepareStatement(sql);
+      stmt.setInt(1, evento.getIdEvento());
+      stmt.setInt(2, arquivo.getServiceFileId());
+      stmt.execute();
+      stmt.close();
+      return true;
+    } catch (SQLException e) {
       return false;
     }
   }
