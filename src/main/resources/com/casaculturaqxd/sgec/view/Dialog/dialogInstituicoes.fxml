@@ -14,11 +14,11 @@
 <?import javafx.scene.layout.VBox?>
 
 
-<DialogPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="630.0" stylesheets="@../../css/dialogInstituicoesStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<DialogPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="630.0" stylesheets="@../../css/dialogInstituicoesStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <content>
-      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="630.0">
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="630.0">
          <children>
-            <BorderPane layoutX="172.0" layoutY="70.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="60.0">
+            <BorderPane layoutX="172.0" layoutY="70.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="20.0">
                <center>
                   <ImageView fx:id="imagem" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
                </center>
@@ -26,7 +26,7 @@
                   <Button fx:id="adicionarImagem" mnemonicParsing="false" styleClass="adicionar" text="Adicionar Imagem +" BorderPane.alignment="CENTER" />
                </bottom>
             </BorderPane>
-            <VBox layoutX="250.0" layoutY="270.0" prefHeight="213.0" prefWidth="620.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="0.0">
+            <VBox layoutX="20.0" layoutY="248.0" prefHeight="213.0" prefWidth="620.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="0.0">
                <children>
                   <Label fx:id="labelNomeInstituicao" text="Nome da instituição" />
                   <TextField fx:id="nomeInstituicao" maxWidth="-Infinity" minHeight="-Infinity" prefWidth="250.0" />
@@ -36,7 +36,7 @@
                   <TextField fx:id="valorInstituicao" maxWidth="-Infinity" minHeight="-Infinity" prefWidth="250.0" />
                </children>
             </VBox>
-            <HBox layoutY="511.0" prefHeight="58.0" prefWidth="625.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <HBox layoutX="20.0" layoutY="478.0" prefHeight="25.0" prefWidth="590.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="0.0">
                <children>
                   <RadioButton fx:id="colaborador" mnemonicParsing="false" text="Colaborador">
                      <HBox.margin>
@@ -46,7 +46,7 @@
                   <RadioButton fx:id="organizador" mnemonicParsing="false" text="Organizador" />
                </children>
             </HBox>
-            <HBox alignment="CENTER" layoutX="90.0" layoutY="556.0" prefHeight="113.0" prefWidth="625.0" spacing="30.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <HBox alignment="CENTER" layoutX="35.0" layoutY="537.0" prefHeight="113.0" prefWidth="625.0" spacing="30.0" AnchorPane.bottomAnchor="-0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="0.0">
                <children>
                   <Button id="cancelar" fx:id="cancelar" mnemonicParsing="false" text="Cancelar" />
                   <Button fx:id="cadastrarInstituicao" mnemonicParsing="false" styleClass="adicionar" text="Cadastrar nova instituição" />
