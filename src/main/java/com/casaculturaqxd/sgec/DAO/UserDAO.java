@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import com.casaculturaqxd.sgec.models.User;
 
 public class UserDAO {
-  private Connection connection; 
+  private Connection connection;
 
   public Connection getConnection() {
     return connection;
@@ -17,19 +17,19 @@ public class UserDAO {
     this.connection = connection;
   }
 
-  public boolean inserir(User obj){
+  public boolean inserir(User obj) {
     try {
-      //1° passo - criar comando sql
-      String sql = "insert into usuario (id_usuario,nome_usuario,email,senha,editor)"
-              + " values(?,?,?,?,?)";
-      //2° passo - conectar o banco de dados e organizar o comando sql
+      // 1° passo - criar comando sql
+      String sql =
+          "insert into usuario (id_usuario,nome_usuario,email,senha,editor)" + " values(?,?,?,?,?)";
+      // 2° passo - conectar o banco de dados e organizar o comando sql
       PreparedStatement stmt = connection.prepareStatement(sql);
       stmt.setInt(1, obj.getIdUsuario());
       stmt.setString(2, obj.getNomeUsuario());
       stmt.setString(3, obj.getEmail());
       stmt.setString(4, obj.getSenha());
       stmt.setBoolean(5, obj.isEditor());
-      //3° passo - executar o comando sql
+      // 3° passo - executar o comando sql
       stmt.execute();
       stmt.close();
       return true;
@@ -38,12 +38,11 @@ public class UserDAO {
     }
   }
 
-  public User getUsuario(User obj){
+  public User getUsuario(User obj) {
     String sql = "SELECT * FROM usuario WHERE id_usuario=?";
     try {
       PreparedStatement stmt = connection.prepareStatement(sql);
       stmt.setInt(1, obj.getIdUsuario());
-      System.out.println(stmt);
       ResultSet resultado = stmt.executeQuery();
       if (resultado.next()) {
         obj.setIdUsuario(resultado.getInt("id_usuario"));
@@ -60,7 +59,7 @@ public class UserDAO {
     }
   }
 
-  public boolean validar(User obj){
+  public boolean validar(User obj) {
     String sql = "SELECT * FROM usuario WHERE email=? and senha=?";
     try {
       PreparedStatement stmt = connection.prepareStatement(sql);
@@ -73,15 +72,17 @@ public class UserDAO {
         obj.setEmail(resultado.getString("email"));
         obj.setSenha(resultado.getString("senha"));
         obj.setEditor(resultado.getBoolean("editor"));
+
+        this.connection.setReadOnly(!obj.isEditor());
         return true;
-      } 
+      }
       return false;
     } catch (Exception e) {
       return false;
     }
   }
 
-  public boolean update(User obj){
+  public boolean update(User obj) {
     String sql = "UPDATE usuario SET nome_usuario=?, email=?, senha=?, editor=? WHERE id_usuario=?";
     try {
       PreparedStatement stmt = connection.prepareStatement(sql);
@@ -97,7 +98,7 @@ public class UserDAO {
     }
   }
 
-  public boolean deletar(User obj){
+  public boolean deletar(User obj) {
     String sql = "DELETE FROM usuario WHERE id_usuario=?";
     try {
       PreparedStatement stmt = connection.prepareStatement(sql);
