@@ -11,18 +11,17 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-
 <AnchorPane id="principal" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="170.0" prefWidth="230.0" styleClass="root" stylesheets="@../../css/cardArquivoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <HBox alignment="TOP_RIGHT" prefHeight="32.0" prefWidth="230.0">
                <children>
-                  <MenuBar id="menu">
+                  <MenuBar id="menu" fx:id="menuOpcoes">
                      <menus>
                         <Menu mnemonicParsing="false">
                            <items>
-                              <MenuItem fx:id="Download" mnemonicParsing="false" text="Download" />
+                              <MenuItem fx:id="download" mnemonicParsing="false" text="Download" />
                               <MenuItem fx:id="delete" mnemonicParsing="false" text="Delete" />
                            </items>
                            <graphic>
@@ -39,7 +38,7 @@
             </HBox>
             <HBox fx:id="imagem" alignment="CENTER">
                <children>
-                  <ImageView fitHeight="97.0" fitWidth="231.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="imagem" fitHeight="97.0" fitWidth="231.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../imagens/default_image.png" />
                      </image>
