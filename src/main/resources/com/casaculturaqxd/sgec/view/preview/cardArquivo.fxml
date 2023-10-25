@@ -60,7 +60,7 @@
                      <font>
                         <Font size="16.0" />
                      </font></Label>
-                  <Label fx:id="fileTyle" text="Label">
+                  <Label fx:id="fileTyPE" text="Label">
                      <font>
                         <Font size="16.0" />
                      </font></Label>
