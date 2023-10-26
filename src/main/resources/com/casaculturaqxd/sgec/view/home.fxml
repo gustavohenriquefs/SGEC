@@ -27,7 +27,7 @@
           <RowConstraints minHeight="10.0" percentHeight="0.0" prefHeight="180.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label id="titulo1" prefHeight="74.0" prefWidth="1800.0" stylesheets="@../css/HomeStyle.css" text=" Próximas Metas" textFill="#fffef7">
+            <Label id="titulo1" prefHeight="74.0" prefWidth="1800.0" text=" Próximas Metas" textFill="#fffef7">
                <font>
                   <Font size="16.0" />
                </font>
@@ -45,7 +45,7 @@
       </GridPane>
       <VBox prefHeight="368.0" prefWidth="778.0">
          <children>
-            <Label id="titulo1" prefHeight="68.0" prefWidth="1800.0" stylesheets="@../css/HomeStyle.css" text="Últimos Eventos Cadastrados" textFill="#fffef7">
+            <Label id="titulo1" prefHeight="68.0" prefWidth="1800.0" text="Últimos Eventos Cadastrados" textFill="#fffef7">
                <font>
                   <Font size="16.0" />
                </font>
