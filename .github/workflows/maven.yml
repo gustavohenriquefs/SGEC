@@ -10,9 +10,9 @@ name: Java CI with Maven
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main","development"]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main","development" ]
 
 jobs:
   build:
@@ -29,3 +29,16 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn -B package --file pom.xml
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Run maven tests
+      uses: actions/setup-java@v3
+      with:
+        java-version: '20.0.2'
+        distribution: 'temurin'
+        cache: maven
+    - name: Test with Maven
+      run: mvn test
