@@ -18,6 +18,10 @@ public class ParticipanteDAOTest {
     private static int idValidParticipante = 1, idUpdatableParticipante = 2,
             idInvalidParticipante = -1, idValidEvento = 1, idInvalidEvento = -1;
 
+    ParticipanteDAOTest() {
+        setUpClass();
+    }
+
     @BeforeAll
     public static void setUpClass() {
         db = DatabasePostgres.getInstance("URL_TEST", "USER_NAME_TEST", "PASSWORD_TEST");
