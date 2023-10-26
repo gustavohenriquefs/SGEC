@@ -1,5 +1,10 @@
 @import url(../colors/colorStyle.css);
 
+.root:hover {
+    -fx-scale-x : 1.1;
+    -fx-scale-y : 1.1;
+    -fx-scale-z: 1.1;
+}
 #container {
     -fx-background-color: #FFFEF7;
 }
@@ -12,9 +17,4 @@
 #botao {
     -fx-background-color:  #2A3F25;
     -fx-color: #FFFEF7;
-}
-#botao:hover{
-    -fx-scale-x : 1.1;
-    -fx-scale-y : 1.1;
-    -fx-scale-z: 1.1;
 }
