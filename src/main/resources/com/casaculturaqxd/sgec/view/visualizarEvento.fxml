@@ -20,7 +20,7 @@
 
 <ScrollPane prefHeight="2079.0" prefWidth="1440.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.VisualizarEventoController">
    <content>
-      <AnchorPane id="container" fx:id="page" prefHeight="2066.0" prefWidth="1560.0" style="-fx-background-color: #E9E3CA;" stylesheets="@../css/visualizarEvento.css">
+      <AnchorPane id="container" fx:id="page" prefHeight="2066.0" prefWidth="1560.0" style="-fx-background-color: #E9E3CA;">
          <children>
             <HBox alignment="CENTER" layoutX="153.0" layoutY="55.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="203.0" prefWidth="1155.0" style="-fx-background-color: FFFEF7;">
                <children>
