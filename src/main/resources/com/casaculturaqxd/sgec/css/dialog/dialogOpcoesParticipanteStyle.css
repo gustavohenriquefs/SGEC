@@ -1,17 +1,13 @@
-@import url(../css/colors/colorStyle.css);
+@import url(../colors/colorStyle.css);
 
 .root {
     -fx-background-color: -bege;
 }
-.adicionar {
+#consultar{
     -fx-background-color: -verde;
     -fx-text-fill: -branco;
 }
-.vincular {
+#cadastrar {
     -fx-background-color: -preto;
-    -fx-text-fill: -branco;
-}
-#cancelar {
-    -fx-background-color: -vermelho;
     -fx-text-fill: -branco;
 }
