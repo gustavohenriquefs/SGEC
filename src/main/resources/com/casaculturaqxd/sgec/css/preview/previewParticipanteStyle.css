@@ -8,5 +8,7 @@
     -fx-wrap-text: true;
 }
 .meusLabels {
-    -fx-border-color: #392E2E;
+    -fx-border-color: -preto;
+    -fx-border-radius: 0.005px;
+    -fx-wrap-text: true;
 }
