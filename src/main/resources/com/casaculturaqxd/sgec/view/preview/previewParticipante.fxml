@@ -15,7 +15,7 @@
          <children>
             <HBox fx:id="campoArtista" layoutX="20.0" layoutY="160.0" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="40.0" prefWidth="260.0" styleClass="meusLabels" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="160.0">
                <children>
-                  <Label id="artista" fx:id="artista" minHeight="-Infinity" prefHeight="42.0" prefWidth="260.0" styleClass="meusLabels" HBox.hgrow="ALWAYS">
+                  <Label id="artista" fx:id="nomeArtista" minHeight="-Infinity" prefHeight="42.0" prefWidth="260.0" styleClass="meusLabels" HBox.hgrow="ALWAYS">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -24,7 +24,7 @@
             </HBox>
             <HBox fx:id="campoArea" layoutX="20.0" layoutY="211.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="40.0" prefWidth="260.0" styleClass="meusLabels" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
                <children>
-                  <Label id="area" fx:id="area" prefHeight="41.0" prefWidth="260.0" styleClass="meusLabels" HBox.hgrow="ALWAYS">
+                  <Label id="area" fx:id="areaAtuacao" prefHeight="41.0" prefWidth="260.0" styleClass="meusLabels" HBox.hgrow="ALWAYS">
                      <font>
                         <Font size="14.0" />
                      </font>
