@@ -7,8 +7,3 @@
     -fx-white-space: normal;
     -fx-wrap-text: true;
 }
-.meusLabels {
-    -fx-border-color: -preto;
-    -fx-border-radius: 0.005px;
-    -fx-wrap-text: true;
-}
