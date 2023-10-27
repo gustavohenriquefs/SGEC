@@ -5,15 +5,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.SortedSet;
 
-import com.casaculturaqxd.sgec.enums.ServiceType;
 import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 import com.casaculturaqxd.sgec.service.Service;
 
 public class ServiceFileDAO {
-  String suffix;
-  ServiceType serviceType;
   Connection connection;
   Service service;
   String bucket;
@@ -21,7 +19,6 @@ public class ServiceFileDAO {
   ServiceFileDAO(String bucket, Service service){
     this.bucket = bucket;
     this.service = service;
-    serviceType = ServiceType.S3;
   }
 
   public void setConnection(Connection connection){
@@ -32,11 +29,12 @@ public class ServiceFileDAO {
     try {
       service.enviarArquivo(bucket, arquivo.getFileKey(), arquivo.getContent());
       //1° passo - criar comando sql
-      String sql = "insert into service_file (file_key,service,bucket,ultima_modificacao)"
-              + " values(?,?,?,?)";
+      String sql = "insert into service_file (file_key,suffix,service,bucket,ultima_modificacao)"
+              + " values(?,?,?,?,?)";
       //2° passo - conectar o banco de dados e organizar o comando sql
       PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-      stmt.setString(2, arquivo.getFileKey());
+      stmt.setString(1, arquivo.getFileKey());
+      stmt.setString(2, arquivo.getSuffix());
       stmt.setString(3, arquivo.getService());
       stmt.setString(4, arquivo.getBucket());
       stmt.setDate(5, arquivo.getUltimaModificacao());
@@ -65,6 +63,7 @@ public class ServiceFileDAO {
         arquivoRetorno = arquivo;
         arquivoRetorno.setServiceFileId(resultSet.getInt("id_service_file"));
         arquivoRetorno.setFileKey(resultSet.getString("file_key"));
+        arquivoRetorno.setSuffix(resultSet.getString("suffix"));
         arquivoRetorno.setService(resultSet.getString("service"));
         arquivoRetorno.setBucket(resultSet.getString("bucket"));
         arquivoRetorno.setUltimaModificacao(resultSet.getDate("ultima_modificacao"));
@@ -89,17 +88,20 @@ public class ServiceFileDAO {
     }
   }
 
-  private boolean vincularArquivos(ServiceFile arquivo, Evento evento){
+  public boolean vincularAllArquivos(Evento evento){
+    SortedSet<Integer> listaArquivos = evento.getListaArquivos();
     String sql = "INSERT INTO service_file_evento(id_evento, id_service_file) VALUES (?, ?);";
-    try {
-      PreparedStatement stmt = connection.prepareStatement(sql);
-      stmt.setInt(1, evento.getIdEvento());
-      stmt.setInt(2, arquivo.getServiceFileId());
-      stmt.execute();
-      stmt.close();
-      return true;
-    } catch (SQLException e) {
-      return false;
+    for (Integer idArquivo : listaArquivos) {
+      try {
+          PreparedStatement stmt = connection.prepareStatement(sql);
+          stmt.setInt(1, evento.getIdEvento());
+          stmt.setInt(2, idArquivo);
+          stmt.execute();
+          stmt.close();
+      } catch (SQLException e) {
+          return false;
+      }
     }
+    return true;
   }
 }
