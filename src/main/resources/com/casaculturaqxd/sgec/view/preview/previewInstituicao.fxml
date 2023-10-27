@@ -7,17 +7,17 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox id="container" fx:id="container" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="300.0" prefWidth="602.0" style="-fx-background-color: #FFFEF7;" stylesheets="@../../css/preview/previewInstituicaoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox id="container" fx:id="container" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="300.0" style="-fx-background-color: #FFFEF7;" stylesheets="@../../css/preview/previewInstituicaoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <AnchorPane id="principal" fx:id="principal" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="300.0" prefWidth="602.0">
+      <AnchorPane id="principal" fx:id="principal" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="300.0">
          <children>
             <HBox layoutX="90.0" layoutY="67.0" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <VBox prefHeight="300.0" prefWidth="294.0">
+                  <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="150.0">
                      <children>
                         <HBox prefHeight="202.0" prefWidth="227.0">
                            <children>
-                              <ImageView fx:id="imagem" fitHeight="228.0" fitWidth="294.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS" />
+                              <ImageView fx:id="imagem" fitHeight="230.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS" />
                            </children>
                         </HBox>
                         <HBox prefHeight="100.0" prefWidth="200.0">
@@ -27,7 +27,7 @@
                         </HBox>
                      </children>
                   </VBox>
-                  <VBox prefHeight="300.0" prefWidth="308.0">
+                  <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="150.0">
                      <children>
                         <HBox prefHeight="311.0" prefWidth="308.0">
                            <children>
