@@ -90,18 +90,50 @@ public class ServiceFileDAO {
 
   public boolean vincularAllArquivos(Evento evento){
     SortedSet<Integer> listaArquivos = evento.getListaArquivos();
-    String sql = "INSERT INTO service_file_evento(id_evento, id_service_file) VALUES (?, ?);";
-    for (Integer idArquivo : listaArquivos) {
-      try {
-          PreparedStatement stmt = connection.prepareStatement(sql);
-          stmt.setInt(1, evento.getIdEvento());
-          stmt.setInt(2, idArquivo);
-          stmt.execute();
-          stmt.close();
-      } catch (SQLException e) {
-          return false;
-      }
+    for (Integer idServiceFile : listaArquivos) {
+      boolean temp = vincularArquivo(idServiceFile, evento.getIdEvento());
+      if(temp == false)
+        return false;
     }
+    return true;
+  }
+
+  public boolean vincularArquivo(int idServiceFile, int idEvento){
+    String sql = "INSERT INTO service_file_evento(id_evento, id_service_file) VALUES (?, ?);";
+    try {
+        PreparedStatement stmt = connection.prepareStatement(sql);
+        stmt.setInt(1, idEvento);
+        stmt.setInt(2, idServiceFile);
+        stmt.execute();
+        stmt.close();
+        return true;
+    } catch (SQLException e) {
+        return false;
+    }
+  }
+
+  public boolean desvincularArquivo(int idServiceFile, int idEvento) {
+    String sql = "delete from service_file_evento where id_service_file=? and id_evento=?";
+    try {
+      PreparedStatement stmt = connection.prepareStatement(sql);
+      stmt.setInt(1, idServiceFile);
+      stmt.setInt(2, idEvento);
+      stmt.execute();
+      stmt.close();
+      return true;
+    } catch (Exception e) {
+      return false;
+    }
+  }
+
+  public boolean desvincularAllArquivos(Evento evento) {
+    SortedSet<Integer> listaArquivos = evento.getListaArquivos();
+    for (Integer idServiceFile : listaArquivos) {
+      boolean temp = desvincularArquivo(idServiceFile, evento.getIdEvento());
+      if(temp == false)
+        return false;
+    }
+    evento.setListaArquivos(null);
     return true;
   }
 }
