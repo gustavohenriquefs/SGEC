@@ -13,14 +13,14 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="container" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #E9E3CA;" stylesheets="@../css/page/pesquisarEventoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.PesquisarEventoController">
+<AnchorPane id="container" fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #E9E3CA;" stylesheets="@../css/page/pesquisarEventoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.PesquisarEventoController">
    <children>
       <Label id="pesquisar" fx:id="pesquisar" layoutX="32.0" layoutY="67.0" text="Pesquisar Evento" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="67.0">
          <font>
             <Font name="System Bold" size="20.0" />
          </font>
       </Label>
-      <AnchorPane layoutX="30.0" layoutY="146.0" prefHeight="69.0" prefWidth="560.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <AnchorPane id="container" layoutX="30.0" layoutY="146.0" prefHeight="69.0" prefWidth="560.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
             <Label id="filtro" fx:id="filtro" layoutX="14.0" layoutY="5.0" text="Filtros" AnchorPane.leftAnchor="20.0">
                <font>
@@ -100,6 +100,5 @@
             </Button>
          </children>
       </HBox>
-      <HBox fx:id="header" prefHeight="50.0" prefWidth="1200.0" />
    </children>
 </AnchorPane>
