@@ -36,7 +36,7 @@
                         </HBox>
                         <HBox prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <Label id="valor" fx:id="valor" prefHeight="46.0" prefWidth="307.0" styleClass="meusLabels" />
+                              <Label id="valor" fx:id="valorContribuicao" prefHeight="46.0" prefWidth="307.0" styleClass="meusLabels" />
                            </children>
                         </HBox>
                      </children>
