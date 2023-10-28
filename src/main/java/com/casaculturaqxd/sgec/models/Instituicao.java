@@ -1,51 +1,54 @@
 package com.casaculturaqxd.sgec.models;
 
-import com.casaculturaqxd.sgec.enums.Atribuicao;
-
 /**
- * Instituições incluem aquelas que agem como colaboradores
- * ou como organizadores de eventos em que a Casa de Saberes esteja envolvida.
- * Uma instituição pode ser organizadora de vários eventos e também realizadora de outros,
- * mas não Organizadora e Colaboradora ao mesmo tempo
+ * Instituições incluem aquelas que agem como colaboradores ou como organizadores de eventos em que
+ * a Casa de Saberes esteja envolvida. Uma instituição pode ser organizadora de vários eventos e
+ * também realizadora de outros, mas não Organizadora e Colaboradora ao mesmo tempo
  */
 public class Instituicao {
-    private Integer idInstituicao = null;
-    private Atribuicao atribuicao;
+    private Integer idInstituicao;
     private String nome;
     private String descricaoContribuicao;
-    private float valorContribuicao;
+    private String valorContribuicao;
+    private Integer idServiceFile;
 
-    
-    public Instituicao(String nome, String descricaoContribuicao, float valorContribuicao,Atribuicao atribuicao) {
+    public Instituicao(String nome, String descricaoContribuicao, String valorContribuicao,
+            Integer idServiceFile) {
         this.nome = nome;
         this.descricaoContribuicao = descricaoContribuicao;
         this.valorContribuicao = valorContribuicao;
-        this.atribuicao = atribuicao;
+        this.idServiceFile = idServiceFile;
+    }
+
+    public Instituicao(String nome) {
+        this.nome = nome;
+    }
+
+    public Instituicao() {
     }
 
     public String getNome() {
         return nome;
     }
+
     public void setNome(String nome) {
         this.nome = nome;
     }
+
     public String getDescricaoContribuicao() {
         return descricaoContribuicao;
     }
+
     public void setDescricaoContribuicao(String descricaoContribuicao) {
         this.descricaoContribuicao = descricaoContribuicao;
     }
-    public float getValorContribuicao() {
+
+    public String getValorContribuicao() {
         return valorContribuicao;
     }
-    public void setValorContribuicao(float valorContribuicao) {
+
+    public void setValorContribuicao(String valorContribuicao) {
         this.valorContribuicao = valorContribuicao;
-    }
-    public Atribuicao getAtribuicao() {
-        return atribuicao;
-    }
-    public void setAtribuicao(Atribuicao atribuicao) {
-        this.atribuicao = atribuicao;
     }
 
     public Integer getIdInstituicao() {
@@ -55,5 +58,13 @@ public class Instituicao {
     public void setIdInstituicao(Integer idInstituicao) {
         this.idInstituicao = idInstituicao;
     }
-    
+
+    public Integer getIdServiceFile() {
+        return idServiceFile;
+    }
+
+    public void setIdServiceFile(Integer idServiceFile) {
+        this.idServiceFile = idServiceFile;
+    }
+
 }
