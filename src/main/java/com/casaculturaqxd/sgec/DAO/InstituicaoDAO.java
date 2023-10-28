@@ -39,8 +39,11 @@ public class InstituicaoDAO {
       ResultSet resultado = statement.executeQuery();
 
       if (resultado.next()) {
+        instituicao.setIdInstituicao(resultado.getInt("id_instituicao"));
         instituicao.setNome(resultado.getString("nome_instituicao"));
         instituicao.setIdServiceFile(resultado.getInt("id_service_file"));
+      } else {
+        return Optional.empty();
       }
 
       statement.close();
@@ -65,6 +68,8 @@ public class InstituicaoDAO {
         product.setIdInstituicao(resultado.getInt("id_instituicao"));
         product.setNome(resultado.getString("nome_instituicao"));
         product.setIdServiceFile(resultado.getInt("id_service_file"));
+      } else {
+        return Optional.empty();
       }
 
       statement.close();
@@ -108,16 +113,16 @@ public class InstituicaoDAO {
       PreparedStatement statement = conn.prepareStatement(atualizarInstituicaoQuery);
 
       statement.setString(1, instituicao.getNome());
-      statement.setInt(2, instituicao.getIdServiceFile());
-      statement.setInt(4, instituicao.getIdInstituicao());
+      statement.setObject(2, instituicao.getIdServiceFile());
+      statement.setInt(3, instituicao.getIdInstituicao());
 
-      statement.execute();
+      int numAtualizacoes = statement.executeUpdate();
       statement.close();
-    } catch (Exception e) {
+
+      return numAtualizacoes > 0;
+    } catch (SQLException e) {
       return false;
     }
-
-    return true;
   }
 
   public boolean removerInstituicao(Instituicao instituicao) throws SQLException {
