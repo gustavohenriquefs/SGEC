@@ -24,6 +24,10 @@ public class Instituicao {
         this.nome = nome;
     }
 
+    public Instituicao(Integer idInstituicao) {
+        this.idInstituicao = idInstituicao;
+    }
+
     public Instituicao() {
     }
 
