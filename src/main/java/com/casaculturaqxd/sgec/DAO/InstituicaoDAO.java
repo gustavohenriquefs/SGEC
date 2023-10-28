@@ -51,6 +51,30 @@ public class InstituicaoDAO {
     return Optional.of(instituicao);
   }
 
+  public Optional<Instituicao> getInstituicao(String nome) {
+    String getInstituicaoQuery = "SELECT * FROM instituicao WHERE nome_instituicao=?";
+    Instituicao product = new Instituicao();
+    try {
+      PreparedStatement statement = conn.prepareStatement(getInstituicaoQuery);
+
+      statement.setString(1, nome);
+
+      ResultSet resultado = statement.executeQuery();
+
+      if (resultado.next()) {
+        product.setIdInstituicao(resultado.getInt("id_instituicao"));
+        product.setNome(resultado.getString("nome_instituicao"));
+        product.setIdServiceFile(resultado.getInt("id_service_file"));
+      }
+
+      statement.close();
+    } catch (Exception e) {
+      return Optional.empty();
+    }
+
+    return Optional.of(product);
+  }
+
   public boolean inserirInstituicao(Instituicao instituicao) throws SQLException {
     String inserirInstituicaoQuery =
         "INSERT INTO instituicao (nome_instituicao, id_service_file) VALUES (?, ?)";
