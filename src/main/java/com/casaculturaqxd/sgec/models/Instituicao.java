@@ -24,7 +24,7 @@ public class Instituicao {
         this.nome = nome;
     }
 
-    public Instituicao(Integer idInstituicao) {
+    public Instituicao(int idInstituicao) {
         this.idInstituicao = idInstituicao;
     }
 
