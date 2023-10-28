@@ -156,6 +156,8 @@ public class InstituicaoDAO {
       stmt.close();
       return true;
     } catch (SQLException e) {
+      Logger erro = Logger.getLogger("erroSQL");
+      erro.log(Level.SEVERE, "excecao levantada:", e);
       return false;
     } catch (NullPointerException e) {
       Logger erro = Logger.getLogger("ID faltando");
@@ -232,11 +234,60 @@ public class InstituicaoDAO {
     }
   }
 
+  public boolean atualizarOrganizador(Instituicao instituicao, Integer idEvento) {
+    try {
+      String sql = "UPDATE organizador_evento SET descricao_contribuicao=?, valor_contribuicao=?"
+          + " WHERE id_instituicao = ? AND id_evento = ?";
+      PreparedStatement stmt = conn.prepareStatement(sql);
+      stmt.setString(1, instituicao.getDescricaoContribuicao());
+      stmt.setString(2, instituicao.getValorContribuicao());
+      stmt.setInt(3, instituicao.getIdInstituicao());
+      stmt.setInt(4, idEvento);
+
+      int numAtualizacoes = stmt.executeUpdate();
+      stmt.close();
+      return numAtualizacoes > 0;
+    } catch (SQLException e) {
+      Logger erro = Logger.getLogger("erroSQL");
+      erro.log(Level.SEVERE, "excecao levantada:", e);
+      return false;
+    } catch (NullPointerException e) {
+      Logger erro = Logger.getLogger("ID faltando");
+      erro.log(Level.SEVERE, "excecao levantada:", e);
+      return false;
+    }
+  }
+
+  public boolean atualizarColaborador(Instituicao instituicao, Integer idEvento) {
+    try {
+      String sql = "UPDATE colaborador_evento SET descricao_contribuicao=?, valor_contribuicao=?"
+          + " WHERE id_instituicao = ? AND id_evento = ?";
+      PreparedStatement stmt = conn.prepareStatement(sql);
+      stmt.setString(1, instituicao.getDescricaoContribuicao());
+      stmt.setString(2, instituicao.getValorContribuicao());
+      stmt.setInt(3, instituicao.getIdInstituicao());
+      stmt.setInt(4, idEvento);
+
+      int numAtualizacoes = stmt.executeUpdate();
+      stmt.close();
+      return numAtualizacoes > 0;
+    } catch (SQLException e) {
+      Logger erro = Logger.getLogger("erroSQL");
+      erro.log(Level.SEVERE, "excecao levantada:", e);
+      return false;
+    } catch (NullPointerException e) {
+      Logger erro = Logger.getLogger("ID faltando");
+      erro.log(Level.SEVERE, "excecao levantada:", e);
+      return false;
+    }
+  }
+
   public boolean desvincularOrganizador(Integer idInstituicao, Integer idEvento) {
-    String vincLocaisSql = "DELETE FROM organizador_evento WHERE id_instituicao=? AND id_evento=?";
+    String desvincularOrganizadorQuery =
+        "DELETE FROM organizador_evento WHERE id_instituicao=? AND id_evento=?";
 
     try {
-      PreparedStatement stmt = conn.prepareStatement(vincLocaisSql);
+      PreparedStatement stmt = conn.prepareStatement(desvincularOrganizadorQuery);
       stmt.setInt(1, idInstituicao);
       stmt.setInt(2, idEvento);
 
@@ -256,10 +307,11 @@ public class InstituicaoDAO {
   }
 
   public boolean desvincularColaborador(Integer idInstituicao, Integer idEvento) {
-    String vincLocaisSql = "DELETE FROM colaborador_evento WHERE id_instituicao=? AND id_evento=?";
+    String desvincularColaboradorQuery =
+        "DELETE FROM colaborador_evento WHERE id_instituicao=? AND id_evento=?";
 
     try {
-      PreparedStatement stmt = conn.prepareStatement(vincLocaisSql);
+      PreparedStatement stmt = conn.prepareStatement(desvincularColaboradorQuery);
       stmt.setInt(1, idInstituicao);
       stmt.setInt(2, idEvento);
 
