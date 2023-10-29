@@ -1,5 +1,6 @@
 package com.casaculturaqxd.sgec.models;
 
+import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 
 public class Participante {
     private int idParticipante;
@@ -7,16 +8,16 @@ public class Participante {
     private String areaDeAtuacao;
     private String bio;
     private String linkMapaDaCultura;
-    private Integer idImagemCapa;
+    private ServiceFile imagemCapa;
 
     public Participante(int idParticipante, String nome, String areaDeAtuacao, String bio,
-            String linkMapaDaCultura, Integer idImagemCapa) {
+            String linkMapaDaCultura, ServiceFile imagemCapa) {
         this.idParticipante = idParticipante;
         this.nome = nome;
         this.areaDeAtuacao = areaDeAtuacao;
         this.bio = bio;
         this.linkMapaDaCultura = linkMapaDaCultura;
-        this.idImagemCapa = idImagemCapa;
+        this.imagemCapa = imagemCapa;
     }
 
     public Participante(int idParticipante, String nome, String areaDeAtuacao, String bio,
@@ -26,7 +27,7 @@ public class Participante {
         this.areaDeAtuacao = areaDeAtuacao;
         this.bio = bio;
         this.linkMapaDaCultura = linkMapaDaCultura;
-        this.idImagemCapa = 0;
+        this.imagemCapa = null;
     }
 
     public Participante(String nome, String areaDeAtuacao, String bio, String linkMapaDaCultura) {
@@ -34,7 +35,7 @@ public class Participante {
         this.areaDeAtuacao = areaDeAtuacao;
         this.bio = bio;
         this.linkMapaDaCultura = linkMapaDaCultura;
-        this.idImagemCapa = null;
+        this.imagemCapa = null;
     }
 
     public String getNome() {
@@ -77,12 +78,12 @@ public class Participante {
         this.bio = bio;
     }
 
-    public Integer getIdImagemCapa() {
-        return idImagemCapa;
+    public ServiceFile getImagemCapa() {
+        return imagemCapa;
     }
 
-    public void setIdImagemCapa(Integer idImagemCapa) {
-        this.idImagemCapa = idImagemCapa;
+    public void setImagemCapa(ServiceFile imagemCapa) {
+        this.imagemCapa = imagemCapa;
     }
 
 

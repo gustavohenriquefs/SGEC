@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.casaculturaqxd.sgec.models.Participante;
+import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 
 public class ParticipanteDAO {
   private Connection conn;
@@ -38,7 +39,7 @@ public class ParticipanteDAO {
         participante.setNome(resultado.getString("nome_participante"));
         participante.setBio(resultado.getString("bio"));
         participante.setLinkMapaDaCultura(resultado.getString("link_perfil"));
-        participante.setIdImagemCapa(resultado.getInt("id_service_file"));
+        participante.setImagemCapa(new ServiceFile(resultado.getInt("id_service_file")));
       } else {
         return Optional.empty();
       }
@@ -53,7 +54,9 @@ public class ParticipanteDAO {
   public boolean inserirParticipante(Participante participante) throws SQLException {
     String inserirParticipanteQuery =
         "INSERT INTO participante (nome_participante, area_atuacao, bio, link_perfil, id_service_file) VALUES (?, ?, ?, ?, ?)";
-
+    Integer serviceFileId = null;
+    if (participante.getImagemCapa() != null)
+      serviceFileId = participante.getImagemCapa().getServiceFileId();
     try {
       PreparedStatement statement =
           conn.prepareStatement(inserirParticipanteQuery, Statement.RETURN_GENERATED_KEYS);
@@ -62,7 +65,7 @@ public class ParticipanteDAO {
       statement.setString(2, participante.getAreaDeAtuacao());
       statement.setString(3, participante.getBio());
       statement.setString(4, participante.getLinkMapaDaCultura());
-      statement.setObject(5, participante.getIdImagemCapa(), Types.INTEGER);
+      statement.setObject(5, serviceFileId, Types.INTEGER);
       statement.executeUpdate();
 
       ResultSet rs = statement.getGeneratedKeys();
@@ -86,7 +89,9 @@ public class ParticipanteDAO {
   public boolean updateParticipante(Participante participante) throws SQLException {
     String atualizarParticipanteQuery =
         "UPDATE participante SET nome_participante=?, area_atuacao=?, bio=?, link_perfil=?, id_service_file =? WHERE id_participante=?";
-
+    Integer serviceFileId = null;
+    if (participante.getImagemCapa() != null)
+      serviceFileId = participante.getImagemCapa().getServiceFileId();
     try {
       PreparedStatement statement = conn.prepareStatement(atualizarParticipanteQuery);
 
@@ -94,7 +99,7 @@ public class ParticipanteDAO {
       statement.setString(2, participante.getAreaDeAtuacao());
       statement.setString(3, participante.getBio());
       statement.setString(4, participante.getLinkMapaDaCultura());
-      statement.setObject(5, participante.getIdImagemCapa(), Types.INTEGER);
+      statement.setObject(5, serviceFileId, Types.INTEGER);
       statement.setInt(6, participante.getIdParticipante());
 
       int numAtualizacoes = statement.executeUpdate();
