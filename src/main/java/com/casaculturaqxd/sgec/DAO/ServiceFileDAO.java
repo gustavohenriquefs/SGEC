@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.SortedSet;
 
+import com.casaculturaqxd.sgec.enums.ServiceType;
 import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 import com.casaculturaqxd.sgec.service.Service;
@@ -28,24 +29,21 @@ public class ServiceFileDAO {
   public boolean inserirArquivo(ServiceFile arquivo){
     try {
       service.enviarArquivo(arquivo);
-      //1° passo - criar comando sql
       String sql = "insert into service_file (file_key,suffix,service,bucket,ultima_modificacao)"
               + " values(?,?,?,?,?)";
-      //2° passo - conectar o banco de dados e organizar o comando sql
       PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
       stmt.setString(1, arquivo.getFileKey());
       stmt.setString(2, arquivo.getSuffix());
       stmt.setString(3, arquivo.getService());
       stmt.setString(4, arquivo.getBucket());
       stmt.setDate(5, arquivo.getUltimaModificacao());
-      //3° passo - executar o comando sql
-      stmt.executeUpdate();
+      int numRemocoes = stmt.executeUpdate();
       ResultSet rs = stmt.getGeneratedKeys();
       if (rs.next()) {
           arquivo.setServiceFileId(rs.getInt("id_service_file"));
       }
       stmt.close();
-      return true;
+      return numRemocoes > 0;
     } catch (Exception e) {
       return false;
     }
@@ -80,9 +78,9 @@ public class ServiceFileDAO {
       String sql = "delete from service_file where id_service_file=?";
       PreparedStatement stmt = connection.prepareStatement(sql);
       stmt.setInt(1, arquivo.getServiceFileId());
-      stmt.execute();
+      int numRemocoes = stmt.executeUpdate();
       stmt.close();
-      return true;
+      return numRemocoes > 0;
     } catch (Exception e) {
       return false;
     }
