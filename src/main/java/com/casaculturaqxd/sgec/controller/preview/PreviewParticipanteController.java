@@ -1,6 +1,6 @@
 package com.casaculturaqxd.sgec.controller.preview;
 
-import com.casaculturaqxd.sgec.controller.CadastrarEventoController;
+import com.casaculturaqxd.sgec.controller.ControllerEvento;
 import com.casaculturaqxd.sgec.models.Participante;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -9,7 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 
 public class PreviewParticipanteController {
-    private CadastrarEventoController parentController;
+    private ControllerEvento parentController;
     private Participante participante;
     @FXML
     private Parent container;
@@ -23,11 +23,11 @@ public class PreviewParticipanteController {
     public void initialize() {
     }
 
-    public CadastrarEventoController getParentController() {
+    public ControllerEvento getParentController() {
         return parentController;
     }
 
-    public void setParentController(CadastrarEventoController parentController) {
+    public void setParentController(ControllerEvento parentController) {
         this.parentController = parentController;
     }
 
@@ -48,7 +48,7 @@ public class PreviewParticipanteController {
     }
 
     public void remover() {
-        parentController.removerPreviewParticipante(getParticipante());
+        parentController.removerParticipante(getParticipante());
     }
 
     public Parent getContainer() {

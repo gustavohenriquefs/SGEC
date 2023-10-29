@@ -40,7 +40,7 @@ import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.Participante;
 
 
-public class CadastrarEventoController {
+public class CadastrarEventoController implements ControllerEvento {
     private final int MAX_LOCALIZACOES = 4;
     DatabasePostgres db = DatabasePostgres.getInstance("URL", "USER_NAME", "PASSWORD");
     EventoBuilder builderEvento = new EventoBuilder();
@@ -176,14 +176,14 @@ public class CadastrarEventoController {
     public void removerLocalizacao() throws IOException {
     }
 
-    public void adicionarParticipante() throws IOException {
+    public void adicionarParticipante(Participante participante) {
         // TODO remover implementacao de teste
         participantes.put(
                 new Participante(1, "new_participante", "new_area atuacao", "new link", null),
                 new FXMLLoader(App.class.getResource("view/preview/previewParticipante.fxml")));
     }
 
-    public void removerPreviewParticipante(Participante participante) {
+    public void removerParticipante(Participante participante) {
         participantes.remove(participante);
     }
 
