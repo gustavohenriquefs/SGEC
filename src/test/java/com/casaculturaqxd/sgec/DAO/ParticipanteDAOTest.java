@@ -2,6 +2,7 @@ package com.casaculturaqxd.sgec.DAO;
 
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.Participante;
+import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 import java.sql.SQLException;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -16,7 +17,8 @@ public class ParticipanteDAOTest {
     private static ParticipanteDAO participanteDAO;
     private static Participante participante;
     private static int idValidParticipante = 1, idUpdatableParticipante = 2,
-            idInvalidParticipante = -1, idValidEvento = 1, idInvalidEvento = -1;
+            idInvalidParticipante = -1, idValidEvento = 1, idInvalidEvento = -1,
+            idValidServiceFile = 1;
 
     ParticipanteDAOTest() {
         setUpClass();
@@ -67,7 +69,7 @@ public class ParticipanteDAOTest {
                 () -> assertEquals("bio teste", result.getBio()),
                 () -> assertEquals("artesanato, pintura, cinema", result.getAreaDeAtuacao()),
                 () -> assertEquals("link teste", result.getLinkMapaDaCultura()),
-                () -> assertEquals(0, result.getIdImagemCapa()));
+                () -> assertEquals(idValidServiceFile, result.getImagemCapa().getServiceFileId()));
     }
 
     @Test
@@ -119,7 +121,7 @@ public class ParticipanteDAOTest {
     @Test
     public void testUpdateValidParticipanteDoesNotThrows() {
         participante = new Participante(idUpdatableParticipante, "updated_nome", "updated_area",
-                "updated_bio", "updated_link", 0);
+                "updated_bio", "updated_link", new ServiceFile(idValidServiceFile));
         assertDoesNotThrow(() -> participanteDAO.updateParticipante(participante));
     }
 
