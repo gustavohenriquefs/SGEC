@@ -8,7 +8,7 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 
-<MenuBar id="principal" fx:id="menu" prefHeight="40.0" prefWidth="429.0" style="-fx-background-color: #A22D2E;" stylesheets="@../../css/MenuStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<MenuBar id="principal" fx:id="menu" prefHeight="40.0" prefWidth="429.0" style="-fx-background-color: #A22D2E;" stylesheets="@../../css/componentes/MenuStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <menus>
       <Menu fx:id="home" mnemonicParsing="false">
          <graphic>
