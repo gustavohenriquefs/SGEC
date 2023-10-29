@@ -27,7 +27,7 @@ public class ServiceFileDAO {
 
   public boolean inserirArquivo(ServiceFile arquivo){
     try {
-      service.enviarArquivo(bucket, arquivo.getFileKey(), arquivo.getContent());
+      service.enviarArquivo(arquivo);
       //1° passo - criar comando sql
       String sql = "insert into service_file (file_key,suffix,service,bucket,ultima_modificacao)"
               + " values(?,?,?,?,?)";

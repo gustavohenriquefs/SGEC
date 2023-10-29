@@ -14,12 +14,23 @@ public class ServiceFile {
     private Date ultimaModificacao;
     private File preview;
     private File content;
-    
-    public ServiceFile(File content,String bucket) {
+
+    public ServiceFile(File content, String bucket) {
         this.content = content;
         this.bucket = bucket;
+        this.fileKey = content.getName();
         service = ServiceType.S3;
     }
+
+
+    public ServiceFile(String fileKey, String bucket, Date ultimaModificacao, File content) {
+        this.fileKey = fileKey;
+        this.bucket = bucket;
+        this.ultimaModificacao = ultimaModificacao;
+        this.content = content;
+        service = ServiceType.S3;
+    }
+
 
     public Integer getServiceFileId() {
         return serviceFileId;
@@ -36,6 +47,7 @@ public class ServiceFile {
     public void setFileKey(String fileKey) {
         this.fileKey = fileKey;
     }
+
 
     public String getSuffix() {
         return suffix;
@@ -79,9 +91,9 @@ public class ServiceFile {
 
     @Override
     public String toString() {
-        return "ServiceFile [serviceFileId=" + serviceFileId + ", fileKey=" + fileKey + ", service=" + service
-                + ", bucket=" + bucket + ", ultimaModificacao=" + ultimaModificacao + ", preview=" + preview
-                + ", content=" + content + "]";
+        return "ServiceFile [serviceFileId=" + serviceFileId + ", fileKey=" + fileKey + ", service="
+                + service + ", bucket=" + bucket + ", ultimaModificacao=" + ultimaModificacao
+                + ", preview=" + preview + ", content=" + content + "]";
     }
 
 }
