@@ -15,10 +15,19 @@ public class ServiceFile {
     public ServiceFile(File content, String bucket) {
         this.content = content;
         this.bucket = bucket;
+        this.fileKey = content.getName();
     }
 
     public ServiceFile(Integer serviceFileId) {
         this.serviceFileId = serviceFileId;
+    }
+
+
+    public ServiceFile(String fileKey, String bucket, Date ultimaModificacao, File content) {
+        this.fileKey = fileKey;
+        this.bucket = bucket;
+        this.ultimaModificacao = ultimaModificacao;
+        this.content = content;
     }
 
     public Integer getServiceFileId() {

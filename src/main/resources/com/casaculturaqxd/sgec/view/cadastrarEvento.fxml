@@ -5,7 +5,6 @@
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.ScrollPane?>
@@ -17,9 +16,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<ScrollPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="1122.0" prefWidth="1442.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.CadastrarEventoController">
+<ScrollPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="1122.0" prefWidth="1442.0" stylesheets="@../css/page/cadastrarEventoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.CadastrarEventoController">
   <content>
-    <AnchorPane id="container" prefHeight="800.0" prefWidth="1440.0" stylesheets="@../css/cadastrarEventoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <AnchorPane id="container" prefHeight="800.0" prefWidth="1440.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <HBox fx:id="header" prefHeight="35.0" prefWidth="790.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          
