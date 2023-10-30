@@ -22,14 +22,14 @@ jobs:
     steps:
     - name: Set up Environment Variables
       run: |
-        echo "URL=$URL" >> .env
-        echo "USER_NAME=$USER_NAME" >> .env
-        echo "PASSWORD=$PASSWORD" >> .env
-        echo "ACCESS_KEY=$ACCESS_KEY" >> .env
-        echo "SECRET_KEY=$SECRET_KEY" >> .env
-        echo "URL_TEST=$URL_TEST" >> .env
-        echo "USER_NAME_TEST=$USER_NAME_TEST" >> .env
-        echo "PASSWORD_TEST=$PASSWORD_TEST" >> .env
+        echo "URL=$URL" > $GITHUB_WORKSPACE/.env
+        echo "USER_NAME=$USER_NAME" >> $GITHUB_WORKSPACE/.env
+        echo "PASSWORD=$PASSWORD" >> $GITHUB_WORKSPACE/.env
+        echo "ACCESS_KEY=$ACCESS_KEY" >> $GITHUB_WORKSPACE/.env
+        echo "SECRET_KEY=$SECRET_KEY" >> $GITHUB_WORKSPACE/.env
+        echo "URL_TEST=$URL_TEST" >> $GITHUB_WORKSPACE/.env
+        echo "USER_NAME_TEST=$USER_NAME_TEST" >> $GITHUB_WORKSPACE/.env
+        echo "PASSWORD_TEST=$PASSWORD_TEST" >> $GITHUB_WORKSPACE/.env
       env:
         URL: ${{ secrets.URL }}
         USER_NAME: ${{ secrets.USER_NAME }}
