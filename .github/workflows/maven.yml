@@ -39,7 +39,6 @@ jobs:
         USER_NAME_TEST: ${{ secrets.USER_NAME_TEST }}
         PASSWORD_TEST: ${{ secrets.PASSWORD_TEST }}
       run: |
-        echo "Current Directory Before Creating .env: $PWD"
         echo "URL=$URL" > $GITHUB_WORKSPACE/.env
         echo "USER_NAME=$USER_NAME" >> $GITHUB_WORKSPACE/.env
         echo "PASSWORD=$PASSWORD" >> $GITHUB_WORKSPACE/.env
@@ -48,9 +47,6 @@ jobs:
         echo "URL_TEST=$URL_TEST" >> $GITHUB_WORKSPACE/.env
         echo "USER_NAME_TEST=$USER_NAME_TEST" >> $GITHUB_WORKSPACE/.env
         echo "PASSWORD_TEST=$PASSWORD_TEST" >> $GITHUB_WORKSPACE/.env
-        echo "Current Directory After Creating .env: $PWD"
-        echo "CLASSPATH::::::::::::::::::::::: $CLASSPATH"
-        ls -a
         
     - name: Build with Maven
       run: mvn -B package --file pom.xml
