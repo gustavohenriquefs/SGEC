@@ -43,14 +43,14 @@ jobs:
         echo "CLASSPATH::::::::::::::::::::::: $CLASSPATH"
         ls -a
       env:
-        URL: ${{ secrets.URL }}
-        USER_NAME: ${{ secrets.USER_NAME }}
-        PASSWORD: ${{ secrets.PASSWORD }}
-        ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
-        SECRET_KEY: ${{ secrets.SECRET_KEY }}
-        URL_TEST: ${{ secrets.URL_TEST }}
-        USER_NAME_TEST: ${{ secrets.USER_NAME_TEST }}
-        PASSWORD_TEST: ${{ secrets.PASSWORD_TEST }}
+        URL: ${{ secrets.LOCATION.DATABASE.URL }}
+        USER_NAME: ${{ secrets.LOCATION.DATABASE.USER_NAME }}
+        PASSWORD: ${{ secrets.LOCATION.DATABASE.PASSWORD }}
+        ACCESS_KEY: ${{ secrets.LOCATION.AWS.ACCESS_KEY }}
+        SECRET_KEY: ${{ secrets.LOCATION.AWS.SECRET_KEY }}
+        URL_TEST: ${{ secrets.LOCATION.AWS_TEST.URL_TEST }}
+        USER_NAME_TEST: ${{ secrets.LOCATION.AWS_TEST.USER_NAME_TEST }}
+        PASSWORD_TEST: ${{ secrets.LOCATION.AWS_TEST.PASSWORD_TEST }}
         
     - name: Build with Maven
       run: mvn -B package --file pom.xml
