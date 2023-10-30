@@ -24,6 +24,10 @@ public class LocalizacaoDAOTest {
     private static int validIdLocal = 1, updatableIdLocal = 2, validIdEvento = 1,
             invalidIdLocal = -1, invalidIdEvento = -1;
 
+    LocalizacaoDAOTest() {
+        setUpClass();
+    }
+
     @BeforeAll
     public static void setUpClass() {
         localizacaoDAO = new LocalizacaoDAO();
