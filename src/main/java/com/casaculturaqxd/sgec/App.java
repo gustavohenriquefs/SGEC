@@ -50,9 +50,14 @@ public class App extends Application {
         return scene.getRoot();
     }
 
+    public static void logout() throws IOException {
+        setUsuario(null);
+        scene.setRoot(loadFXML("view/login"));
+        lastVisitedPages.clear();
+    }
+
     public static void backLastScreen() {
-        scene = new Scene(lastVisitedPages.pop());
-        scene.getStylesheets();
+        scene.setRoot(lastVisitedPages.pop());
     }
 
     public static void setRoot(Parent objVisualizacao) throws IOException {

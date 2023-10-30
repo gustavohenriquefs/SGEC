@@ -5,8 +5,15 @@ import java.io.IOException;
 import com.casaculturaqxd.sgec.App;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 
 public class MenuController {
+    @FXML
+    Label campoNomeUsuario;
+
+    public void initialize() {
+        campoNomeUsuario.setText(App.getUsuario().getNomeUsuario());
+    }
 
     @FXML
     public void goToHome() throws IOException {
@@ -53,8 +60,7 @@ public class MenuController {
 
     @FXML
     public void logout() throws IOException {
-        App.setUsuario(null);
-        App.setRoot("view/login");
+        App.logout();
     }
 
 }
