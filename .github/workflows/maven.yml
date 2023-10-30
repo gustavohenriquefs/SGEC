@@ -1,22 +1,28 @@
+# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
+
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
 name: Java CI with Maven
 
 on:
   push:
-    branches:
-      - main
-      - development
+    branches: [ "main","development" ]
   pull_request:
-    branches:
-      - main
-      - development
+    branches: [ "main","development" ]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
 
+    runs-on: ubuntu-latest
+    
     steps:
     - name: Set up Environment Variables
       run: |
+        echo "Current Directory Before Creating .env: $PWD"
         echo "URL=$URL" > $GITHUB_WORKSPACE/.env
         echo "USER_NAME=$USER_NAME" >> $GITHUB_WORKSPACE/.env
         echo "PASSWORD=$PASSWORD" >> $GITHUB_WORKSPACE/.env
@@ -25,6 +31,8 @@ jobs:
         echo "URL_TEST=$URL_TEST" >> $GITHUB_WORKSPACE/.env
         echo "USER_NAME_TEST=$USER_NAME_TEST" >> $GITHUB_WORKSPACE/.env
         echo "PASSWORD_TEST=$PASSWORD_TEST" >> $GITHUB_WORKSPACE/.env
+        echo "Current Directory After Creating .env: $PWD"
+        echo "CLASSPATH::::::::::::::::::::::: $CLASSPATH"
       env:
         URL: ${{ secrets.URL }}
         USER_NAME: ${{ secrets.USER_NAME }}
@@ -34,34 +42,13 @@ jobs:
         URL_TEST: ${{ secrets.URL_TEST }}
         USER_NAME_TEST: ${{ secrets.USER_NAME_TEST }}
         PASSWORD_TEST: ${{ secrets.PASSWORD_TEST }}
-
-    - uses: actions/checkout@v2
-
+        
+    - uses: actions/checkout@v3
     - name: Set up JDK 20.0.2
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v3
       with:
         java-version: '20.0.2'
         distribution: 'temurin'
-
+        cache: maven
     - name: Build with Maven
       run: mvn -B package --file pom.xml
-
-  test:
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v2
-
-    - name: Set up JDK 20.0.2
-      uses: actions/setup-java@v2
-      with:
-        java-version: '20.0.2'
-        distribution: 'temurin'
-
-    - name: Configure Test Environment
-      run: |
-        mv $GITHUB_WORKSPACE/.env src/test/resources/.env
-      shell: bash
-
-    - name: Test with Maven
-      run: mvn test
