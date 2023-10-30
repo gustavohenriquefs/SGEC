@@ -5,7 +5,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -28,7 +27,7 @@ public class App extends Application {
         stage.getIcons().add(image);
         stage.setTitle("SGEC");
         stage.setScene(scene);
-        
+
         stage.setMaximized(true);
         stage.show();
     }
@@ -46,39 +45,41 @@ public class App extends Application {
     public static Stack<Parent> getLastVisitedPages() {
         return lastVisitedPages;
     }
-    public static Parent getRoot(){
+
+    public static Parent getRoot() {
         return scene.getRoot();
     }
 
+    public static void backLastScreen() {
+        scene = new Scene(lastVisitedPages.pop());
+        scene.getStylesheets();
+    }
+
     public static void setRoot(Parent objVisualizacao) throws IOException {
-        if(lastVisitedPages.empty() == true &&
-           !objVisualizacao.getId().equals(loadFXML("view/login").getId())){
+        if (lastVisitedPages.empty() == true
+                && !objVisualizacao.getId().equals(loadFXML("view/login").getId())) {
 
             lastVisitedPages.add(getRoot());
             scene.setRoot(objVisualizacao);
-        }   
-        else if(!lastVisitedPages.lastElement().getId().equals(objVisualizacao.getId()) &&
-                !objVisualizacao.getId().equals(loadFXML("view/login").getId())){
+        } else if (!lastVisitedPages.lastElement().getId().equals(objVisualizacao.getId())
+                && !objVisualizacao.getId().equals(loadFXML("view/login").getId())) {
 
             lastVisitedPages.add(getRoot());
             scene.setRoot(objVisualizacao);
-          }   
-          System.out.println(lastVisitedPages);
+        }
     }
 
     public static void setRoot(String fxml) throws IOException {
-        if(lastVisitedPages.empty() == true && 
-           getRoot().getId().equals(loadFXML("view/login").getId())){
+        if (lastVisitedPages.empty() == true
+                && getRoot().getId().equals(loadFXML("view/login").getId())) {
 
             scene.setRoot(loadFXML(fxml));
-        }
-        else if(!getRoot().getId().equals(loadFXML(fxml).getId()) && 
-           !loadFXML(fxml).getId().equals(loadFXML("view/login").getId())){
+        } else if (!getRoot().getId().equals(loadFXML(fxml).getId())
+                && !loadFXML(fxml).getId().equals(loadFXML("view/login").getId())) {
 
-           lastVisitedPages.add(getRoot());
-           scene.setRoot(loadFXML(fxml));
+            lastVisitedPages.add(getRoot());
+            scene.setRoot(loadFXML(fxml));
         }
-        System.out.println(lastVisitedPages);
     }
 
     private static Parent loadFXML(String fxml) throws IOException {
