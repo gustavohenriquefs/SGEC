@@ -30,14 +30,14 @@ jobs:
         
     - name: Set up Environment Variables
       env:
-        URL: ${{ env.URL }}
-        USER_NAME: ${{ env.USER_NAME }}
-        PASSWORD: ${{ env.PASSWORD }}
-        ACCESS_KEY: ${{ env.ACCESS_KEY }}
-        SECRET_KEY: ${{ env.SECRET_KEY }}
-        URL_TEST: ${{ env.URL_TEST }}
-        USER_NAME_TEST: ${{ env.USER_NAME_TEST }}
-        PASSWORD_TEST: ${{ env.PASSWORD_TEST }}
+        URL: ${{ secrets.URL }}
+        USER_NAME: ${{ secrets.USER_NAME }}
+        PASSWORD: ${{ secrets.PASSWORD }}
+        ACCESS_KEY: ${{ secrets.ACCESS_KEY }}
+        SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        URL_TEST: ${{ secrets.URL_TEST }}
+        USER_NAME_TEST: ${{ secrets.USER_NAME_TEST }}
+        PASSWORD_TEST: ${{ secrets.PASSWORD_TEST }}
       run: |
         echo "Current Directory Before Creating .env: $PWD"
         echo "URL=$URL" > $GITHUB_WORKSPACE/.env
