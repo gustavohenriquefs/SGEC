@@ -33,6 +33,7 @@ jobs:
         echo "PASSWORD_TEST=$PASSWORD_TEST" >> $GITHUB_WORKSPACE/.env
         echo "Current Directory After Creating .env: $PWD"
         echo "CLASSPATH::::::::::::::::::::::: $CLASSPATH"
+        ls -a
       env:
         URL: ${{ secrets.URL }}
         USER_NAME: ${{ secrets.USER_NAME }}
