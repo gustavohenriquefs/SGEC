@@ -34,17 +34,14 @@ public class DatabasePostgres implements Database {
         this.urlDataBase = dotenv.get(urlKey);
         this.nomeUsuario = dotenv.get(userNameKey);
         this.senha = dotenv.get(passwordKey);
-
+        
         try {
             Class.forName("org.postgresql.Driver");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        try {
             this.connection = DriverManager.getConnection(urlDataBase, nomeUsuario, senha);
         } catch (SQLException erro) {
             throw new RuntimeException(erro);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 

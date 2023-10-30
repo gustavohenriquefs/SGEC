@@ -19,7 +19,7 @@ public class TestAppIT {
     @Test
     public void testStart() throws Exception {
         DatabasePostgres db;
-        Class.forName("org.postgresql.Driver");
+        
         db = DatabasePostgres.getInstance("URL_TEST", "USER_NAME_TEST", "PASSWORD_TEST");
     }
     
