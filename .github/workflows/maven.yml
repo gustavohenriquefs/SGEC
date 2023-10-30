@@ -20,16 +20,16 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - name: Create .env File
-      run: | 
-        echo "URL=$URL"                       > .env
-        echo "USER_NAME=$USER_NAME"           > .env
-        echo "PASSWORD=$PASSWORD"             > .env
-        echo "ACCESS_KEY=$ACCESS_KEY"         > .env
-        echo "SECRET_KEY=$SECRET_KEY"         > .env
-        echo "URL_TEST=$URL_TEST"             > .env
-        echo "USER_NAME_TEST=$USER_NAME_TEST" > .env
-        echo "PASSWORD_TEST=$PASSWORD_TEST"   > .env
+    - name: Set up Environment Variables
+      run: |
+        echo "URL=$URL" >> .env
+        echo "USER_NAME=$USER_NAME" >> .env
+        echo "PASSWORD=$PASSWORD" >> .env
+        echo "ACCESS_KEY=$ACCESS_KEY" >> .env
+        echo "SECRET_KEY=$SECRET_KEY" >> .env
+        echo "URL_TEST=$URL_TEST" >> .env
+        echo "USER_NAME_TEST=$USER_NAME_TEST" >> .env
+        echo "PASSWORD_TEST=$PASSWORD_TEST" >> .env
       env:
         URL: ${{ secrets.URL }}
         USER_NAME: ${{ secrets.USER_NAME }}
