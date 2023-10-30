@@ -1,0 +1,13 @@
+@import url(../colors/colorStyle.css);
+
+.root {
+    -fx-background-color: -bege;
+}
+#consultar{
+    -fx-background-color: -verde;
+    -fx-text-fill: -branco;
+}
+#cadastrar {
+    -fx-background-color: -preto;
+    -fx-text-fill: -branco;
+}

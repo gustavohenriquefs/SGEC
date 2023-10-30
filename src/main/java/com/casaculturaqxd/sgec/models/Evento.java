@@ -6,7 +6,6 @@ import java.sql.Time;
 
 import java.util.SortedSet;
 
-import com.casaculturaqxd.sgec.models.arquivo.Arquivo;
 
 public class Evento {
     private Integer idEvento;
@@ -29,7 +28,7 @@ public class Evento {
     SortedSet<Integer> listaParticipantes;  
     SortedSet<Integer> listaOrganizadores;
     SortedSet<Integer> listaColaboradores;
-    SortedSet<Arquivo> listaArquivos;
+    SortedSet<Integer> listaArquivos;
 
     public String getNome() {
         return nome;
@@ -178,16 +177,16 @@ public class Evento {
         return this.listaColaboradores.remove(colaborador);
     }
 
-    public SortedSet<Arquivo> getListaArquivos() {
+    public SortedSet<Integer> getListaArquivos() {
         return listaArquivos;
     }
-    public void setListaArquivos(SortedSet<Arquivo> listaArquivos) {
+    public void setListaArquivos(SortedSet<Integer> listaArquivos) {
         this.listaArquivos = listaArquivos;
     }
-    public void addArquivo(Arquivo arquivo){
+    public void addArquivo(Integer arquivo){
         this.listaArquivos.add(arquivo);
     }
-    public boolean removeArquivo(Arquivo arquivo){
+    public boolean removeArquivo(Integer arquivo){
         return this.listaArquivos.remove(arquivo);
     }
     public Integer getIdEvento() {

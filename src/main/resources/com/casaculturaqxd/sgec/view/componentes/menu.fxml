@@ -1,28 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.*?>
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.control.Hyperlink?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.effect.ColorAdjust?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 
-<VBox id="header" minHeight="0.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.componentes.MenuController">
-    <children>
-        <AnchorPane id="header" fx:id="header" minWidth="1200.0" prefHeight="51.0" prefWidth="602.0" style="-fx-background-color: #A22D2E;">
-            <children>
-            <HBox layoutX="29.0" layoutY="8.0" spacing="30.0">
-               <children>
-                      <Hyperlink fx:id="home" layoutX="29.0" layoutY="8.0" onAction="#goToHome" text="Home" textFill="#fffef7" AnchorPane.leftAnchor="29.0" AnchorPane.rightAnchor="1120.0" />
-                      <Hyperlink fx:id="pesquisarEvento" layoutX="77.0" layoutY="8.0" onAction="#goToPesquisarEvento" text="Pesquisar evento" textFill="#fffef7" />
-                      <Hyperlink fx:id="cadastrarEvento" layoutX="182.0" layoutY="8.0" onAction="#goToCadastrarEvento" text="Cadastrar evento" textFill="#fffef7" />
-                      <Hyperlink fx:id="pesquisarGrupoEventos" layoutX="280.0" layoutY="8.0" onAction="#goToPesquisarGrupoEventos" text="Pesquisar grupos de eventos" textFill="#fffef7" />
-                      <Hyperlink fx:id="cadastrarGrupoEventos" layoutX="440.0" layoutY="8.0" onAction="#goToCadastrarGrupoEventos" text="Cadastrar grupos de eventos" textFill="#fffef7" />
-               </children>
-            </HBox>
-            </children>
-        </AnchorPane>
-    </children>
-</VBox>
+<MenuBar id="principal" fx:id="menu" prefHeight="40.0" prefWidth="429.0" style="-fx-background-color: #A22D2E;" stylesheets="@../../css/componentes/MenuStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <menus>
+      <Menu fx:id="home" mnemonicParsing="false">
+         <graphic>
+            <ImageView fx:id="voltar" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../imagens/left-arrow_271218.png" />
+               </image>
+               <effect>
+                  <ColorAdjust brightness="1.0" />
+               </effect>
+            </ImageView>
+         </graphic></Menu>
+      <Menu fx:id="home" mnemonicParsing="false" style="-fx-text-fill: #FFFFFF;" text="Home" />
+      <Menu fx:id="cadastrar" mnemonicParsing="false" style="-fx-text-fill: #FFFFFF;" text="Cadastrar">
+         <items>
+            <MenuItem fx:id="cadastrarEvento" mnemonicParsing="false" text="Evento" />
+            <MenuItem fx:id="cadastrarGrupo" mnemonicParsing="false" text="Grupo de eventos" />
+         </items>
+      </Menu>
+      <Menu fx:id="pesquisar" mnemonicParsing="false" style="-fx-text-fill: #FFFFFF;" text="Pesquisar">
+         <items>
+            <MenuItem fx:id="pesquisarEvento" mnemonicParsing="false" text="Evento" />
+            <MenuItem fx:id="pesquisarGrupo" mnemonicParsing="false" text="Grupo de eventos" />
+         </items>
+      </Menu>
+      <Menu fx:id="opcoes" mnemonicParsing="false" style="-fx-text-fill: #FFFFFF;" text="Opções">
+         <items>
+            <MenuItem fx:id="alterar" mnemonicParsing="false" text="Alterar informações pessoais" />
+            <MenuItem fx:id="sair" mnemonicParsing="false" text="Sair" />
+         </items>
+      </Menu>
+      <Menu fx:id="nomeUsuario" mnemonicParsing="false">
+         <graphic>
+            <Label fx:id="campoNomeUsuario" style="-fx-text-fill: #E9E3CA;" text="Nome do usuário" textFill="WHITE" />
+         </graphic>
+      </Menu>
+   </menus>
+</MenuBar>

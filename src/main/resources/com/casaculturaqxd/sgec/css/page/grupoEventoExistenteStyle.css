@@ -1,0 +1,23 @@
+@import url(../colors/colorStyle.css);
+
+#container, #principal {
+    -fx-background-color: -bege;
+}
+.botoes {
+    -fx-background-color: -verde;
+    -fx-text-fill: -branco;
+}
+#acoes {
+    -fx-background-color: -branco;
+}
+.faixas {
+    -fx-background-color: -vermelho;
+    -fx-pref-height: 3px;
+}
+.listas {
+    -fx-background-color: -branco;
+}
+#cancelar {
+    -fx-background-color: -preto;
+    -fx-text-fill: -branco;
+}

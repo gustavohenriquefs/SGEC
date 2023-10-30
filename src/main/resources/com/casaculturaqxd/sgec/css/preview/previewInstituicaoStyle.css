@@ -1,12 +1,9 @@
-@import url(../css/colors/colorStyle.css);
+@import url(../colors/colorStyle.css);
 
 #principal, #container {
     -fx-background-color: -branco;
 }
-#artista, #link, #area {
+#descricao, #valor, #nomeInstituicao {
     -fx-white-space: normal;
     -fx-wrap-text: true;
-}
-.meusLabels {
-    -fx-border-color: #392E2E;
 }

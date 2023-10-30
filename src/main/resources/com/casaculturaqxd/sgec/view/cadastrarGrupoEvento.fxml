@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<ScrollPane id="container" fx:id="container" hbarPolicy="ALWAYS" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1560.0" prefWidth="1560.0" stylesheets="@../css/page/cadastrarGrupoEventoStyle.css" vbarPolicy="ALWAYS" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+  <content>
+    <AnchorPane id="principal" fx:id="principal" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="1560.0" prefWidth="1560.0">
+         <children>
+            <VBox fx:id="header" layoutX="293.0" prefHeight="108.0" prefWidth="800.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <Label layoutX="21.0" layoutY="129.0" text="Cadastrar Grupo de Evento" AnchorPane.leftAnchor="20.0">
+               <font>
+                  <Font name="System Bold" size="20.0" />
+               </font>
+            </Label>
+            <HBox layoutX="20.0" layoutY="173.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="740.0" spacing="10.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
+               <children>
+                  <HBox HBox.hgrow="ALWAYS">
+                     <children>
+                        <TextField fx:id="titulo" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="400.0" HBox.hgrow="ALWAYS" />
+                     </children>
+                  </HBox>
+                  <CheckBox fx:id="fruicao" mnemonicParsing="false" text="Fruição" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets top="5.0" />
+                     </HBox.margin>
+                  </CheckBox>
+                  <CheckBox fx:id="fortalecimento" layoutX="410.0" layoutY="15.0" mnemonicParsing="false" text="Fortalecimento de patrimônio cultural" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets top="5.0" />
+                     </HBox.margin>
+                  </CheckBox>
+                  <CheckBox fx:id="formacao" layoutX="470.0" layoutY="15.0" mnemonicParsing="false" text="Formação em arte e cultura" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets top="5.0" />
+                     </HBox.margin>
+                  </CheckBox>
+                  <CheckBox fx:id="convocatoria" mnemonicParsing="false" text="Convocatória">
+                     <HBox.margin>
+                        <Insets top="5.0" />
+                     </HBox.margin>
+                  </CheckBox>
+               </children>
+            </HBox>
+            <Label layoutX="20.0" layoutY="159.0" text="Título" AnchorPane.leftAnchor="20.0">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <DatePicker fx:id="dataInicial" layoutX="13.0" layoutY="229.0" AnchorPane.leftAnchor="20.0" />
+            <DatePicker fx:id="daataFinal" layoutX="604.0" layoutY="224.0" AnchorPane.rightAnchor="20.0" />
+            <Label layoutX="22.0" layoutY="215.0" text="Data Inicial" AnchorPane.leftAnchor="22.0">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <Label layoutX="1365.0" layoutY="206.0" text="Data Final">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <Label layoutX="23.0" layoutY="276.0" text="Descrição" AnchorPane.leftAnchor="20.0">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <ScrollPane hbarPolicy="ALWAYS" layoutX="20.0" layoutY="294.0" vbarPolicy="ALWAYS" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
+               <content>
+                  <TextArea fx:id="descricao" prefHeight="150.0" prefWidth="1506.0" />
+               </content>
+            </ScrollPane>
+            <HBox fx:id="metricas" layoutX="20.0" layoutY="496.0" prefHeight="75.0" prefWidth="1520.0" spacing="30.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
+               <children>
+                  <TextField fx:id="publicoEsperado">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </TextField>
+                  <TextField fx:id="publicoAlcancado">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </TextField>
+                  <TextField fx:id="participantesEsperado">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </TextField>
+                  <TextField fx:id="participantesAlcancados">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </TextField>
+                  <TextField fx:id="acoesDeselvolvidasEsperadas">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </TextField>
+               </children>
+            </HBox>
+            <ComboBox id="classificacaoEtaria" fx:id="classificacaoEtaria" layoutX="22.0" layoutY="608.0" prefWidth="150.0" promptText="Classificação Etária" AnchorPane.leftAnchor="20.0" />
+            <Button id="cancelar" fx:id="cancelar" layoutX="1241.0" layoutY="1513.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="124.0" style="-fx-background-color: #352929;" text="Cancelar" textFill="#fffef7" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="195.0" />
+            <Button id="criar" fx:id="criar" layoutX="1390.0" layoutY="1513.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="124.0" style="-fx-background-color: #2A3F25;" text="Criar" textFill="#fffef7" AnchorPane.bottomAnchor="20.0" AnchorPane.rightAnchor="46.0" />
+            <Label layoutX="23.0" layoutY="479.0" text="Público Esperado">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <Label layoutX="202.0" layoutY="479.0" text="Público Alcançado">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <Label layoutX="381.0" layoutY="479.0" text="Participantes Esperados">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <Label layoutX="558.0" layoutY="479.0" text="Participantes Alcançados">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <Label layoutX="738.0" layoutY="479.0" text="Ações Desenvolvidas(Esperado)">
+               <font>
+                  <Font name="System Bold" size="11.0" />
+               </font>
+            </Label>
+            <VBox layoutY="780.0" prefHeight="700.0" prefWidth="1560.0" spacing="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+               <children>
+                  <HBox prefHeight="230.0" prefWidth="1560.0">
+                     <children>
+                        <VBox alignment="CENTER_LEFT" prefHeight="213.0" prefWidth="1545.0">
+                           <children>
+                              <Button fx:id="adicionarEventos" mnemonicParsing="false" styleClass="botoes" text="Adicionar Eventos" textFill="WHITE">
+                                 <VBox.margin>
+                                    <Insets left="20.0" />
+                                 </VBox.margin>
+                              </Button>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="230.0" prefWidth="200.0">
+                     <children>
+                        <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Button fx:id="adicionarColaboradores" alignment="BOTTOM_RIGHT" mnemonicParsing="false" styleClass="botoes" text="Adicionar Colaboradores">
+                                 <VBox.margin>
+                                    <Insets left="20.0" />
+                                 </VBox.margin>
+                              </Button>
+                           </children>
+                        </VBox>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="230.0" prefWidth="1560.0" spacing="30.0">
+                     <children>
+                        <VBox alignment="CENTER_LEFT" prefHeight="214.0" prefWidth="1544.0">
+                           <children>
+                              <Button alignment="BOTTOM_LEFT" mnemonicParsing="false" styleClass="botoes" text="Adicionar Organizadores">
+                                 <VBox.margin>
+                                    <Insets left="20.0" />
+                                 </VBox.margin>
+                              </Button>
+                           </children>
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </VBox>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children></AnchorPane>
+  </content>
+</ScrollPane>
