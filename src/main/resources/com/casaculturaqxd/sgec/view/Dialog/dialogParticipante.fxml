@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<DialogPane id="dialogParticipantes" prefHeight="499.0" prefWidth="614.0" stylesheets="@../../css/dialogParticipanteStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<DialogPane id="dialogParticipantes" prefHeight="499.0" prefWidth="614.0" stylesheets="@../../css/dialog/dialogParticipanteStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <content>
       <AnchorPane prefHeight="200.0" prefWidth="200.0">
          <children>
