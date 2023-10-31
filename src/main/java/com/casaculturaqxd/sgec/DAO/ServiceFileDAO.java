@@ -11,14 +11,13 @@ import com.casaculturaqxd.sgec.enums.ServiceType;
 import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 import com.casaculturaqxd.sgec.service.Service;
+import com.casaculturaqxd.sgec.service.ServiceFactory;
 
 public class ServiceFileDAO {
   Connection connection;
   Service service;
-  String bucket;
 
-  ServiceFileDAO(String bucket, Service service){
-    this.bucket = bucket;
+  ServiceFileDAO(Service service){
     this.service = service;
   }
 
@@ -28,13 +27,14 @@ public class ServiceFileDAO {
 
   public boolean inserirArquivo(ServiceFile arquivo){
     try {
+      setService(arquivo);
       service.enviarArquivo(arquivo);
       String sql = "insert into service_file (file_key,suffix,service,bucket,ultima_modificacao)"
               + " values(?,?,?,?,?)";
       PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
       stmt.setString(1, arquivo.getFileKey());
       stmt.setString(2, arquivo.getSuffix());
-      stmt.setString(3, arquivo.getService());
+      stmt.setString(3, arquivo.getService().toString());
       stmt.setString(4, arquivo.getBucket());
       stmt.setDate(5, arquivo.getUltimaModificacao());
       int numRemocoes = stmt.executeUpdate();
@@ -51,6 +51,7 @@ public class ServiceFileDAO {
 
   public ServiceFile getArquivo(ServiceFile arquivo){
     try {
+      setService(arquivo);
       service.getArquivo(arquivo.getBucket(), arquivo.getFileKey());
       String sql = "select * from service_file where id_service_file=?";
       PreparedStatement stmt = connection.prepareStatement(sql);
@@ -74,6 +75,7 @@ public class ServiceFileDAO {
 
   public boolean deleteArquivo(ServiceFile arquivo){
     try {
+      setService(arquivo);
       service.deletarArquivo(arquivo.getBucket(), arquivo.getFileKey());
       String sql = "delete from service_file where id_service_file=?";
       PreparedStatement stmt = connection.prepareStatement(sql);
@@ -133,5 +135,9 @@ public class ServiceFileDAO {
     }
     evento.setListaArquivos(null);
     return true;
+  }
+
+  public void setService(ServiceFile arquivo) {
+        this.service = arquivo.getService();
   }
 }
