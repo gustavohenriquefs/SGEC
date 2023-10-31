@@ -16,7 +16,6 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.S3Object;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 
 import io.github.cdimascio.dotenv.Dotenv;
@@ -113,5 +112,10 @@ public class S3Service implements Service {
          return suffix;
       }
       return null;
+   }
+
+   @Override
+   public String toString() {
+      return "s3";
    }
 }
