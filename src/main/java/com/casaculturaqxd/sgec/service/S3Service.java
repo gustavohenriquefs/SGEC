@@ -113,4 +113,9 @@ public class S3Service implements Service {
       }
       return null;
    }
+
+   @Override
+   public String toString() {
+      return "s3";
+   }
 }
