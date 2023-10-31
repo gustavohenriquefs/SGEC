@@ -7,11 +7,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.SortedSet;
 
-import com.casaculturaqxd.sgec.enums.ServiceType;
 import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 import com.casaculturaqxd.sgec.service.Service;
-import com.casaculturaqxd.sgec.service.ServiceFactory;
 
 public class ServiceFileDAO {
   Connection connection;
