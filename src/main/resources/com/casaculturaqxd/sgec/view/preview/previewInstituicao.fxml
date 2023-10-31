@@ -1,36 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox id="container" fx:id="container" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="300.0" prefWidth="602.0" style="-fx-background-color: #FFFEF7;" stylesheets="@../../css/previewInstituicaoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox id="container" fx:id="container" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="300.0" style="-fx-background-color: #FFFEF7;" stylesheets="@../../css/preview/previewInstituicaoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <AnchorPane id="principal" fx:id="principal" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="300.0" prefWidth="602.0">
+      <AnchorPane id="principal" fx:id="principal" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="300.0">
          <children>
-            <HBox id="campoNomeInstituicao" fx:id="campoNomeInstituicao" layoutX="20.0" layoutY="80.0" styleClass="meusLabels" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="80.0">
+            <HBox layoutX="90.0" layoutY="67.0" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <Label id="nomeInstituicao" fx:id="nomeInstituicao" minHeight="-Infinity" prefHeight="50.0" HBox.hgrow="ALWAYS" />
-               </children>
-            </HBox>
-            <HBox id="campoDescricao" fx:id="campoDescricao" layoutX="20.0" layoutY="141.0" minHeight="-Infinity" prefHeight="80.0" styleClass="meusLabels" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
-               <children>
-                  <Label id="area" fx:id="area" prefHeight="80.0" HBox.hgrow="ALWAYS" />
-               </children>
-            </HBox>
-            <HBox id="campoValor" fx:id="campoValor" layoutX="20.0" layoutY="241.0" styleClass="meusLabels" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
-               <children>
-                  <Label id="valor" fx:id="valor" minHeight="-Infinity" prefHeight="50.0" style="-fx-background-color: FF0000;" />
-               </children>
-            </HBox>
-            <HBox id="campoImagem" fx:id="campoImagem" layoutX="20.0" layoutY="5.0" prefHeight="69.0" prefWidth="564.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
-               <children>
-                  <ImageView id="imagem" fx:id="imagem" fitHeight="60.0" fitWidth="562.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS" />
+                  <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="201.0" prefWidth="150.0">
+                     <children>
+                        <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="170.0" prefWidth="150.0">
+                           <children>
+                              <ImageView fx:id="imagem" fitHeight="174.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS" />
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <Label id="nomeInstituicao" fx:id="nomeInstituicao" prefHeight="73.0" prefWidth="294.0" stylesheets="@../../css/preview/previewInstituicaoStyle.css" HBox.hgrow="ALWAYS" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="198.0" prefWidth="150.0">
+                     <children>
+                        <HBox prefHeight="248.0" prefWidth="150.0">
+                           <children>
+                              <Label id="descricao" fx:id="descricao" prefHeight="259.0" prefWidth="308.0" styleClass="meusLabels" />
+                           </children>
+                        </HBox>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <Label id="valor" fx:id="valorContribuicao" prefHeight="46.0" prefWidth="307.0" styleClass="meusLabels" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
                </children>
             </HBox>
          </children>
       </AnchorPane>
    </children>
+   <effect>
+      <DropShadow />
+   </effect>
 </VBox>
