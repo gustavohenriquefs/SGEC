@@ -10,10 +10,10 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TestDatabasePostgres {
     DatabasePostgres database;
     String INVALID_ENV = "";
-    DatabasePostgres incorrectDatabase;
 
     public TestDatabasePostgres() {
-
+        database = DatabasePostgres.getInstance("URL_TEST", "USER_NAME_TEST", "PASSWORD_TEST");
+        INVALID_ENV = "";
     }
 
     @BeforeEach
