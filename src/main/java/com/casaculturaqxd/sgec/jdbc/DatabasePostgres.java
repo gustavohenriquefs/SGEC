@@ -86,7 +86,7 @@ public class DatabasePostgres implements Database {
     }
 
     private boolean variavelEnvExists(String envKey) {
-        return dotenv.get(envKey) == null;
+        return dotenv.get(envKey) != null;
     }
 
 }

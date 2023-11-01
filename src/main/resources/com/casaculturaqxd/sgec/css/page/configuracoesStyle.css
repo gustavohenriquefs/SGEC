@@ -1,0 +1,12 @@
+@import url(../colors/colorStyle.css);
+
+.root {
+    -fx-background-color: -bege;
+}
+#camposDados {
+    -fx-background-color: -branco;
+}
+.botoes {
+    -fx-background-color: -preto;
+    -fx-text-fill: -branco;
+}

@@ -1,0 +1,16 @@
+@import url(../colors/colorStyle.css);
+
+.root {
+    -fx-background-color: -bege;
+}
+#camposCadastro {
+    -fx-background-color: -vermelho;
+}
+#botao {
+    -fx-background-color: -laranja;
+    -fx-text-fill: -branco;
+}
+.texto {
+    -fx-text-fill: -branco;
+    -fx-text-align: left;
+}
