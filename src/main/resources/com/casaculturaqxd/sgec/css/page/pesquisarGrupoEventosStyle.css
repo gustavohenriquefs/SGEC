@@ -3,3 +3,7 @@
 .root {
     -fx-background-color: -bege;
 }
+#botao {
+    -fx-background-color: -verde;
+    -fx-text-fill: -branco;
+}
