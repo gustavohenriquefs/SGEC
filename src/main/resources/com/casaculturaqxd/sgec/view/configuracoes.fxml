@@ -36,7 +36,7 @@
                               <VBox>
                                  <children>
                                     <Label text="Nome" />
-                                    <TextField styleClass="campos" />
+                                    <TextField fx:id="nome" styleClass="campos" />
                                  </children>
                                  <VBox.margin>
                                     <Insets left="10.0" right="10.0" />
@@ -45,7 +45,7 @@
                               <VBox>
                                  <children>
                                     <Label text="Email" />
-                                    <TextField />
+                                    <TextField fx:id="email" />
                                  </children>
                                  <VBox.margin>
                                     <Insets left="10.0" right="10.0" />
@@ -53,7 +53,7 @@
                               </VBox>
                               <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
                                  <children>
-                                    <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="190.0" styleClass="botoes" text="Salvar" />
+                                    <Button fx:id="salvar" mnemonicParsing="false" prefHeight="26.0" prefWidth="190.0" styleClass="botoes" text="Salvar" />
                                  </children>
                               </VBox>
                            </children>
@@ -63,7 +63,7 @@
                               <VBox>
                                  <children>
                                     <Label text="Senha antiga" />
-                                    <PasswordField />
+                                    <PasswordField fx:id="senhaAntiga" />
                                  </children>
                                  <VBox.margin>
                                     <Insets left="10.0" right="10.0" />
@@ -72,7 +72,7 @@
                               <VBox>
                                  <children>
                                     <Label text="Nova senha" />
-                                    <PasswordField />
+                                    <PasswordField fx:id="novaSenha" />
                                  </children>
                                  <VBox.margin>
                                     <Insets left="10.0" right="10.0" />
@@ -81,7 +81,7 @@
                               <VBox>
                                  <children>
                                     <Label text="Confirme a senha" />
-                                    <PasswordField />
+                                    <PasswordField fx:id="confirmarSenha" />
                                  </children>
                                  <VBox.margin>
                                     <Insets left="10.0" right="10.0" />
@@ -89,7 +89,7 @@
                               </VBox>
                               <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
                                  <children>
-                                    <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="212.0" styleClass="botoes" text="Trocar senha" />
+                                    <Button fx:id="trocarSenha" mnemonicParsing="false" prefHeight="26.0" prefWidth="212.0" styleClass="botoes" text="Trocar senha" />
                                  </children>
                               </VBox>
                            </children>
