@@ -1,12 +1,14 @@
 package com.casaculturaqxd.sgec.DAO;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.SortedSet;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 import com.casaculturaqxd.sgec.service.Service;
@@ -15,20 +17,20 @@ public class ServiceFileDAO {
   Connection connection;
   Service service;
 
-  ServiceFileDAO(Service service){
+  ServiceFileDAO(Service service) {
     this.service = service;
   }
 
-  public void setConnection(Connection connection){
+  public void setConnection(Connection connection) {
     this.connection = connection;
   }
 
-  public boolean inserirArquivo(ServiceFile arquivo){
+  public boolean inserirArquivo(ServiceFile arquivo) {
     try {
       setService(arquivo);
       service.enviarArquivo(arquivo);
       String sql = "insert into service_file (file_key,suffix,service,bucket,ultima_modificacao)"
-              + " values(?,?,?,?,?)";
+          + " values(?,?,?,?,?)";
       PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
       stmt.setString(1, arquivo.getFileKey());
       stmt.setString(2, arquivo.getSuffix());
@@ -38,16 +40,22 @@ public class ServiceFileDAO {
       int numRemocoes = stmt.executeUpdate();
       ResultSet rs = stmt.getGeneratedKeys();
       if (rs.next()) {
-          arquivo.setServiceFileId(rs.getInt("id_service_file"));
+        arquivo.setServiceFileId(rs.getInt("id_service_file"));
       }
       stmt.close();
       return numRemocoes > 0;
-    } catch (Exception e) {
+    } catch (SQLException e) {
+      Logger erro = Logger.getLogger("erroSQl");
+      erro.log(Level.SEVERE, "excecao levantada:", e);
+      return false;
+    } catch (IOException e) {
+      Logger erro = Logger.getLogger("erro upload arquivo no s3");
+      erro.log(Level.SEVERE, "excecao levantada:", e);
       return false;
     }
   }
 
-  public ServiceFile getArquivo(ServiceFile arquivo){
+  public ServiceFile getArquivo(ServiceFile arquivo) {
     try {
       setService(arquivo);
       service.getArquivo(arquivo.getBucket(), arquivo.getFileKey());
@@ -66,12 +74,14 @@ public class ServiceFileDAO {
         arquivoRetorno.setUltimaModificacao(resultSet.getDate("ultima_modificacao"));
       }
       return arquivo;
-    } catch (Exception e) {
+    } catch (SQLException e) {
+      Logger erro = Logger.getLogger("erroSQl");
+      erro.log(Level.SEVERE, "excecao levantada:", e);
       return null;
     }
   }
 
-  public boolean deleteArquivo(ServiceFile arquivo){
+  public boolean deleteArquivo(ServiceFile arquivo) {
     try {
       setService(arquivo);
       service.deletarArquivo(arquivo.getBucket(), arquivo.getFileKey());
@@ -81,32 +91,36 @@ public class ServiceFileDAO {
       int numRemocoes = stmt.executeUpdate();
       stmt.close();
       return numRemocoes > 0;
-    } catch (Exception e) {
+    } catch (SQLException e) {
+      Logger erro = Logger.getLogger("erroSQl");
+      erro.log(Level.SEVERE, "excecao levantada:", e);
       return false;
     }
   }
 
-  public boolean vincularAllArquivos(Evento evento){
+  public boolean vincularAllArquivos(Evento evento) {
     SortedSet<Integer> listaArquivos = evento.getListaArquivos();
     for (Integer idServiceFile : listaArquivos) {
       boolean temp = vincularArquivo(idServiceFile, evento.getIdEvento());
-      if(temp == false)
+      if (temp == false)
         return false;
     }
     return true;
   }
 
-  public boolean vincularArquivo(int idServiceFile, int idEvento){
+  public boolean vincularArquivo(int idServiceFile, int idEvento) {
     String sql = "INSERT INTO service_file_evento(id_evento, id_service_file) VALUES (?, ?);";
     try {
-        PreparedStatement stmt = connection.prepareStatement(sql);
-        stmt.setInt(1, idEvento);
-        stmt.setInt(2, idServiceFile);
-        stmt.execute();
-        stmt.close();
-        return true;
+      PreparedStatement stmt = connection.prepareStatement(sql);
+      stmt.setInt(1, idEvento);
+      stmt.setInt(2, idServiceFile);
+      stmt.execute();
+      stmt.close();
+      return true;
     } catch (SQLException e) {
-        return false;
+      Logger erro = Logger.getLogger("erroSQl");
+      erro.log(Level.SEVERE, "excecao levantada:", e);
+      return false;
     }
   }
 
@@ -119,7 +133,9 @@ public class ServiceFileDAO {
       stmt.execute();
       stmt.close();
       return true;
-    } catch (Exception e) {
+    } catch (SQLException e) {
+      Logger erro = Logger.getLogger("erroSQl");
+      erro.log(Level.SEVERE, "excecao levantada:", e);
       return false;
     }
   }
@@ -128,7 +144,7 @@ public class ServiceFileDAO {
     SortedSet<Integer> listaArquivos = evento.getListaArquivos();
     for (Integer idServiceFile : listaArquivos) {
       boolean temp = desvincularArquivo(idServiceFile, evento.getIdEvento());
-      if(temp == false)
+      if (temp == false)
         return false;
     }
     evento.setListaArquivos(null);
@@ -136,6 +152,6 @@ public class ServiceFileDAO {
   }
 
   public void setService(ServiceFile arquivo) {
-        this.service = arquivo.getService();
+    this.service = arquivo.getService();
   }
 }

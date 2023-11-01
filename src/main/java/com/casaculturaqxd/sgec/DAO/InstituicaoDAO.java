@@ -98,7 +98,9 @@ public class InstituicaoDAO {
         instituicao.setIdInstituicao(rs.getInt("id_instituicao"));
       }
       statement.close();
-    } catch (Exception e) {
+    } catch (SQLException e) {
+      Logger erro = Logger.getLogger("erroSQl");
+      erro.log(Level.SEVERE, "excecao levantada:", e);
       return false;
     }
 
@@ -121,6 +123,8 @@ public class InstituicaoDAO {
 
       return numAtualizacoes > 0;
     } catch (SQLException e) {
+      Logger erro = Logger.getLogger("erroSQl");
+      erro.log(Level.SEVERE, "excecao levantada:", e);
       return false;
     }
   }
@@ -138,6 +142,8 @@ public class InstituicaoDAO {
 
       return numRemocoes > 0;
     } catch (Exception e) {
+      Logger erro = Logger.getLogger("erroSQl");
+      erro.log(Level.SEVERE, "excecao levantada:", e);
       return false;
     }
   }
