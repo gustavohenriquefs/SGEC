@@ -20,7 +20,7 @@ public class ParticipanteDAOTest {
             idInvalidParticipante = -1, idValidEvento = 1, idInvalidEvento = -1,
             idValidServiceFile = 1;
 
-    ParticipanteDAOTest() {
+    public ParticipanteDAOTest() {
         setUpClass();
     }
 
