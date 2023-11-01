@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<VBox maxHeight="1024.0" maxWidth="1440.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1440.0" stylesheets="@../css/page/pesquisarGrupoEventosStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox maxHeight="1024.0" maxWidth="1440.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="231.0" prefWidth="1440.0" spacing="5.0" VBox.vgrow="ALWAYS">
+         <children>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+               <children>
+                  <VBox layoutX="200.0" layoutY="-42.0" prefHeight="58.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
+                     <children>
+                        <Label text="Pesquisar Grupos de Eventos">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                        </Label>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <TextField maxWidth="1000.0" HBox.hgrow="ALWAYS" />
+                              <Button maxWidth="200.0" mnemonicParsing="false" text="Pesquisar" HBox.hgrow="ALWAYS" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <VBox layoutX="158.0" layoutY="108.0" prefHeight="58.0" prefWidth="308.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                     <children>
+                        <Label text="Filtros" />
+                        <HBox prefHeight="100.0" prefWidth="200.0" spacing="100.0">
+                           <children>
+                              <MenuButton mnemonicParsing="false" text="Metas">
+                                <items>
+                                  <MenuItem mnemonicParsing="false" text="Fruição" />
+                                  <MenuItem mnemonicParsing="false" text="Fortalecimento de patrimônio cultural" />
+                                    <MenuItem mnemonicParsing="false" text="Formação em arte cultural" />
+                                    <MenuItem mnemonicParsing="false" text="Convocatória" />
+                                </items>
+                              </MenuButton>
+                              <MenuButton mnemonicParsing="false" text="Classificação etária">
+                                <items>
+                                  <MenuItem mnemonicParsing="false" text="Livre" />
+                                  <MenuItem mnemonicParsing="false" text="10 anos" />
+                                    <MenuItem mnemonicParsing="false" text="12 anos" />
+                                    <MenuItem mnemonicParsing="false" text="14 anos" />
+                                    <MenuItem mnemonicParsing="false" text="16 anos" />
+                                    <MenuItem mnemonicParsing="false" text="18 anos" />
+                                </items>
+                              </MenuButton>
+                              <DatePicker />
+                              <DatePicker />
+                              <TextField />
+                              <CheckBox mnemonicParsing="false" text="Acessível em Libras" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+                  <VBox alignment="TOP_CENTER" layoutX="469.0" layoutY="164.0" prefHeight="80.0" prefWidth="1440.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                     <children>
+                        <Label text="Exibir resultados para">
+                           <font>
+                              <Font name="System Bold Italic" size="20.0" />
+                           </font>
+                        </Label>
+                        <HBox prefHeight="66.0" prefWidth="1440.0" spacing="100.0">
+                           <children>
+                              <MenuButton disable="true" mnemonicParsing="false" text="Metas">
+                                 <items>
+                                    <MenuItem mnemonicParsing="false" text="Fruição" />
+                                    <MenuItem mnemonicParsing="false" text="Fortalecimento de patrimônio cultural" />
+                                    <MenuItem mnemonicParsing="false" text="Formação em arte cultural" />
+                                    <MenuItem mnemonicParsing="false" text="Convocatória" />
+                                 </items>
+                              </MenuButton>
+                              <MenuButton disable="true" mnemonicParsing="false" text="Classificação etária">
+                                 <items>
+                                    <MenuItem mnemonicParsing="false" text="Livre" />
+                                    <MenuItem mnemonicParsing="false" text="10 anos" />
+                                    <MenuItem mnemonicParsing="false" text="12 anos" />
+                                    <MenuItem mnemonicParsing="false" text="14 anos" />
+                                    <MenuItem mnemonicParsing="false" text="16 anos" />
+                                    <MenuItem mnemonicParsing="false" text="18 anos" />
+                                 </items>
+                              </MenuButton>
+                              <DatePicker disable="true" />
+                              <DatePicker disable="true" />
+                              <TextField disable="true" />
+                              <CheckBox disable="true" mnemonicParsing="false" text="Acessível em Libras" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+         </children>
+      </VBox>
+      <AnchorPane prefHeight="349.0" prefWidth="1442.0" VBox.vgrow="ALWAYS">
+         <children>
+            <ScrollPane hbarPolicy="ALWAYS" layoutX="1.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="360.0" prefWidth="1440.0" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+         </children>
+      </AnchorPane>
+   </children>
+</VBox>
