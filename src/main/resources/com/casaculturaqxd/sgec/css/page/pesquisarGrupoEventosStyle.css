@@ -1,0 +1,5 @@
+@import url(../colors/colorStyle.css);
+
+.root {
+    -fx-background-color: -bege;
+}
