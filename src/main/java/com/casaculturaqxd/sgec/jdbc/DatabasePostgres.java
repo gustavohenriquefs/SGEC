@@ -6,13 +6,10 @@ import java.sql.SQLException;
 import io.github.cdimascio.dotenv.Dotenv;
 
 /**
- * Implementacao de Database utilizando o driver jdbc
- * do Postgres, todos os parâmetros são carregados a partir
- * de variáveis de ambiente definidas em um arquivo .env.
- * 
+ * Implementacao de Database utilizando o driver jdbc do Postgres, todos os parâmetros são
+ * carregados a partir de variáveis de ambiente definidas em um arquivo .env.
  * <p>
- * Todos os métodos set desconectam da conexão atual
- * antes de tentar atualizar uma das credenciais.
+ * Todos os métodos set desconectam da conexão atual antes de tentar atualizar uma das credenciais.
  * </p>
  */
 public class DatabasePostgres implements Database {
@@ -23,18 +20,24 @@ public class DatabasePostgres implements Database {
     private String senha;
     private Dotenv dotenv = Dotenv.load();
 
-    public static DatabasePostgres getInstance(String urlKey, String userNameKey, String passwordKey) {
-        if (instance == null) {
-            instance = new DatabasePostgres(urlKey, userNameKey, passwordKey);
+    public static DatabasePostgres getInstance(String urlKey, String userNameKey,
+            String passwordKey) {
+        try {
+            if (instance == null || instance.getConnection().isClosed()) {
+                instance = new DatabasePostgres(urlKey, userNameKey, passwordKey);
+            }
+            return instance;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
         }
-        return instance;
     }
 
     private DatabasePostgres(String urlKey, String userNameKey, String passwordKey) {
         this.urlDataBase = dotenv.get(urlKey);
         this.nomeUsuario = dotenv.get(userNameKey);
         this.senha = dotenv.get(passwordKey);
-        
+
         try {
             Class.forName("org.postgresql.Driver");
             this.connection = DriverManager.getConnection(urlDataBase, nomeUsuario, senha);
@@ -57,7 +60,7 @@ public class DatabasePostgres implements Database {
         }
     }
 
-    public void setUrlDataBase(String urlKey) throws IncorrectEnvironmentVariableException{
+    public void setUrlDataBase(String urlKey) throws IncorrectEnvironmentVariableException {
         if (variavelEnvExists(urlKey)) {
             desconectar(connection);
             this.urlDataBase = dotenv.get(urlKey);
