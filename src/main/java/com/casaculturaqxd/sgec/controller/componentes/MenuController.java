@@ -4,31 +4,63 @@ import java.io.IOException;
 
 import com.casaculturaqxd.sgec.App;
 
-public class MenuController {
+import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 
-    public void goToHome() throws IOException{
-        try {
-            App.setRoot("view/home");
-        } catch (Exception e) {
-            // TODO: handle exception
-        }
+public class MenuController {
+    @FXML
+    Label campoNomeUsuario;
+
+    public void initialize() {
+        campoNomeUsuario.setText(App.getUsuario().getNomeUsuario());
     }
 
-    public void goToPesquisarEvento() throws IOException{
+    @FXML
+    public void goToHome() throws IOException {
+        App.setRoot("view/home");
+
+    }
+
+    @FXML
+    public void goToPesquisarEvento() throws IOException {
         App.setRoot("view/pesquisarEvento");
     }
 
-    public void goToCadastrarEvento() throws IOException{
-        if(App.getUsuario().isEditor())
+    @FXML
+    public void goToCadastrarEvento() throws IOException {
+        if (App.getUsuario().isEditor())
             App.setRoot("view/cadastrarEvento");
     }
 
-    public void goToPesquisarGrupoEventos() throws IOException{
+    @FXML
+    public void goToPesquisarGrupoEventos() throws IOException {
         App.setRoot("view/pesquisarGrupoEventos");
     }
 
-    public void goToCadastrarGrupoEventos() throws IOException{
-        if(App.getUsuario().isEditor())
-            App.setRoot("view/cadastrarGrupoEvento");
+    @FXML
+    public void goToCadastrarGrupoEventos() throws IOException {
+        // desabilitado por enquanto
+        // if(App.getUsuario().isEditor())
+        // App.setRoot("view/cadastrarGrupoEvento");
     }
+
+    @FXML
+    public void backTela() throws IOException {
+        if (!App.lastVisitedPages.empty()
+                && !App.lastVisitedPages.lastElement().getId().equals(App.getRoot().getId()))
+
+            App.backLastScreen();
+    }
+
+    @FXML
+    public void goToConfiguracoes() throws IOException {
+        if (App.getUsuario() != null)
+            App.setRoot("view/configuracoes");
+    }
+
+    @FXML
+    public void logout() throws IOException {
+        App.logout();
+    }
+
 }
