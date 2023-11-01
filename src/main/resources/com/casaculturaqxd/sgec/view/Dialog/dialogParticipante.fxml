@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DialogPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<DialogPane id="dialogParticipantes" prefHeight="499.0" prefWidth="614.0" stylesheets="@../../css/dialog/dialogParticipanteStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <content>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <VBox alignment="CENTER" layoutX="20.0" prefHeight="269.0" prefWidth="594.0" spacing="5.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+               <children>
+                  <Label text="Nome artista" />
+                  <TextField fx:id="nomeArtista" maxWidth="-Infinity" prefWidth="300.0" />
+                  <Label text="Minibio do artista" />
+                  <TextArea fx:id="minibioArtista" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="300.0" wrapText="true" />
+                  <Label text="Área de atuação" />
+                  <TextField fx:id="areaAtuacao" maxWidth="-Infinity" prefWidth="300.0" />
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                     <children>
+                        <Button id="cancelar" fx:id="cancelar" mnemonicParsing="false" text="Cancelar" />
+                        <Button id="cadastrar" fx:id="cadastrar" mnemonicParsing="false" text="Cadastrar Novo Participante" />
+                        <Button id="vincular" fx:id="vincular" mnemonicParsing="false" text="Vincular Participante" />
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+   </content>
+   <header>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="320.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <VBox alignment="CENTER" layoutX="150.0" layoutY="-24.0" prefHeight="154.0" prefWidth="480.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                     <children>
+                        <ImageView fx:id="imagem" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                        <Button id="adicionar" fx:id="adicionarImagem" mnemonicParsing="false" text="Adicionar Imagem" />
+                     </children>
+                  </VBox>
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+   </header>
+</DialogPane>

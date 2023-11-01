@@ -9,7 +9,7 @@ import java.sql.Statement;
 import com.casaculturaqxd.sgec.models.User;
 
 public class UserDAO {
-  private Connection connection; 
+  private Connection connection;
 
   public Connection getConnection() {
     return connection;
@@ -19,7 +19,7 @@ public class UserDAO {
     this.connection = connection;
   }
 
-  public boolean inserir(User obj){
+  public boolean inserir(User obj) {
     try {
       //1° passo - criar comando sql
       String sql = "insert into usuario (nome_usuario,email,senha,editor)"
@@ -46,7 +46,7 @@ public class UserDAO {
     }
   }
 
-  public User getUsuario(User obj){
+  public User getUsuario(User obj) {
     String sql = "SELECT * FROM usuario WHERE id_usuario=?";
     try {
       PreparedStatement stmt = connection.prepareStatement(sql);
@@ -67,7 +67,7 @@ public class UserDAO {
     }
   }
 
-  public boolean validar(User obj){
+  public boolean validar(User obj) {
     String sql = "SELECT * FROM usuario WHERE email=? and senha=?";
     try {
       PreparedStatement stmt = connection.prepareStatement(sql);
@@ -80,15 +80,17 @@ public class UserDAO {
         obj.setEmail(resultado.getString("email"));
         obj.setSenha(resultado.getString("senha"));
         obj.setEditor(resultado.getBoolean("editor"));
+
+        this.connection.setReadOnly(!obj.isEditor());
         return true;
-      } 
+      }
       return false;
     } catch (Exception e) {
       return false;
     }
   }
 
-  public boolean update(User obj){
+  public boolean update(User obj) {
     String sql = "UPDATE usuario SET nome_usuario=?, email=?, senha=?, editor=? WHERE id_usuario=?";
     try {
       PreparedStatement stmt = connection.prepareStatement(sql);
@@ -106,7 +108,7 @@ public class UserDAO {
     }
   }
 
-  public boolean deletar(User obj){
+  public boolean deletar(User obj) {
     String sql = "DELETE FROM usuario WHERE id_usuario=?";
     try {
       PreparedStatement stmt = connection.prepareStatement(sql);

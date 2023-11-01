@@ -16,18 +16,18 @@ import com.casaculturaqxd.sgec.models.User;
  * JavaFX App
  */
 public class App extends Application {
-    private static Stack<Parent> lastVisitedPages = new Stack<Parent>();
+    public static Stack<Parent> lastVisitedPages = new Stack<Parent>();
     private static Scene scene;
     private static User usuarioLogado;
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("view/home"), 640, 480);
+        scene = new Scene(loadFXML("view/login"), 640, 480);
         Image image = new Image(App.class.getResourceAsStream("imagens/logo_cego_aderaldo.png"));
         stage.getIcons().add(image);
         stage.setTitle("SGEC");
         stage.setScene(scene);
-        
+
         stage.setMaximized(true);
         stage.show();
     }
@@ -42,15 +42,49 @@ public class App extends Application {
         return usuarioLogado;
     }
 
-    public static void setRoot(Parent objVisualizacao) throws IOException {
-        lastVisitedPages.add(objVisualizacao);
-        scene.setRoot(objVisualizacao);
+    public static Stack<Parent> getLastVisitedPages() {
+        return lastVisitedPages;
     }
 
-     public static void setRoot(String fxml) throws IOException {
-        lastVisitedPages.add(loadFXML(fxml));
-        System.out.println(lastVisitedPages);
-        scene.setRoot(loadFXML(fxml));
+    public static Parent getRoot() {
+        return scene.getRoot();
+    }
+
+    public static void logout() throws IOException {
+        setUsuario(null);
+        scene.setRoot(loadFXML("view/login"));
+        lastVisitedPages.clear();
+    }
+
+    public static void backLastScreen() {
+        scene.setRoot(lastVisitedPages.pop());
+    }
+
+    public static void setRoot(Parent objVisualizacao) throws IOException {
+        if (lastVisitedPages.empty() == true
+                && !objVisualizacao.getId().equals(loadFXML("view/login").getId())) {
+
+            lastVisitedPages.add(getRoot());
+            scene.setRoot(objVisualizacao);
+        } else if (!lastVisitedPages.lastElement().getId().equals(objVisualizacao.getId())
+                && !objVisualizacao.getId().equals(loadFXML("view/login").getId())) {
+
+            lastVisitedPages.add(getRoot());
+            scene.setRoot(objVisualizacao);
+        }
+    }
+
+    public static void setRoot(String fxml) throws IOException {
+        if (lastVisitedPages.empty() == true
+                && getRoot().getId().equals(loadFXML("view/login").getId())) {
+
+            scene.setRoot(loadFXML(fxml));
+        } else if (!getRoot().getId().equals(loadFXML(fxml).getId())
+                && !loadFXML(fxml).getId().equals(loadFXML("view/login").getId())) {
+
+            lastVisitedPages.add(getRoot());
+            scene.setRoot(loadFXML(fxml));
+        }
     }
 
     private static Parent loadFXML(String fxml) throws IOException {
