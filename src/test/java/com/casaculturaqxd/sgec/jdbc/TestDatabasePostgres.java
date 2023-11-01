@@ -12,7 +12,7 @@ public class TestDatabasePostgres {
     String INVALID_ENV = "";
     DatabasePostgres incorrectDatabase;
 
-    TestDatabasePostgres() {
+    public TestDatabasePostgres() {
 
     }
 
