@@ -29,18 +29,18 @@
                         </Label>
                         <HBox prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <TextField maxWidth="1000.0" HBox.hgrow="ALWAYS" />
-                              <Button maxWidth="200.0" mnemonicParsing="false" text="Pesquisar" HBox.hgrow="ALWAYS" />
+                              <TextField fx:id="nomeEvento" maxWidth="1000.0" HBox.hgrow="ALWAYS" />
+                              <Button id="botao" fx:id="pesquisarGrupo" maxWidth="200.0" mnemonicParsing="false" text="Pesquisar" HBox.hgrow="ALWAYS" />
                            </children>
                         </HBox>
                      </children>
                   </VBox>
-                  <VBox layoutX="158.0" layoutY="108.0" prefHeight="58.0" prefWidth="308.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                  <VBox layoutX="158.0" layoutY="108.0" prefHeight="58.0" prefWidth="308.0" spacing="15.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                      <children>
                         <Label text="Filtros" />
-                        <HBox prefHeight="100.0" prefWidth="200.0" spacing="100.0">
+                        <HBox fx:id="localidade" prefHeight="100.0" prefWidth="200.0" spacing="100.0">
                            <children>
-                              <MenuButton mnemonicParsing="false" text="Metas">
+                              <MenuButton fx:id="metas" mnemonicParsing="false" text="Metas">
                                 <items>
                                   <MenuItem mnemonicParsing="false" text="Fruição" />
                                   <MenuItem mnemonicParsing="false" text="Fortalecimento de patrimônio cultural" />
@@ -48,7 +48,7 @@
                                     <MenuItem mnemonicParsing="false" text="Convocatória" />
                                 </items>
                               </MenuButton>
-                              <MenuButton mnemonicParsing="false" text="Classificação etária">
+                              <MenuButton fx:id="classficacaoEtaria" mnemonicParsing="false" text="Classificação etária">
                                 <items>
                                   <MenuItem mnemonicParsing="false" text="Livre" />
                                   <MenuItem mnemonicParsing="false" text="10 anos" />
@@ -58,15 +58,15 @@
                                     <MenuItem mnemonicParsing="false" text="18 anos" />
                                 </items>
                               </MenuButton>
-                              <DatePicker />
-                              <DatePicker />
+                              <DatePicker fx:id="dataInicio" />
+                              <DatePicker fx:id="dataFim" />
                               <TextField />
-                              <CheckBox mnemonicParsing="false" text="Acessível em Libras" />
+                              <CheckBox fx:id="acessivelLibras" mnemonicParsing="false" text="Acessível em Libras" />
                            </children>
                         </HBox>
                      </children>
                   </VBox>
-                  <VBox alignment="TOP_CENTER" layoutX="469.0" layoutY="164.0" prefHeight="80.0" prefWidth="1440.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                  <VBox alignment="TOP_CENTER" layoutX="469.0" layoutY="164.0" prefHeight="80.0" prefWidth="1440.0" spacing="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                      <children>
                         <Label text="Exibir resultados para">
                            <font>
@@ -107,7 +107,7 @@
       </VBox>
       <AnchorPane prefHeight="349.0" prefWidth="1442.0" VBox.vgrow="ALWAYS">
          <children>
-            <ScrollPane hbarPolicy="ALWAYS" layoutX="1.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="360.0" prefWidth="1440.0" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <ScrollPane fx:id="resultados" hbarPolicy="ALWAYS" layoutX="1.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="360.0" prefWidth="1440.0" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
          </children>
       </AnchorPane>
    </children>
