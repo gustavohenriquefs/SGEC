@@ -9,6 +9,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -42,20 +43,20 @@
                            <children>
                               <MenuButton fx:id="metas" mnemonicParsing="false" text="Metas">
                                 <items>
-                                  <MenuItem mnemonicParsing="false" text="Fruição" />
-                                  <MenuItem mnemonicParsing="false" text="Fortalecimento de patrimônio cultural" />
-                                    <MenuItem mnemonicParsing="false" text="Formação em arte cultural" />
-                                    <MenuItem mnemonicParsing="false" text="Convocatória" />
+                                  <MenuItem fx:id="fruicao" mnemonicParsing="false" text="Fruição" />
+                                  <MenuItem fx:id="fortalecimento" mnemonicParsing="false" text="Fortalecimento de patrimônio cultural" />
+                                    <MenuItem fx:id="formacao" mnemonicParsing="false" text="Formação em arte cultural" />
+                                    <MenuItem fx:id="convocatoria" mnemonicParsing="false" text="Convocatória" />
                                 </items>
                               </MenuButton>
                               <MenuButton fx:id="classficacaoEtaria" mnemonicParsing="false" text="Classificação etária">
                                 <items>
-                                  <MenuItem mnemonicParsing="false" text="Livre" />
-                                  <MenuItem mnemonicParsing="false" text="10 anos" />
-                                    <MenuItem mnemonicParsing="false" text="12 anos" />
-                                    <MenuItem mnemonicParsing="false" text="14 anos" />
-                                    <MenuItem mnemonicParsing="false" text="16 anos" />
-                                    <MenuItem mnemonicParsing="false" text="18 anos" />
+                                  <MenuItem fx:id="livre" mnemonicParsing="false" text="Livre" />
+                                  <MenuItem fx:id="maior10" mnemonicParsing="false" text="10 anos" />
+                                    <MenuItem fx:id="maior12" mnemonicParsing="false" text="12 anos" />
+                                    <MenuItem fx:id="maior14" mnemonicParsing="false" text="14 anos" />
+                                    <MenuItem fx:id="maior16" mnemonicParsing="false" text="16 anos" />
+                                    <MenuItem fx:id="maior18" mnemonicParsing="false" text="18 anos" />
                                 </items>
                               </MenuButton>
                               <DatePicker fx:id="dataInicio" />
@@ -66,37 +67,21 @@
                         </HBox>
                      </children>
                   </VBox>
-                  <VBox alignment="TOP_CENTER" layoutX="469.0" layoutY="164.0" prefHeight="80.0" prefWidth="1440.0" spacing="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                  <VBox alignment="TOP_CENTER" layoutX="469.0" layoutY="164.0" prefHeight="80.0" prefWidth="1440.0" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                      <children>
                         <Label text="Exibir resultados para">
                            <font>
                               <Font name="System Bold Italic" size="20.0" />
                            </font>
                         </Label>
-                        <HBox prefHeight="66.0" prefWidth="1440.0" spacing="100.0">
+                        <HBox alignment="TOP_CENTER" prefHeight="66.0" prefWidth="1440.0" spacing="100.0">
                            <children>
-                              <MenuButton disable="true" mnemonicParsing="false" text="Metas">
-                                 <items>
-                                    <MenuItem mnemonicParsing="false" text="Fruição" />
-                                    <MenuItem mnemonicParsing="false" text="Fortalecimento de patrimônio cultural" />
-                                    <MenuItem mnemonicParsing="false" text="Formação em arte cultural" />
-                                    <MenuItem mnemonicParsing="false" text="Convocatória" />
-                                 </items>
-                              </MenuButton>
-                              <MenuButton disable="true" mnemonicParsing="false" text="Classificação etária">
-                                 <items>
-                                    <MenuItem mnemonicParsing="false" text="Livre" />
-                                    <MenuItem mnemonicParsing="false" text="10 anos" />
-                                    <MenuItem mnemonicParsing="false" text="12 anos" />
-                                    <MenuItem mnemonicParsing="false" text="14 anos" />
-                                    <MenuItem mnemonicParsing="false" text="16 anos" />
-                                    <MenuItem mnemonicParsing="false" text="18 anos" />
-                                 </items>
-                              </MenuButton>
-                              <DatePicker disable="true" />
-                              <DatePicker disable="true" />
-                              <TextField disable="true" />
-                              <CheckBox disable="true" mnemonicParsing="false" text="Acessível em Libras" />
+                              <Label fx:id="resultadoMeta" text="Label" />
+                              <Label fx:id="classificacaoResultado" text="Label" />
+                              <Label fx:id="dataInicioResultado" text="Label" />
+                              <Label fx:id="dataFinalResultado" text="Label" />
+                              <Label fx:id="localidadeResultado" text="Label" />
+                              <Label fx:id="acessivelLibrasResultado" text="Label" />
                            </children>
                         </HBox>
                      </children>
@@ -105,9 +90,13 @@
             </AnchorPane>
          </children>
       </VBox>
-      <AnchorPane prefHeight="349.0" prefWidth="1442.0" VBox.vgrow="ALWAYS">
+      <AnchorPane prefHeight="338.0" prefWidth="1440.0" VBox.vgrow="ALWAYS">
          <children>
-            <ScrollPane fx:id="resultados" hbarPolicy="ALWAYS" layoutX="1.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="360.0" prefWidth="1440.0" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+            <ScrollPane fx:id="campoResultados" hbarPolicy="ALWAYS" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <content>
+                  <FlowPane fx:id="resultados" />
+               </content>
+            </ScrollPane>
          </children>
       </AnchorPane>
    </children>
