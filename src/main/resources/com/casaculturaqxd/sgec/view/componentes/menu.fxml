@@ -8,11 +8,11 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 
-<MenuBar id="principal" fx:id="menu" prefHeight="40.0" prefWidth="429.0" style="-fx-background-color: #A22D2E;" stylesheets="@../../css/MenuStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<MenuBar id="principal" fx:id="menu" prefHeight="40.0" prefWidth="429.0" style="-fx-background-color: #A22D2E;" stylesheets="@../../css/componentes/MenuStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.componentes.MenuController">
    <menus>
-      <Menu fx:id="home" mnemonicParsing="false">
+      <Menu fx:id="backTela" onShowing="#backTela" mnemonicParsing="false">
          <graphic>
-            <ImageView fx:id="voltar" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fx:id="voltar" onMouseClicked="#backTela" fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../imagens/left-arrow_271218.png" />
                </image>
@@ -20,24 +20,32 @@
                   <ColorAdjust brightness="1.0" />
                </effect>
             </ImageView>
-         </graphic></Menu>
-      <Menu fx:id="home" mnemonicParsing="false" style="-fx-text-fill: #FFFFFF;" text="Home" />
+         </graphic>
+         <items>
+            <MenuItem mnemonicParsing="false"/>
+         </items>
+      </Menu>
+      <Menu fx:id="home" mnemonicParsing="false" style="-fx-text-fill: #FFFFFF;">
+         <graphic>
+            <Label onMouseClicked="#goToHome" text="Home" textFill="WHITE" />
+         </graphic>
+      </Menu>
       <Menu fx:id="cadastrar" mnemonicParsing="false" style="-fx-text-fill: #FFFFFF;" text="Cadastrar">
          <items>
-            <MenuItem fx:id="cadastrarEvento" mnemonicParsing="false" text="Evento" />
-            <MenuItem fx:id="cadastrarGrupo" mnemonicParsing="false" text="Grupo de eventos" />
+            <MenuItem fx:id="cadastrarEvento" onAction="#goToCadastrarEvento" mnemonicParsing="false" text="Evento" />
+            <MenuItem fx:id="cadastrarGrupo" onAction="#goToCadastrarGrupoEventos" mnemonicParsing="false" text="Grupo de eventos" />
          </items>
       </Menu>
       <Menu fx:id="pesquisar" mnemonicParsing="false" style="-fx-text-fill: #FFFFFF;" text="Pesquisar">
          <items>
-            <MenuItem fx:id="pesquisarEvento" mnemonicParsing="false" text="Evento" />
-            <MenuItem fx:id="pesquisarGrupo" mnemonicParsing="false" text="Grupo de eventos" />
+            <MenuItem fx:id="pesquisarEvento" onAction="#goToPesquisarEvento" mnemonicParsing="false" text="Evento" />
+            <MenuItem fx:id="pesquisarGrupo" onAction="#goToPesquisarGrupoEventos" mnemonicParsing="false" text="Grupo de eventos" />
          </items>
       </Menu>
       <Menu fx:id="opcoes" mnemonicParsing="false" style="-fx-text-fill: #FFFFFF;" text="Opções">
          <items>
-            <MenuItem fx:id="alterar" mnemonicParsing="false" text="Alterar informações pessoais" />
-            <MenuItem fx:id="sair" mnemonicParsing="false" text="Sair" />
+            <MenuItem fx:id="alterar" mnemonicParsing="false" onAction="#goToConfiguracoes" text="Alterar informações pessoais" />
+            <MenuItem fx:id="sair" mnemonicParsing="false" onAction="#logout" text="Sair" />
          </items>
       </Menu>
       <Menu fx:id="nomeUsuario" mnemonicParsing="false">

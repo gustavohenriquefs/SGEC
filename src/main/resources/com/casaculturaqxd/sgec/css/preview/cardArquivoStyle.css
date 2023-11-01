@@ -1,0 +1,8 @@
+@import url(../colors/colorStyle.css);
+
+.root {
+    -fx-background-color: -branco;
+}
+#menu {
+    -fx-background-color: -branco;
+}
