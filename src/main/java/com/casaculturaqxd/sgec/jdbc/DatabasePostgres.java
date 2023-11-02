@@ -20,8 +20,7 @@ public class DatabasePostgres implements Database {
     private String senha;
     private Dotenv dotenv = Dotenv.load();
 
-    public static DatabasePostgres getInstance(String urlKey, String userNameKey,
-            String passwordKey) {
+    public static DatabasePostgres getInstance(String urlKey, String userNameKey, String passwordKey) {
         try {
             if (instance == null || instance.getConnection().isClosed()) {
                 instance = new DatabasePostgres(urlKey, userNameKey, passwordKey);

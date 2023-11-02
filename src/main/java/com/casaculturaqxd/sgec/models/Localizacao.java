@@ -2,6 +2,7 @@ package com.casaculturaqxd.sgec.models;
 
 public class Localizacao {
     private int idLocalizacao;
+    private String nome;
     private String rua;
     private int numeroRua;
     private String bairro;
@@ -9,6 +10,27 @@ public class Localizacao {
     private String cidade;
     private String estado;
     private String pais;
+
+    public Localizacao(String nome, String rua, String cidade, String estado, String pais) {
+        this.nome = nome;
+        this.rua = rua;
+        this.cidade = cidade;
+        this.estado = estado;
+        this.pais = pais;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public Localizacao() {
+    }
+
 
     public String getRua() {
         return rua;

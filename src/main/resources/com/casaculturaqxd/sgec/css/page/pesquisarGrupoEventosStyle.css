@@ -1,0 +1,17 @@
+@import url(../colors/colorStyle.css);
+
+.root {
+    -fx-background-color: -bege;
+}
+#botao {
+    -fx-background-color: -verde;
+    -fx-text-fill: -branco;
+}
+.labels {
+    -fx-padding: 2px 10px 2px 10px;
+    -fx-background-color: -branco;
+    -fx-background-radius: 20px;
+    -fx-border-radius: 100px;
+    -fx-border-color: -branco;
+    fx-box-sizing: border-box;
+}
