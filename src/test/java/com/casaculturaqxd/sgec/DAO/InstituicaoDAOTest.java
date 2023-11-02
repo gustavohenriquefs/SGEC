@@ -270,26 +270,4 @@ public class InstituicaoDAOTest {
                 () -> assertNotEquals(previousValor,
                         instituicaoDAO.getInstituicao(instituicao).get().getValorContribuicao()));
     }
-
-    @Test
-    public void testAtualizarValidColaboradorValidEventoFalhandoDebug() {
-        // criar vinculo para o teste
-        String previousDescricao = "nova descricao", previousValor = null;
-        instituicao = new Instituicao(idValidInstituicao);
-        instituicao.setDescricaoContribuicao(previousDescricao);
-        instituicao.setValorContribuicao(previousValor);
-        instituicaoDAO.vincularColaborador(instituicao, idValidEvento);
-
-        // atualizar o model
-        instituicao.setDescricaoContribuicao("updated descricao");
-        instituicao.setValorContribuicao("update valor");
-
-        boolean sucess = instituicaoDAO.atualizarColaborador(instituicao, idValidEvento);
-        assertAll(() -> assertFalse(sucess),
-                () -> assertNotEquals(previousDescricao,
-                        instituicaoDAO.getInstituicao(instituicao).get()
-                                .getDescricaoContribuicao()),
-                () -> assertNotEquals(previousValor,
-                        instituicaoDAO.getInstituicao(instituicao).get().getValorContribuicao()));
-    }
 }

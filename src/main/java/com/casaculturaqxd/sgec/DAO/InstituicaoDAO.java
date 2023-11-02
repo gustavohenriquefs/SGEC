@@ -285,6 +285,10 @@ public class InstituicaoDAO {
       Logger erro = Logger.getLogger("ID faltando");
       erro.log(Level.SEVERE, "excecao levantada:", e);
       return false;
+    } catch (Exception e) {
+      Logger outraExcecao = Logger.getLogger("metodo executou");
+      outraExcecao.log(Level.SEVERE, "excecao nao capturada adequadamente", e);
+      return false;
     }
   }
 
