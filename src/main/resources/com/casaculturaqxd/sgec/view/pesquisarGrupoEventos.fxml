@@ -62,8 +62,26 @@
                                     <MenuItem fx:id="maior18" mnemonicParsing="false" text="18 anos" />
                                 </items>
                               </MenuButton>
-                              <DatePicker fx:id="dataInicio" />
-                              <DatePicker fx:id="dataFim" />
+                              <VBox>
+                                 <children>
+                                    <Label text="Data de início">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <DatePicker fx:id="dataInicio" />
+                                 </children>
+                              </VBox>
+                              <VBox>
+                                 <children>
+                                    <Label text="Data de fim">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                    <DatePicker fx:id="dataFim" />
+                                 </children>
+                              </VBox>
                               <VBox>
                                  <children>
                                     <Label text="Localização">
