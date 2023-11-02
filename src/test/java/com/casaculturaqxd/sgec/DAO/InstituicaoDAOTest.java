@@ -240,8 +240,8 @@ public class InstituicaoDAOTest {
         // atualizar o model
         instituicao.setDescricaoContribuicao("updated descricao");
         instituicao.setValorContribuicao("update valor");
-
-        assertAll(() -> assertTrue(instituicaoDAO.atualizarOrganizador(instituicao, idValidEvento)),
+        boolean sucess = instituicaoDAO.atualizarOrganizador(instituicao, idValidEvento);
+        assertAll(() -> assertTrue(sucess),
                 () -> assertNotEquals(previousDescricao,
                         instituicaoDAO.getInstituicao(instituicao).get()
                                 .getDescricaoContribuicao()),
