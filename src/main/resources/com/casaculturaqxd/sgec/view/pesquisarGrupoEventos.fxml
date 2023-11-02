@@ -96,7 +96,7 @@
                                     <Font size="16.0" />
                                  </font>
                               </Label>
-                              <Label fx:id="classificacaoResultado" prefHeight="32.0" prefWidth="45.0" styleClass="labels" text="Label">
+                              <Label fx:id="classificacaoResultado" styleClass="labels" text="Label">
                                  <font>
                                     <Font size="16.0" />
                                  </font>
