@@ -30,7 +30,7 @@
                         </Label>
                         <HBox prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <TextField fx:id="nomeEvento" maxWidth="1000.0" HBox.hgrow="ALWAYS" />
+                              <TextField fx:id="nomeGrupoEventos" maxWidth="1000.0" HBox.hgrow="ALWAYS" />
                               <Button id="botao" fx:id="pesquisarGrupo" maxWidth="200.0" mnemonicParsing="false" text="Pesquisar" HBox.hgrow="ALWAYS" />
                            </children>
                         </HBox>
@@ -89,7 +89,7 @@
                                           <Font size="14.0" />
                                        </font>
                                     </Label>
-                                    <TextField promptText="Local: Quixadá(Ex)" />
+                                    <TextField fx:id="localizacao" promptText="Local: Quixadá(Ex)" />
                                  </children>
                               </VBox>
                               <CheckBox fx:id="acessivelLibras" mnemonicParsing="false" text="Acessível em Libras" />
@@ -151,7 +151,7 @@
          <children>
             <ScrollPane fx:id="campoResultados" hbarPolicy="ALWAYS" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <content>
-                  <FlowPane fx:id="resultados" />
+                  <FlowPane fx:id="secaoResultados" />
                </content>
             </ScrollPane>
          </children>
