@@ -24,21 +24,29 @@ public class DatabasePostgres implements Database {
     private Dotenv dotenv = Dotenv.load();
 
     public static DatabasePostgres getInstance(String urlKey, String userNameKey, String passwordKey) {
-        if (instance == null) {
-            instance = new DatabasePostgres(urlKey, userNameKey, passwordKey);
+        try {
+            if (instance == null || instance.getConnection().isClosed()) {
+                instance = new DatabasePostgres(urlKey, userNameKey, passwordKey);
+            }
+            return instance;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
         }
-        return instance;
     }
 
     private DatabasePostgres(String urlKey, String userNameKey, String passwordKey) {
         this.urlDataBase = dotenv.get(urlKey);
         this.nomeUsuario = dotenv.get(userNameKey);
         this.senha = dotenv.get(passwordKey);
-
+        
         try {
+            Class.forName("org.postgresql.Driver");
             this.connection = DriverManager.getConnection(urlDataBase, nomeUsuario, senha);
         } catch (SQLException erro) {
             throw new RuntimeException(erro);
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -83,7 +91,7 @@ public class DatabasePostgres implements Database {
     }
 
     private boolean variavelEnvExists(String envKey) {
-        return dotenv.get(envKey) == null;
+        return dotenv.get(envKey) != null;
     }
 
 }

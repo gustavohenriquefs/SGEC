@@ -11,13 +11,8 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox id="container" prefHeight="576.0" prefWidth="780.0" stylesheets="@../css/page/HomeStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.HomeController">
+<VBox id="pageHome" fx:id="root" prefHeight="576.0" prefWidth="780.0" stylesheets="@../css/page/HomeStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.HomeController">
    <children>
-      <HBox fx:id="menuContainer">
-         <VBox.margin>
-            <Insets />
-         </VBox.margin>
-      </HBox>
       <GridPane fx:id="gridMetas" prefHeight="227.0" prefWidth="780.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />

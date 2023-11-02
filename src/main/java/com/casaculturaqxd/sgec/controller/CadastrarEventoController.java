@@ -50,6 +50,8 @@ public class CadastrarEventoController implements ControllerEvento {
     DateFormat formatterHorario;
     Stage stage;
     @FXML
+    VBox root;
+    @FXML
     VBox Localizacoes, cargaHoraria;
     @FXML
     HBox header, secaoParticipantes, Organizadores, Colaboradores;
@@ -81,6 +83,8 @@ public class CadastrarEventoController implements ControllerEvento {
     public void initialize() throws IOException {
         formatterHorario = new SimpleDateFormat("HH:mm");
 
+        loadMenu();
+        // inicia com o local obrigatorio carregado na pagina
         addListenersParticipante(participantes);
 
         // FXMLLoader loaderMenu = new
@@ -93,6 +97,12 @@ public class CadastrarEventoController implements ControllerEvento {
 
         showCargaHoraria(checkMeta3.isSelected());
         showCertificavel(checkMeta3.isSelected());
+    }
+
+    private void loadMenu() throws IOException {
+        FXMLLoader carregarMenu =
+                new FXMLLoader(App.class.getResource("view/componentes/menu.fxml"));
+        root.getChildren().add(0, carregarMenu.load());
     }
 
     public void criarNovoEvento() throws IOException, ParseException {
