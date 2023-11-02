@@ -7,9 +7,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.SortedSet;
 import java.util.TreeSet;
+
+import javax.swing.JOptionPane;
 
 import com.casaculturaqxd.sgec.models.Evento;
 
@@ -246,6 +249,43 @@ public class EventoDAO {
     }
 
     return eventos;
+  }
+
+  public ArrayList<Evento> pesquisarEvento(String nome){
+    try {
+      ArrayList<Evento> eventos = new ArrayList<>();
+      
+      String sql = "select * from eventos where nome like ?";
+      
+      PreparedStatement stmt = connection.prepareStatement(sql);
+      stmt.setString(1, "%"+nome+"%");
+      ResultSet resultSet = stmt.executeQuery();
+      while(resultSet.next()){
+        Evento evento = new Evento();
+        evento.setIdEvento(resultSet.getInt("id_evento"));
+        evento.setNome(resultSet.getString("nome_evento"));
+        evento.setPublicoEsperado(resultSet.getInt("publico_esperado"));
+        evento.setPublicoAlcancado(resultSet.getInt("publico_alcancado"));
+        evento.setDescricao(resultSet.getString("descricao"));
+        evento.setDataInicial(resultSet.getDate("data_inicial"));
+        evento.setDataFinal(resultSet.getDate("data_final"));
+        evento.setHorario(resultSet.getTime("horario"));
+        evento.setClassificacaoEtaria(resultSet.getString("classificacao_etaria"));
+        evento.setCertificavel(resultSet.getBoolean("certificavel"));
+        evento.setCargaHoraria(resultSet.getTime("carga_horaria"));
+        evento.setAcessivelEmLibras(resultSet.getBoolean("acessivel_em_libras"));
+        evento.setParticipantesEsperado(resultSet.getInt("num_participantes_esperado"));
+        evento.setMunicipiosEsperado(resultSet.getInt("num_municipios_esperado"));
+        evento.setLocais(this.buscarLocaisPorEvento(evento.getIdEvento()));
+        evento.setListaOrganizadores(this.buscarOrganizadoresPorEvento(evento.getIdEvento()));
+        evento.setListaColaboradores(this.buscarColaboradoresPorEvento(evento.getIdEvento()));
+        evento.setListaParticipantes(this.buscarLocaisPorEvento(evento.getIdEvento()));
+        eventos.add(evento);
+      }     
+      return eventos;
+    } catch (SQLException e) {
+      return null;
+    }
   }
 
   public Optional<Evento> buscarEvento(Evento evento) {
