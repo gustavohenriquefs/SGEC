@@ -262,7 +262,8 @@ public class InstituicaoDAOTest {
         instituicao.setDescricaoContribuicao("updated descricao");
         instituicao.setValorContribuicao("update valor");
 
-        assertAll(() -> assertTrue(instituicaoDAO.atualizarColaborador(instituicao, idValidEvento)),
+        boolean sucess = instituicaoDAO.atualizarColaborador(instituicao, idValidEvento);
+        assertAll(() -> assertTrue(sucess),
                 () -> assertNotEquals(previousDescricao,
                         instituicaoDAO.getInstituicao(instituicao).get()
                                 .getDescricaoContribuicao()),
