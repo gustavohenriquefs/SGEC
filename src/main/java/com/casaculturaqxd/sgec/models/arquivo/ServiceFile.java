@@ -22,11 +22,13 @@ public class ServiceFile {
         this.content = content;
         this.bucket = bucket;
         this.fileKey = content.getName();
-        this.service = ServiceFactory.getService(ServiceType.S3, "ACCESS_KEY","SECRET_KEY");
+        this.service = ServiceFactory.getService(ServiceType.S3, "ACCESS_KEY", "SECRET_KEY");
     }
 
-    public ServiceFile(Integer serviceFileId) {
+    public ServiceFile(Integer serviceFileId, String bucket) {
         this.serviceFileId = serviceFileId;
+        this.bucket = bucket;
+        this.service = ServiceFactory.getService(ServiceType.S3, "ACCESS_KEY", "SECRET_KEY");
     }
 
 
@@ -35,7 +37,7 @@ public class ServiceFile {
         this.bucket = bucket;
         this.ultimaModificacao = ultimaModificacao;
         this.content = content;
-        this.service = ServiceFactory.getService(ServiceType.S3, "ACCESS_KEY","SECRET_KEY");
+        this.service = ServiceFactory.getService(ServiceType.S3, "ACCESS_KEY", "SECRET_KEY");
     }
 
     public Integer getServiceFileId() {
@@ -68,7 +70,8 @@ public class ServiceFile {
     }
 
     public void setService(String serviceType) {
-        this.service = ServiceFactory.getService(ServiceType.valueOf(serviceType), "ACCESS_KEY", "SECRET_KEY");
+        this.service = ServiceFactory.getService(ServiceType.valueOf(serviceType.toUpperCase()),
+                "ACCESS_KEY", "SECRET_KEY");
     }
 
     public String getBucket() {
