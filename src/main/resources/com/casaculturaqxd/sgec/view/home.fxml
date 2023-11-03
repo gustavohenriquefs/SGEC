@@ -3,15 +3,14 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox id="pageHome" fx:id="root" prefHeight="576.0" prefWidth="780.0" stylesheets="@../css/page/HomeStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.HomeController">
+<VBox id="pageHome" fx:id="root" prefHeight="576.0" prefWidth="780.0" stylesheets="@../css/page/HomeStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.HomeController">
    <children>
       <GridPane fx:id="gridMetas" prefHeight="227.0" prefWidth="780.0">
         <columnConstraints>
@@ -22,14 +21,19 @@
           <RowConstraints minHeight="10.0" percentHeight="0.0" prefHeight="180.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label id="titulo1" prefHeight="74.0" prefWidth="1800.0" text=" Próximas Metas" textFill="#fffef7">
-               <font>
-                  <Font size="16.0" />
-               </font>
-               <padding>
-                  <Insets bottom="12.0" left="20.0" top="12.0" />
-               </padding>
-            </Label>
+            <VBox>
+               <children>
+                  <Label id="titulo1" prefHeight="74.0" prefWidth="1800.0" styleClass="labels" text=" Próximas Metas" textFill="#fffef7">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="12.0" left="20.0" top="12.0" />
+                     </padding>
+                  </Label>
+                  <FlowPane prefHeight="200.0" prefWidth="200.0" />
+               </children>
+            </VBox>
          </children>
          <VBox.margin>
             <Insets top="20.0" />
@@ -38,9 +42,9 @@
             <Insets bottom="12.0" left="12.0" right="12.0" top="12.0" />
          </padding>
       </GridPane>
-      <VBox prefHeight="368.0" prefWidth="778.0">
+      <VBox prefHeight="368.0" prefWidth="778.0" VBox.vgrow="ALWAYS">
          <children>
-            <Label id="titulo1" prefHeight="68.0" prefWidth="1800.0" text="Últimos Eventos Cadastrados" textFill="#fffef7">
+            <Label id="titulo1" prefHeight="68.0" prefWidth="1800.0" styleClass="labels" text="Últimos Eventos Cadastrados" textFill="#fffef7">
                <font>
                   <Font size="16.0" />
                </font>
@@ -48,14 +52,10 @@
                   <Insets left="20.0" />
                </padding>
             </Label>
-            <ScrollPane prefHeight="271.0" prefWidth="756.0">
-              <content>
-                <AnchorPane minHeight="200.0" minWidth="0.0" prefHeight="434.0" prefWidth="752.0">
-                     <children>
-                        <HBox fx:id="listaEventos" minHeight="400.0" prefHeight="400.0" />
-                     </children>
-                  </AnchorPane>
-              </content>
+            <ScrollPane hbarPolicy="ALWAYS" vbarPolicy="ALWAYS" VBox.vgrow="ALWAYS">
+               <content>
+                  <FlowPane fx:id="secaoUltimosEventos" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="265.0" prefWidth="740.0" />
+               </content>
             </ScrollPane>
          </children>
          <VBox.margin>
