@@ -1,6 +1,7 @@
 package com.casaculturaqxd.sgec.controller.preview;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import com.casaculturaqxd.sgec.controller.ControllerEvento;
 import com.casaculturaqxd.sgec.models.Participante;
@@ -30,6 +31,9 @@ public class PreviewParticipanteController {
         return parentController;
     }
 
+    /**
+     * seta o stage desse controller para o mesmo do controller pai passado
+     */
     public void setParentController(ControllerEvento parentController) {
         this.parentController = parentController;
     }
@@ -47,11 +51,22 @@ public class PreviewParticipanteController {
     public void loadContent() {
         nomeArtista.setText(participante.getNome());
         areaAtuacao.setText(participante.getAreaDeAtuacao());
-        // minibio.setText(participante.getBio());
-        // link.setText(participante.getLink());
-        // InputStream fileAsStream = new
-        // FileInputStream(participante.getServiceFile().getContent());
-        // imagem.setImage(new Image(fileAsStream));
+        minibio.setText(participante.getBio());
+        link.setText(participante.getLinkMapaDaCultura());
+        loadImagem();
+    }
+
+    public void loadImagem() {
+        InputStream fileAsStream;
+
+        try {
+            fileAsStream = new FileInputStream(participante.getImagemCapa().getContent());
+            imagem.setImage(new Image(fileAsStream));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
     }
 
     public void remover() {
