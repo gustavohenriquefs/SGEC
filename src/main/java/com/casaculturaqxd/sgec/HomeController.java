@@ -14,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
@@ -33,13 +34,10 @@ public class HomeController {
   private GridPane gridMetas;
 
   @FXML
-  private HBox listaEventos;
+  private FlowPane secaoUltimosEventos;
 
   @FXML
   private RowConstraints titulo1;
-
-  @FXML
-  private HBox menuContainer;
 
   @FXML
   public void initialize() throws IOException {
@@ -51,13 +49,13 @@ public class HomeController {
     ArrayList<Evento> ultimosEventos = getUltimosEventos();
 
     if (ultimosEventos != null) {
-      for (int idxEvento = 0; idxEvento < ultimosEventos.size(); idxEvento++) {
-        this.adicionarEventoEmGrid(ultimosEventos.get(idxEvento), idxEvento);
+      for (Evento evento : ultimosEventos) {
+        this.adicionarEventoEmGrid(evento);
       }
     }
   }
 
-  private void adicionarEventoEmGrid(Evento evento, int idxEvento) {
+  private void adicionarEventoEmGrid(Evento evento) {
     try {
 
       FXMLLoader childLoader = obterFXMLPreviewEventoExistenteLoader();
@@ -68,7 +66,7 @@ public class HomeController {
 
       childController.setEvento(evento);
 
-      listaEventos.getChildren().add(childNode);
+      secaoUltimosEventos.getChildren().add(childNode);
     } catch (IOException e) {
       e.printStackTrace();
     }
