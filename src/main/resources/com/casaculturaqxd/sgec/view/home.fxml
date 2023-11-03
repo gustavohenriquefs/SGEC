@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox id="pageHome" fx:id="root" prefHeight="576.0" prefWidth="780.0" stylesheets="@../css/page/HomeStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.HomeController">
+<VBox id="pageHome" fx:id="root" prefHeight="576.0" prefWidth="780.0" stylesheets="@../css/page/HomeStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.HomeController">
    <children>
       <GridPane fx:id="gridMetas" prefHeight="227.0" prefWidth="780.0">
         <columnConstraints>
@@ -21,14 +21,19 @@
           <RowConstraints minHeight="10.0" percentHeight="0.0" prefHeight="180.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label id="titulo1" prefHeight="74.0" prefWidth="1800.0" text=" Próximas Metas" textFill="#fffef7">
-               <font>
-                  <Font size="16.0" />
-               </font>
-               <padding>
-                  <Insets bottom="12.0" left="20.0" top="12.0" />
-               </padding>
-            </Label>
+            <VBox>
+               <children>
+                  <Label id="titulo1" prefHeight="74.0" prefWidth="1800.0" styleClass="labels" text=" Próximas Metas" textFill="#fffef7">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="12.0" left="20.0" top="12.0" />
+                     </padding>
+                  </Label>
+                  <FlowPane prefHeight="200.0" prefWidth="200.0" />
+               </children>
+            </VBox>
          </children>
          <VBox.margin>
             <Insets top="20.0" />
@@ -39,7 +44,7 @@
       </GridPane>
       <VBox prefHeight="368.0" prefWidth="778.0" VBox.vgrow="ALWAYS">
          <children>
-            <Label id="titulo1" prefHeight="68.0" prefWidth="1800.0" text="Últimos Eventos Cadastrados" textFill="#fffef7">
+            <Label id="titulo1" prefHeight="68.0" prefWidth="1800.0" styleClass="labels" text="Últimos Eventos Cadastrados" textFill="#fffef7">
                <font>
                   <Font size="16.0" />
                </font>
