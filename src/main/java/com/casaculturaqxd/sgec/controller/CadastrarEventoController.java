@@ -25,6 +25,7 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -33,6 +34,7 @@ import java.util.TreeSet;
 
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.EventoDAO;
+import com.casaculturaqxd.sgec.DAO.ParticipanteDAO;
 import com.casaculturaqxd.sgec.builder.EventoBuilder;
 import com.casaculturaqxd.sgec.controller.preview.PreviewParticipanteController;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
@@ -45,6 +47,7 @@ public class CadastrarEventoController implements ControllerEvento {
     DatabasePostgres db = DatabasePostgres.getInstance("URL", "USER_NAME", "PASSWORD");
     EventoBuilder builderEvento = new EventoBuilder();
     EventoDAO eventoDAO = new EventoDAO();
+    ParticipanteDAO participanteDAO = new ParticipanteDAO();
     ArrayList<FieldLocalizacaoController> controllersLocais =
             new ArrayList<FieldLocalizacaoController>();
     DateFormat formatterHorario;
@@ -81,6 +84,8 @@ public class CadastrarEventoController implements ControllerEvento {
 
 
     public void initialize() throws IOException {
+        participanteDAO.setConnection(db.getConnection());
+
         formatterHorario = new SimpleDateFormat("HH:mm");
 
         loadMenu();
@@ -184,6 +189,13 @@ public class CadastrarEventoController implements ControllerEvento {
     }
 
     public void removerLocalizacao() throws IOException {
+    }
+
+    public void adicionarParticipante() throws SQLException {
+        // TODO: substituir por abrir o dialog de participante e chamar
+        // adicionarParticipante(resultado)
+        participantes.put(participanteDAO.getParticipante(new Participante(1)).get(),
+                new FXMLLoader(App.class.getResource("view/preview/previewParticipante.fxml")));
     }
 
     public void adicionarParticipante(Participante participante) {
@@ -317,5 +329,10 @@ public class CadastrarEventoController implements ControllerEvento {
 
     public boolean emptyLocalizacoes() {
         return Localizacoes.getChildren().isEmpty();
+    }
+
+    @Override
+    public Stage getStage() {
+        return this.stage;
     }
 }
