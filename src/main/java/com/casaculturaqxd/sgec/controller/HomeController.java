@@ -1,4 +1,4 @@
-package com.casaculturaqxd.sgec;
+package com.casaculturaqxd.sgec.controller;
 
 import java.io.IOException;
 import java.net.URL;
@@ -9,6 +9,7 @@ import com.casaculturaqxd.sgec.DAO.EventoDAO;
 import com.casaculturaqxd.sgec.controller.preview.PreviewEventoController;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.Evento;
+import com.casaculturaqxd.sgec.App;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
