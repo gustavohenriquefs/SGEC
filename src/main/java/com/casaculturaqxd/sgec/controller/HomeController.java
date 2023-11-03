@@ -72,9 +72,8 @@ public class HomeController {
   }
 
   private FXMLLoader obterFXMLPreviewEventoExistenteLoader() {
-    URL fxmlUrl = getClass().getResource("view/preview/previewEventoExistente.fxml");
 
-    return new FXMLLoader(fxmlUrl);
+    return new FXMLLoader(App.class.getResource("view/preview/previewEventoExistente.fxml"));
   }
 
   private ArrayList<Evento> getUltimosEventos() {
