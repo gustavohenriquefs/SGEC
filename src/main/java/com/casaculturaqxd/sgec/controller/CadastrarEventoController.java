@@ -141,6 +141,7 @@ public class CadastrarEventoController {
 
         Evento novoEvento = builderEvento.getEvento();
         if (eventoDAO.inserirEvento(novoEvento)) {
+            eventoDAO.vincularMetas(novoEvento.getListaMetas(), novoEvento.getIdEvento());
             novoEvento = eventoDAO.buscarEvento(novoEvento).get();
             App.setRoot("view/home");
         }
@@ -179,8 +180,9 @@ public class CadastrarEventoController {
             }
         }
         for (CheckBox checkBox : checkBoxes) {
+            // ids sao 1-based
             if (checkBox.isSelected()) {
-                metasSelecionadas.add(new Meta(checkBoxes.indexOf(checkBox)));
+                metasSelecionadas.add(new Meta(checkBoxes.indexOf(checkBox) + 1));
             }
         }
         return metasSelecionadas;
