@@ -68,7 +68,9 @@ public class EventoDAO {
         return false;
       }
     }
-
+    if (evento.getListaMetas() != null) {
+      return vincularMeta(evento.getListaMetas(), evento.getIdEvento());
+    }
     /*
      * if(evento.getListaOrganizadores() != null) { boolean vinculoOrganizadores =
      * this.vincularOrganizadores(evento.getListaOrganizadores(), evento.getIdEvento());
