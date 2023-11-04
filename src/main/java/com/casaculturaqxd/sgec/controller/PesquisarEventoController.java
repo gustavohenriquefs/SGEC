@@ -1,6 +1,8 @@
 package com.casaculturaqxd.sgec.controller;
 
 import java.io.IOException;
+import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import com.casaculturaqxd.sgec.App;
@@ -38,8 +40,10 @@ public class PesquisarEventoController {
     }
 
     public void pesquisarEvento(){
-        String nome = "Evento de teste";
-        ArrayList<Evento> eventos = eventoDAO.pesquisarEvento(nome);
+        String nome = "";
+        Date dataInicial = Date.valueOf(LocalDate.of(2023, 12, 15));
+        Date dataFinal = Date.valueOf(LocalDate.of(2024, 02, 29));
+        ArrayList<Evento> eventos = eventoDAO.pesquisarEvento(nome, null, dataFinal);
         for (Evento evento : eventos) {
             System.out.println(evento);
         }
