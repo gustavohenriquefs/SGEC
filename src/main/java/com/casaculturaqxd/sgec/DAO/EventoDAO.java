@@ -255,12 +255,14 @@ public class EventoDAO {
     try {
       ArrayList<Evento> eventos = new ArrayList<>();
       
-      String sql = "select * from eventos where nome like ?";
+      String sql = "select * from evento where nome_evento like ?";
       
       PreparedStatement stmt = connection.prepareStatement(sql);
       stmt.setString(1, "%"+nome+"%");
       ResultSet resultSet = stmt.executeQuery();
+      System.out.println("Entrei em pesquisar!");
       while(resultSet.next()){
+        System.out.println("Entrei no while!");
         Evento evento = new Evento();
         evento.setIdEvento(resultSet.getInt("id_evento"));
         evento.setNome(resultSet.getString("nome_evento"));
