@@ -1,7 +1,6 @@
 package com.casaculturaqxd.sgec.DAO;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -68,9 +67,6 @@ public class EventoDAO {
         return false;
       }
     }
-    if (evento.getListaMetas() != null) {
-      return vincularMeta(evento.getListaMetas(), evento.getIdEvento());
-    }
     /*
      * if(evento.getListaOrganizadores() != null) { boolean vinculoOrganizadores =
      * this.vincularOrganizadores(evento.getListaOrganizadores(), evento.getIdEvento());
@@ -89,7 +85,7 @@ public class EventoDAO {
     return true;
   }
 
-  private boolean vincularMeta(List<Meta> metas, Integer idEvento) {
+  public boolean vincularMetas(List<Meta> metas, Integer idEvento) {
     MetaDAO metaDAO = new MetaDAO(connection);
     List<Boolean> vinculos = new ArrayList<>();
     for (Meta meta : metas) {
@@ -288,6 +284,7 @@ public class EventoDAO {
             .setListaColaboradores(this.buscarColaboradoresPorEvento(eventoRetorno.getIdEvento()));
         eventoRetorno
             .setListaParticipantes(this.buscarLocaisPorEvento(eventoRetorno.getIdEvento()));
+        eventoRetorno.setListaMetas(this.listarMetasEvento(eventoRetorno));
       }
       stmt.close();
       return Optional.ofNullable(eventoRetorno);
@@ -587,6 +584,11 @@ public class EventoDAO {
     }
 
     return participantes;
+  }
+
+  public ArrayList<Meta> listarMetasEvento(Evento evento) {
+    MetaDAO metaDAO = new MetaDAO(connection);
+    return metaDAO.listarMetasEvento(evento.getIdEvento());
   }
 
   private boolean desvincularColaborador(Integer colaboradorId, Integer idEvento) {
