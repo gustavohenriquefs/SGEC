@@ -133,8 +133,31 @@ public class MetaDAO {
         return listaMetas;
     }
 
+    public ArrayList<Meta> listarMetasEvento(Integer idEvento) {
+        String queryListarMetas =
+                "SELECT * FROM meta_evento INNER JOIN meta USING(id_meta) WHERE id_evento=?";
+
+        ArrayList<Meta> listaMetas = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.prepareStatement(queryListarMetas);
+            statement.setInt(1, idEvento);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Meta meta = new Meta(resultSet.getInt("id_meta"), resultSet.getString("nome_meta"));
+                listaMetas.add(meta);
+            }
+            statement.close();
+        } catch (SQLException e) {
+            Logger erro = Logger.getLogger("erroSQL");
+            erro.log(Level.SEVERE, "excecao levantada:", e);
+
+            return null;
+        }
+        return listaMetas;
+    }
+
     public boolean vincularEvento(Integer idMeta, Integer idEvento) {
-        String queryVincularGrupo = "INSERT INTO meta_evento VALUES(?,?)";
+        String queryVincularGrupo = "INSERT INTO meta_evento (id_meta,id_evento) VALUES(?,?)";
         try {
             PreparedStatement statement = connection.prepareStatement(queryVincularGrupo);
             statement.setInt(1, idMeta);
