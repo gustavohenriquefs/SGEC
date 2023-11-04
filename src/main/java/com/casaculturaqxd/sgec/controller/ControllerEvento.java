@@ -10,4 +10,7 @@ public interface ControllerEvento {
 
     public void removerParticipante(Participante participante);
 
+    public void adicionarLocalizacao(String localizacao);
+
+    public void removerLocalizacao(String localizacao);
 }
