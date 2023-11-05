@@ -22,3 +22,11 @@
     -fx-padding: 5px 10px 5px 10px;
     -fx-background-radius: 20px;
 }
+.botoes {
+    -fx-pref-height: 25px;
+    -fx-min-height: 25px;
+    -fx-max-height: 25px;
+    -fx-min-width: 120px;
+    -fx-pref-width: 120px;
+    -fx-max-width: 120px;
+}
