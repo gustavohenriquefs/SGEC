@@ -1,0 +1,33 @@
+@import url(../colors/colorStyle.css);
+
+.root {
+    -fx-background-color: -branco;
+}
+.texto {
+    -fx-font-size: 20px;
+}
+#verdetalhes {
+    -fx-background-color: -verde;
+    -fx-text-fill: -branco;
+}
+#dataRealizacao {
+    -fx-background-color: -verde;
+    -fx-text-fill: -branco;
+    -fx-padding: 5px 10px 5px 10px;
+    -fx-background-radius: 20px;
+}
+#dataLimite {
+    -fx-background-color: -laranja;
+    -fx-text-fill: -branco;
+    -fx-padding: 5px 10px 5px 10px;
+    -fx-background-radius: 20px;
+}
+.botoes {
+    -fx-pref-height: 22px;
+    -fx-min-height: 22px;
+    -fx-max-height: 22px;
+    -fx-min-width: 120px;
+    -fx-pref-width: 120px;
+    -fx-max-width: 120px;
+    -fx-font-size: 10px;
+}
