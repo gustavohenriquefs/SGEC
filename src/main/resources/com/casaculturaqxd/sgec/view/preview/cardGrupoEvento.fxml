@@ -21,7 +21,7 @@
          <children>
             <HBox prefHeight="104.0" prefWidth="500.0">
                <children>
-                  <Label fx:id="descricao" styleClass="texto" text="Label" HBox.hgrow="ALWAYS">
+                  <Label fx:id="descricao" alignment="TOP_LEFT" prefHeight="50.0" prefWidth="500.0" styleClass="texto" wrapText="true" HBox.hgrow="ALWAYS">
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font>
@@ -35,7 +35,7 @@
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Label>
-                  <Label fx:id="metasAtendidas" text="Label" />
+                  <Label fx:id="metasAtendidas" text="Label" wrapText="true" />
                </children>
             </HBox>
          </children>
