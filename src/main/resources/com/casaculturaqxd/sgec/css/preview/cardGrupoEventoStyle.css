@@ -1,0 +1,24 @@
+@import url(../colors/colorStyle.css);
+
+.root {
+    -fx-background-color: -bege;
+}
+.texto {
+    -fx-font-size: 16px;
+}
+#verdetalhes {
+    -fx-background-color: -verde;
+    -fx-text-fill: -branco;
+}
+#dataRealizacao {
+    -fx-background-color: -verde;
+    -fx-text-fill: -branco;
+    -fx-padding: 5px 10px 5px 10px;
+    -fx-background-radius: 20px;
+}
+#dataLimite {
+    -fx-background-color: -laranja;
+    -fx-text-fill: -branco;
+    -fx-padding: 5px 10px 5px 10px;
+    -fx-background-radius: 20px;
+}
