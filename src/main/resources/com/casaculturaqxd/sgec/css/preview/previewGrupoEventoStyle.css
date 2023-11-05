@@ -1,10 +1,10 @@
 @import url(../colors/colorStyle.css);
 
 .root {
-    -fx-background-color: -bege;
+    -fx-background-color: -branco;
 }
 .texto {
-    -fx-font-size: 16px;
+    -fx-font-size: 20px;
 }
 #verdetalhes {
     -fx-background-color: -verde;
