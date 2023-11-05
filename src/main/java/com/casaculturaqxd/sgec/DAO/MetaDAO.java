@@ -47,6 +47,28 @@ public class MetaDAO {
         return Optional.of(meta);
     }
 
+    public Optional<Meta> getMetaPorNome(String nomeMeta) {
+        String queryGet = "SELECT * FROM meta WHERE nome_meta=?";
+        Meta meta = new Meta(nomeMeta);
+        try {
+            PreparedStatement statement = connection.prepareStatement(queryGet);
+            statement.setString(1, nomeMeta);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                meta.setIdMeta(resultSet.getInt("id_meta"));
+            } else {
+                return Optional.empty();
+            }
+        } catch (SQLException e) {
+            Logger erro = Logger.getLogger("erroSQL");
+            erro.log(Level.SEVERE, "excecao levantada:", e);
+
+            return Optional.empty();
+        }
+        return Optional.of(meta);
+    }
+
     public boolean inserirMeta(Meta meta) {
         String insertQuery = "INSERT INTO meta(nome_meta) VALUES(?)";
         try {
