@@ -251,19 +251,18 @@ public class EventoDAO {
     return eventos;
   }
 
-  public ArrayList<Evento> pesquisarEvento(String nome, Date inicioDate, Date fimDate){
+  public ArrayList<Evento> pesquisarEvento(String nome, Date inicioDate, Date fimDate, boolean libras){
     if(inicioDate == null && fimDate == null){
       try {
         ArrayList<Evento> eventos = new ArrayList<>();
         
-        String sql = "select * from evento where nome_evento like ?";
+        String sql = "select * from evento where nome_evento like ? and acessivel_em_libras = ?";
         
         PreparedStatement stmt = connection.prepareStatement(sql);
         stmt.setString(1, "%"+nome+"%");
+        stmt.setBoolean(2, libras);
         ResultSet resultSet = stmt.executeQuery();
-        System.out.println("Entrei em pesquisar!");
         while(resultSet.next()){
-          System.out.println("Entrei no while!");
           Evento evento = new Evento();
           evento.setIdEvento(resultSet.getInt("id_evento"));
           evento.setNome(resultSet.getString("nome_evento"));
@@ -294,11 +293,12 @@ public class EventoDAO {
       try {
         ArrayList<Evento> eventos = new ArrayList<>();
         
-        String sql = "select * from evento where nome_evento like ? and data_inicial = ?";
+        String sql = "select * from evento where nome_evento like ? and data_inicial = ? and acessivel_em_libras = ?";
         
         PreparedStatement stmt = connection.prepareStatement(sql);
         stmt.setString(1, "%"+nome+"%");
         stmt.setDate(2, inicioDate);
+        stmt.setBoolean(3, libras);
         ResultSet resultSet = stmt.executeQuery();
 
         while(resultSet.next()){
@@ -332,11 +332,12 @@ public class EventoDAO {
       try {
         ArrayList<Evento> eventos = new ArrayList<>();
         
-        String sql = "select * from evento where nome_evento like ? and data_final = ?";
+        String sql = "select * from evento where nome_evento like ? and data_final = ? and acessivel_em_libras = ?";
         
         PreparedStatement stmt = connection.prepareStatement(sql);
         stmt.setString(1, "%"+nome+"%");
         stmt.setDate(2, fimDate);
+        stmt.setBoolean(3, libras);
         ResultSet resultSet = stmt.executeQuery();
 
         while(resultSet.next()){
@@ -370,12 +371,13 @@ public class EventoDAO {
       try {
         ArrayList<Evento> eventos = new ArrayList<>();
         
-        String sql = "select * from evento where nome_evento like ? and data_inicial = ? and data_final = ?";
+        String sql = "select * from evento where nome_evento like ? and data_inicial = ? and data_final = ? and acessivel_em_libras = ?";
         
         PreparedStatement stmt = connection.prepareStatement(sql);
         stmt.setString(1, "%"+nome+"%");
         stmt.setDate(2, inicioDate);
         stmt.setDate(3, fimDate);
+        stmt.setBoolean(4, libras);
         ResultSet resultSet = stmt.executeQuery();
 
         while(resultSet.next()){
