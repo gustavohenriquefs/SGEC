@@ -9,7 +9,14 @@ public class Localizacao {
     private String cidade;
     private String estado;
     private String pais;
+    private String nomeLocalizacao;
 
+    public String getNomeLocalizacao() {
+        return nomeLocalizacao;
+    }
+    public void setNomeLocalizacao(String nomeLocalizacao) {
+        this.nomeLocalizacao = nomeLocalizacao;
+    }
     public String getRua() {
         return rua;
     }
