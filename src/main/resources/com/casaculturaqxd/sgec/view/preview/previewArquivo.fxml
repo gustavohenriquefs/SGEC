@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="principal" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="170.0" prefWidth="230.0" styleClass="root" stylesheets="@../../css/preview/cardArquivoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="170.0" prefWidth="230.0" styleClass="root" stylesheets="@../../css/preview/cardArquivoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -22,8 +22,8 @@
                      <menus>
                         <Menu mnemonicParsing="false">
                            <items>
-                              <MenuItem fx:id="download" mnemonicParsing="false" text="Download" />
-                              <MenuItem fx:id="delete" mnemonicParsing="false" text="Delete" />
+                              <MenuItem onMouseClicked="download" fx:id="download" mnemonicParsing="false" text="Download" />
+                              <MenuItem onMouseClicked="delete" fx:id="delete" mnemonicParsing="false" text="Delete" />
                            </items>
                            <graphic>
                               <ImageView fx:id="opcoes" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
@@ -39,7 +39,7 @@
             </HBox>
             <HBox alignment="CENTER">
                <children>
-                  <ImageView fx:id="imagem" fitHeight="97.0" fitWidth="231.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="imagemPreview" fitHeight="97.0" fitWidth="231.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../imagens/default_image.png" />
                      </image>
@@ -60,7 +60,7 @@
                      <font>
                         <Font size="16.0" />
                      </font></Label>
-                  <Label fx:id="fileTyPE" text="Label">
+                  <Label fx:id="fileType" text="Label">
                      <font>
                         <Font size="16.0" />
                      </font></Label>
