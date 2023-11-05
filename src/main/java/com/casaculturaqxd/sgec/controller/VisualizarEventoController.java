@@ -94,7 +94,6 @@ public class VisualizarEventoController {
         /*
          * TODO: adicionar funcionalidade de arquivos e reativar o botao
          */
-        temporaryHideUnimplementedFields();
     }
 
     private void loadMenu() throws IOException {
@@ -271,13 +270,4 @@ public class VisualizarEventoController {
         }
     }
 
-    /**
-     * oculta e desabilita todas as funcionalidades nao implementadas TODO: remover o metodo apos
-     * arquivos serem implementados
-     */
-    private void temporaryHideUnimplementedFields() {
-        for (Node node : secaoArquivos.getChildren()) {
-            node.setVisible(false);
-        }
-    }
 }
