@@ -162,7 +162,7 @@
                               <VBox>
                                  <children>
                                     <Label text="Atende  à(s) metas:" />
-                                    <HBox spacing="20.0">
+                                    <HBox fx:id="secaoMetas" spacing="20.0">
                                        <children>
                                           <CheckBox mnemonicParsing="false" text="Fruição" />
                                           <CheckBox mnemonicParsing="false" text="Fortalecimento de patrimônio cultural" />
