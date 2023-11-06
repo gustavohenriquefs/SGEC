@@ -25,6 +25,10 @@ public class ServiceFile {
         this.service = ServiceFactory.getService(ServiceType.S3, "ACCESS_KEY","SECRET_KEY");
     }
 
+    public ServiceFile(Integer serviceFileId) {
+        this.serviceFileId = serviceFileId;
+    }
+
 
     public ServiceFile(String fileKey, String bucket, Date ultimaModificacao, File content) {
         this.fileKey = fileKey;
@@ -33,7 +37,6 @@ public class ServiceFile {
         this.content = content;
         this.service = ServiceFactory.getService(ServiceType.S3, "ACCESS_KEY","SECRET_KEY");
     }
-
 
     public Integer getServiceFileId() {
         return serviceFileId;

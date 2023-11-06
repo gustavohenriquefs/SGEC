@@ -16,11 +16,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox id="pageCadastrarEvento" fx:id="root" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.CadastrarEventoController">
+<VBox id="pageCadastrarEvento" fx:id="root" prefHeight="1154.0" prefWidth="1461.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.CadastrarEventoController">
    <children>
-      <ScrollPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="1122.0" prefWidth="1442.0">
+      <ScrollPane hbarPolicy="ALWAYS" vbarPolicy="ALWAYS" VBox.vgrow="ALWAYS">
          <content>
-            <AnchorPane id="container" prefHeight="800.0" prefWidth="1440.0" stylesheets="@../css/page/cadastrarEventoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+            <AnchorPane id="container" prefWidth="1800.0" stylesheets="@../css/page/cadastrarEventoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
                <children>
                   <Label layoutX="29.0" layoutY="45.0" prefHeight="35.0" prefWidth="124.0" text="Criar Evento" textFill="#352929" AnchorPane.leftAnchor="29.0">
                      <font>
@@ -30,11 +30,6 @@
                         <Insets left="30.0" top="10.0" />
                      </VBox.margin>
                   </Label>
-                  <VBox VBox.vgrow="ALWAYS">
-                  <children>
-                        <HBox HBox.hgrow="ALWAYS" />
-                  </children>
-                  </VBox>
                         <HBox alignment="CENTER" layoutX="45.0" layoutY="309.0" prefHeight="59.0" prefWidth="1371.0" spacing="400.0">
                            <children>
                               <HBox spacing="25.0">
@@ -91,7 +86,7 @@
                               </HBox>
                            </children>
                         </HBox>
-                  <Pane layoutY="80.0" maxWidth="1408.0" prefHeight="239.0" prefWidth="1395.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="45.0">
+                  <Pane layoutY="80.0" maxWidth="1408.0" prefHeight="228.0" prefWidth="1408.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="38.0">
                         <children>
                            <Label layoutX="25.0" layoutY="6.0" prefHeight="17.0" prefWidth="40.0" text="Título" textFill="#352929" AnchorPane.leftAnchor="5.0" />
                            <TextField fx:id="titulo" layoutX="23.0" layoutY="28.0" maxWidth="430.0" prefHeight="26.0" prefWidth="430.0" AnchorPane.leftAnchor="5.0" />
@@ -106,7 +101,7 @@
                         <Label fx:id="textoMinutos" layoutX="611.0" layoutY="57.0" prefHeight="17.0" prefWidth="52.0" text="Minutos" textFill="#352929" AnchorPane.rightAnchor="116.39999999999998" />
                         <TextField fx:id="horas" layoutX="425.0" layoutY="79.0" />
                         <TextField fx:id="minutos" layoutX="611.0" layoutY="79.0" />
-                        <HBox layoutX="469.0" layoutY="28.0" prefHeight="40.0" prefWidth="667.0" spacing="45.0">
+                        <HBox fx:id="secaoMetas" layoutX="469.0" layoutY="28.0" prefHeight="40.0" prefWidth="667.0" spacing="45.0">
                            <children>
                               <CheckBox fx:id="checkMeta1" mnemonicParsing="false" text="Fruição" />
                               <CheckBox fx:id="checkMeta2" mnemonicParsing="false" text="Fortalecimento Patrimônio Cultural" />

@@ -1,0 +1,12 @@
+@import url(../colors/colorStyle.css);
+
+.root {
+    -fx-background-color: -bege;
+}
+#container {
+    -fx-background-color: E1E1E1;
+}
+#botao {
+    -fx-background-color: -laranja;
+    -fx-text-fill: -branco;
+}
