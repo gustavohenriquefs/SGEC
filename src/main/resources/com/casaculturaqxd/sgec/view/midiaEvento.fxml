@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="root" alignment="CENTER" styleClass="fundo" stylesheets="@../css/page/midiaEventoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox id="pageMidiaEvento" fx:id="root" alignment="CENTER" styleClass="fundo" stylesheets="@../css/page/midiaEventoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <ScrollPane styleClass="fundo">
          <content>
