@@ -37,11 +37,14 @@
                </Label>
                <HBox layoutX="10.0" layoutY="32.0" prefHeight="26.0" prefWidth="542.0" spacing="10.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="0.0">
                   <children>
-                     <ChoiceBox fx:id="metas" prefHeight="26.0" prefWidth="130.0">
-                        <HBox.margin>
-                           <Insets />
-                        </HBox.margin>
-                     </ChoiceBox>
+                        <MenuButton mnemonicParsing="false" text="Metas">
+                          <items>
+                              <CheckMenuItem mnemonicParsing="false" text="Fruição" />
+                              <CheckMenuItem mnemonicParsing="false" text="Fortalecimento de Patrimõnio Cultural" />
+                              <CheckMenuItem mnemonicParsing="false" text="Formação em Arte e Cultura" />
+                              <CheckMenuItem mnemonicParsing="false" text="Convocatória" />
+                          </items>
+                        </MenuButton>
                      <DatePicker fx:id="dataInicio" prefWidth="130.0">
                         <HBox.margin>
                            <Insets left="5.0" />
