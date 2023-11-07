@@ -14,6 +14,10 @@ import com.casaculturaqxd.sgec.models.Instituicao;
 public class InstituicaoDAO {
   private Connection conn;
 
+  public InstituicaoDAO(Connection connection) {
+    conn = connection;
+  }
+
   public Connection getConn() {
     return conn;
   }
