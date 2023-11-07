@@ -89,12 +89,8 @@ public class CadastrarEventoController implements ControllerEvento {
         formatterHorario = new SimpleDateFormat("HH:mm");
 
         loadMenu();
-        // inicia com o local obrigatorio carregado na pagina
         addListenersParticipante(participantes);
 
-        // FXMLLoader loaderMenu = new
-        // FXMLLoader(App.class.getResource("view/componentes/menu.fxml"));
-        // header.getChildren().add(loaderMenu.load());
         // inicia com o local obrigatorio carregado na pagina
         carregarCampoLocalizacao();
         classificacaoEtaria.getItems().addAll(classificacoes);
@@ -169,9 +165,6 @@ public class CadastrarEventoController implements ControllerEvento {
 
 
     public void cancelar() throws IOException {
-        /**
-         * TODO: implementar uma fila na classe App, para retornar a ultima tela visitada
-         */
         builderEvento.resetar();
         App.setRoot("view/home");
     }
