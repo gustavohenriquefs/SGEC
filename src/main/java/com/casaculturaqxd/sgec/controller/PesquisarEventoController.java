@@ -2,16 +2,19 @@ package com.casaculturaqxd.sgec.controller;
 
 import java.io.IOException;
 import java.sql.Date;
-import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.SortedSet;
 
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.EventoDAO;
 import com.casaculturaqxd.sgec.DAO.LocalizacaoDAO;
+import com.casaculturaqxd.sgec.DAO.MetaDAO;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.Localizacao;
+import com.casaculturaqxd.sgec.models.Meta;
 
+import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.CheckBox;
@@ -24,6 +27,7 @@ import javafx.scene.layout.VBox;
 public class PesquisarEventoController {
     private EventoDAO eventoDAO = new EventoDAO();
     private LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO();
+    private MetaDAO metaDAO = new MetaDAO(null);
     private final DatabasePostgres pesquisaConnection = DatabasePostgres.getInstance("URL_TEST","USER_NAME_TEST","PASSWORD_TEST");
     @FXML
     private VBox root;
@@ -33,6 +37,8 @@ public class PesquisarEventoController {
     private TextField nomeLocalizacao, textFieldPesquisa;
     @FXML
     private CheckBox acessivelLibras;
+    @FXML
+    private MenuButton opcoesMetas;
     //@FXML
     //private FlowPane campoResultados;
 
@@ -40,6 +46,7 @@ public class PesquisarEventoController {
         loadMenu();
         eventoDAO.setConnection(pesquisaConnection.getConnection());
         localizacaoDAO.setConnection(pesquisaConnection.getConnection());
+        metaDAO.setConnection(pesquisaConnection.getConnection());
     }
 
     private void loadMenu() throws IOException {
@@ -60,24 +67,44 @@ public class PesquisarEventoController {
         if(dataFim.getValue() != null){
             dataFinal = Date.valueOf(dataFim.getValue());
         }
-        ArrayList<Evento> eventos = eventoDAO.pesquisarEvento(nome, dataInicial, dataFinal,acessivelLibras.isSelected());
+        ArrayList<Evento> eventos = eventoDAO.pesquisarEvento(nome, dataInicial, dataFinal);
         ArrayList<Localizacao> localizacaos = localizacaoDAO.pesquisarLocalizacao(cidade);
         ArrayList<Evento> eventosFinais = new ArrayList<>();
-        for (Evento evento : eventos) {
-            for (Localizacao localizacaoTemp : localizacaos) {
-                if(localizacaoDAO.verificaLocalidade(evento.getIdEvento(), localizacaoTemp.getIdLocalizacao())){
-                    System.out.println(localizacaoTemp.getIdLocalizacao() + " " + localizacaoTemp.getCidade());
-                    System.out.println(evento.getIdEvento() + " " + evento.getNome());
-                    eventosFinais.add(evento);
+    
+        if(nomeLocalizacao.getLength() != 0){
+            for (Evento evento : eventos) {
+                SortedSet<Integer> idsLocais = eventoDAO.buscarLocaisPorEvento(evento.getIdEvento());
+                for (Localizacao local : localizacaos) {
+                    if(idsLocais.contains((Integer)local.getIdLocalizacao())){
+                        eventosFinais.add(evento);
+                        break;
+                    }
                 }
             }
-        }
-        for (Evento evento : eventosFinais) {
-            System.out.println("==========================");
-            System.out.println(evento);
-            System.out.println("==========================");
+        }else{
+            eventosFinais = eventos;
         }
 
+        if(acessivelLibras.isSelected()){
+            ArrayList<Evento> eventosFinaisLibras = new ArrayList<>();
+            for (Evento evento : eventosFinais) {
+                if(evento.isAcessivelEmLibras()){
+                    eventosFinaisLibras.add(evento);
+                }
+            }
+            eventosFinais = eventosFinaisLibras;
+        }
+
+        for (Evento evento : eventosFinais) {
+            System.out.println(evento.getNome());
+        }
+
+        ArrayList<Meta> metas = metaDAO.listarTodasMetas();
+        if(metas!=null){
+            for (Meta meta : metas) {
+                System.out.println(meta);
+            }   
+        }
     }
 
 }
