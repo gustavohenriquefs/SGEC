@@ -10,13 +10,16 @@ import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.EventoDAO;
 import com.casaculturaqxd.sgec.DAO.LocalizacaoDAO;
 import com.casaculturaqxd.sgec.controller.preview.PreviewLocalizacaoController;
+import com.casaculturaqxd.sgec.controller.preview.PreviewParticipanteController;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.Indicador;
 import com.casaculturaqxd.sgec.models.Localizacao;
-
+import com.casaculturaqxd.sgec.models.Participante;
 import javafx.collections.FXCollections;
+import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -39,11 +42,14 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.util.converter.IntegerStringConverter;
 
-public class VisualizarEventoController {
+public class VisualizarEventoController implements ControllerEvento {
     private Evento evento;
+    private Stage stage;
     private DatabasePostgres db = DatabasePostgres.getInstance("URL", "USER_NAME", "PASSWORD");
     private EventoDAO eventoDAO = new EventoDAO();
     private LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO();
@@ -51,6 +57,8 @@ public class VisualizarEventoController {
     VBox root;
     @FXML
     AnchorPane secaoArquivos;
+    @FXML
+    StackPane secaoParticipantes;
     @FXML
     VBox frameLocais;
     @FXML
@@ -68,6 +76,10 @@ public class VisualizarEventoController {
     @FXML
     private String[] classificacoes =
             {"Livre", "10 anos", "12 anos", "14 anos", "16 anos", "18 anos"};
+    // listas
+    ObservableMap<Participante, FXMLLoader> participantes =
+            FXCollections.<Participante, FXMLLoader> observableHashMap();
+
     // Tabela com todos os campos de input
     ObservableList<Control> camposInput = FXCollections.observableArrayList();
     // Indicadores
@@ -84,12 +96,11 @@ public class VisualizarEventoController {
     public void initialize() throws IOException {
         addControls(root, camposInput);
         addPropriedadeAlterar(camposInput);
-
+        addListenersParticipante(participantes);
         loadMenu();
 
         eventoDAO.setConnection(db.getConnection());
         localizacaoDAO.setConnection(db.getConnection());
-        // capturando evento de mock do banco
 
         /*
          * TODO: adicionar funcionalidade de arquivos e reativar o botao
@@ -279,5 +290,56 @@ public class VisualizarEventoController {
         for (Node node : secaoArquivos.getChildren()) {
             node.setVisible(false);
         }
+    }
+
+    @Override
+    public void adicionarParticipante(Participante participante) {
+        // TODO chamar metodo para todo participante vinculado ao evento
+        participantes.put(participante,
+                new FXMLLoader(App.class.getResource("view/preview/previewParticipante.fxml")));
+    }
+
+    @Override
+    public void removerParticipante(Participante participante) {
+        participantes.remove(participante);
+    }
+
+    @Override
+    public Stage getStage() {
+        return this.stage;
+    }
+
+    public void addListenersParticipante(ObservableMap<Participante, FXMLLoader> observablemap) {
+        VisualizarEventoController superController = this;
+        observablemap.addListener(new MapChangeListener<Participante, FXMLLoader>() {
+            @Override
+            public void onChanged(
+                    MapChangeListener.Change<? extends Participante, ? extends FXMLLoader> change) {
+
+                if (change.wasAdded()) {
+                    Participante addedKey = change.getKey();
+                    // carregar o fxml de preview e setar o participante deste para o
+                    // participante adicionado
+                    try {
+                        Parent previewParticipante = change.getValueAdded().load();
+                        PreviewParticipanteController controller =
+                                change.getValueAdded().getController();
+                        controller.setParticipante(addedKey);
+                        controller.setParentController(superController);
+
+                        secaoParticipantes.getChildren().add(previewParticipante);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (change.wasRemoved()) {
+                    PreviewParticipanteController removedController =
+                            change.getValueRemoved().getController();
+                    // Remover o Pane de preview ao deletar um Participante da lista
+                    secaoParticipantes.getChildren().remove(removedController.getContainer());
+
+                }
+            }
+        });
     }
 }
