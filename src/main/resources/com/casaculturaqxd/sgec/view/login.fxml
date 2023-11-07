@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
@@ -10,7 +11,7 @@
 
 <VBox id="pageLogin" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@../css/page/LoginStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.LoginController">
    <children>
-      <Pane fx:id="form" layoutX="195.0" layoutY="109.0" maxWidth="200.0" prefHeight="210.0" prefWidth="219.0">
+      <Pane fx:id="form" layoutX="195.0" layoutY="109.0" maxWidth="200.0" prefHeight="232.0" prefWidth="200.0">
          <children>
             <PasswordField fx:id="senha" layoutX="26.0" layoutY="139.0" onKeyReleased="#keyReleasedProperty" />
             <TextField fx:id="email" layoutX="26.0" layoutY="81.0" onKeyReleased="#keyReleasedProperty" />
@@ -22,6 +23,7 @@
                   <Font size="16.0" />
                </font>
             </Label>
+            <Hyperlink id="linkCadastro" fx:id="redirectCadastro" onAction="#goToCadastro" layoutX="15.0" layoutY="207.0" text="Não possui conta? Cadastre-se" />
          </children>
       </Pane>
    </children>

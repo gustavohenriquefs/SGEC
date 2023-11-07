@@ -62,12 +62,14 @@ public class App extends Application {
 
     public static void setRoot(Parent objVisualizacao) throws IOException {
         if (lastVisitedPages.empty() == true
-                && !objVisualizacao.getId().equals(loadFXML("view/login").getId())) {
+                && !objVisualizacao.getId().equals(loadFXML("view/login").getId())
+                && !objVisualizacao.getId().equals(loadFXML("view/cadastro").getId())) {
 
             lastVisitedPages.add(getRoot());
             scene.setRoot(objVisualizacao);
         } else if (!lastVisitedPages.lastElement().getId().equals(objVisualizacao.getId())
-                && !objVisualizacao.getId().equals(loadFXML("view/login").getId())) {
+                && !objVisualizacao.getId().equals(loadFXML("view/login").getId())
+                && !objVisualizacao.getId().equals(loadFXML("view/cadastro").getId())) {
 
             lastVisitedPages.add(getRoot());
             scene.setRoot(objVisualizacao);
@@ -75,14 +77,14 @@ public class App extends Application {
     }
 
     public static void setRoot(String fxml) throws IOException {
-        if (lastVisitedPages.empty() == true
-                && getRoot().getId().equals(loadFXML("view/login").getId())) {
+        if (!getRoot().getId().equals(loadFXML(fxml).getId())) {
 
-            scene.setRoot(loadFXML(fxml));
-        } else if (!getRoot().getId().equals(loadFXML(fxml).getId())
-                && !loadFXML(fxml).getId().equals(loadFXML("view/login").getId())) {
-
-            lastVisitedPages.add(getRoot());
+            if (!getRoot().getId().equals(loadFXML("view/login").getId())
+                    && !getRoot().getId().equals(loadFXML("view/cadastro").getId())
+                    && !loadFXML(fxml).getId().equals(loadFXML("view/login").getId())
+                    && !loadFXML(fxml).getId().equals(loadFXML("view/cadastro").getId())) {
+                lastVisitedPages.add(getRoot());
+            }
             scene.setRoot(loadFXML(fxml));
         }
     }

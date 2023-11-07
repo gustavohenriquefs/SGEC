@@ -39,9 +39,8 @@ public class MenuController {
 
     @FXML
     public void goToCadastrarGrupoEventos() throws IOException {
-        // desabilitado por enquanto
-        // if(App.getUsuario().isEditor())
-        // App.setRoot("view/cadastrarGrupoEvento");
+        if (App.getUsuario().isEditor())
+            App.setRoot("view/cadastrarGrupoEvento");
     }
 
     @FXML
