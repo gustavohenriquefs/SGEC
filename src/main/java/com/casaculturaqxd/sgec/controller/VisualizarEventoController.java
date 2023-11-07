@@ -4,8 +4,7 @@ package com.casaculturaqxd.sgec.controller;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.Time;
-
-
+import java.util.ArrayList;
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.EventoDAO;
 import com.casaculturaqxd.sgec.DAO.LocalizacaoDAO;
@@ -14,7 +13,7 @@ import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.Indicador;
 import com.casaculturaqxd.sgec.models.Localizacao;
-
+import com.casaculturaqxd.sgec.models.Meta;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -29,7 +28,6 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
@@ -39,6 +37,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.converter.IntegerStringConverter;
 
@@ -54,6 +53,8 @@ public class VisualizarEventoController {
     @FXML
     VBox frameLocais;
     @FXML
+    HBox secaoMetas;
+    @FXML
     TextArea descricao;
     @FXML
     Label titulo;
@@ -63,6 +64,7 @@ public class VisualizarEventoController {
     TextField cargaHoraria, horario;
     @FXML
     CheckBox certificavel, libras;
+    ArrayList<CheckBox> checkBoxesMetas = new ArrayList<>();
     @FXML
     ChoiceBox<String> classificacaoEtaria;
     @FXML
@@ -89,7 +91,6 @@ public class VisualizarEventoController {
 
         eventoDAO.setConnection(db.getConnection());
         localizacaoDAO.setConnection(db.getConnection());
-        // capturando evento de mock do banco
 
         /*
          * TODO: adicionar funcionalidade de arquivos e reativar o botao
@@ -104,7 +105,7 @@ public class VisualizarEventoController {
     }
 
     private void loadContent() throws IOException {
-
+        loadMetas();
         classificacaoEtaria.getItems().addAll(classificacoes);
         titulo.setText(evento.getNome());
         descricao.setText(evento.getDescricao());
@@ -160,6 +161,18 @@ public class VisualizarEventoController {
         addIndicador(tabelaIndicadoresGerais, numeroPublico);
         addIndicador(tabelaIndicadoresMeta1, numeroMestres);
         addIndicador(tabelaIndicadoresMeta2, numeroMunicipios);
+    }
+
+    private void loadMetas() {
+        for (Node node : secaoMetas.getChildren()) {
+            if (node instanceof CheckBox) {
+                checkBoxesMetas.add((CheckBox) node);
+            }
+        }
+        for (Meta meta : evento.getListaMetas()) {
+            // ids sao 1-based
+            checkBoxesMetas.get(meta.getIdMeta() - 1).setSelected(true);
+        }
     }
 
     public void setEvento(Evento evento) throws IOException {
