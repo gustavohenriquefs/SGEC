@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox id="pagePesquisarGrupoEventos" maxHeight="1024.0" maxWidth="1440.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1440.0" stylesheets="@../css/page/pesquisarGrupoEventosStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox id="pagePesquisarGrupoEventos" fx:id="root" maxHeight="1024.0" maxWidth="1440.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1440.0" stylesheets="@../css/page/pesquisarGrupoEventosStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.pesquisarGrupoEventosController">
    <children>
       <VBox maxHeight="1024.0" maxWidth="1440.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="231.0" prefWidth="1440.0" spacing="5.0" VBox.vgrow="ALWAYS">
          <children>
