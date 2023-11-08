@@ -1,5 +1,6 @@
 package com.casaculturaqxd.sgec.controller;
 
+import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
@@ -16,6 +17,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -37,8 +39,8 @@ import com.casaculturaqxd.sgec.builder.EventoBuilder;
 import com.casaculturaqxd.sgec.controller.preview.PreviewArquivoController;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.Evento;
-import com.casaculturaqxd.sgec.models.Participante;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
+import com.casaculturaqxd.sgec.service.Service;
 
 
 public class CadastrarEventoController implements ControllerServiceFile {
@@ -55,7 +57,9 @@ public class CadastrarEventoController implements ControllerServiceFile {
     @FXML
     VBox Localizacoes, cargaHoraria;
     @FXML
-    HBox header, Participantes, Organizadores, Colaboradores, secaoArquivos;
+    HBox header, Participantes, Organizadores, Colaboradores;
+    @FXML
+    FlowPane secaoArquivos;
     @FXML
     TextField titulo, publicoEsperado, publicoAlcancado, horas, minutos, horasCargaHoraria,
             numParticipantesEsperado, numMunicipiosEsperado;
@@ -71,7 +75,8 @@ public class CadastrarEventoController implements ControllerServiceFile {
     CheckBox checkMeta1, checkMeta2, checkMeta3, checkMeta4;
     @FXML
     RadioButton certificavel, acessivelEmLibras;
-    private ObservableMap<ServiceFile, FXMLLoader> mapServiceFiles;
+    private ObservableMap<ServiceFile, FXMLLoader> mapServiceFiles =
+            FXCollections.observableHashMap();
     // Botoes
     @FXML
     Button botaoNovaLocalizacao, botaoOrganizadores, botaoColaboradores, botaoParticipantes,
@@ -79,7 +84,7 @@ public class CadastrarEventoController implements ControllerServiceFile {
 
     public void initialize() throws IOException {
         formatterHorario = new SimpleDateFormat("HH:mm");
-
+        addListenersServiceFile(mapServiceFiles);
         loadMenu();
         // inicia com o local obrigatorio carregado na pagina
         carregarCampoLocalizacao();
@@ -205,17 +210,28 @@ public class CadastrarEventoController implements ControllerServiceFile {
     public void adicionarArquivo() {
         FileChooser fileChooser = new FileChooser();
         File arquivoSelecionado = fileChooser.showOpenDialog(stage);
-        adicionarArquivo(new ServiceFile(arquivoSelecionado, "sgecteste"));
+        adicionarArquivo(new ServiceFile(arquivoSelecionado));
     }
 
     @Override
     public void adicionarArquivo(ServiceFile serviceFile) {
-        throw new UnsupportedOperationException("Unimplemented method 'adicionarArquivo'");
+        mapServiceFiles.put(serviceFile,
+                new FXMLLoader(App.class.getResource("view/preview/previewArquivo.fxml")));
     }
 
     @Override
     public void removerArquivo(ServiceFile serviceFile) {
-        throw new UnsupportedOperationException("Unimplemented method 'removerArquivo'");
+        Service service = serviceFile.getService();
+        try {
+            service.deletarArquivo(serviceFile.getBucket(), serviceFile.getFileKey());
+
+        } catch (IllegalArgumentException e) {
+            // caso arquivo ja nao esteja registrado
+            mapServiceFiles.remove(serviceFile);
+        } catch (Exception e) {
+            // em qualquer outro erro
+            e.printStackTrace();
+        }
     }
 
     public boolean camposObrigatoriosPreenchidos() {
