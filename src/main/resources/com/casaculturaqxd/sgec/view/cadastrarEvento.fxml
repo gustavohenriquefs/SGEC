@@ -11,6 +11,7 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
@@ -165,7 +166,7 @@
                            </HBox>
                            </children>
                         </VBox>
-                        <VBox prefHeight="46.0" prefWidth="150.0">
+                        <VBox prefHeight="46.0" prefWidth="150.0" spacing="15.0">
                            <children>
                               <HBox fx:id="Colaboradores" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                                  <children>
@@ -174,11 +175,11 @@
                               </HBox>
                            </children>
                         </VBox>
-                        <HBox fx:id="secaoArquivos">
+                        <FlowPane fx:id="secaoArquivos" hgap="20.0">
                            <children>
                               <Button fx:id="botaoArquivos" mnemonicParsing="false" onAction="#adicionarArquivo" prefHeight="46.0" prefWidth="152.0" style="-fx-background-color: #352929;" text="Adicionar arquivos" textFill="WHITE" />
                            </children>
-                        </HBox>
+                        </FlowPane>
                         <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
                            <children>
                         <Button fx:id="cancelar" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#cancelar" prefHeight="26.0" prefWidth="200.0" style="-fx-background-color: #352929;" text="Cancelar" textFill="WHITE" />
