@@ -16,6 +16,7 @@ import com.casaculturaqxd.sgec.models.Localizacao;
 import com.casaculturaqxd.sgec.models.Meta;
 
 import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
 import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -96,8 +97,14 @@ public class VisualizarEventoController {
             visualizarTodos;
     @FXML
     private ImageView copiaCola;
+    @FXML
+    private Tooltip tooltipCliboard;
 
     public void initialize() throws IOException {
+        tooltipCliboard = new Tooltip("Copiado para a área de transferência");
+        tooltipCliboard.setHideDelay(Duration.seconds(1));
+        Tooltip.install(copiaCola, tooltipCliboard);
+        copiaCola.setOnMouseClicked(event -> copyToClipboard(event));
         addControls(root, camposInput);
         addPropriedadeAlterar(camposInput);
 
@@ -315,12 +322,13 @@ public class VisualizarEventoController {
         clipboard.setContent(content);
     }
 
-    public void copyToClipboard(){
+    private void copyToClipboard(MouseEvent event){        
         getDescricao();
-        Tooltip tooltip = new Tooltip("Copiado para a área de transferência");
-        // Exibe a mensagem e determina sua duração
-        tooltip.setShowDuration(Duration.millis(1000));
-        tooltip.show(copiaCola, copiaCola.getScene().getWindow().getX() + copiaCola.getBoundsInParent().getMaxX(), copiaCola.getScene().getWindow().getY() + copiaCola.getBoundsInParent().getMaxY());
+         // Exibe a mensagem e determina sua duração
+         tooltipCliboard.show(copiaCola, event.getScreenX(), event.getScreenY());
+         PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
+         pause.setOnFinished(e -> tooltipCliboard.hide());
+         pause.play();
     }
 
 }
