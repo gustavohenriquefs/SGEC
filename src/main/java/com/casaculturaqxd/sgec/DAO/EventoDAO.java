@@ -94,7 +94,7 @@ public class EventoDAO {
   }
 
   public boolean vincularArquivos(Evento evento) {
-    ServiceFileDAO serviceFileDAO = new ServiceFileDAO(null);
+    ServiceFileDAO serviceFileDAO = new ServiceFileDAO(getConnection());
     return serviceFileDAO.vincularAllArquivos(evento);
   }
 
@@ -284,12 +284,18 @@ public class EventoDAO {
             .setListaColaboradores(this.buscarColaboradoresPorEvento(eventoRetorno.getIdEvento()));
         eventoRetorno
             .setListaParticipantes(this.buscarLocaisPorEvento(eventoRetorno.getIdEvento()));
+        eventoRetorno.setListaArquivos(this.buscarArquivosPorEvento(eventoRetorno));
       }
       stmt.close();
       return Optional.ofNullable(eventoRetorno);
     } catch (SQLException e) {
       return Optional.empty();
     }
+  }
+
+  private ArrayList<ServiceFile> buscarArquivosPorEvento(Evento evento) {
+    ServiceFileDAO serviceFileDAO = new ServiceFileDAO(connection);
+    return serviceFileDAO.listarArquivosEvento(evento);
   }
 
   private SortedSet<Integer> buscarColaboradoresPorEvento(int idEvento) {
