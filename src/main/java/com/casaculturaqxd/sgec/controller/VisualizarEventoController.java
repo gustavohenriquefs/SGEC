@@ -1,10 +1,8 @@
 package com.casaculturaqxd.sgec.controller;
 
-
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.Time;
-
 
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.EventoDAO;
@@ -42,6 +40,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.util.converter.IntegerStringConverter;
 
@@ -53,7 +52,7 @@ public class VisualizarEventoController implements ControllerServiceFile {
     @FXML
     VBox root;
     @FXML
-    AnchorPane secaoArquivos;
+    StackPane secaoArquivos;
     @FXML
     VBox frameLocais;
     @FXML
@@ -69,10 +68,8 @@ public class VisualizarEventoController implements ControllerServiceFile {
     @FXML
     ChoiceBox<String> classificacaoEtaria;
     @FXML
-    private String[] classificacoes =
-            {"Livre", "10 anos", "12 anos", "14 anos", "16 anos", "18 anos"};
-    private ObservableMap<ServiceFile, FXMLLoader> mapServiceFiles =
-            FXCollections.observableHashMap();
+    private String[] classificacoes = { "Livre", "10 anos", "12 anos", "14 anos", "16 anos", "18 anos" };
+    private ObservableMap<ServiceFile, FXMLLoader> mapServiceFiles = FXCollections.observableHashMap();
     // Tabela com todos os campos de input
     ObservableList<Control> camposInput = FXCollections.observableArrayList();
     // Indicadores
@@ -101,8 +98,7 @@ public class VisualizarEventoController implements ControllerServiceFile {
     }
 
     private void loadMenu() throws IOException {
-        FXMLLoader carregarMenu =
-                new FXMLLoader(App.class.getResource("view/componentes/menu.fxml"));
+        FXMLLoader carregarMenu = new FXMLLoader(App.class.getResource("view/componentes/menu.fxml"));
         root.getChildren().add(0, carregarMenu.load());
     }
 
@@ -132,8 +128,7 @@ public class VisualizarEventoController implements ControllerServiceFile {
         certificavel.setSelected(evento.isCertificavel());
         libras.setSelected(evento.isAcessivelEmLibras());
 
-        FXMLLoader loaderLocal =
-                new FXMLLoader(App.class.getResource("view/preview/previewLocalizacao.fxml"));
+        FXMLLoader loaderLocal = new FXMLLoader(App.class.getResource("view/preview/previewLocalizacao.fxml"));
 
         if (evento.getLocais() != null) {
             for (Integer idLocal : evento.getLocais()) {
@@ -189,7 +184,7 @@ public class VisualizarEventoController implements ControllerServiceFile {
             evento.setPublicoAlcancado(numeroPublico.getValorAlcancado());
             evento.setPublicoEsperado(numeroPublico.getValorEsperado());
             evento.setParticipantesEsperado(numeroMestres.getValorEsperado());
-            evento.setMunicipiosEsperado(numeroMunicipios.getValorEsperado());;
+            evento.setMunicipiosEsperado(numeroMunicipios.getValorEsperado());
             eventoDAO.alterarEvento(evento);
 
             Alert sucessoAtualizacao = new Alert(AlertType.INFORMATION);
@@ -260,7 +255,8 @@ public class VisualizarEventoController implements ControllerServiceFile {
 
     /**
      * <p>
-     * Retorna todos os elementos que suportam interacao do usuario presentes na pagina, exceto
+     * Retorna todos os elementos que suportam interacao do usuario presentes na
+     * pagina, exceto
      * botoes, labels e tableviews
      * <p>
      */
@@ -316,8 +312,7 @@ public class VisualizarEventoController implements ControllerServiceFile {
                     // arquivo adicionado
                     try {
                         Parent previewParticipante = change.getValueAdded().load();
-                        PreviewArquivoController controller =
-                                change.getValueAdded().getController();
+                        PreviewArquivoController controller = change.getValueAdded().getController();
                         controller.setServiceFile(addedKey);
                         controller.setParentController(superController);
 
@@ -327,8 +322,7 @@ public class VisualizarEventoController implements ControllerServiceFile {
                     }
                 }
                 if (change.wasRemoved()) {
-                    PreviewArquivoController removedController =
-                            change.getValueRemoved().getController();
+                    PreviewArquivoController removedController = change.getValueRemoved().getController();
                     // Remover o Pane de preview ao deletar um Arquivo da lista
                     secaoArquivos.getChildren().remove(removedController.getRoot());
                 }

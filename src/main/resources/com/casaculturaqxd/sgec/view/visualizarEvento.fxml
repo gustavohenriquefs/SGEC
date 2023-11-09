@@ -120,12 +120,12 @@
                         </AnchorPane>
                      </children>
                   </VBox>
-                  <AnchorPane fx:id="secaoArquivos" layoutY="1841.0">
+                  <AnchorPane layoutY="1841.0">
                      <children>
                         <VBox alignment="CENTER" layoutY="54.0">
                            <children>
                               <Pane prefHeight="6.0" prefWidth="1425.0" style="-fx-background-color: #A22D2E;" />
-                              <StackPane id="arquivos" prefHeight="131.0" prefWidth="1425.0" />
+                              <StackPane id="arquivos" fx:id="secaoArquivos" prefHeight="131.0" prefWidth="1425.0" />
                               <Button fx:id="adicionarArquivo" alignment="CENTER" mnemonicParsing="false" style="-fx-background-color: #2A3F25;" text="Adicionar novo arquivo +" textFill="WHITE" />
                            </children>
                         </VBox>
