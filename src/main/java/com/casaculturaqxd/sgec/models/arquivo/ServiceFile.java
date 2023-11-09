@@ -41,7 +41,6 @@ public class ServiceFile {
         this.serviceFileId = serviceFileId;
     }
 
-
     public ServiceFile(String fileKey, String bucket, Date ultimaModificacao, File content) {
         this.fileKey = fileKey;
         this.bucket = bucket;
@@ -66,7 +65,6 @@ public class ServiceFile {
         this.fileKey = fileKey;
     }
 
-
     public String getSuffix() {
         return suffix;
     }
@@ -80,7 +78,7 @@ public class ServiceFile {
     }
 
     public void setService(String serviceType) {
-        this.service = ServiceFactory.getService(ServiceType.valueOf(serviceType), "ACCESS_KEY",
+        this.service = ServiceFactory.getService(ServiceType.valueOf(serviceType.toUpperCase()), "ACCESS_KEY",
                 "SECRET_KEY");
     }
 
@@ -93,6 +91,9 @@ public class ServiceFile {
     }
 
     public File getContent() {
+        if (this.content == null) {
+            this.content = service.getArquivo(bucket, fileKey);
+        }
         return content;
     }
 
