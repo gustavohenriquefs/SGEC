@@ -21,7 +21,7 @@ public class GrupoEventos {
     private int numMunicipiosAlcancado;
     private ArrayList<Instituicao> organizadores;
     private ArrayList<Instituicao> colaboradores;
-
+    private ArrayList<Meta> metas;
 
     private ServiceFile imagemCapa;
 
@@ -159,6 +159,14 @@ public class GrupoEventos {
 
     public void setColaboradores(ArrayList<Instituicao> listaColaboradores) {
         this.colaboradores = listaColaboradores;
+    }
+
+    public ArrayList<Meta> getMetas() {
+        return metas;
+    }
+
+    public void setMetas(ArrayList<Meta> metas) {
+        this.metas = metas;
     }
 
 }
