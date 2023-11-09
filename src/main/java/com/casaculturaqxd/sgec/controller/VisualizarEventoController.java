@@ -14,13 +14,18 @@ import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.Indicador;
 import com.casaculturaqxd.sgec.models.Localizacao;
 import com.casaculturaqxd.sgec.models.Meta;
+
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -32,14 +37,21 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.util.converter.IntegerStringConverter;
+import javafx.scene.image.ImageView;
+import javafx.util.Duration;
 
 public class VisualizarEventoController {
     private Evento evento;
@@ -82,6 +94,8 @@ public class VisualizarEventoController {
     @FXML
     Button novoParticipante, novoOrganizador, novoColaborador, salvarAlteracoes, adicionarArquivo,
             visualizarTodos;
+    @FXML
+    private ImageView copiaCola;
 
     public void initialize() throws IOException {
         addControls(root, camposInput);
@@ -293,4 +307,20 @@ public class VisualizarEventoController {
             node.setVisible(false);
         }
     }
+
+    private void getDescricao(){
+        Clipboard clipboard = Clipboard.getSystemClipboard();
+        ClipboardContent content = new ClipboardContent();
+        content.putString(descricao.getText());
+        clipboard.setContent(content);
+    }
+
+    public void copyToClipboard(){
+        getDescricao();
+        Tooltip tooltip = new Tooltip("Copiado para a área de transferência");
+        // Exibe a mensagem e determina sua duração
+        tooltip.setShowDuration(Duration.millis(1000));
+        tooltip.show(copiaCola, copiaCola.getScene().getWindow().getX() + copiaCola.getBoundsInParent().getMaxX(), copiaCola.getScene().getWindow().getY() + copiaCola.getBoundsInParent().getMaxY());
+    }
+
 }
