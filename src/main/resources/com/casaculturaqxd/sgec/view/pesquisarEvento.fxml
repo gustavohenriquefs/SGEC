@@ -40,7 +40,7 @@
                         <MenuButton fx:id="opcoesMetas" mnemonicParsing="false" text="Metas">
                           <items>
                               <CheckMenuItem mnemonicParsing="false" text="Fruição" />
-                              <CheckMenuItem mnemonicParsing="false" text="Fortalecimento de Patrimõnio Cultural" />
+                              <CheckMenuItem mnemonicParsing="false" text="Fortalecimento de Patrimônio Cultural" />
                               <CheckMenuItem mnemonicParsing="false" text="Formação em Arte e Cultura" />
                               <CheckMenuItem mnemonicParsing="false" text="Convocatória" />
                           </items>

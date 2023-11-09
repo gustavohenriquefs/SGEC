@@ -18,8 +18,10 @@ import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
@@ -95,16 +97,43 @@ public class PesquisarEventoController {
             eventosFinais = eventosFinaisLibras;
         }
 
-        for (Evento evento : eventosFinais) {
-            System.out.println(evento.getNome());
+        ArrayList<Integer> metasSelecionadas = new ArrayList<>();
+        for (MenuItem menuItem : opcoesMetas.getItems()) {
+            if (menuItem instanceof CheckMenuItem) {
+                CheckMenuItem checkMenuItem = (CheckMenuItem) menuItem;
+                if (checkMenuItem.isSelected()) {
+                    Meta meta = metaDAO.getMetaPorNome(checkMenuItem.getText());
+                    if(meta != null)
+                        metasSelecionadas.add(meta.getIdMeta());
+                } 
+            }
         }
 
-        ArrayList<Meta> metas = metaDAO.listarTodasMetas();
-        if(metas!=null){
-            for (Meta meta : metas) {
-                System.out.println(meta);
-            }   
+        if(!metasSelecionadas.isEmpty()){
+            ArrayList<Evento> eventoTemp = new ArrayList<>();
+            for (Evento evento : eventosFinais) {
+                ArrayList<Meta> metas = metaDAO.listarMetasEvento(evento.getIdEvento());
+                int cont = 0;
+                if(!metas.isEmpty()){
+                    for (Meta metaTemp : metas) {
+                        if(metasSelecionadas.contains(metaTemp.getIdMeta())){
+                            System.out.println("CHEGUEI AQUI!");
+                            cont++;
+                        }
+                    }
+                    if(cont == metasSelecionadas.size()){
+                        eventoTemp.add(evento);
+                    }
+                }
+            }
+            eventosFinais = eventoTemp;
         }
+        
+        
+        for (Evento evento : eventosFinais) {
+          System.out.println(evento.getNome() + " " + evento.getIdEvento());
+        }
+        System.out.println("===========================");
     }
 
 }

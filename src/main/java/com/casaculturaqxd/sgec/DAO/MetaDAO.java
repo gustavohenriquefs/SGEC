@@ -47,8 +47,8 @@ public class MetaDAO {
         return Optional.of(meta);
     }
 
-    public Optional<Meta> getMetaPorNome(String nomeMeta) {
-        String queryGet = "SELECT * FROM meta WHERE nome_meta=?";
+    public Meta getMetaPorNome(String nomeMeta) {
+        String queryGet = "SELECT * FROM meta WHERE nome_meta like ?";
         Meta meta = new Meta(nomeMeta);
         try {
             PreparedStatement statement = connection.prepareStatement(queryGet);
@@ -58,15 +58,15 @@ public class MetaDAO {
             if (resultSet.next()) {
                 meta.setIdMeta(resultSet.getInt("id_meta"));
             } else {
-                return Optional.empty();
+                return null;
             }
         } catch (SQLException e) {
             Logger erro = Logger.getLogger("erroSQL");
             erro.log(Level.SEVERE, "excecao levantada:", e);
 
-            return Optional.empty();
+            return null;
         }
-        return Optional.of(meta);
+        return meta;
     }
 
     public boolean inserirMeta(Meta meta) {
