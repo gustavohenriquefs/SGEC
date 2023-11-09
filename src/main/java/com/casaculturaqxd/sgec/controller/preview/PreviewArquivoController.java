@@ -10,7 +10,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Optional;
 
-import com.casaculturaqxd.sgec.controller.CadastrarEventoController;
 import com.casaculturaqxd.sgec.controller.ControllerServiceFile;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 import javafx.fxml.FXML;
@@ -118,6 +117,11 @@ public class PreviewArquivoController {
     }
 
     public void setServiceFile(ServiceFile serviceFile) {
+        // opcao de download apenas para arquivos ja registrados
+        if (serviceFile.getServiceFileId() == null) {
+            downloadItem.setVisible(false);
+            downloadItem.setDisable(true);
+        }
         imagemPreview.setImage(null);
         this.serviceFile = serviceFile;
         loadContent();
@@ -128,10 +132,6 @@ public class PreviewArquivoController {
     }
 
     public void setParentController(ControllerServiceFile parentController) {
-        if (parentController instanceof CadastrarEventoController) {
-            downloadItem.setVisible(false);
-            downloadItem.setDisable(true);
-        }
         this.parentController = parentController;
     }
 
