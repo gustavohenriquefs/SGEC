@@ -9,6 +9,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
@@ -76,7 +77,7 @@
                   <Font name="System Bold" size="16.0" />
                </font>
             </Label>
-            <AnchorPane id="Organizaodores" prefHeight="466.0" prefWidth="1428.0" />
+            <AnchorPane id="Organizaodores" prefHeight="454.0" prefWidth="1428.0" />
             <VBox alignment="CENTER" layoutY="718.0" prefHeight="400.0" prefWidth="1426.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="40.0">
                <children>
                   <HBox>
@@ -213,6 +214,11 @@
                   <Button fx:id="salvarAlteracoes" mnemonicParsing="false" styleClass="botoes" text="Salvar alterações" />
                </children>
             </HBox>
+            <ImageView fitHeight="20.0" fitWidth="20.0" layoutX="1501.0" layoutY="501.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../imagens/WhatsApp%20Image%202023-11-09%20at%2009.17.39.jpeg"/>
+               </image>
+            </ImageView>
          </children>
       </AnchorPane>
    </content>
