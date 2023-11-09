@@ -10,6 +10,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.ColorAdjust?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -56,8 +57,11 @@
                                     </Label>
                                     <ImageView fx:id="copiaCola" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                                        <image>
-                                          <Image url="@../imagens/WhatsApp%20Image%202023-11-09%20at%2009.17.39.jpeg" />
+                                          <Image url="@../imagens/—Pngtree—vector%20copy%20icon_4013746.png" />
                                        </image>
+                                       <effect>
+                                          <ColorAdjust brightness="1.0" />
+                                       </effect>
                                     </ImageView>
                                  </children>
                               </HBox>
