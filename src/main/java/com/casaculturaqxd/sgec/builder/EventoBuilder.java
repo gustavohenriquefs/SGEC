@@ -2,46 +2,56 @@ package com.casaculturaqxd.sgec.builder;
 
 import java.sql.Time;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.SortedSet;
 
 import com.casaculturaqxd.sgec.models.Evento;
+import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 
 public class EventoBuilder implements Builder {
   Evento evento;
 
-  public EventoBuilder(){
+  public EventoBuilder() {
     resetar();
   }
 
-  public Evento getEvento(){
+  public Evento getEvento() {
     return evento;
   }
 
-  public void setCargaHoraria(Time cargaHoraria){
+  public void setCargaHoraria(Time cargaHoraria) {
     evento.setCargaHoraria(cargaHoraria);
   }
 
-  public void setCertificavel(boolean certificavel){
+  public void setCertificavel(boolean certificavel) {
     evento.setCertificavel(certificavel);
   }
 
-  public void setLocalizacoes(SortedSet<Integer> localizacoes){
+  public void setLocalizacoes(SortedSet<Integer> localizacoes) {
     evento.setLocais(localizacoes);
   }
 
-  public void setParticipantes(SortedSet<Integer> participantes){
+  public void setParticipantes(SortedSet<Integer> participantes) {
     evento.setListaParticipantes(participantes);
   }
-  public void setAcessivelEmLibras(boolean acessivel){
+
+  public void setAcessivelEmLibras(boolean acessivel) {
     evento.setAcessivelEmLibras(acessivel);
   }
 
-  public void setMunicipiosEsperado(int municipiosEsperado){
+  public void setMunicipiosEsperado(int municipiosEsperado) {
     evento.setMunicipiosEsperado(municipiosEsperado);
   }
+
   public void setParticipantesEsperado(int participantesEsperado) {
     evento.setParticipantesEsperado(participantesEsperado);
   }
+
+  public EventoBuilder setListaArquivos(ArrayList<ServiceFile> listaArquivos) {
+    evento.setListaArquivos(listaArquivos);
+    return this;
+  }
+
   @Override
   public void resetar() {
     evento = new Evento();
@@ -91,5 +101,5 @@ public class EventoBuilder implements Builder {
   public void setOrganizadores(SortedSet<Integer> organizadores) {
     evento.setListaOrganizadores(organizadores);
   }
-  
+
 }
