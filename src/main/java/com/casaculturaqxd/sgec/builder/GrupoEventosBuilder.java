@@ -23,67 +23,67 @@ public class GrupoEventosBuilder implements Builder {
     }
 
     @Override
-    public Builder setNome(String nome) {
+    public GrupoEventosBuilder setNome(String nome) {
         grupoEventos.setNome(nome);
         return this;
     }
 
     @Override
-    public Builder setDescricao(String descricao) {
+    public GrupoEventosBuilder setDescricao(String descricao) {
         grupoEventos.setDescricao(descricao);
         return this;
     }
 
     @Override
-    public Builder setDataInicial(Date dataInicial) {
+    public GrupoEventosBuilder setDataInicial(Date dataInicial) {
         grupoEventos.setDataInicial(dataInicial);
         return this;
     }
 
     @Override
-    public Builder setDataFinal(Date dataFinal) {
+    public GrupoEventosBuilder setDataFinal(Date dataFinal) {
         grupoEventos.setDataFinal(dataFinal);
         return this;
     }
 
     @Override
-    public Builder setPublicoEsperado(int publicoEsperado) {
+    public GrupoEventosBuilder setPublicoEsperado(int publicoEsperado) {
         grupoEventos.setPublicoEsperado(publicoEsperado);
         return this;
     }
 
     @Override
-    public Builder setPublicoAlcancado(int publicoAlcancado) {
+    public GrupoEventosBuilder setPublicoAlcancado(int publicoAlcancado) {
         grupoEventos.setPublicoAlcancado(publicoAlcancado);
         return this;
     }
 
     @Override
-    public Builder setClassificacaoEtaria(String classificacaoEtaria) {
+    public GrupoEventosBuilder setClassificacaoEtaria(String classificacaoEtaria) {
         grupoEventos.setClassificacaoEtaria(classificacaoEtaria);
         return this;
     }
 
     @Override
-    public Builder setColaboradores(SortedSet<Integer> colaboradores) {
+    public GrupoEventosBuilder setColaboradores(SortedSet<Integer> colaboradores) {
         // TODO Remover metodo apos refactor em evento
         return this;
     }
 
     @Override
-    public Builder setOrganizadores(SortedSet<Integer> organizadores) {
+    public GrupoEventosBuilder setOrganizadores(SortedSet<Integer> organizadores) {
         // TODO Remover metodo apos refactor em evento
         return this;
     }
 
     @Override
-    public Builder setColaboradores(ArrayList<Instituicao> colaboradores) {
+    public GrupoEventosBuilder setColaboradores(ArrayList<Instituicao> colaboradores) {
         grupoEventos.setColaboradores(colaboradores);
         return this;
     }
 
     @Override
-    public Builder setOrganizadores(ArrayList<Instituicao> organizadores) {
+    public GrupoEventosBuilder setOrganizadores(ArrayList<Instituicao> organizadores) {
         grupoEventos.setOrganizadores(organizadores);
         return this;
     }
