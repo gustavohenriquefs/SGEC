@@ -35,6 +35,7 @@ import java.util.TreeSet;
 
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.EventoDAO;
+import com.casaculturaqxd.sgec.DAO.ServiceFileDAO;
 import com.casaculturaqxd.sgec.builder.EventoBuilder;
 import com.casaculturaqxd.sgec.controller.preview.PreviewArquivoController;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
@@ -42,14 +43,12 @@ import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 import com.casaculturaqxd.sgec.service.Service;
 
-
 public class CadastrarEventoController implements ControllerServiceFile {
     private final int MAX_LOCALIZACOES = 4;
     DatabasePostgres db = DatabasePostgres.getInstance("URL", "USER_NAME", "PASSWORD");
     EventoBuilder builderEvento = new EventoBuilder();
     EventoDAO eventoDAO = new EventoDAO();
-    ArrayList<FieldLocalizacaoController> controllersLocais =
-            new ArrayList<FieldLocalizacaoController>();
+    ArrayList<FieldLocalizacaoController> controllersLocais = new ArrayList<FieldLocalizacaoController>();
     DateFormat formatterHorario;
     Stage stage;
     @FXML
@@ -69,14 +68,12 @@ public class CadastrarEventoController implements ControllerServiceFile {
     DatePicker dataInicial, dataFinal;
     @FXML
     ChoiceBox<String> classificacaoEtaria;
-    private String[] classificacoes =
-            {"Livre", "10 anos", "12 anos", "14 anos", "16 anos", "18 anos"};
+    private String[] classificacoes = { "Livre", "10 anos", "12 anos", "14 anos", "16 anos", "18 anos" };
     @FXML
     CheckBox checkMeta1, checkMeta2, checkMeta3, checkMeta4;
     @FXML
     RadioButton certificavel, acessivelEmLibras;
-    private ObservableMap<ServiceFile, FXMLLoader> mapServiceFiles =
-            FXCollections.observableHashMap();
+    private ObservableMap<ServiceFile, FXMLLoader> mapServiceFiles = FXCollections.observableHashMap();
     // Botoes
     @FXML
     Button botaoNovaLocalizacao, botaoOrganizadores, botaoColaboradores, botaoParticipantes,
@@ -96,8 +93,7 @@ public class CadastrarEventoController implements ControllerServiceFile {
     }
 
     private void loadMenu() throws IOException {
-        FXMLLoader carregarMenu =
-                new FXMLLoader(App.class.getResource("view/componentes/menu.fxml"));
+        FXMLLoader carregarMenu = new FXMLLoader(App.class.getResource("view/componentes/menu.fxml"));
         root.getChildren().add(0, carregarMenu.load());
     }
 
@@ -149,19 +145,25 @@ public class CadastrarEventoController implements ControllerServiceFile {
         for (FieldLocalizacaoController controller : controllersLocais) {
             idLocais.add(controller.getLocalizacao().getIdLocalizacao());
         }
+        ArrayList<ServiceFile> listaArquivos = new ArrayList<>(mapServiceFiles.keySet());
+        builderEvento.setListaArquivos(listaArquivos);
         builderEvento.setLocalizacoes(idLocais);
         Evento novoEvento = builderEvento.getEvento();
         if (eventoDAO.inserirEvento(novoEvento)) {
-            novoEvento = eventoDAO.buscarEvento(novoEvento).get();
+            ServiceFileDAO serviceFileDAO = new ServiceFileDAO(eventoDAO.getConnection());
+            for (ServiceFile arquivo : novoEvento.getListaArquivos()) {
+                serviceFileDAO.inserirArquivo(arquivo);
+            }
+            eventoDAO.vincularArquivos(novoEvento);
             App.setRoot("view/home");
         }
 
     }
 
-
     public void cancelar() throws IOException {
         /**
-         * TODO: implementar uma fila na classe App, para retornar a ultima tela visitada
+         * TODO: implementar uma fila na classe App, para retornar a ultima tela
+         * visitada
          */
         builderEvento.resetar();
         App.setRoot("view/home");
@@ -192,8 +194,7 @@ public class CadastrarEventoController implements ControllerServiceFile {
         // TODO: permitir adicionar uma instituicao existente, neste caso o preview dela
         // que e adicionado a pagina
         SubSceneLoader loaderOrganizadores = new SubSceneLoader();
-        AnchorPane novoOrganizador =
-                (AnchorPane) loaderOrganizadores.getPage("fields/fieldInstituicao");
+        AnchorPane novoOrganizador = (AnchorPane) loaderOrganizadores.getPage("fields/fieldInstituicao");
         Organizadores.getChildren().add(novoOrganizador);
 
     }
@@ -202,8 +203,7 @@ public class CadastrarEventoController implements ControllerServiceFile {
         // TODO: permitir adicionar uma instituicao existente, neste caso o preview dela
         // que e adicionado a pagina
         SubSceneLoader loaderColaboradores = new SubSceneLoader();
-        AnchorPane novoColaborador =
-                (AnchorPane) loaderColaboradores.getPage("fields/fieldInstituicao");
+        AnchorPane novoColaborador = (AnchorPane) loaderColaboradores.getPage("fields/fieldInstituicao");
         Colaboradores.getChildren().add(novoColaborador);
     }
 
@@ -268,8 +268,7 @@ public class CadastrarEventoController implements ControllerServiceFile {
                     // arquivo adicionado
                     try {
                         Parent previewParticipante = change.getValueAdded().load();
-                        PreviewArquivoController controller =
-                                change.getValueAdded().getController();
+                        PreviewArquivoController controller = change.getValueAdded().getController();
                         controller.setServiceFile(addedKey);
                         controller.setParentController(superController);
 
@@ -279,8 +278,7 @@ public class CadastrarEventoController implements ControllerServiceFile {
                     }
                 }
                 if (change.wasRemoved()) {
-                    PreviewArquivoController removedController =
-                            change.getValueRemoved().getController();
+                    PreviewArquivoController removedController = change.getValueRemoved().getController();
                     // Remover o Pane de preview ao deletar um Arquivo da lista
                     secaoArquivos.getChildren().remove(removedController.getRoot());
                 }
