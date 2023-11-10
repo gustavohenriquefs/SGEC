@@ -101,6 +101,14 @@ public class ServiceFile {
         this.content = content;
     }
 
+    public File getPreview() {
+        return preview;
+    }
+
+    public void setPreview(File preview) {
+        this.preview = preview;
+    }
+
     public Date getUltimaModificacao() {
         return ultimaModificacao;
     }

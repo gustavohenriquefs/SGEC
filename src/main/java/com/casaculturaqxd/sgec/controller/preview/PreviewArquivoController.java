@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Optional;
 
+import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.controller.ControllerServiceFile;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 import javafx.fxml.FXML;
@@ -20,6 +21,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -105,6 +107,22 @@ public class PreviewArquivoController {
             tamanho.setText(formatFileSize(serviceFile.getContent().length()));
             date.setText(dataArquivo);
             fileType.setText(serviceFile.getSuffix());
+            loadImage();
+        }
+    }
+
+    private void loadImage() {
+        if (serviceFile.getPreview() == null) {
+            // carregar imagem default
+            imagemPreview.setImage(new Image(App.class.getResource("imagens/default_image.png").toString()));
+        } else {
+            InputStream imagemPreviewStream;
+            try {
+                imagemPreviewStream = new FileInputStream(serviceFile.getPreview());
+                imagemPreview.setImage(new Image(imagemPreviewStream));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         }
     }
 
