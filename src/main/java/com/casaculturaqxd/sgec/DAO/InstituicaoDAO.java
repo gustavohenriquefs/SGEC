@@ -6,10 +6,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import com.casaculturaqxd.sgec.models.Instituicao;
+import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 
 public class InstituicaoDAO {
   private Connection conn;
@@ -34,7 +36,7 @@ public class InstituicaoDAO {
 
   public Optional<Instituicao> getInstituicao(Instituicao instituicao) {
     String getInstituicaoQuery = "SELECT * FROM instituicao WHERE id_instituicao=?";
-
+    ServiceFileDAO serviceFileDAO = new ServiceFileDAO(conn);
     try {
       PreparedStatement statement = conn.prepareStatement(getInstituicaoQuery);
 
@@ -43,9 +45,13 @@ public class InstituicaoDAO {
       ResultSet resultado = statement.executeQuery();
 
       if (resultado.next()) {
+        ServiceFile imagemCapa = new ServiceFile(resultado.getInt("id_service_file"));
+        if (imagemCapa.getServiceFileId() > 0) {
+          // setar a capa somente se o arquivo existir
+          instituicao.setImagemCapa(serviceFileDAO.getArquivo(imagemCapa));
+        }
         instituicao.setIdInstituicao(resultado.getInt("id_instituicao"));
         instituicao.setNome(resultado.getString("nome_instituicao"));
-        instituicao.setIdServiceFile(resultado.getInt("id_service_file"));
       } else {
         return Optional.empty();
       }
@@ -61,6 +67,7 @@ public class InstituicaoDAO {
   public Optional<Instituicao> getInstituicao(String nome) {
     String getInstituicaoQuery = "SELECT * FROM instituicao WHERE nome_instituicao=?";
     Instituicao product = new Instituicao();
+    ServiceFileDAO serviceFileDAO = new ServiceFileDAO(conn);
     try {
       PreparedStatement statement = conn.prepareStatement(getInstituicaoQuery);
 
@@ -69,9 +76,14 @@ public class InstituicaoDAO {
       ResultSet resultado = statement.executeQuery();
 
       if (resultado.next()) {
+        ServiceFile imagemCapa = new ServiceFile(resultado.getInt("id_service_file"));
+        if (imagemCapa.getServiceFileId() > 0) {
+          // setar a capa somente se o arquivo existir
+          product.setImagemCapa(serviceFileDAO.getArquivo(imagemCapa));
+        }
+
         product.setIdInstituicao(resultado.getInt("id_instituicao"));
         product.setNome(resultado.getString("nome_instituicao"));
-        product.setIdServiceFile(resultado.getInt("id_service_file"));
       } else {
         return Optional.empty();
       }
@@ -85,15 +97,16 @@ public class InstituicaoDAO {
   }
 
   public boolean inserirInstituicao(Instituicao instituicao) throws SQLException {
-    String inserirInstituicaoQuery =
-        "INSERT INTO instituicao (nome_instituicao, id_service_file) VALUES (?, ?)";
+    String inserirInstituicaoQuery = "INSERT INTO instituicao (nome_instituicao, id_service_file) VALUES (?, ?)";
 
     try {
-      PreparedStatement statement =
-          conn.prepareStatement(inserirInstituicaoQuery, Statement.RETURN_GENERATED_KEYS);
-
+      PreparedStatement statement = conn.prepareStatement(inserirInstituicaoQuery, Statement.RETURN_GENERATED_KEYS);
+      Integer idServiceFile = null;
+      if (instituicao.getImagemCapa() != null) {
+        instituicao.getImagemCapa().getServiceFileId();
+      }
       statement.setString(1, instituicao.getNome());
-      statement.setObject(2, instituicao.getIdServiceFile(), Types.INTEGER);
+      statement.setObject(2, idServiceFile, Types.INTEGER);
 
       statement.executeUpdate();
 
@@ -112,14 +125,16 @@ public class InstituicaoDAO {
   }
 
   public boolean atualizarInstituicao(Instituicao instituicao) throws SQLException {
-    String atualizarInstituicaoQuery =
-        "UPDATE instituicao SET nome_instituicao=?, id_service_file=? WHERE id_instituicao=?";
+    String atualizarInstituicaoQuery = "UPDATE instituicao SET nome_instituicao=?, id_service_file=? WHERE id_instituicao=?";
 
     try {
       PreparedStatement statement = conn.prepareStatement(atualizarInstituicaoQuery);
-
+      Integer idServiceFile = null;
+      if (instituicao.getImagemCapa() != null) {
+        instituicao.getImagemCapa().getServiceFileId();
+      }
       statement.setString(1, instituicao.getNome());
-      statement.setObject(2, instituicao.getIdServiceFile());
+      statement.setObject(2, idServiceFile, Types.INTEGER);
       statement.setInt(3, instituicao.getIdInstituicao());
 
       int numAtualizacoes = statement.executeUpdate();
@@ -152,11 +167,78 @@ public class InstituicaoDAO {
     }
   }
 
+  public ArrayList<Instituicao> listarOrganizadoresEvento(int idEvento) {
+    String sql = "SELECT * FROM organizador_evento INNER JOIN instituicao USING(id_instituicao) WHERE id_evento=?";
+
+    ArrayList<Instituicao> listaOrganizadores = new ArrayList<>();
+    ServiceFileDAO serviceFileDAO = new ServiceFileDAO(getConn());
+    try {
+      PreparedStatement statement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+      statement.setInt(1, idEvento);
+      ResultSet resultSet = statement.executeQuery();
+
+      while (resultSet.next()) {
+        Instituicao organizador = new Instituicao();
+        ServiceFile imagemCapa = new ServiceFile(resultSet.getInt("id_service_file"));
+        if (imagemCapa.getServiceFileId() > 0) {
+          // setar a capa somente se o arquivo existir
+          organizador.setImagemCapa(serviceFileDAO.getArquivo(imagemCapa));
+        }
+        organizador.setIdInstituicao(resultSet.getInt("id_instituicao"));
+        organizador.setNome(resultSet.getString("nome_instituicao"));
+        organizador.setDescricaoContribuicao(resultSet.getString("descricao_contribuicao"));
+        organizador.setValorContribuicao(resultSet.getString("valor_contribuicao"));
+
+        listaOrganizadores.add(organizador);
+      }
+    } catch (SQLException e) {
+      Logger erro = Logger.getLogger("erroSQL");
+      erro.log(Level.SEVERE, "excecao levantada:", e);
+      return null;
+    } catch (Exception e) {
+      return null;
+    }
+    return listaOrganizadores;
+  }
+
+  public ArrayList<Instituicao> listarColaboradoresEvento(int idEvento) {
+    String sql = "SELECT * FROM colaborador_evento INNER JOIN instituicao USING(id_instituicao) WHERE id_evento=?";
+    ArrayList<Instituicao> listaColaboradores = new ArrayList<>();
+    ServiceFileDAO serviceFileDAO = new ServiceFileDAO(getConn());
+    try {
+      PreparedStatement statement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+      statement.setInt(1, idEvento);
+      ResultSet resultSet = statement.executeQuery();
+
+      while (resultSet.next()) {
+        Instituicao colaborador = new Instituicao();
+        ServiceFile imagemCapa = new ServiceFile(resultSet.getInt("id_service_file"));
+        if (imagemCapa.getServiceFileId() > 0) {
+          // setar a capa somente se o arquivo existir
+          colaborador.setImagemCapa(serviceFileDAO.getArquivo(imagemCapa));
+        }
+
+        colaborador.setIdInstituicao(resultSet.getInt("id_instituicao"));
+        colaborador.setNome(resultSet.getString("nome_instituicao"));
+        colaborador.setDescricaoContribuicao(resultSet.getString("descricao_contribuicao"));
+        colaborador.setValorContribuicao(resultSet.getString("valor_contribuicao"));
+
+        listaColaboradores.add(colaborador);
+      }
+    } catch (SQLException e) {
+      Logger erro = Logger.getLogger("erroSQL");
+      erro.log(Level.SEVERE, "excecao levantada:", e);
+      return null;
+    } catch (Exception e) {
+      return null;
+    }
+    return listaColaboradores;
+  }
+
   public boolean vincularOrganizador(Instituicao instituicao, Integer idEvento) {
     try {
-      String sql =
-          "insert into organizador_evento (id_instituicao,id_evento,descricao_contribuicao, valor_contribuicao)"
-              + " values(?, ?, ?, ?)";
+      String sql = "insert into organizador_evento (id_instituicao,id_evento,descricao_contribuicao, valor_contribuicao)"
+          + " values(?, ?, ?, ?)";
       PreparedStatement stmt = conn.prepareStatement(sql);
       stmt.setInt(1, instituicao.getIdInstituicao());
       stmt.setInt(2, idEvento);
@@ -179,9 +261,8 @@ public class InstituicaoDAO {
   public boolean vincularOrganizador(Integer idInstituicao, Integer idEvento,
       String descricaoContribuicao, String valorContribuicao) {
     try {
-      String sql =
-          "insert into organizador_evento (id_instituicao,id_evento,descricao_contribuicao, valor_contribuicao)"
-              + " values(?, ?, ?, ?)";
+      String sql = "insert into organizador_evento (id_instituicao,id_evento,descricao_contribuicao, valor_contribuicao)"
+          + " values(?, ?, ?, ?)";
       PreparedStatement stmt = conn.prepareStatement(sql);
       stmt.setInt(1, idInstituicao);
       stmt.setInt(2, idEvento);
@@ -201,9 +282,8 @@ public class InstituicaoDAO {
 
   public boolean vincularColaborador(Instituicao instituicao, Integer idEvento) {
     try {
-      String sql =
-          "insert into colaborador_evento (id_instituicao,id_evento,descricao_contribuicao, valor_contribuicao)"
-              + " values(?, ?, ?, ?)";
+      String sql = "insert into colaborador_evento (id_instituicao,id_evento,descricao_contribuicao, valor_contribuicao)"
+          + " values(?, ?, ?, ?)";
       PreparedStatement stmt = conn.prepareStatement(sql);
       stmt.setInt(1, instituicao.getIdInstituicao());
       stmt.setInt(2, idEvento);
@@ -224,9 +304,8 @@ public class InstituicaoDAO {
   public boolean vincularColaborador(Integer idInstituicao, Integer idEvento,
       String descricaoContribuicao, String valorContribuicao) {
     try {
-      String sql =
-          "insert into colaborador_evento (id_instituicao,id_evento,descricao_contribuicao, valor_contribuicao)"
-              + " values(?, ?, ?, ?)";
+      String sql = "insert into colaborador_evento (id_instituicao,id_evento,descricao_contribuicao, valor_contribuicao)"
+          + " values(?, ?, ?, ?)";
       PreparedStatement stmt = conn.prepareStatement(sql);
       stmt.setInt(1, idInstituicao);
       stmt.setInt(2, idEvento);
@@ -297,8 +376,7 @@ public class InstituicaoDAO {
   }
 
   public boolean desvincularOrganizador(Integer idInstituicao, Integer idEvento) {
-    String desvincularOrganizadorQuery =
-        "DELETE FROM organizador_evento WHERE id_instituicao=? AND id_evento=?";
+    String desvincularOrganizadorQuery = "DELETE FROM organizador_evento WHERE id_instituicao=? AND id_evento=?";
 
     try {
       PreparedStatement stmt = conn.prepareStatement(desvincularOrganizadorQuery);
@@ -321,8 +399,7 @@ public class InstituicaoDAO {
   }
 
   public boolean desvincularColaborador(Integer idInstituicao, Integer idEvento) {
-    String desvincularColaboradorQuery =
-        "DELETE FROM colaborador_evento WHERE id_instituicao=? AND id_evento=?";
+    String desvincularColaboradorQuery = "DELETE FROM colaborador_evento WHERE id_instituicao=? AND id_evento=?";
 
     try {
       PreparedStatement stmt = conn.prepareStatement(desvincularColaboradorQuery);

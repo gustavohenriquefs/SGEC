@@ -1,23 +1,28 @@
 package com.casaculturaqxd.sgec.models;
 
+import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
+
 /**
- * Instituições incluem aquelas que agem como colaboradores ou como organizadores de eventos em que
- * a Casa de Saberes esteja envolvida. Uma instituição pode ser organizadora de vários eventos e
- * também realizadora de outros, mas não Organizadora e Colaboradora ao mesmo tempo
+ * Instituições incluem aquelas que agem como colaboradores ou como
+ * organizadores de eventos em que
+ * a Casa de Saberes esteja envolvida. Uma instituição pode ser organizadora de
+ * vários eventos e
+ * também realizadora de outros, mas não Organizadora e Colaboradora ao mesmo
+ * tempo
  */
 public class Instituicao {
     private Integer idInstituicao;
     private String nome;
     private String descricaoContribuicao;
     private String valorContribuicao;
-    private Integer idServiceFile;
+    private ServiceFile imagemCapa;
 
     public Instituicao(String nome, String descricaoContribuicao, String valorContribuicao,
-            Integer idServiceFile) {
+            ServiceFile serviceFile) {
         this.nome = nome;
         this.descricaoContribuicao = descricaoContribuicao;
         this.valorContribuicao = valorContribuicao;
-        this.idServiceFile = idServiceFile;
+        this.imagemCapa = serviceFile;
     }
 
     public Instituicao(String nome) {
@@ -63,12 +68,12 @@ public class Instituicao {
         this.idInstituicao = idInstituicao;
     }
 
-    public Integer getIdServiceFile() {
-        return idServiceFile;
+    public ServiceFile getImagemCapa() {
+        return imagemCapa;
     }
 
-    public void setIdServiceFile(Integer idServiceFile) {
-        this.idServiceFile = idServiceFile;
+    public void setImagemCapa(ServiceFile serviceFile) {
+        this.imagemCapa = serviceFile;
     }
 
 }

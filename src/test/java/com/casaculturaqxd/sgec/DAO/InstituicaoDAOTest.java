@@ -3,6 +3,7 @@ package com.casaculturaqxd.sgec.DAO;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.Instituicao;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import org.junit.jupiter.api.AfterEach;
@@ -10,7 +11,6 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-
 
 public class InstituicaoDAOTest {
     private static DatabasePostgres db;
@@ -97,7 +97,8 @@ public class InstituicaoDAOTest {
     }
 
     /**
-     * utilizando valor aleatorio para garantir que o valor atualizado seja diferente do valor
+     * utilizando valor aleatorio para garantir que o valor atualizado seja
+     * diferente do valor
      * antigo
      */
     @Test
@@ -157,8 +158,7 @@ public class InstituicaoDAOTest {
     @Test
     public void testVincularOrganizadorSemValorContribuicao() throws SQLException {
         InstituicaoDAO dao = new InstituicaoDAO(db.getConnection());
-        Instituicao instituicao =
-                new Instituicao("nova_instituicao", "nova_contribuicao", null, null);
+        Instituicao instituicao = new Instituicao("nova_instituicao", "nova_contribuicao", null, null);
         dao.inserirInstituicao(instituicao);
 
         assertTrue(dao.vincularOrganizador(instituicao, idValidEvento));
@@ -209,8 +209,7 @@ public class InstituicaoDAOTest {
     @Test
     public void testVincularValidColaboradorValidEvento() throws SQLException {
         InstituicaoDAO dao = new InstituicaoDAO(db.getConnection());
-        Instituicao instituicao =
-                new Instituicao("nova instituicao", "nova descricao", "novo valor", null);
+        Instituicao instituicao = new Instituicao("nova instituicao", "nova descricao", "novo valor", null);
         dao.inserirInstituicao(instituicao);
 
         assertTrue(dao.vincularColaborador(instituicao, idValidEvento));
@@ -242,6 +241,50 @@ public class InstituicaoDAOTest {
         dao.vincularColaborador(instituicao, idValidEvento);
 
         assertTrue(dao.desvincularColaborador(instituicao.getIdInstituicao(), idValidEvento));
+    }
+
+    @Test
+    public void testListarOrganizadoresValidEvento() {
+        InstituicaoDAO instituicaoDAO = new InstituicaoDAO(db.getConnection());
+        Instituicao instituicao = instituicaoDAO.getInstituicao(new Instituicao(idValidInstituicao)).get();
+        instituicaoDAO.vincularOrganizador(instituicao.getIdInstituicao(), idValidEvento, "contribuicao_teste", null);
+
+        List<Instituicao> result = instituicaoDAO.listarOrganizadoresEvento(idValidEvento);
+        Instituicao inserted = result.get(0);
+        assertAll(() -> assertFalse(result.isEmpty()),
+                () -> assertEquals(instituicao.getIdInstituicao(), inserted.getIdInstituicao()),
+                () -> assertEquals(instituicao.getNome(), inserted.getNome()),
+                () -> assertEquals("contribuicao_teste", inserted.getDescricaoContribuicao()),
+                () -> assertNull(inserted.getValorContribuicao()));
+    }
+
+    @Test
+    public void testListarOrganizadoresEmptyEvento() {
+        InstituicaoDAO instituicaoDAO = new InstituicaoDAO(db.getConnection());
+        List<Instituicao> result = instituicaoDAO.listarOrganizadoresEvento(idValidEvento);
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    public void testListarColaboradoresValidEvento() {
+        InstituicaoDAO instituicaoDAO = new InstituicaoDAO(db.getConnection());
+        Instituicao instituicao = instituicaoDAO.getInstituicao(new Instituicao(idValidInstituicao)).get();
+        instituicaoDAO.vincularColaborador(instituicao.getIdInstituicao(), idValidEvento, "contribuicao_teste", null);
+
+        List<Instituicao> result = instituicaoDAO.listarColaboradoresEvento(idValidEvento);
+        Instituicao inserted = result.get(0);
+        assertAll(() -> assertFalse(result.isEmpty()),
+                () -> assertEquals(instituicao.getIdInstituicao(), inserted.getIdInstituicao()),
+                () -> assertEquals(instituicao.getNome(), inserted.getNome()),
+                () -> assertEquals("contribuicao_teste", inserted.getDescricaoContribuicao()),
+                () -> assertNull(inserted.getValorContribuicao()));
+    }
+
+    @Test
+    public void testListarColaboradoresEmptyEvento() {
+        InstituicaoDAO instituicaoDAO = new InstituicaoDAO(db.getConnection());
+        List<Instituicao> result = instituicaoDAO.listarColaboradoresEvento(idValidEvento);
+        assertTrue(result.isEmpty());
     }
 
     @Test
