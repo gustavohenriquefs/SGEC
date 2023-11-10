@@ -14,7 +14,7 @@ import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 
 public class ParticipanteDAO {
   private Connection conn;
-
+  
   public Connection getConn() {
     return conn;
   }
@@ -75,6 +75,8 @@ public class ParticipanteDAO {
       statement.close();
 
     } catch (SQLException e) {
+      Logger erro = Logger.getLogger("erroSQl");
+      erro.log(Level.SEVERE, "excecao levantada:", e);
       conn.rollback();
 
       return false;
@@ -115,7 +117,6 @@ public class ParticipanteDAO {
     } finally {
       conn.commit();
     }
-
   }
 
   public boolean deletarParticipante(Participante participante) throws SQLException {
@@ -130,6 +131,8 @@ public class ParticipanteDAO {
       statement.close();
       return numRemocoes > 0;
     } catch (SQLException e) {
+      Logger erro = Logger.getLogger("erroSQl");
+      erro.log(Level.SEVERE, "excecao levantada:", e);
       conn.rollback();
 
       return false;
@@ -170,6 +173,5 @@ public class ParticipanteDAO {
       erro.log(Level.SEVERE, "excecao levantada:", e);
       return false;
     }
-
   }
 }

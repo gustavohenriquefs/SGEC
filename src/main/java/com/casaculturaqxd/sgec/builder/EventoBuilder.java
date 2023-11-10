@@ -100,27 +100,15 @@ public class EventoBuilder implements Builder {
   }
 
   @Override
-  public Builder setColaboradores(SortedSet<Integer> colaboradores) {
-    evento.setListaColaboradores(colaboradores);
-    return this;
-  }
-
-  @Override
-  public Builder setOrganizadores(SortedSet<Integer> organizadores) {
-    evento.setListaOrganizadores(organizadores);
-    return this;
-  }
-
-  @Override
   public Builder setColaboradores(ArrayList<Instituicao> colaboradores) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'setColaboradores'");
+    evento.setListaOrganizadores(colaboradores);
+    return this;
   }
 
   @Override
   public Builder setOrganizadores(ArrayList<Instituicao> organizadores) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'setOrganizadores'");
+    evento.setListaColaboradores(organizadores);
+    return this;
   }
 
 }

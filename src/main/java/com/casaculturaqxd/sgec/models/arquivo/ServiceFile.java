@@ -3,7 +3,6 @@ package com.casaculturaqxd.sgec.models.arquivo;
 import java.io.File;
 import java.sql.Date;
 
-
 import com.casaculturaqxd.sgec.enums.ServiceType;
 import com.casaculturaqxd.sgec.service.Service;
 import com.casaculturaqxd.sgec.service.ServiceFactory;
@@ -22,20 +21,20 @@ public class ServiceFile {
         this.content = content;
         this.bucket = bucket;
         this.fileKey = content.getName();
-        this.service = ServiceFactory.getService(ServiceType.S3, "ACCESS_KEY","SECRET_KEY");
+        this.service = ServiceFactory.getService(ServiceType.S3, "ACCESS_KEY", "SECRET_KEY");
     }
 
     public ServiceFile(Integer serviceFileId) {
         this.serviceFileId = serviceFileId;
+        this.service = ServiceFactory.getService(ServiceType.S3, "ACCESS_KEY", "SECRET_KEY");
     }
-
 
     public ServiceFile(String fileKey, String bucket, Date ultimaModificacao, File content) {
         this.fileKey = fileKey;
         this.bucket = bucket;
         this.ultimaModificacao = ultimaModificacao;
         this.content = content;
-        this.service = ServiceFactory.getService(ServiceType.S3, "ACCESS_KEY","SECRET_KEY");
+        this.service = ServiceFactory.getService(ServiceType.S3, "ACCESS_KEY", "SECRET_KEY");
     }
 
     public Integer getServiceFileId() {
@@ -53,7 +52,6 @@ public class ServiceFile {
     public void setFileKey(String fileKey) {
         this.fileKey = fileKey;
     }
-
 
     public String getSuffix() {
         return suffix;
