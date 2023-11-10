@@ -76,4 +76,35 @@ public class Instituicao {
         this.imagemCapa = serviceFile;
     }
 
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+
+        if (!(other instanceof Instituicao)) {
+            return false;
+        }
+
+        Instituicao asInstituicao = (Instituicao) other;
+
+        return this.idInstituicao == asInstituicao.getIdInstituicao() &&
+                this.nome == asInstituicao.getNome() &&
+                this.descricaoContribuicao == asInstituicao.getDescricaoContribuicao() &&
+                this.valorContribuicao == asInstituicao.getValorContribuicao() &&
+                this.imagemCapa == asInstituicao.getImagemCapa();
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+
+        hash = 29 * hash + (idInstituicao == null ? 0 : idInstituicao.hashCode());
+        hash = 29 * hash + (nome == null ? 0 : nome.hashCode());
+        hash = 29 * hash + (descricaoContribuicao == null ? 0 : descricaoContribuicao.hashCode());
+        hash = 29 * hash + (valorContribuicao == null ? 0 : valorContribuicao.hashCode());
+        hash = 29 * hash + (imagemCapa == null ? 0 : imagemCapa.hashCode());
+
+        return hash;
+    }
 }
