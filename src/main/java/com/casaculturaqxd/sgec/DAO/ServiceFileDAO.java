@@ -17,8 +17,8 @@ public class ServiceFileDAO {
   Connection connection;
   Service service;
 
-  ServiceFileDAO(Service service) {
-    this.service = service;
+  ServiceFileDAO(Connection connection) {
+    this.connection = connection;
   }
 
   public void setConnection(Connection connection) {
