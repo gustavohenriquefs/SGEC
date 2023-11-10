@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -95,7 +96,6 @@ public class ServiceFileDAO {
       logException(e);
       return null;
     }
-    return null;
   }
 
   public File getContent(ServiceFile serviceFile) {
@@ -163,6 +163,7 @@ public class ServiceFileDAO {
       stmt.execute();
       stmt.close();
       return true;
+
     } catch (Exception e) {
       logException(e);
       return false;

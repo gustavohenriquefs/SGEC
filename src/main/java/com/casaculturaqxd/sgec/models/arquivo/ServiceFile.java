@@ -4,6 +4,7 @@ import java.io.File;
 import java.sql.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import com.casaculturaqxd.sgec.enums.ServiceType;
 import com.casaculturaqxd.sgec.service.Service;
 import com.casaculturaqxd.sgec.service.ServiceFactory;
@@ -39,6 +40,7 @@ public class ServiceFile {
 
     public ServiceFile(Integer serviceFileId) {
         this.serviceFileId = serviceFileId;
+        this.service = ServiceFactory.getService(ServiceType.S3, "ACCESS_KEY", "SECRET_KEY");
     }
 
     public ServiceFile(String fileKey, String bucket, Date ultimaModificacao, File content) {

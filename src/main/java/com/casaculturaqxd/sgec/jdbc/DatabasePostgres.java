@@ -6,13 +6,10 @@ import java.sql.SQLException;
 import io.github.cdimascio.dotenv.Dotenv;
 
 /**
- * Implementacao de Database utilizando o driver jdbc
- * do Postgres, todos os parâmetros são carregados a partir
- * de variáveis de ambiente definidas em um arquivo .env.
- * 
+ * Implementacao de Database utilizando o driver jdbc do Postgres, todos os parâmetros são
+ * carregados a partir de variáveis de ambiente definidas em um arquivo .env.
  * <p>
- * Todos os métodos set desconectam da conexão atual
- * antes de tentar atualizar uma das credenciais.
+ * Todos os métodos set desconectam da conexão atual antes de tentar atualizar uma das credenciais.
  * </p>
  */
 public class DatabasePostgres implements Database {
@@ -39,7 +36,7 @@ public class DatabasePostgres implements Database {
         this.urlDataBase = dotenv.get(urlKey);
         this.nomeUsuario = dotenv.get(userNameKey);
         this.senha = dotenv.get(passwordKey);
-        
+
         try {
             Class.forName("org.postgresql.Driver");
             this.connection = DriverManager.getConnection(urlDataBase, nomeUsuario, senha);
@@ -62,7 +59,7 @@ public class DatabasePostgres implements Database {
         }
     }
 
-    public void setUrlDataBase(String urlKey) throws IncorrectEnvironmentVariableException{
+    public void setUrlDataBase(String urlKey) throws IncorrectEnvironmentVariableException {
         if (variavelEnvExists(urlKey)) {
             desconectar(connection);
             this.urlDataBase = dotenv.get(urlKey);
