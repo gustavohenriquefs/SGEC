@@ -2,7 +2,6 @@ package com.casaculturaqxd.sgec.builder;
 
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.SortedSet;
 import com.casaculturaqxd.sgec.models.GrupoEventos;
 import com.casaculturaqxd.sgec.models.Instituicao;
 
@@ -61,18 +60,6 @@ public class GrupoEventosBuilder implements Builder {
     @Override
     public GrupoEventosBuilder setClassificacaoEtaria(String classificacaoEtaria) {
         grupoEventos.setClassificacaoEtaria(classificacaoEtaria);
-        return this;
-    }
-
-    @Override
-    public GrupoEventosBuilder setColaboradores(SortedSet<Integer> colaboradores) {
-        // TODO Remover metodo apos refactor em evento
-        return this;
-    }
-
-    @Override
-    public GrupoEventosBuilder setOrganizadores(SortedSet<Integer> organizadores) {
-        // TODO Remover metodo apos refactor em evento
         return this;
     }
 
