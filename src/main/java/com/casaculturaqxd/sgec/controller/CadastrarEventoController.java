@@ -48,6 +48,7 @@ public class CadastrarEventoController implements ControllerServiceFile {
     DatabasePostgres db = DatabasePostgres.getInstance("URL", "USER_NAME", "PASSWORD");
     EventoBuilder builderEvento = new EventoBuilder();
     EventoDAO eventoDAO = new EventoDAO();
+    ServiceFileDAO serviceFileDAO;
     ArrayList<FieldLocalizacaoController> controllersLocais = new ArrayList<FieldLocalizacaoController>();
     DateFormat formatterHorario;
     Stage stage;
@@ -111,7 +112,7 @@ public class CadastrarEventoController implements ControllerServiceFile {
 
         builderEvento.resetar();
         eventoDAO.setConnection(db.getConnection());
-
+        serviceFileDAO = new ServiceFileDAO(eventoDAO.getConnection());
         builderEvento.setNome(titulo.getText());
         builderEvento.setDescricao(titulo.getText());
         builderEvento
@@ -150,9 +151,16 @@ public class CadastrarEventoController implements ControllerServiceFile {
         builderEvento.setLocalizacoes(idLocais);
         Evento novoEvento = builderEvento.getEvento();
         if (eventoDAO.inserirEvento(novoEvento)) {
-            ServiceFileDAO serviceFileDAO = new ServiceFileDAO(eventoDAO.getConnection());
+            // procura pelo arquivo no banco, se nao estiver realiza a insercao
             for (ServiceFile arquivo : novoEvento.getListaArquivos()) {
-                serviceFileDAO.inserirArquivo(arquivo);
+                ServiceFile arquivoExistente = serviceFileDAO.getArquivo(arquivo.getFileKey());
+                if (arquivoExistente == null) {
+                    serviceFileDAO.inserirArquivo(arquivo);
+                } else {
+                    int idxArquivo = novoEvento.getListaArquivos().indexOf(arquivo);
+
+                    novoEvento.getListaArquivos().set(idxArquivo, arquivoExistente);
+                }
             }
             eventoDAO.vincularArquivos(novoEvento);
             App.setRoot("view/home");

@@ -75,6 +75,29 @@ public class ServiceFileDAO {
     }
   }
 
+  public ServiceFile getArquivo(String nomeArquivo) {
+    try {
+      String sql = "select * from service_file where file_key=?";
+      PreparedStatement stmt = connection.prepareStatement(sql);
+      stmt.setString(1, nomeArquivo);
+      ResultSet resultSet = stmt.executeQuery();
+      if (resultSet.next()) {
+        ServiceFile arquivoRetorno = new ServiceFile(resultSet.getInt("id_service_file"));
+        arquivoRetorno.setFileKey(resultSet.getString("file_key"));
+        arquivoRetorno.setSuffix(resultSet.getString("suffix"));
+        arquivoRetorno.setService(resultSet.getString("service"));
+        arquivoRetorno.setBucket(resultSet.getString("bucket"));
+        arquivoRetorno.setUltimaModificacao(resultSet.getDate("ultima_modificacao"));
+
+        return arquivoRetorno;
+      }
+    } catch (Exception e) {
+      logException(e);
+      return null;
+    }
+    return null;
+  }
+
   public File getContent(ServiceFile serviceFile) {
     try {
       setService(serviceFile);
