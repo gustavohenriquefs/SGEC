@@ -25,11 +25,22 @@ public class Evento {
     private boolean acessivelEmLibras;
     private Date cadastradoEm;
 
-    SortedSet<Integer> locais;
-    SortedSet<Integer> listaParticipantes;
-    SortedSet<Integer> listaOrganizadores;
-    SortedSet<Integer> listaColaboradores;
-    ArrayList<ServiceFile> listaArquivos;
+
+
+    private SortedSet<Integer> locais;
+    private SortedSet<Integer> listaParticipantes;
+    private SortedSet<Integer> listaOrganizadores;
+    private SortedSet<Integer> listaColaboradores;
+    private ArrayList<ServiceFile> listaArquivos;
+    private ArrayList<Meta> listaMetas;
+
+    public ArrayList<Meta> getListaMetas() {
+        return listaMetas;
+    }
+
+    public void setListaMetas(ArrayList<Meta> listaMetas) {
+        this.listaMetas = listaMetas;
+    }
 
     public String getNome() {
         return nome;
@@ -203,7 +214,7 @@ public class Evento {
     public ArrayList<ServiceFile> getListaArquivos() {
         return listaArquivos;
     }
-
+  
     public void setListaArquivos(ArrayList<ServiceFile> listaArquivos) {
         this.listaArquivos = listaArquivos;
     }

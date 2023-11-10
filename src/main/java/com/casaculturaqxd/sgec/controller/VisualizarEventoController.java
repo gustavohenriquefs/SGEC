@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.Date;
 import java.sql.Time;
 
+import java.util.ArrayList;
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.EventoDAO;
 import com.casaculturaqxd.sgec.DAO.LocalizacaoDAO;
@@ -15,6 +16,11 @@ import com.casaculturaqxd.sgec.models.Indicador;
 import com.casaculturaqxd.sgec.models.Localizacao;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 import com.casaculturaqxd.sgec.service.Service;
+import com.casaculturaqxd.sgec.models.Meta;
+
+import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
+import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
@@ -22,8 +28,10 @@ import javafx.collections.ObservableMap;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -35,14 +43,21 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.util.converter.IntegerStringConverter;
+import javafx.scene.image.ImageView;
+import javafx.util.Duration;
 
 public class VisualizarEventoController implements ControllerServiceFile {
     private Evento evento;
@@ -56,15 +71,18 @@ public class VisualizarEventoController implements ControllerServiceFile {
     @FXML
     VBox frameLocais;
     @FXML
+    HBox secaoMetas;
+    @FXML
     TextArea descricao;
     @FXML
-    Label titulo;
+    Label titulo;H
     @FXML
     DatePicker dataInicial, dataFinal;
     @FXML
     TextField cargaHoraria, horario;
     @FXML
     CheckBox certificavel, libras;
+    ArrayList<CheckBox> checkBoxesMetas = new ArrayList<>();
     @FXML
     ChoiceBox<String> classificacaoEtaria;
     @FXML
@@ -81,8 +99,16 @@ public class VisualizarEventoController implements ControllerServiceFile {
 
     @FXML
     Button salvarAlteracoes;
+    @FXML
+    private ImageView copiaCola;
+    @FXML
+    private Tooltip tooltipCliboard;
 
     public void initialize() throws IOException {
+        tooltipCliboard = new Tooltip("Copiado para a área de transferência");
+        tooltipCliboard.setHideDelay(Duration.seconds(1));
+        Tooltip.install(copiaCola, tooltipCliboard);
+        copiaCola.setOnMouseClicked(event -> copyToClipboard(event));
         addControls(root, camposInput);
         addPropriedadeAlterar(camposInput);
         addListenersServiceFile(mapServiceFiles);
@@ -90,11 +116,6 @@ public class VisualizarEventoController implements ControllerServiceFile {
 
         eventoDAO.setConnection(db.getConnection());
         localizacaoDAO.setConnection(db.getConnection());
-        // capturando evento de mock do banco
-
-        /*
-         * TODO: adicionar funcionalidade de arquivos e reativar o botao
-         */
     }
 
     private void loadMenu() throws IOException {
@@ -103,7 +124,7 @@ public class VisualizarEventoController implements ControllerServiceFile {
     }
 
     private void loadContent() throws IOException {
-
+        loadMetas();
         classificacaoEtaria.getItems().addAll(classificacoes);
         titulo.setText(evento.getNome());
         descricao.setText(evento.getDescricao());
@@ -158,6 +179,18 @@ public class VisualizarEventoController implements ControllerServiceFile {
         addIndicador(tabelaIndicadoresGerais, numeroPublico);
         addIndicador(tabelaIndicadoresMeta1, numeroMestres);
         addIndicador(tabelaIndicadoresMeta2, numeroMunicipios);
+    }
+
+    private void loadMetas() {
+        for (Node node : secaoMetas.getChildren()) {
+            if (node instanceof CheckBox) {
+                checkBoxesMetas.add((CheckBox) node);
+            }
+        }
+        for (Meta meta : evento.getListaMetas()) {
+            // ids sao 1-based
+            checkBoxesMetas.get(meta.getIdMeta() - 1).setSelected(true);
+        }
     }
 
     public void setEvento(Evento evento) throws IOException {
@@ -328,5 +361,21 @@ public class VisualizarEventoController implements ControllerServiceFile {
                 }
             }
         });
+    }
+  
+    private void getDescricao(){
+        Clipboard clipboard = Clipboard.getSystemClipboard();
+        ClipboardContent content = new ClipboardContent();
+        content.putString(descricao.getText());
+        clipboard.setContent(content);
+    }
+
+    private void copyToClipboard(MouseEvent event){        
+        getDescricao();
+         // Exibe a mensagem e determina sua duração
+         tooltipCliboard.show(copiaCola, event.getScreenX(), event.getScreenY());
+         PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
+         pause.setOnFinished(e -> tooltipCliboard.hide());
+         pause.play();
     }
 }

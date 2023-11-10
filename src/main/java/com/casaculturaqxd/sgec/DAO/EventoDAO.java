@@ -1,18 +1,20 @@
 package com.casaculturaqxd.sgec.DAO;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
+import com.casaculturaqxd.sgec.models.Meta;
+
 
 public class EventoDAO {
   private Connection connection;
@@ -32,7 +34,8 @@ public class EventoDAO {
     }
 
     try {
-      String sql = "INSERT INTO evento (nome_evento, publico_esperado, publico_alcancado, descricao, data_inicial, data_final, horario, classificacao_etaria, certificavel, carga_horaria, acessivel_em_libras, num_participantes_esperado, num_municipios_esperado) VALUES (?, ?, ?, ?, ?, ?, ?, ?::faixa_etaria, ?, ?, ?, ?, ?) RETURNING id_evento";
+      String sql =
+          "INSERT INTO evento (nome_evento, publico_esperado, publico_alcancado, descricao, data_inicial, data_final, horario, classificacao_etaria, certificavel, carga_horaria, acessivel_em_libras, num_participantes_esperado, num_municipios_esperado) VALUES (?, ?, ?, ?, ?, ?, ?, ?::faixa_etaria, ?, ?, ?, ?, ?) RETURNING id_evento";
 
       PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
@@ -70,27 +73,31 @@ public class EventoDAO {
         return false;
       }
     }
-
     /*
      * if(evento.getListaOrganizadores() != null) { boolean vinculoOrganizadores =
-     * this.vincularOrganizadores(evento.getListaOrganizadores(),
-     * evento.getIdEvento());
+     * this.vincularOrganizadores(evento.getListaOrganizadores(), evento.getIdEvento());
      * if(vinculoOrganizadores == false) { return false; } }
      */
 
     /*
      * if(evento.getListaColaboradores() != null) { boolean vinculoColaboradores =
-     * this.vincularColaboradores(evento.getListaColaboradores(),
-     * evento.getIdEvento());
-     * if(vinculoColaboradores == false) { return false; } }
-     * if(evento.getListaParticipantes() !=
+     * this.vincularColaboradores(evento.getListaColaboradores(), evento.getIdEvento());
+     * if(vinculoColaboradores == false) { return false; } } if(evento.getListaParticipantes() !=
      * null) { boolean vinculoParticipantes =
-     * this.vincularParticipantes(evento.getListaParticipantes(),
-     * evento.getIdEvento());
+     * this.vincularParticipantes(evento.getListaParticipantes(), evento.getIdEvento());
      * if(vinculoParticipantes == false) { return false; } }
      */
 
     return true;
+  }
+
+  public boolean vincularMetas(List<Meta> metas, Integer idEvento) {
+    MetaDAO metaDAO = new MetaDAO(connection);
+    List<Boolean> vinculos = new ArrayList<>();
+    for (Meta meta : metas) {
+      vinculos.add(metaDAO.vincularEvento(meta.getIdMeta(), idEvento));
+    }
+
   }
 
   public boolean vincularArquivos(Evento evento) {
@@ -109,7 +116,8 @@ public class EventoDAO {
   }
 
   private boolean vincularLocal(Integer local, Integer idEvento) {
-    String vincLocaisSql = "INSERT INTO localizacao_evento(id_localizacao, id_evento) VALUES (?, ?)";
+    String vincLocaisSql =
+        "INSERT INTO localizacao_evento(id_localizacao, id_evento) VALUES (?, ?)";
 
     try {
       PreparedStatement stmt = connection.prepareStatement(vincLocaisSql);
@@ -135,7 +143,8 @@ public class EventoDAO {
   }
 
   private boolean vincularOrganizador(Integer organizador, Integer idEvento) {
-    String vincOrganizadoresSql = "INSERT INTO organizador_evento(id_evento, id_instituicao) VALUES (?, ?);";
+    String vincOrganizadoresSql =
+        "INSERT INTO organizador_evento(id_evento, id_instituicao) VALUES (?, ?);";
 
     try {
       PreparedStatement stmt = connection.prepareStatement(vincOrganizadoresSql);
@@ -161,7 +170,8 @@ public class EventoDAO {
   }
 
   private boolean vincularColaborador(Integer colaborador, Integer idEvento) {
-    String vincColaboradoresSql = "INSERT INTO colaborador_evento(id_evento, id_instituicao) VALUES (?, ?);";
+    String vincColaboradoresSql =
+        "INSERT INTO colaborador_evento(id_evento, id_instituicao) VALUES (?, ?);";
 
     try {
       PreparedStatement stmt = connection.prepareStatement(vincColaboradoresSql);
@@ -187,7 +197,8 @@ public class EventoDAO {
   }
 
   private boolean vincularParticipante(Integer participante, Integer idEvento) {
-    String vincParticipantesSql = "INSERT INTO participante_evento(id_participante, id_evento) VALUES (?, ?);";
+    String vincParticipantesSql =
+        "INSERT INTO participante_evento(id_participante, id_evento) VALUES (?, ?);";
 
     try {
       PreparedStatement stmt = connection.prepareStatement(vincParticipantesSql);
@@ -285,6 +296,7 @@ public class EventoDAO {
         eventoRetorno
             .setListaParticipantes(this.buscarLocaisPorEvento(eventoRetorno.getIdEvento()));
         eventoRetorno.setListaArquivos(this.buscarArquivosPorEvento(eventoRetorno));
+        eventoRetorno.setListaMetas(this.listarMetasEvento(eventoRetorno));
       }
       stmt.close();
       return Optional.ofNullable(eventoRetorno);
@@ -345,7 +357,8 @@ public class EventoDAO {
   }
 
   public int getNumeroMunicipiosDiferentes(Integer idEvento) {
-    String sql = "SELECT DISTINCT count(l.cidade) as num_municipios_distintos FROM localizacao_evento le LEFT JOIN localizacao l on l.id_localizacao = le.id_localizacao WHERE le.id_evento = ?";
+    String sql =
+        "SELECT DISTINCT count(l.cidade) as num_municipios_distintos FROM localizacao_evento le LEFT JOIN localizacao l on l.id_localizacao = le.id_localizacao WHERE le.id_evento = ?";
     int numMunicipiosDistintos = 0;
 
     try {
@@ -392,7 +405,9 @@ public class EventoDAO {
 
   public boolean alterarEvento(Evento evento) {
     try {
-      String sql = "update evento set nome_evento=?, publico_esperado=?, publico_alcancado=?, descricao=?, data_inicial=?, data_final=?, horario=?, classificacao_etaria=?::faixa_etaria, certificavel=?, carga_horaria=?, acessivel_em_libras=?, num_participantes_esperado = ?, num_municipios_esperado = ? where id_evento=?";
+      String sql =
+          "update evento set nome_evento=?, publico_esperado=?, publico_alcancado=?, descricao=?, data_inicial=?, data_final=?, horario=?, classificacao_etaria=?::faixa_etaria, certificavel=?, carga_horaria=?, acessivel_em_libras=?, num_participantes_esperado = ?, num_municipios_esperado = ? where id_evento=?";
+
 
       PreparedStatement stmt = connection.prepareStatement(sql);
 
@@ -444,11 +459,14 @@ public class EventoDAO {
   }
 
   private boolean sincronizarParticipantes(Evento evento) {
-    SortedSet<Integer> participantesEventoIds = this.buscarParticipantesPorEvento(evento.getIdEvento());
+    SortedSet<Integer> participantesEventoIds =
+        this.buscarParticipantesPorEvento(evento.getIdEvento());
 
     for (Integer participanteId : participantesEventoIds) {
       if (!evento.getListaParticipantes().contains(participanteId)) {
-        boolean participanteFoiDesvinculado = this.desvincularParticipante(participanteId, evento.getIdEvento());
+        boolean participanteFoiDesvinculado =
+            this.desvincularParticipante(participanteId, evento.getIdEvento());
+
 
         if (!participanteFoiDesvinculado) {
           return false;
@@ -457,7 +475,8 @@ public class EventoDAO {
     }
 
     for (Integer participanteId : evento.getListaParticipantes()) {
-      boolean participanteFoiVinculado = this.vincularParticipante(participanteId, evento.getIdEvento());
+      boolean participanteFoiVinculado =
+          this.vincularParticipante(participanteId, evento.getIdEvento());
 
       if (!participanteFoiVinculado) {
         return false;
@@ -468,11 +487,14 @@ public class EventoDAO {
   }
 
   private boolean sincronizarColaboradores(Evento evento) {
-    SortedSet<Integer> colaboradoresEventoIds = this.buscarColaboradoresPorEvento(evento.getIdEvento());
+    SortedSet<Integer> colaboradoresEventoIds =
+        this.buscarColaboradoresPorEvento(evento.getIdEvento());
 
     for (Integer colaboradorId : colaboradoresEventoIds) {
       if (!evento.getListaColaboradores().contains(colaboradorId)) {
-        boolean colaboradorFoiDesvinculado = this.desvincularColaborador(colaboradorId, evento.getIdEvento());
+        boolean colaboradorFoiDesvinculado =
+            this.desvincularColaborador(colaboradorId, evento.getIdEvento());
+
 
         if (!colaboradorFoiDesvinculado) {
           return false;
@@ -481,7 +503,8 @@ public class EventoDAO {
     }
 
     for (Integer colaboradorId : evento.getListaColaboradores()) {
-      boolean colaboradorFoiVinculado = this.vincularColaborador(colaboradorId, evento.getIdEvento());
+      boolean colaboradorFoiVinculado =
+          this.vincularColaborador(colaboradorId, evento.getIdEvento());
 
       if (!colaboradorFoiVinculado) {
         return false;
@@ -492,11 +515,13 @@ public class EventoDAO {
   }
 
   private boolean sincronizarOrganizadores(Evento evento) {
-    SortedSet<Integer> organizadoresEventoIds = this.buscarOrganizadoresPorEvento(evento.getIdEvento());
+    SortedSet<Integer> organizadoresEventoIds =
+        this.buscarOrganizadoresPorEvento(evento.getIdEvento());
 
     for (Integer organizadorId : organizadoresEventoIds) {
       if (!evento.getListaOrganizadores().contains(organizadorId)) {
-        boolean organizadorFoiDesvinculado = this.desvincularOrganizador(organizadorId, evento.getIdEvento());
+        boolean organizadorFoiDesvinculado =
+            this.desvincularOrganizador(organizadorId, evento.getIdEvento());
 
         if (!organizadorFoiDesvinculado) {
           return false;
@@ -505,7 +530,8 @@ public class EventoDAO {
     }
 
     for (Integer organizadorId : evento.getListaOrganizadores()) {
-      boolean organizadorFoiVinculado = this.vincularOrganizador(organizadorId, evento.getIdEvento());
+      boolean organizadorFoiVinculado =
+          this.vincularOrganizador(organizadorId, evento.getIdEvento());
 
       if (!organizadorFoiVinculado) {
         return false;
@@ -540,7 +566,8 @@ public class EventoDAO {
   }
 
   private boolean desvincularParticipante(Integer participanteId, Integer idEvento) {
-    String vincParticipantesSql = "DELETE FROM participante_evento WHERE id_participante=? AND id_evento=?";
+    String vincParticipantesSql =
+        "DELETE FROM participante_evento WHERE id_participante=? AND id_evento=?";
 
     try {
       PreparedStatement stmt = connection.prepareStatement(vincParticipantesSql);
@@ -578,8 +605,14 @@ public class EventoDAO {
     return participantes;
   }
 
+  public ArrayList<Meta> listarMetasEvento(Evento evento) {
+    MetaDAO metaDAO = new MetaDAO(connection);
+    return metaDAO.listarMetasEvento(evento.getIdEvento());
+  }
+
   private boolean desvincularColaborador(Integer colaboradorId, Integer idEvento) {
-    String vincColaboradoresSql = "DELETE FROM colaborador_evento WHERE id_instituicao=? AND id_evento=?";
+    String vincColaboradoresSql =
+        "DELETE FROM colaborador_evento WHERE id_instituicao=? AND id_evento=?";
 
     try {
       PreparedStatement stmt = connection.prepareStatement(vincColaboradoresSql);
@@ -595,7 +628,8 @@ public class EventoDAO {
   }
 
   private boolean desvincularOrganizador(Integer organizadorId, Integer idEvento) {
-    String vincOrganizadoresSql = "DELETE FROM organizador_evento WHERE id_instituicao=? AND id_evento=?";
+    String vincOrganizadoresSql =
+        "DELETE FROM organizador_evento WHERE id_instituicao=? AND id_evento=?";
 
     try {
       PreparedStatement stmt = connection.prepareStatement(vincOrganizadoresSql);
@@ -624,6 +658,11 @@ public class EventoDAO {
     }
 
     return true;
+  }
+
+  private boolean desvincularMeta(Integer meta, Integer idEvento) {
+    MetaDAO metaDAO = new MetaDAO(connection);
+    return metaDAO.desvincularEvento(meta, idEvento);
   }
 
   public ArrayList<Evento> obterEventos() {

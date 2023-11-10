@@ -31,11 +31,6 @@
                         <Insets left="30.0" top="10.0" />
                      </VBox.margin>
                   </Label>
-                  <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS">
-                  <children>
-                        <HBox HBox.hgrow="ALWAYS" />
-                  </children>
-                  </VBox>
                         <HBox alignment="CENTER" layoutX="45.0" layoutY="309.0" prefHeight="59.0" prefWidth="1371.0" spacing="400.0">
                            <children>
                               <HBox spacing="25.0">
@@ -107,7 +102,7 @@
                         <Label fx:id="textoMinutos" layoutX="611.0" layoutY="57.0" prefHeight="17.0" prefWidth="52.0" text="Minutos" textFill="#352929" AnchorPane.rightAnchor="116.39999999999998" />
                         <TextField fx:id="horas" layoutX="425.0" layoutY="79.0" />
                         <TextField fx:id="minutos" layoutX="611.0" layoutY="79.0" />
-                        <HBox layoutX="469.0" layoutY="28.0" prefHeight="40.0" prefWidth="667.0" spacing="45.0">
+                        <HBox fx:id="secaoMetas" layoutX="469.0" layoutY="28.0" prefHeight="40.0" prefWidth="667.0" spacing="45.0">
                            <children>
                               <CheckBox fx:id="checkMeta1" mnemonicParsing="false" text="Fruição" />
                               <CheckBox fx:id="checkMeta2" mnemonicParsing="false" text="Fortalecimento Patrimônio Cultural" />
