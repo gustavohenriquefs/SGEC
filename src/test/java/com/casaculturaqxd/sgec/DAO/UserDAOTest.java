@@ -3,18 +3,17 @@ package com.casaculturaqxd.sgec.DAO;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.User;
 import java.sql.Connection;
+import java.sql.SQLException;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-
 public class UserDAOTest {
-    private static DatabasePostgres db =
-            DatabasePostgres.getInstance("URL_TEST", "USER_NAME_TEST", "PASSWORD_TEST");
-    private static UserDAO userDAO;
-    private static User obj;
+    private static DatabasePostgres db;
+    private static int idValidUsuario = 1, idInvalidUsuario = -1;
 
     public UserDAOTest() {
         setUpClass();
@@ -22,52 +21,55 @@ public class UserDAOTest {
 
     @BeforeAll
     public static void setUpClass() {
-        userDAO = new UserDAO();
-        userDAO.setConnection(db.getConnection());
+        db = DatabasePostgres.getInstance("URL_TEST", "USER_NAME_TEST", "PASSWORD_TEST");
+        try {
+            db.getConnection().setAutoCommit(false);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @AfterAll
-    public static void tearDownClass() {
-        db.desconectar(db.getConnection());
+    public static void tearDownClass() throws SQLException {
+        db.getConnection().rollback();
+        db.getConnection().commit();
     }
 
     @AfterEach
-    public void tearDown() {
-        // remover do banco o obj usado no teste
-        // mantendo o registro conhecido
-        if (obj.getIdUsuario() != 1) {
-            userDAO.deletar(obj);
-        }
+    public void tearDown() throws SQLException {
+        db.getConnection().rollback();
+        db.getConnection().commit();
     }
 
     @Test
     public void testGetConnection() {
+        UserDAO userDAO = new UserDAO(db.getConnection());
         Connection connection = userDAO.getConnection();
         assertNotNull(connection);
     }
 
-
     @Test
     public void testSetConnection() {
+        UserDAO userDAO = new UserDAO(db.getConnection());
         assertEquals(db.getConnection(), userDAO.getConnection());
     }
 
     @Test
     public void testInserir() {
-        obj = new User("new_test_user", "newtest@mail", "newtestpassword", false);
+        UserDAO userDAO = new UserDAO(db.getConnection());
+        User user = new User("new_test_user", "newtest@mail", "newtestpassword", false);
 
-        assertAll(() -> assertTrue(userDAO.inserir(obj)),
-                () -> assertNotEquals(0, obj.getIdUsuario()));
+        assertAll(() -> assertTrue(userDAO.inserir(user)),
+                () -> assertNotEquals(0, user.getIdUsuario()));
     }
 
     @Test
     public void testGetValidUsuario() {
-        // registro conhecido
-        User validUser = new User();
-        validUser.setIdUsuario(1);
+        UserDAO userDAO = new UserDAO(db.getConnection());
+        User validUser = new User(idValidUsuario);
 
         User result = userDAO.getUsuario(validUser);
-        assertAll(() -> assertEquals(1, result.getIdUsuario()),
+        assertAll(() -> assertEquals(idValidUsuario, result.getIdUsuario()),
                 () -> assertEquals("test user", result.getNomeUsuario()),
                 () -> assertEquals("test@mail", result.getEmail()),
                 () -> assertEquals("testpassword", result.getSenha()),
@@ -76,63 +78,67 @@ public class UserDAOTest {
 
     @Test
     public void testGetInvalidUsuario() {
-        // usando id invalido
-        obj = new User();
-        obj.setIdUsuario(Integer.MIN_VALUE);
-
-        User result = userDAO.getUsuario(obj);
+        UserDAO userDAO = new UserDAO(db.getConnection());
+        User user = new User(idInvalidUsuario);
+        User result = userDAO.getUsuario(user);
         assertNull(result);
     }
 
     @Test
     public void testValidarValidUsuario() {
-        obj = new User("test@mail", "testpassword");
+        UserDAO userDAO = new UserDAO(db.getConnection());
+        User user = new User("test@mail", "testpassword");
 
-        assertAll(() -> assertTrue(userDAO.validar(obj)), () -> assertEquals(1, obj.getIdUsuario()),
-                () -> assertEquals("test user", obj.getNomeUsuario()),
-                () -> assertEquals("test@mail", obj.getEmail()),
-                () -> assertEquals("testpassword", obj.getSenha()),
-                () -> assertTrue(obj.isEditor()));
+        assertAll(() -> assertTrue(userDAO.validar(user)),
+                () -> assertEquals(1, user.getIdUsuario()),
+                () -> assertEquals("test user", user.getNomeUsuario()),
+                () -> assertEquals("test@mail", user.getEmail()),
+                () -> assertEquals("testpassword", user.getSenha()),
+                () -> assertTrue(user.isEditor()));
     }
 
     @Test
     public void testValidarInvalidUsuario() {
-        obj = new User("invalidEmail", "invalidPassword");
+        UserDAO userDAO = new UserDAO(db.getConnection());
+        User user = new User("invalidEmail", "invalidPassword");
 
         // verifica se a validacao falhou e se os outros atributos nao foram setados
-        assertAll(() -> assertFalse(userDAO.validar(obj)),
-                () -> assertEquals(0, obj.getIdUsuario()), () -> assertNull(obj.getNomeUsuario()),
-                () -> assertFalse(obj.isEditor()));
+        assertAll(() -> assertFalse(userDAO.validar(user)),
+                () -> assertEquals(0, user.getIdUsuario()),
+                () -> assertNull(user.getNomeUsuario()),
+                () -> assertFalse(user.isEditor()));
     }
 
     @Test
     public void testUpdateValidUsuario() {
-        obj = new User();
-        obj.setIdUsuario(1);
-        obj = userDAO.getUsuario(obj);
+        UserDAO userDAO = new UserDAO(db.getConnection());
+        User user = new User(idValidUsuario);
+        user = userDAO.getUsuario(user);
 
-        assertTrue(userDAO.update(obj));
+        assertTrue(userDAO.update(user));
     }
 
     @Test
     public void testUpdateInvalidUsuario() {
-        obj = new User();
-        obj.setIdUsuario(Integer.MIN_VALUE);
+        UserDAO userDAO = new UserDAO(db.getConnection());
+        User previous = new User(idInvalidUsuario);
 
-        assertFalse(userDAO.update(obj));
+        assertFalse(userDAO.update(previous));
     }
 
     @Test
     public void testDeletarValidUsuario() {
-        obj = new User("new_test_user", "newtest@mail", "newtestpassword", false);
-        userDAO.inserir(obj);
-        assertTrue(userDAO.deletar(obj));
+        UserDAO userDAO = new UserDAO(db.getConnection());
+        User user = new User("new_test_user", "newtest@mail", "newtestpassword", false);
+        userDAO.inserir(user);
+        assertTrue(userDAO.deletar(user));
     }
 
     @Test
     public void testDeletarInvalidUsuario() {
-        obj = new User();
-        obj.setIdUsuario(Integer.MIN_VALUE);
-        assertFalse(userDAO.deletar(obj));
+        UserDAO userDAO = new UserDAO(db.getConnection());
+        User user = new User(idInvalidUsuario);
+
+        assertFalse(userDAO.deletar(user));
     }
 }

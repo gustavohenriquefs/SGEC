@@ -12,6 +12,14 @@ import com.casaculturaqxd.sgec.models.User;
 public class UserDAO {
   private Connection connection;
 
+  public UserDAO() {
+
+  }
+
+  public UserDAO(Connection connection) {
+    this.connection = connection;
+  }
+
   public Connection getConnection() {
     return connection;
   }
@@ -84,7 +92,7 @@ public class UserDAO {
         obj.setEmail(resultado.getString("email"));
         obj.setSenha(resultado.getString("senha"));
         obj.setEditor(resultado.getBoolean("editor"));
-
+        this.connection.commit();
         this.connection.setReadOnly(!obj.isEditor());
         return true;
       }
