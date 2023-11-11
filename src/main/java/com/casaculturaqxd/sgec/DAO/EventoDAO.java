@@ -16,7 +16,6 @@ import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 import com.casaculturaqxd.sgec.models.Instituicao;
 import com.casaculturaqxd.sgec.models.Meta;
 
-
 public class EventoDAO {
   private Connection connection;
 
@@ -97,11 +96,13 @@ public class EventoDAO {
 
   public boolean vincularMetas(List<Meta> metas, Integer idEvento) {
     MetaDAO metaDAO = new MetaDAO(connection);
-    List<Boolean> vinculos = new ArrayList<>();
     for (Meta meta : metas) {
-      vinculos.add(metaDAO.vincularEvento(meta.getIdMeta(), idEvento));
+      boolean temp = metaDAO.vincularEvento(meta.getIdMeta(), idEvento);
+      if (temp == false) {
+        return false;
+      }
     }
-
+    return true;
   }
 
   public boolean vincularArquivos(Evento evento) {
@@ -310,7 +311,6 @@ public class EventoDAO {
     return serviceFileDAO.listarArquivosEvento(evento);
   }
 
- 
   private ArrayList<Instituicao> buscarColaboradoresPorEvento(int idEvento) {
     InstituicaoDAO instituicaoDAO = new InstituicaoDAO(connection);
     return instituicaoDAO.listarColaboradoresEvento(idEvento);
@@ -371,7 +371,6 @@ public class EventoDAO {
     try {
       String sql = "update evento set nome_evento=?, publico_esperado=?, publico_alcancado=?, descricao=?, data_inicial=?, data_final=?, horario=?, classificacao_etaria=?::faixa_etaria, certificavel=?, carga_horaria=?, acessivel_em_libras=?, num_participantes_esperado = ?, num_municipios_esperado = ? where id_evento=?";
 
-
       PreparedStatement stmt = connection.prepareStatement(sql);
 
       stmt.setString(1, evento.getNome());
@@ -428,7 +427,6 @@ public class EventoDAO {
       if (!evento.getListaParticipantes().contains(participanteId)) {
         boolean participanteFoiDesvinculado = this.desvincularParticipante(participanteId, evento.getIdEvento());
 
-
         if (!participanteFoiDesvinculado) {
           return false;
         }
@@ -453,7 +451,6 @@ public class EventoDAO {
       if (!evento.getListaColaboradores().contains(colaborador)) {
         boolean colaboradorFoiDesvinculado = this.desvincularColaborador(colaborador.getIdInstituicao(),
             evento.getIdEvento());
-
 
         if (!colaboradorFoiDesvinculado) {
           return false;

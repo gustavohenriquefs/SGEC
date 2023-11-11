@@ -49,10 +49,10 @@ public class EventoBuilder implements Builder {
     evento.setParticipantesEsperado(participantesEsperado);
   }
 
-
   public EventoBuilder setListaArquivos(ArrayList<ServiceFile> listaArquivos) {
     evento.setListaArquivos(listaArquivos);
     return this;
+  }
 
   public void setListaMetas(ArrayList<Meta> metas) {
     evento.setListaMetas(metas);

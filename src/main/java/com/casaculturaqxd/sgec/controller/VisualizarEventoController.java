@@ -75,7 +75,7 @@ public class VisualizarEventoController implements ControllerServiceFile {
     @FXML
     TextArea descricao;
     @FXML
-    Label titulo;H
+    Label titulo;
     @FXML
     DatePicker dataInicial, dataFinal;
     @FXML
@@ -362,20 +362,20 @@ public class VisualizarEventoController implements ControllerServiceFile {
             }
         });
     }
-  
-    private void getDescricao(){
+
+    private void getDescricao() {
         Clipboard clipboard = Clipboard.getSystemClipboard();
         ClipboardContent content = new ClipboardContent();
         content.putString(descricao.getText());
         clipboard.setContent(content);
     }
 
-    private void copyToClipboard(MouseEvent event){        
+    private void copyToClipboard(MouseEvent event) {
         getDescricao();
-         // Exibe a mensagem e determina sua duração
-         tooltipCliboard.show(copiaCola, event.getScreenX(), event.getScreenY());
-         PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
-         pause.setOnFinished(e -> tooltipCliboard.hide());
-         pause.play();
+        // Exibe a mensagem e determina sua duração
+        tooltipCliboard.show(copiaCola, event.getScreenX(), event.getScreenY());
+        PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
+        pause.setOnFinished(e -> tooltipCliboard.hide());
+        pause.play();
     }
 }

@@ -91,6 +91,8 @@ public class ServiceFileDAO {
         arquivoRetorno.setUltimaModificacao(resultSet.getDate("ultima_modificacao"));
 
         return arquivoRetorno;
+      } else {
+        return null;
       }
     } catch (Exception e) {
       logException(e);
