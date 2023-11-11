@@ -9,19 +9,24 @@ import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.EventoDAO;
 import com.casaculturaqxd.sgec.DAO.LocalizacaoDAO;
 import com.casaculturaqxd.sgec.DAO.MetaDAO;
+import com.casaculturaqxd.sgec.controller.preview.PreviewEventoController;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.Localizacao;
 import com.casaculturaqxd.sgec.models.Meta;
 
-import javafx.collections.transformation.SortedList;
+import javafx.collections.FXCollections;
+import javafx.collections.MapChangeListener;
+import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
@@ -31,6 +36,7 @@ public class PesquisarEventoController {
     private LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO();
     private MetaDAO metaDAO = new MetaDAO(null);
     private final DatabasePostgres pesquisaConnection = DatabasePostgres.getInstance("URL_TEST","USER_NAME_TEST","PASSWORD_TEST");
+    private ObservableMap<Evento, FXMLLoader> mapEventos = FXCollections.observableHashMap();;
     @FXML
     private VBox root;
     @FXML
@@ -41,14 +47,18 @@ public class PesquisarEventoController {
     private CheckBox acessivelLibras;
     @FXML
     private MenuButton opcoesMetas;
-    //@FXML
-    //private FlowPane campoResultados;
+    @FXML
+    private FlowPane campoResultados;
+    @FXML
+    private ScrollPane scrollResultados;
 
     public void initialize() throws IOException {
         loadMenu();
+        dimensionarFlowPane();
         eventoDAO.setConnection(pesquisaConnection.getConnection());
         localizacaoDAO.setConnection(pesquisaConnection.getConnection());
         metaDAO.setConnection(pesquisaConnection.getConnection());
+        addListenersEventos(mapEventos);
     }
 
     private void loadMenu() throws IOException {
@@ -69,6 +79,7 @@ public class PesquisarEventoController {
         if(dataFim.getValue() != null){
             dataFinal = Date.valueOf(dataFim.getValue());
         }
+        
         ArrayList<Evento> eventos = eventoDAO.pesquisarEvento(nome, dataInicial, dataFinal);
         ArrayList<Localizacao> localizacaos = localizacaoDAO.pesquisarLocalizacao(cidade);
         ArrayList<Evento> eventosFinais = new ArrayList<>();
@@ -117,7 +128,6 @@ public class PesquisarEventoController {
                 if(!metas.isEmpty()){
                     for (Meta metaTemp : metas) {
                         if(metasSelecionadas.contains(metaTemp.getIdMeta())){
-                            System.out.println("CHEGUEI AQUI!");
                             cont++;
                         }
                     }
@@ -128,12 +138,44 @@ public class PesquisarEventoController {
             }
             eventosFinais = eventoTemp;
         }
-        
-        
-        for (Evento evento : eventosFinais) {
-          System.out.println(evento.getNome() + " " + evento.getIdEvento());
+
+        campoResultados.getChildren().clear();
+        mapEventos.clear(); // limpar os resultados anteriores
+        for(Evento  evento : eventosFinais){ //adicionar resultados na lista
+            mapEventos.put(evento, new FXMLLoader(App.class.getResource("view/preview/previewEventoExistente.fxml")));
         }
-        System.out.println("===========================");
+    }
+
+    public void addListenersEventos(ObservableMap<Evento, FXMLLoader> observablemap) {
+        PesquisarEventoController superController = this;
+    
+        observablemap.addListener(new MapChangeListener<Evento, FXMLLoader>() {
+            @Override
+            public void onChanged(
+                MapChangeListener.Change<? extends Evento, ? extends FXMLLoader> change) {
+                    if (change.wasAdded()) {
+                        Evento addedKey = change.getKey();
+                        try {
+                            Parent previewEvento = change.getValueAdded().load();
+                            PreviewEventoController controller =
+                                change.getValueAdded().getController();
+                            controller.setEvento(addedKey);
+                            controller.setParentController(superController);
+                            campoResultados.getChildren().add(previewEvento);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    }
+            }
+        });  
+    }
+
+    private void dimensionarFlowPane(){
+        scrollResultados.viewportBoundsProperty().addListener((observable, oldValue, newValue) -> {
+            campoResultados.setPrefWidth(newValue.getWidth());
+            campoResultados.setPrefHeight(newValue.getHeight());
+        });
+        campoResultados.prefHeightProperty().bind(scrollResultados.heightProperty());
     }
 
 }

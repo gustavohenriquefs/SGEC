@@ -5,6 +5,7 @@ import java.net.URL;
 
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.EventoDAO;
+import com.casaculturaqxd.sgec.controller.PesquisarEventoController;
 import com.casaculturaqxd.sgec.controller.VisualizarEventoController;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.Evento;
@@ -15,12 +16,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 
 public class PreviewEventoController {
     private EventoDAO dao = new EventoDAO();
     private DatabasePostgres db = DatabasePostgres.getInstance("URL","USER_NAME","PASSWORD");
     private Evento evento;
+    private PesquisarEventoController parentController;
     @FXML
     Label dataHora, titulo;
     @FXML
@@ -40,6 +41,10 @@ public class PreviewEventoController {
     private void setarInformacoesEvento() {
         this.dataHora.setText(evento.getDataFinal().toString() + "\t" + evento.getHorario());
         this.titulo.setText(evento.getNome());
+    }
+
+    public void setParentController(PesquisarEventoController parentController) {
+        this.parentController = parentController;
     }
     
     @FXML

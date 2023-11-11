@@ -67,6 +67,11 @@
          </AnchorPane>
          <AnchorPane layoutX="180.0" layoutY="204.0" prefHeight="174.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="225.6">
             <children>
+                  <ScrollPane fx:id="scrollResultados" layoutY="35.0" prefHeight="329.0" prefWidth="780.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="35.0">
+                     <content>
+                        <FlowPane fx:id="campoResultados" alignment="CENTER" columnHalignment="CENTER" hgap="20.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="316.0" prefWidth="766.0" vgap="20.0" />
+                     </content>
+                  </ScrollPane>
                <StackPane alignment="TOP_CENTER" layoutX="243.0" layoutY="14.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                   <children>
                      <Label id="exibir" fx:id="exibir" text="Exibir resultados para" StackPane.alignment="CENTER">
@@ -91,11 +96,6 @@
                      <Label fx:id="localizacaoResultados" prefWidth="130.0" />
                   </children>
                </HBox>
-               <ScrollPane id="campoResultados" fx:id="campoResultados" fitToHeight="true" hbarPolicy="ALWAYS" layoutY="100.0" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="100.0">
-                  <content>
-                     <VBox id="resultados" fx:id="resultados" />
-                  </content>
-               </ScrollPane>
             </children>
          </AnchorPane>
          <HBox layoutX="39.0" layoutY="97.0" prefHeight="50.0" prefWidth="200.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
