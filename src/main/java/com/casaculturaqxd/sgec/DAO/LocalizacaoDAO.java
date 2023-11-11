@@ -23,7 +23,7 @@ public class LocalizacaoDAO {
     this.connection = connection;
   }
 
-  public Localizacao getLocalizacao(Localizacao obj){
+  public Localizacao getLocalizacao(Localizacao obj) {
     String sql = "SELECT * FROM localizacao WHERE id_localizacao=?";
     try {
       PreparedStatement stmt = connection.prepareStatement(sql);
@@ -43,12 +43,14 @@ public class LocalizacaoDAO {
       } else {
         return null;
       }
-    } catch (Exception e) {
+    } catch (SQLException e) {
+      Logger erro = Logger.getLogger("erroSQl");
+      erro.log(Level.SEVERE, "excecao levantada:", e);
       return null;
     }
   }
 
-  public boolean inserirLocalizacao(Localizacao obj){
+  public boolean inserirLocalizacao(Localizacao obj) {
     try {
       String sql = "insert into localizacao (nome_localizacao,rua,numero_rua,bairro,cep,cidade,estado,pais)"
               + " values(?,?,?,?,?,?,?,?)";
@@ -71,11 +73,12 @@ public class LocalizacaoDAO {
       stmt.close();
       return true;
     } catch (SQLException e) {
-      Logger erro  = Logger.getLogger("erroSQl");
+      Logger erro = Logger.getLogger("erroSQl");
       erro.log(Level.SEVERE, "excecao levantada:", e);
       return false;
     }
   }
+
 
   boolean updateLocalizacao(Localizacao obj){
     String sql = "UPDATE localizacao SET nome_localizacao=?,rua=?,numero_rua=?,bairro=?,cep=?,cidade=?,estado=?,pais=? WHERE id_localizacao=?";
@@ -93,15 +96,16 @@ public class LocalizacaoDAO {
 
       int numModificacoes = stmt.executeUpdate();
       stmt.close();
-
       return numModificacoes>0;
-
-    } catch (Exception e) {
+      
+    } catch (SQLException e) {
+      Logger erro = Logger.getLogger("erroSQl");
+      erro.log(Level.SEVERE, "excecao levantada:", e);
       return false;
     }
   }
 
-  boolean deletarLocalizacao(Localizacao obj){
+  boolean deletarLocalizacao(Localizacao obj) {
     String sql = "DELETE FROM localizacao WHERE id_localizacao=?";
     try {
       PreparedStatement stmt = connection.prepareStatement(sql);
@@ -109,18 +113,17 @@ public class LocalizacaoDAO {
       
       int numRemocoes = stmt.executeUpdate();
       stmt.close();
-
       return numRemocoes>0;
-
-    } catch (Exception e) {
+    } catch (SQLException e) {
+      Logger erro = Logger.getLogger("erroSQl");
+      erro.log(Level.SEVERE, "excecao levantada:", e);
       return false;
     }
   }
 
-  boolean vincularEvento(int idLocalizacao, int idEvento){
+  boolean vincularEvento(int idLocalizacao, int idEvento) {
     try {
-      String sql = "insert into localizacao_evento (id_localizacao,id_evento)"
-              + " values(?,?)";
+      String sql = "insert into localizacao_evento (id_localizacao,id_evento)" + " values(?,?)";
       PreparedStatement stmt = connection.prepareStatement(sql);
       stmt.setInt(1, idLocalizacao);
       stmt.setInt(2, idEvento);
@@ -128,6 +131,8 @@ public class LocalizacaoDAO {
       stmt.close();
       return true;
     } catch (SQLException e) {
+      Logger erro = Logger.getLogger("erroSQl");
+      erro.log(Level.SEVERE, "excecao levantada:", e);
       return false;
     }
   }

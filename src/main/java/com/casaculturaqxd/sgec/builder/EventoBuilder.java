@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.SortedSet;
 
 import com.casaculturaqxd.sgec.models.Evento;
+import com.casaculturaqxd.sgec.models.Instituicao;
 import com.casaculturaqxd.sgec.models.Meta;
 
 public class EventoBuilder implements Builder {
@@ -57,48 +58,57 @@ public class EventoBuilder implements Builder {
   }
 
   @Override
-  public void setNome(String nome) {
+  public Builder setNome(String nome) {
     evento.setNome(nome);
+    return this;
   }
 
   @Override
-  public void setDescricao(String descricao) {
+  public Builder setDescricao(String descricao) {
     evento.setDescricao(descricao);
+    return this;
   }
 
   @Override
-  public void setDataInicial(Date dataInicial) {
+  public Builder setDataInicial(Date dataInicial) {
     evento.setDataInicial(dataInicial);
+    return this;
   }
 
   @Override
-  public void setDataFinal(Date dataFinal) {
+  public Builder setDataFinal(Date dataFinal) {
     evento.setDataFinal(dataFinal);
+    return this;
   }
 
   @Override
-  public void setPublicoEsperado(int publicoEsperado) {
+  public Builder setPublicoEsperado(int publicoEsperado) {
     evento.setPublicoEsperado(publicoEsperado);
+    return this;
   }
 
   @Override
-  public void setPublicoAlcancado(int publicoAlcancado) {
+  public Builder setPublicoAlcancado(int publicoAlcancado) {
     evento.setPublicoAlcancado(publicoAlcancado);
+    return this;
   }
 
   @Override
-  public void setClassificacaoEtaria(String classificacaoEtaria) {
+  public Builder setClassificacaoEtaria(String classificacaoEtaria) {
     evento.setClassificacaoEtaria(classificacaoEtaria);
+    return this;
   }
 
   @Override
-  public void setColaboradores(SortedSet<Integer> colaboradores) {
-    evento.setListaColaboradores(colaboradores);
+  public Builder setColaboradores(ArrayList<Instituicao> colaboradores) {
+    evento.setListaOrganizadores(colaboradores);
+    return this;
   }
 
   @Override
-  public void setOrganizadores(SortedSet<Integer> organizadores) {
-    evento.setListaOrganizadores(organizadores);
+  public Builder setOrganizadores(ArrayList<Instituicao> organizadores) {
+    evento.setListaColaboradores(organizadores);
+    return this;
   }
 
 }

@@ -10,6 +10,7 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
@@ -46,11 +47,20 @@
                      <children>
                         <VBox>
                            <children>
-                              <Label text="Descrição">
-                                 <font>
-                                    <Font name="System Bold" size="20.0" />
-                                 </font>
-                              </Label>
+                              <HBox spacing="1310.0">
+                                 <children>
+                                    <Label text="Descrição">
+                                       <font>
+                                          <Font name="System Bold" size="20.0" />
+                                       </font>
+                                    </Label>
+                                    <ImageView fx:id="copiaCola" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@../imagens/—Pngtree—vector%20copy%20icon_4013746.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </HBox>
                               <TextArea id="descricao" fx:id="descricao" prefHeight="160.0" prefWidth="1426.0" style="-fx-background-color: #FFFFFF;" />
                            </children>
                         </VBox>

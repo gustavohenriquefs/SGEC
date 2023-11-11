@@ -18,7 +18,7 @@ public class ParticipanteDAOTest {
     private static Participante participante;
     private static int idValidParticipante = 1, idUpdatableParticipante = 2,
             idInvalidParticipante = -1, idValidEvento = 1, idInvalidEvento = -1,
-            idValidServiceFile = 1;
+            idValidServiceFile = 11;
 
     public ParticipanteDAOTest() {
         setUpClass();
@@ -93,8 +93,7 @@ public class ParticipanteDAOTest {
 
     @Test
     public void testInserirValidParticipante() throws SQLException {
-        participante =
-                new Participante("novo_participante", "nova_area_atuacao", "nova bio", "link novo");
+        participante = new Participante("novo_participante", "nova_area_atuacao", "nova bio", "link novo");
         assertAll(() -> assertTrue(participanteDAO.inserirParticipante(participante)),
                 () -> assertNotEquals(0, participante.getIdParticipante()));
     }
@@ -130,8 +129,6 @@ public class ParticipanteDAOTest {
         participante = new Participante(idInvalidParticipante, null, null, null, null, null);
         assertFalse(participanteDAO.updateParticipante(participante));
     }
-
-
 
     @Test
     public void testDeletarValidParticipante() throws SQLException {
