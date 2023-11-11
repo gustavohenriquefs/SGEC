@@ -35,7 +35,7 @@ public class PesquisarEventoController {
     private EventoDAO eventoDAO = new EventoDAO();
     private LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO();
     private MetaDAO metaDAO = new MetaDAO(null);
-    private final DatabasePostgres pesquisaConnection = DatabasePostgres.getInstance("URL_TEST","USER_NAME_TEST","PASSWORD_TEST");
+    private final DatabasePostgres pesquisaConnection = DatabasePostgres.getInstance("URL","USER_NAME","PASSWORD");
     private ObservableMap<Evento, FXMLLoader> mapEventos = FXCollections.observableHashMap();;
     @FXML
     private VBox root;
@@ -68,46 +68,68 @@ public class PesquisarEventoController {
     }
 
     public void pesquisarEvento(){
+        ArrayList<Evento> eventosFinais;
         String nome = textFieldPesquisa.getText();
         String cidade = nomeLocalizacao.getText();
         Date dataInicial = null;
         Date dataFinal = null;
         
+        eventosFinais = filtroNomeDataEvento(nome, dataInicial, dataFinal);
+    
+        if(nomeLocalizacao.getLength() != 0){
+            eventosFinais = filtroNomeCidade(eventosFinais, cidade);
+        }
+
+        if(acessivelLibras.isSelected()){
+            eventosFinais = filtroLibras(eventosFinais);
+        }
+
+        ArrayList<Integer> metasSelecionadas = veridicaMetas();
+        if(!metasSelecionadas.isEmpty()){
+            eventosFinais = filtroMetas(eventosFinais, metasSelecionadas);
+        }
+
+        carregarEventos(eventosFinais);
+    }
+
+    private ArrayList<Evento> filtroNomeDataEvento(String nomeEvento, Date dataInicial, Date dataFinal){
         if(dataInicio.getValue() != null){
             dataInicial = Date.valueOf(dataInicio.getValue());
         }
+
         if(dataFim.getValue() != null){
             dataFinal = Date.valueOf(dataFim.getValue());
         }
         
-        ArrayList<Evento> eventos = eventoDAO.pesquisarEvento(nome, dataInicial, dataFinal);
-        ArrayList<Localizacao> localizacaos = localizacaoDAO.pesquisarLocalizacao(cidade);
-        ArrayList<Evento> eventosFinais = new ArrayList<>();
-    
-        if(nomeLocalizacao.getLength() != 0){
-            for (Evento evento : eventos) {
-                SortedSet<Integer> idsLocais = eventoDAO.buscarLocaisPorEvento(evento.getIdEvento());
-                for (Localizacao local : localizacaos) {
-                    if(idsLocais.contains((Integer)local.getIdLocalizacao())){
-                        eventosFinais.add(evento);
-                        break;
-                    }
+        return eventoDAO.pesquisarEvento(nomeEvento, dataInicial, dataFinal);
+    }
+
+    private ArrayList<Evento> filtroNomeCidade(ArrayList<Evento> eventos, String nomeCidade){
+        ArrayList<Localizacao> localizacaos = localizacaoDAO.pesquisarLocalizacao(nomeCidade);
+        ArrayList<Evento> eventosTemp = new ArrayList<>();
+        for (Evento evento : eventos) {
+            SortedSet<Integer> idsLocais = eventoDAO.buscarLocaisPorEvento(evento.getIdEvento());
+            for (Localizacao local : localizacaos) {
+                if(idsLocais.contains((Integer)local.getIdLocalizacao())){
+                    eventosTemp.add(evento);
+                    break;
                 }
             }
-        }else{
-            eventosFinais = eventos;
         }
+        return eventosTemp;
+    }
 
-        if(acessivelLibras.isSelected()){
-            ArrayList<Evento> eventosFinaisLibras = new ArrayList<>();
-            for (Evento evento : eventosFinais) {
-                if(evento.isAcessivelEmLibras()){
-                    eventosFinaisLibras.add(evento);
-                }
+    private ArrayList<Evento> filtroLibras(ArrayList<Evento> eventos){
+        ArrayList<Evento> eventosFinaisLibras = new ArrayList<>();
+        for (Evento evento : eventos) {
+            if(evento.isAcessivelEmLibras()){
+                eventosFinaisLibras.add(evento);
             }
-            eventosFinais = eventosFinaisLibras;
         }
+        return eventosFinaisLibras;
+    }
 
+    private ArrayList<Integer> veridicaMetas(){
         ArrayList<Integer> metasSelecionadas = new ArrayList<>();
         for (MenuItem menuItem : opcoesMetas.getItems()) {
             if (menuItem instanceof CheckMenuItem) {
@@ -119,36 +141,38 @@ public class PesquisarEventoController {
                 } 
             }
         }
+        return metasSelecionadas;
+    } 
 
-        if(!metasSelecionadas.isEmpty()){
-            ArrayList<Evento> eventoTemp = new ArrayList<>();
-            for (Evento evento : eventosFinais) {
-                ArrayList<Meta> metas = metaDAO.listarMetasEvento(evento.getIdEvento());
-                int cont = 0;
-                if(!metas.isEmpty()){
-                    for (Meta metaTemp : metas) {
-                        if(metasSelecionadas.contains(metaTemp.getIdMeta())){
-                            cont++;
-                        }
-                    }
-                    if(cont == metasSelecionadas.size()){
-                        eventoTemp.add(evento);
+    private ArrayList<Evento> filtroMetas(ArrayList<Evento> eventos, ArrayList<Integer> metasSelecionadas){
+        ArrayList<Evento> eventoTemp = new ArrayList<>();
+        for (Evento evento : eventos) {
+            ArrayList<Meta> metas = metaDAO.listarMetasEvento(evento.getIdEvento());
+            int cont = 0;
+            if(!metas.isEmpty()){
+                for (Meta metaTemp : metas) {
+                    if(metasSelecionadas.contains(metaTemp.getIdMeta())){
+                        cont++;
                     }
                 }
+                if(cont == metasSelecionadas.size()){
+                    eventoTemp.add(evento);
+                }
             }
-            eventosFinais = eventoTemp;
         }
+        return eventoTemp;
+    }
 
+    public void carregarEventos(ArrayList<Evento> eventos){
         campoResultados.getChildren().clear();
-        mapEventos.clear(); // limpar os resultados anteriores
-        for(Evento  evento : eventosFinais){ //adicionar resultados na lista
+        mapEventos.clear();
+        for(Evento  evento : eventos){
             mapEventos.put(evento, new FXMLLoader(App.class.getResource("view/preview/previewEventoExistente.fxml")));
         }
     }
 
     public void addListenersEventos(ObservableMap<Evento, FXMLLoader> observablemap) {
         PesquisarEventoController superController = this;
-    
         observablemap.addListener(new MapChangeListener<Evento, FXMLLoader>() {
             @Override
             public void onChanged(
@@ -173,7 +197,6 @@ public class PesquisarEventoController {
     private void dimensionarFlowPane(){
         scrollResultados.viewportBoundsProperty().addListener((observable, oldValue, newValue) -> {
             campoResultados.setPrefWidth(newValue.getWidth());
-            campoResultados.setPrefHeight(newValue.getHeight());
         });
         campoResultados.prefHeightProperty().bind(scrollResultados.heightProperty());
     }
