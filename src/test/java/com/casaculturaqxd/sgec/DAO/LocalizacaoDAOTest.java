@@ -8,6 +8,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.sql.SQLException;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -17,10 +19,7 @@ import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.Localizacao;
 
 public class LocalizacaoDAOTest {
-    private static DatabasePostgres db =
-            DatabasePostgres.getInstance("URL_TEST", "USER_NAME_TEST", "PASSWORD_TEST");
-    private static LocalizacaoDAO localizacaoDAO;
-    private static Localizacao local;
+    private static DatabasePostgres db;
     private static int validIdLocal = 1, updatableIdLocal = 2, validIdEvento = 1,
             invalidIdLocal = -1, invalidIdEvento = -1;
 
@@ -30,8 +29,12 @@ public class LocalizacaoDAOTest {
 
     @BeforeAll
     public static void setUpClass() {
-        localizacaoDAO = new LocalizacaoDAO();
-        localizacaoDAO.setConnection(db.getConnection());
+        db = DatabasePostgres.getInstance("URL_TEST", "USER_NAME_TEST", "PASSWORD_TEST");
+        try {
+            db.getConnection().setAutoCommit(false);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @AfterAll
@@ -40,34 +43,27 @@ public class LocalizacaoDAOTest {
     }
 
     @AfterEach
-    public void tearDown() {
-        // remover do banco o objeto usado no teste
-        // mantendo o registro conhecido
-        if (local != null) {
-            // desvinculando o local do evento utilizado
-            localizacaoDAO.desvincularEvento(local.getIdLocalizacao(), validIdEvento);
-
-            if (local.getIdLocalizacao() != validIdLocal
-                    && local.getIdLocalizacao() != updatableIdLocal) {
-                localizacaoDAO.deletarLocalizacao(local);
-            }
-        }
+    public void tearDown() throws SQLException {
+        db.getConnection().rollback();
+        db.getConnection().commit();
     }
 
     @Test
     public void testGetConnection() {
+        LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO(db.getConnection());
         assertNotNull(localizacaoDAO.getConnection());
     }
 
     @Test
     public void testSetConnection() {
+        LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO(db.getConnection());
         assertEquals(db.getConnection(), localizacaoDAO.getConnection());
     }
 
-
     @Test
     public void testInserirValidLocalizacao() {
-        local = new Localizacao("local_teste", "new_rua_teste", "new_cidade_teste",
+        LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO(db.getConnection());
+        Localizacao local = new Localizacao("local_teste", "new_rua_teste", "new_cidade_teste",
                 "new_estado_teste", "new_pais_teste");
 
         assertAll(() -> assertTrue(localizacaoDAO.inserirLocalizacao(local)),
@@ -76,7 +72,8 @@ public class LocalizacaoDAOTest {
 
     @Test
     public void testInserirLocalizacaoSemNome() {
-        local = new Localizacao(null, "rua_teste", "new_cidade_teste", "new_estado_teste",
+        LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO(db.getConnection());
+        Localizacao local = new Localizacao(null, "rua_teste", "new_cidade_teste", "new_estado_teste",
                 "new_pais_teste");
         assertAll(() -> assertFalse(localizacaoDAO.inserirLocalizacao(local)),
                 () -> assertEquals(0, local.getIdLocalizacao()));
@@ -84,7 +81,8 @@ public class LocalizacaoDAOTest {
 
     @Test
     public void testInserirLocalizacaoSemRua() {
-        local = new Localizacao("local_teste", null, "new_cidade_teste", "new_estado_teste",
+        LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO(db.getConnection());
+        Localizacao local = new Localizacao("local_teste", null, "new_cidade_teste", "new_estado_teste",
                 "new_pais_teste");
         assertAll(() -> assertFalse(localizacaoDAO.inserirLocalizacao(local)),
                 () -> assertEquals(0, local.getIdLocalizacao()));
@@ -92,7 +90,8 @@ public class LocalizacaoDAOTest {
 
     @Test
     public void testInserirLocalizacaoSemCidade() {
-        local = new Localizacao("local_teste", "new_rua_teste", null, "new_estado_teste",
+        LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO(db.getConnection());
+        Localizacao local = new Localizacao("local_teste", "new_rua_teste", null, "new_estado_teste",
                 "new_pais_teste");
         assertAll(() -> assertFalse(localizacaoDAO.inserirLocalizacao(local)),
                 () -> assertEquals(0, local.getIdLocalizacao()));
@@ -100,7 +99,8 @@ public class LocalizacaoDAOTest {
 
     @Test
     public void testInserirLocalizacaoSemEstado() {
-        local = new Localizacao("local_teste", "new_rua_teste", "new_cidade_teste", null,
+        LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO(db.getConnection());
+        Localizacao local = new Localizacao("local_teste", "new_rua_teste", "new_cidade_teste", null,
                 "new_pais_teste");
 
         assertAll(() -> assertFalse(localizacaoDAO.inserirLocalizacao(local)),
@@ -109,7 +109,8 @@ public class LocalizacaoDAOTest {
 
     @Test
     public void testInserirLocalizacaoSemPais() {
-        local = new Localizacao("local_teste", "new_rua_teste", "new_cidade_este",
+        LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO(db.getConnection());
+        Localizacao local = new Localizacao("local_teste", "new_rua_teste", "new_cidade_este",
                 "new_estado_teste", null);
 
         assertAll(() -> assertFalse(localizacaoDAO.inserirLocalizacao(local)),
@@ -118,7 +119,8 @@ public class LocalizacaoDAOTest {
 
     @Test
     public void testGetValidLocalizacao() {
-        local = new Localizacao();
+        LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO(db.getConnection());
+        Localizacao local = new Localizacao();
         // id de local conhecido do banco
         local.setIdLocalizacao(validIdLocal);
 
@@ -134,7 +136,8 @@ public class LocalizacaoDAOTest {
 
     @Test
     public void testGetInvalidLocalizacao() {
-        local = new Localizacao();
+        LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO(db.getConnection());
+        Localizacao local = new Localizacao();
         // utilizando
         local.setIdLocalizacao(invalidIdLocal);
 
@@ -144,7 +147,8 @@ public class LocalizacaoDAOTest {
 
     @Test
     public void testVincularValidLocalValidEvento() {
-        local = new Localizacao();
+        LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO(db.getConnection());
+        Localizacao local = new Localizacao();
         local.setIdLocalizacao(validIdLocal);
 
         assertTrue(localizacaoDAO.vincularEvento(local.getIdLocalizacao(), validIdEvento));
@@ -152,7 +156,8 @@ public class LocalizacaoDAOTest {
 
     @Test
     public void testVincularValidLocalInvalidEvento() {
-        local = new Localizacao();
+        LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO(db.getConnection());
+        Localizacao local = new Localizacao();
         local.setIdLocalizacao(validIdLocal);
 
         assertFalse(localizacaoDAO.vincularEvento(local.getIdLocalizacao(), invalidIdEvento));
@@ -160,7 +165,8 @@ public class LocalizacaoDAOTest {
 
     @Test
     public void testVincularInvalidLocalValidEvento() {
-        local = new Localizacao();
+        LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO(db.getConnection());
+        Localizacao local = new Localizacao();
         local.setIdLocalizacao(invalidIdLocal);
 
         assertFalse(localizacaoDAO.vincularEvento(local.getIdLocalizacao(), validIdEvento));
@@ -168,7 +174,8 @@ public class LocalizacaoDAOTest {
 
     @Test
     public void testVincularInvalidLocalInvalidEvento() {
-        local = new Localizacao();
+        LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO(db.getConnection());
+        Localizacao local = new Localizacao();
         local.setIdLocalizacao(invalidIdLocal);
 
         assertFalse(localizacaoDAO.vincularEvento(local.getIdLocalizacao(), invalidIdEvento));
@@ -176,7 +183,8 @@ public class LocalizacaoDAOTest {
 
     @Test
     public void testDesvincularValidLocalizacaoValidEvento() {
-        local = new Localizacao();
+        LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO(db.getConnection());
+        Localizacao local = new Localizacao();
         local.setIdLocalizacao(validIdLocal);
 
         localizacaoDAO.vincularEvento(local.getIdLocalizacao(), validIdEvento);
@@ -186,7 +194,8 @@ public class LocalizacaoDAOTest {
 
     @Test
     public void testDesvincularValidLocalizacaoInvalidEvento() {
-        local = new Localizacao();
+        LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO(db.getConnection());
+        Localizacao local = new Localizacao();
         local.setIdLocalizacao(validIdLocal);
 
         localizacaoDAO.vincularEvento(local.getIdLocalizacao(), invalidIdEvento);
@@ -196,7 +205,8 @@ public class LocalizacaoDAOTest {
 
     @Test
     public void testDesvincularInvalidLocalizacaoValidEvento() {
-        local = new Localizacao();
+        LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO(db.getConnection());
+        Localizacao local = new Localizacao();
         local.setIdLocalizacao(invalidIdLocal);
 
         localizacaoDAO.vincularEvento(local.getIdLocalizacao(), validIdEvento);
@@ -206,7 +216,8 @@ public class LocalizacaoDAOTest {
 
     @Test
     public void testDesvincularInvalidLocalizacaoInvalidEvento() {
-        local = new Localizacao();
+        LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO(db.getConnection());
+        Localizacao local = new Localizacao();
         local.setIdLocalizacao(invalidIdLocal);
 
         localizacaoDAO.vincularEvento(local.getIdLocalizacao(), invalidIdEvento);
@@ -216,7 +227,8 @@ public class LocalizacaoDAOTest {
 
     @Test
     public void testUpdateValidLocalizacao() {
-        local = new Localizacao();
+        LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO(db.getConnection());
+        Localizacao local = new Localizacao();
         local.setIdLocalizacao(updatableIdLocal);
         String updateString = "update_value", updateCep = "00000-000";
         local.setNome(updateString);
@@ -243,7 +255,8 @@ public class LocalizacaoDAOTest {
 
     @Test
     public void testUpdateInvalidLocalizacao() {
-        local = new Localizacao();
+        LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO(db.getConnection());
+        Localizacao local = new Localizacao();
         local.setIdLocalizacao(invalidIdLocal);
 
         assertFalse(localizacaoDAO.updateLocalizacao(local));
@@ -251,7 +264,8 @@ public class LocalizacaoDAOTest {
 
     @Test
     public void testDeletarValidLocalizacao() {
-        local = new Localizacao("remotion_teste_local", "remotion_teste_rua",
+        LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO(db.getConnection());
+        Localizacao local = new Localizacao("remotion_teste_local", "remotion_teste_rua",
                 "remotion_teste_cidade", "remotion_teste_estado", "remotion_teste_pais");
         localizacaoDAO.inserirLocalizacao(local);
 
@@ -260,7 +274,8 @@ public class LocalizacaoDAOTest {
 
     @Test
     public void testDeletarInvalidLocalizacao() {
-        local = new Localizacao();
+        LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO(db.getConnection());
+        Localizacao local = new Localizacao();
         local.setIdLocalizacao(invalidIdLocal);
 
         assertFalse(localizacaoDAO.deletarLocalizacao(local));
