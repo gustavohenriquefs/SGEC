@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -12,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="principal" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="170.0" prefWidth="230.0" styleClass="root" stylesheets="@../../css/preview/cardArquivoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane id="root" fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="170.0" prefWidth="230.0" styleClass="root" stylesheets="@../../css/preview/cardArquivoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.preview.PreviewArquivoController">
    <children>
       <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -22,8 +21,8 @@
                      <menus>
                         <Menu mnemonicParsing="false">
                            <items>
-                              <MenuItem fx:id="download" mnemonicParsing="false" text="Download" />
-                              <MenuItem fx:id="delete" mnemonicParsing="false" text="Delete" />
+                              <MenuItem fx:id="downloadItem" mnemonicParsing="false" onAction="#download" text="Download" />
+                              <MenuItem fx:id="deleteItem" mnemonicParsing="false" onAction="#deletar" text="Deletar" />
                            </items>
                            <graphic>
                               <ImageView fx:id="opcoes" fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
@@ -39,37 +38,41 @@
             </HBox>
             <HBox alignment="CENTER">
                <children>
-                  <ImageView fx:id="imagem" fitHeight="97.0" fitWidth="231.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="imagemPreview" fitHeight="97.0" fitWidth="231.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../imagens/default_image.png" />
                      </image>
                   </ImageView>
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+            <VBox>
                <children>
-                  <Label fx:id="fileKey" text="Label" HBox.hgrow="ALWAYS">
-                     <HBox.margin>
-                        <Insets />
-                     </HBox.margin>
-                     <font>
-                        <Font size="16.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="date" text="Label">
-                     <font>
-                        <Font size="16.0" />
-                     </font></Label>
-                  <Label fx:id="fileTyPE" text="Label">
-                     <font>
-                        <Font size="16.0" />
-                     </font></Label>
-                  <Label fx:id="tamanho" text="Label">
-                     <font>
-                        <Font size="16.0" />
-                     </font></Label>
+                  <HBox>
+                     <children>
+                        <Label fx:id="fileKey" text="Label" />
+                     </children>
+                  </HBox>
+                  <HBox spacing="75.0">
+                     <children>
+                        <Label fx:id="date" text="Label">
+                           <font>
+                              <Font size="10.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="fileType" text="Label">
+                           <font>
+                              <Font size="10.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="tamanho" text="Label">
+                           <font>
+                              <Font size="10.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
                </children>
-            </HBox>
+            </VBox>
          </children>
       </VBox>
    </children>

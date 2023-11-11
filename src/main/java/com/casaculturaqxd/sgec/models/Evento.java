@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.SortedSet;
+import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 
 public class Evento {
     private Integer idEvento;
@@ -22,11 +23,13 @@ public class Evento {
     private boolean acessivelEmLibras;
     private Date cadastradoEm;
 
+
+
     private SortedSet<Integer> locais;
     private SortedSet<Integer> listaParticipantes;
+    private ArrayList<ServiceFile> listaArquivos;
     private ArrayList<Instituicao> listaOrganizadores;
     private ArrayList<Instituicao> listaColaboradores;
-    private SortedSet<Integer> listaArquivos;
     private ArrayList<Meta> listaMetas;
 
     public ArrayList<Meta> getListaMetas() {
@@ -206,19 +209,19 @@ public class Evento {
         return this.listaColaboradores.remove(colaborador);
     }
 
-    public SortedSet<Integer> getListaArquivos() {
+    public ArrayList<ServiceFile> getListaArquivos() {
         return listaArquivos;
     }
-
-    public void setListaArquivos(SortedSet<Integer> listaArquivos) {
+  
+    public void setListaArquivos(ArrayList<ServiceFile> listaArquivos) {
         this.listaArquivos = listaArquivos;
     }
 
-    public void addArquivo(Integer arquivo) {
+    public void addArquivo(ServiceFile arquivo) {
         this.listaArquivos.add(arquivo);
     }
 
-    public boolean removeArquivo(Integer arquivo) {
+    public boolean removeArquivo(ServiceFile arquivo) {
         return this.listaArquivos.remove(arquivo);
     }
 

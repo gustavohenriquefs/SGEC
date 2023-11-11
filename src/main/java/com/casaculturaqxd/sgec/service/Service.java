@@ -1,5 +1,6 @@
 package com.casaculturaqxd.sgec.service;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -7,7 +8,8 @@ import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 
 public interface Service {
       /**
-       * Cria um novo bucket com o nome especificado, se já existir um bucket com esse nome lança
+       * Cria um novo bucket com o nome especificado, se já existir um bucket com esse
+       * nome lança
        * uma exceção
        * 
        * @param nomeBucket
@@ -16,7 +18,8 @@ public interface Service {
       public void criarBucket(String nomeBucket) throws IllegalArgumentException;
 
       /**
-       * Deleta o bucket com o nome passado, se não existir nenhum bucket com esse nome lança uma
+       * Deleta o bucket com o nome passado, se não existir nenhum bucket com esse
+       * nome lança uma
        * exceção
        * 
        * @param nomeBucket
@@ -25,18 +28,31 @@ public interface Service {
       public void deletarBucket(String nomeBucket) throws IllegalArgumentException;
 
       /**
-       * Retorna um arquivo individual convertido para uma ServiceFile, levanta uma exceção caso o
+       * Captura os metadados do arquivo, como data de modificacao e tamanho
+       * 
+       * @param nomeBucket
+       * @param chaveArquivo
+       * @return serviceFile com os metadados encontrados
+       * @throws IllegalArgumentException
+       */
+      public ServiceFile getMetadata(String nomeBucket, String chaveArquivo)
+                  throws IllegalArgumentException;
+
+      /**
+       * Retorna um arquivo individual convertido para uma java.io.File, levanta uma
+       * exceção caso o
        * nome do bucket ou do arquivo sejam inválidos
        * 
        * @param nomeBucket
        * @param chaveArquivo
        * @throws IllegalArgumentException
        */
-      public ServiceFile getArquivo(String nomeBucket, String chaveArquivo)
+      public File getArquivo(String nomeBucket, String chaveArquivo)
                   throws IllegalArgumentException;
 
       /**
-       * realiza upload do arquivo para o bucket especificado, salvando-o com a chave de destino
+       * realiza upload do arquivo para o bucket especificado, salvando-o com a chave
+       * de destino
        * escolhida retorna uma exceção caso o bucket ou o arquivo sejam inválidos
        * 
        * @param nomeBucket
@@ -57,7 +73,8 @@ public interface Service {
       public List<String> listarArquivos(String nomeBucket) throws IllegalArgumentException;
 
       /**
-       * Remove o arquivo com a chave especificada do bucket lança uma exceção caso a chave ou o
+       * Remove o arquivo com a chave especificada do bucket lança uma exceção caso a
+       * chave ou o
        * nome do bucket sejam inválidos
        * 
        * @param nomeBucket
