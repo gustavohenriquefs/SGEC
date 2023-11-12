@@ -31,6 +31,7 @@ public class UserDAOTest {
 
     @AfterAll
     public static void tearDownClass() throws SQLException {
+        db.getConnection().commit();
         db.desconectar(db.getConnection());
     }
 

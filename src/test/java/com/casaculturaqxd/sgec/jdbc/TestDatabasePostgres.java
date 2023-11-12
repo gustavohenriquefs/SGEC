@@ -1,6 +1,7 @@
 package com.casaculturaqxd.sgec.jdbc;
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +23,8 @@ public class TestDatabasePostgres {
     }
 
     @AfterAll
-    public void tearDownClass() {
+    public void tearDownClass() throws SQLException {
+        database.getConnection().commit();
         database.desconectar(database.getConnection());
     }
 

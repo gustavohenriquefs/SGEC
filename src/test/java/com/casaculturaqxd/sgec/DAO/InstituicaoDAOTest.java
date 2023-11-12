@@ -32,7 +32,8 @@ public class InstituicaoDAOTest {
     }
 
     @AfterAll
-    public static void tearDownClass() {
+    public static void tearDownClass() throws SQLException {
+        db.getConnection().commit();
         db.desconectar(db.getConnection());
     }
 
