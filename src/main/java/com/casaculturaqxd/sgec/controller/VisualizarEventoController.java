@@ -1,6 +1,5 @@
 package com.casaculturaqxd.sgec.controller;
 
-
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.Time;
@@ -15,18 +14,14 @@ import com.casaculturaqxd.sgec.models.Indicador;
 import com.casaculturaqxd.sgec.models.Localizacao;
 import com.casaculturaqxd.sgec.models.Meta;
 
-import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
-import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -81,8 +76,7 @@ public class VisualizarEventoController {
     @FXML
     ChoiceBox<String> classificacaoEtaria;
     @FXML
-    private String[] classificacoes =
-            {"Livre", "10 anos", "12 anos", "14 anos", "16 anos", "18 anos"};
+    private String[] classificacoes = { "Livre", "10 anos", "12 anos", "14 anos", "16 anos", "18 anos" };
     // Tabela com todos os campos de input
     ObservableList<Control> camposInput = FXCollections.observableArrayList();
     // Indicadores
@@ -116,12 +110,10 @@ public class VisualizarEventoController {
         /*
          * TODO: adicionar funcionalidade de arquivos e reativar o botao
          */
-        temporaryHideUnimplementedFields();
     }
 
     private void loadMenu() throws IOException {
-        FXMLLoader carregarMenu =
-                new FXMLLoader(App.class.getResource("view/componentes/menu.fxml"));
+        FXMLLoader carregarMenu = new FXMLLoader(App.class.getResource("view/componentes/menu.fxml"));
         root.getChildren().add(0, carregarMenu.load());
     }
 
@@ -151,8 +143,7 @@ public class VisualizarEventoController {
         certificavel.setSelected(evento.isCertificavel());
         libras.setSelected(evento.isAcessivelEmLibras());
 
-        FXMLLoader loaderLocal =
-                new FXMLLoader(App.class.getResource("view/preview/previewLocalizacao.fxml"));
+        FXMLLoader loaderLocal = new FXMLLoader(App.class.getResource("view/preview/previewLocalizacao.fxml"));
 
         if (evento.getLocais() != null) {
             for (Integer idLocal : evento.getLocais()) {
@@ -220,7 +211,8 @@ public class VisualizarEventoController {
             evento.setPublicoAlcancado(numeroPublico.getValorAlcancado());
             evento.setPublicoEsperado(numeroPublico.getValorEsperado());
             evento.setParticipantesEsperado(numeroMestres.getValorEsperado());
-            evento.setMunicipiosEsperado(numeroMunicipios.getValorEsperado());;
+            evento.setMunicipiosEsperado(numeroMunicipios.getValorEsperado());
+            ;
             eventoDAO.alterarEvento(evento);
 
             Alert sucessoAtualizacao = new Alert(AlertType.INFORMATION);
@@ -231,6 +223,15 @@ public class VisualizarEventoController {
             erroAtualizacao.setContentText("Erro ao alterar evento");
             erroAtualizacao.show();
         }
+    }
+
+    public void goToMidiaEvento() throws IOException {
+        FXMLLoader loadTelaMidia = new FXMLLoader(App.class.getResource("view/midiaEvento.fxml"));
+        Parent nextScreen = loadTelaMidia.load();
+        MidiaEventoController controllerNextScreen = loadTelaMidia.getController();
+        controllerNextScreen.setEvento(evento);
+
+        App.setRoot(nextScreen);
     }
 
     /**
@@ -291,7 +292,8 @@ public class VisualizarEventoController {
 
     /**
      * <p>
-     * Retorna todos os elementos que suportam interacao do usuario presentes na pagina, exceto
+     * Retorna todos os elementos que suportam interacao do usuario presentes na
+     * pagina, exceto
      * botoes, labels e tableviews
      * <p>
      */
@@ -306,7 +308,8 @@ public class VisualizarEventoController {
     }
 
     /**
-     * oculta e desabilita todas as funcionalidades nao implementadas TODO: remover o metodo apos
+     * oculta e desabilita todas as funcionalidades nao implementadas TODO: remover
+     * o metodo apos
      * arquivos serem implementados
      */
     private void temporaryHideUnimplementedFields() {
@@ -315,20 +318,20 @@ public class VisualizarEventoController {
         }
     }
 
-    private void getDescricao(){
+    private void getDescricao() {
         Clipboard clipboard = Clipboard.getSystemClipboard();
         ClipboardContent content = new ClipboardContent();
         content.putString(descricao.getText());
         clipboard.setContent(content);
     }
 
-    private void copyToClipboard(MouseEvent event){        
+    private void copyToClipboard(MouseEvent event) {
         getDescricao();
-         // Exibe a mensagem e determina sua duração
-         tooltipCliboard.show(copiaCola, event.getScreenX(), event.getScreenY());
-         PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
-         pause.setOnFinished(e -> tooltipCliboard.hide());
-         pause.play();
+        // Exibe a mensagem e determina sua duração
+        tooltipCliboard.show(copiaCola, event.getScreenX(), event.getScreenY());
+        PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
+        pause.setOnFinished(e -> tooltipCliboard.hide());
+        pause.play();
     }
 
 }
