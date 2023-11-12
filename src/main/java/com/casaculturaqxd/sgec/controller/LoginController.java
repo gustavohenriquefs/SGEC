@@ -1,6 +1,7 @@
 package com.casaculturaqxd.sgec.controller;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.UserDAO;
@@ -27,7 +28,7 @@ public class LoginController {
     private User usuario;
     private UserDAO userDAO = new UserDAO();
     private final DatabasePostgres userConnection =
-            DatabasePostgres.getInstance("URL", "USER_NAME", "PASSWORD");
+            DatabasePostgres.getInstance("URL_TEST", "USER_NAME_TEST", "PASSWORD_TEST");
 
     /**
      * Carrega a página com o botão de login desabilitado
@@ -42,8 +43,9 @@ public class LoginController {
      * para a proxima tela.
      * 
      * @throws IOException
+     * @throws NoSuchAlgorithmException
      */
-    public void authUsuario() throws IOException {
+    public void authUsuario() throws IOException, NoSuchAlgorithmException {
         usuario = new User(email.getText(), senha.getText());
         if (userDAO.validar(usuario)) {
             App.setUsuario(usuario);
