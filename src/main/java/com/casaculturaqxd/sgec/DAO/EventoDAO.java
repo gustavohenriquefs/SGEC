@@ -12,6 +12,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import com.casaculturaqxd.sgec.models.Evento;
+import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 import com.casaculturaqxd.sgec.models.Instituicao;
 import com.casaculturaqxd.sgec.models.Meta;
 
@@ -20,6 +21,10 @@ public class EventoDAO {
 
   public void setConnection(Connection connection) {
     this.connection = connection;
+  }
+
+  public Connection getConnection() {
+    return this.connection;
   }
 
   public boolean inserirEvento(Evento evento) {
@@ -91,11 +96,18 @@ public class EventoDAO {
 
   public boolean vincularMetas(List<Meta> metas, Integer idEvento) {
     MetaDAO metaDAO = new MetaDAO(connection);
-    List<Boolean> vinculos = new ArrayList<>();
     for (Meta meta : metas) {
-      vinculos.add(metaDAO.vincularEvento(meta.getIdMeta(), idEvento));
+      boolean temp = metaDAO.vincularEvento(meta.getIdMeta(), idEvento);
+      if (temp == false) {
+        return false;
+      }
     }
-    return vinculos.contains(false);
+    return true;
+  }
+
+  public boolean vincularArquivos(Evento evento) {
+    ServiceFileDAO serviceFileDAO = new ServiceFileDAO(getConnection());
+    return serviceFileDAO.vincularAllArquivos(evento);
   }
 
   private boolean vincularLocais(SortedSet<Integer> locais, Integer idEvento) {
@@ -284,6 +296,7 @@ public class EventoDAO {
             .setListaColaboradores(this.buscarColaboradoresPorEvento(eventoRetorno.getIdEvento()));
         eventoRetorno
             .setListaParticipantes(this.buscarLocaisPorEvento(eventoRetorno.getIdEvento()));
+        eventoRetorno.setListaArquivos(this.buscarArquivosPorEvento(eventoRetorno));
         eventoRetorno.setListaMetas(this.listarMetasEvento(eventoRetorno));
       }
       stmt.close();
@@ -291,6 +304,11 @@ public class EventoDAO {
     } catch (SQLException e) {
       return Optional.empty();
     }
+  }
+
+  private ArrayList<ServiceFile> buscarArquivosPorEvento(Evento evento) {
+    ServiceFileDAO serviceFileDAO = new ServiceFileDAO(connection);
+    return serviceFileDAO.listarArquivosEvento(evento);
   }
 
   private ArrayList<Instituicao> buscarColaboradoresPorEvento(int idEvento) {
