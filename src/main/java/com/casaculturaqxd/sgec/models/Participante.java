@@ -10,6 +10,10 @@ public class Participante {
     private String linkMapaDaCultura;
     private ServiceFile imagemCapa;
 
+    public Participante(int idParticipante) {
+        this.idParticipante = idParticipante;
+    }
+
     public Participante(int idParticipante, String nome, String areaDeAtuacao, String bio,
             String linkMapaDaCultura, ServiceFile imagemCapa) {
         this.idParticipante = idParticipante;
@@ -85,6 +89,5 @@ public class Participante {
     public void setImagemCapa(ServiceFile imagemCapa) {
         this.imagemCapa = imagemCapa;
     }
-
 
 }
