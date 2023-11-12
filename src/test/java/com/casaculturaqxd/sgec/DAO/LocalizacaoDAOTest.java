@@ -45,7 +45,6 @@ public class LocalizacaoDAOTest {
     @AfterEach
     public void tearDown() throws SQLException {
         db.getConnection().rollback();
-        db.getConnection().commit();
     }
 
     @Test
