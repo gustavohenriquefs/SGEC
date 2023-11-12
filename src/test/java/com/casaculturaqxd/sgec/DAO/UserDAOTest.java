@@ -9,6 +9,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
+import org.postgresql.core.TransactionState;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class UserDAOTest {
@@ -24,6 +26,7 @@ public class UserDAOTest {
         db = DatabasePostgres.getInstance("URL_TEST", "USER_NAME_TEST", "PASSWORD_TEST");
         try {
             db.getConnection().setAutoCommit(false);
+            db.getConnection().setTransactionIsolation(db.getConnection().TRANSACTION_SERIALIZABLE);
         } catch (SQLException e) {
             e.printStackTrace();
         }

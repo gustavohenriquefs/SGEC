@@ -27,6 +27,7 @@ public class ParticipanteDAOTest {
         db = DatabasePostgres.getInstance("URL_TEST", "USER_NAME_TEST", "PASSWORD_TEST");
         try {
             db.getConnection().setAutoCommit(false);
+            db.getConnection().setTransactionIsolation(db.getConnection().TRANSACTION_SERIALIZABLE);
         } catch (SQLException e) {
             e.printStackTrace();
         }
