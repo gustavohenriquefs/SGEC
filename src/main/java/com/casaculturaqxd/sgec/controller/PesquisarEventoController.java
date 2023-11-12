@@ -24,6 +24,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
@@ -51,6 +52,8 @@ public class PesquisarEventoController {
     private FlowPane campoResultados;
     @FXML
     private ScrollPane scrollResultados;
+    @FXML
+    private Label exibir;
 
     public void initialize() throws IOException {
         loadMenu();
@@ -89,6 +92,7 @@ public class PesquisarEventoController {
             eventosFinais = filtroMetas(eventosFinais, metasSelecionadas);
         }
 
+        exibir.setVisible(true);
         scrollResultados.setVisible(true);
         carregarEventos(eventosFinais);
     }
