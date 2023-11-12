@@ -1,7 +1,11 @@
 package com.casaculturaqxd.sgec.controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.MapChangeListener;
+import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -14,6 +18,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -30,17 +35,21 @@ import java.util.ArrayList;
 import java.util.TreeSet;
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.EventoDAO;
+import com.casaculturaqxd.sgec.DAO.ServiceFileDAO;
 import com.casaculturaqxd.sgec.builder.EventoBuilder;
+import com.casaculturaqxd.sgec.controller.preview.PreviewArquivoController;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.Evento;
+import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
+import com.casaculturaqxd.sgec.service.Service;
 import com.casaculturaqxd.sgec.models.Meta;
 
-
-public class CadastrarEventoController {
+public class CadastrarEventoController implements ControllerServiceFile {
     private final int MAX_LOCALIZACOES = 4;
     DatabasePostgres db = DatabasePostgres.getInstance("URL", "USER_NAME", "PASSWORD");
     EventoBuilder builderEvento = new EventoBuilder();
     EventoDAO eventoDAO = new EventoDAO();
+    ServiceFileDAO serviceFileDAO;
     ArrayList<FieldLocalizacaoController> controllersLocais =
             new ArrayList<FieldLocalizacaoController>();
     DateFormat formatterHorario;
@@ -50,7 +59,10 @@ public class CadastrarEventoController {
     @FXML
     VBox Localizacoes, cargaHoraria;
     @FXML
-    HBox Participantes, Organizadores, Colaboradores, secaoMetas;
+    HBox header, Participantes, Organizadores, Colaboradores, secaoMetas;
+    @FXML
+    FlowPane secaoArquivos;
+
     @FXML
     TextField titulo, publicoEsperado, publicoAlcancado, horas, minutos, horasCargaHoraria,
             numParticipantesEsperado, numMunicipiosEsperado;
@@ -66,6 +78,7 @@ public class CadastrarEventoController {
     CheckBox checkMeta3;
     @FXML
     RadioButton certificavel, acessivelEmLibras;
+    private ObservableMap<ServiceFile, FXMLLoader> mapServiceFiles = FXCollections.observableHashMap();
 
     // Botoes
     @FXML
@@ -73,7 +86,7 @@ public class CadastrarEventoController {
 
     public void initialize() throws IOException {
         formatterHorario = new SimpleDateFormat("HH:mm");
-
+        addListenersServiceFile(mapServiceFiles);
         loadMenu();
         // inicia com o local obrigatorio carregado na pagina
         carregarCampoLocalizacao();
@@ -85,6 +98,7 @@ public class CadastrarEventoController {
     private void loadMenu() throws IOException {
         FXMLLoader carregarMenu =
                 new FXMLLoader(App.class.getResource("view/componentes/menu.fxml"));
+
         root.getChildren().add(0, carregarMenu.load());
     }
 
@@ -102,6 +116,8 @@ public class CadastrarEventoController {
 
         builderEvento.resetar();
         eventoDAO.setConnection(db.getConnection());
+
+        serviceFileDAO = new ServiceFileDAO(eventoDAO.getConnection());
 
         builderEvento.setNome(titulo.getText());
         builderEvento.setDescricao(titulo.getText());
@@ -136,23 +152,35 @@ public class CadastrarEventoController {
         for (FieldLocalizacaoController controller : controllersLocais) {
             idLocais.add(controller.getLocalizacao().getIdLocalizacao());
         }
+        ArrayList<ServiceFile> listaArquivos = new ArrayList<>(mapServiceFiles.keySet());
+        builderEvento.setListaArquivos(listaArquivos);
         builderEvento.setLocalizacoes(idLocais);
         builderEvento.setListaMetas(getMetasSelecionadas());
 
         Evento novoEvento = builderEvento.getEvento();
         if (eventoDAO.inserirEvento(novoEvento)) {
+            // procura pelo arquivo no banco, se nao estiver realiza a insercao
+            for (ServiceFile arquivo : novoEvento.getListaArquivos()) {
+                ServiceFile arquivoExistente = serviceFileDAO.getArquivo(arquivo.getFileKey());
+                if (arquivoExistente == null) {
+                    serviceFileDAO.inserirArquivo(arquivo);
+                } else {
+                    int idxArquivo = novoEvento.getListaArquivos().indexOf(arquivo);
+
+                    novoEvento.getListaArquivos().set(idxArquivo, arquivoExistente);
+                }
+            }
+            eventoDAO.vincularArquivos(novoEvento);
             eventoDAO.vincularMetas(novoEvento.getListaMetas(), novoEvento.getIdEvento());
             novoEvento = eventoDAO.buscarEvento(novoEvento).get();
+
             App.setRoot("view/home");
         }
 
     }
 
-
     public void cancelar() throws IOException {
-        /**
-         * TODO: implementar uma fila na classe App, para retornar a ultima tela visitada
-         */
+        
         builderEvento.resetar();
         App.setRoot("view/home");
     }
@@ -219,6 +247,28 @@ public class CadastrarEventoController {
     public void adicionarArquivo() {
         FileChooser fileChooser = new FileChooser();
         File arquivoSelecionado = fileChooser.showOpenDialog(stage);
+        adicionarArquivo(new ServiceFile(arquivoSelecionado));
+    }
+
+    @Override
+    public void adicionarArquivo(ServiceFile serviceFile) {
+        mapServiceFiles.put(serviceFile,
+                new FXMLLoader(App.class.getResource("view/preview/previewArquivo.fxml")));
+    }
+
+    @Override
+    public void removerArquivo(ServiceFile serviceFile) {
+        Service service = serviceFile.getService();
+        try {
+            service.deletarArquivo(serviceFile.getBucket(), serviceFile.getFileKey());
+
+        } catch (IllegalArgumentException e) {
+            // caso arquivo ja nao esteja registrado
+            mapServiceFiles.remove(serviceFile);
+        } catch (Exception e) {
+            // em qualquer outro erro
+            e.printStackTrace();
+        }
     }
 
     public boolean camposObrigatoriosPreenchidos() {
@@ -242,6 +292,37 @@ public class CadastrarEventoController {
 
     }
 
+    public void addListenersServiceFile(ObservableMap<ServiceFile, FXMLLoader> observablemap) {
+        ControllerServiceFile superController = this;
+        observablemap.addListener(new MapChangeListener<ServiceFile, FXMLLoader>() {
+            @Override
+            public void onChanged(
+                    MapChangeListener.Change<? extends ServiceFile, ? extends FXMLLoader> change) {
+
+                if (change.wasAdded()) {
+                    ServiceFile addedKey = change.getKey();
+                    // carregar o fxml de preview e setar o ServiceFile deste para o
+                    // arquivo adicionado
+                    try {
+                        Parent previewParticipante = change.getValueAdded().load();
+                        PreviewArquivoController controller = change.getValueAdded().getController();
+                        controller.setServiceFile(addedKey);
+                        controller.setParentController(superController);
+
+                        secaoArquivos.getChildren().add(previewParticipante);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (change.wasRemoved()) {
+                    PreviewArquivoController removedController = change.getValueRemoved().getController();
+                    // Remover o Pane de preview ao deletar um Arquivo da lista
+                    secaoArquivos.getChildren().remove(removedController.getRoot());
+                }
+            }
+        });
+    }
+  
     public TextFormatter<String> getNumericalFormatter() {
         return new TextFormatter<>(change -> {
             if (change.getText().matches("\\d+")) {

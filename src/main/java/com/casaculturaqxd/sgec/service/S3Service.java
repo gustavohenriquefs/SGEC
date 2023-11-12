@@ -60,15 +60,24 @@ public class S3Service implements Service {
       }
    }
 
+   public ServiceFile getMetadata(String nomeBucket, String chaveArquivo) {
+      var object = client.getObject(nomeBucket, chaveArquivo);
+      var metadata = object.getObjectMetadata();
+      Date ultimaModificacao = new java.sql.Date(metadata.getLastModified().getTime());
+      long fileSize = metadata.getContentLength();
+      String suffix = findFileSuffix(chaveArquivo);
+      return new ServiceFile(suffix, nomeBucket, ultimaModificacao, null);
+   }
+
    /**
-    * captura o conteudo do objeto em uma InputStream depois cria um arquivo temporário com esse
+    * captura o conteudo do objeto em uma InputStream depois cria um arquivo
+    * temporário com esse
     * conteúdo, por fim retorna um service file desse conteudo
     */
-   public ServiceFile getArquivo(String nomeBucket, String chaveArquivo) {
+   @Override
+   public File getArquivo(String nomeBucket, String chaveArquivo) {
       var object = client.getObject(nomeBucket, chaveArquivo);
       InputStream content = object.getObjectContent();
-      Date ultimaModificacao =
-            new java.sql.Date(object.getObjectMetadata().getLastModified().getTime());
       File newFile;
 
       try {
@@ -76,7 +85,7 @@ public class S3Service implements Service {
          newFile.deleteOnExit();
          OutputStream output = new FileOutputStream(newFile, false);
          content.transferTo(output);
-         return new ServiceFile(chaveArquivo, nomeBucket, ultimaModificacao, newFile);
+         return newFile;
       } catch (IOException e) {
          e.printStackTrace();
       }
@@ -85,7 +94,8 @@ public class S3Service implements Service {
    }
 
    /**
-    * Baseado no codigo disponivel neste <a href="https://github.com/feltex/aws-s3">link</a>
+    * Baseado no codigo disponivel neste
+    * <a href="https://github.com/feltex/aws-s3">link</a>
     */
    @Override
    public List<String> listarArquivos(String nomeBucket) throws IllegalArgumentException {
