@@ -2,10 +2,10 @@ package com.casaculturaqxd.sgec.jdbc;
 
 import java.sql.Connection;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-
 
 public class TestDatabasePostgres {
     DatabasePostgres database;
@@ -21,6 +21,10 @@ public class TestDatabasePostgres {
         database = DatabasePostgres.getInstance("URL_TEST", "USER_NAME_TEST", "PASSWORD_TEST");
     }
 
+    @AfterAll
+    public void tearDownClass() {
+        database.desconectar(database.getConnection());
+    }
 
     @Test
     public void testUniqueInstance() {
@@ -28,7 +32,6 @@ public class TestDatabasePostgres {
         Connection secondConnection = database.getConnection();
         assertEquals(firstConnection, secondConnection);
     }
-
 
     @Test
     public void testDesconectarOnValidConnection() {
