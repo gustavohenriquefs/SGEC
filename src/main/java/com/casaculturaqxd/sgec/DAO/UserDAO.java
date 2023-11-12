@@ -75,7 +75,7 @@ public class UserDAO {
     }
   }
 
-  public String encriptar(String senha) throws NoSuchAlgorithmException {
+  private String encriptar(String senha) throws NoSuchAlgorithmException {
     MessageDigest digest = MessageDigest.getInstance("SHA-256");
     byte[] asHex = digest.digest("a".getBytes(StandardCharsets.UTF_8));
     BigInteger number = new BigInteger(1, asHex);
