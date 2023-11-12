@@ -21,7 +21,6 @@ public class PreviewEventoController {
     private EventoDAO dao = new EventoDAO();
     private DatabasePostgres db = DatabasePostgres.getInstance("URL","USER_NAME","PASSWORD");
     private Evento evento;
-    private PesquisarEventoController parentController;
     @FXML
     Label dataHora, titulo;
     @FXML
@@ -41,10 +40,6 @@ public class PreviewEventoController {
     private void setarInformacoesEvento() {
         this.dataHora.setText(evento.getDataFinal().toString() + "\t" + evento.getHorario());
         this.titulo.setText(evento.getNome());
-    }
-
-    public void setParentController(PesquisarEventoController parentController) {
-        this.parentController = parentController;
     }
     
     @FXML

@@ -257,159 +257,34 @@ public class EventoDAO {
   }
 
   public ArrayList<Evento> pesquisarEvento(String nome, Date inicioDate, Date fimDate){
-    if(inicioDate == null && fimDate == null){
-      try {
-        ArrayList<Evento> eventos = new ArrayList<>();
-        
-        String sql = "select * from evento where nome_evento like ?";
-        
-        PreparedStatement stmt = connection.prepareStatement(sql);
-        stmt.setString(1, "%"+nome+"%");
-        ResultSet resultSet = stmt.executeQuery();
-        while(resultSet.next()){
-          Evento evento = new Evento();
-          evento.setIdEvento(resultSet.getInt("id_evento"));
-          evento.setNome(resultSet.getString("nome_evento"));
-          evento.setPublicoEsperado(resultSet.getInt("publico_esperado"));
-          evento.setPublicoAlcancado(resultSet.getInt("publico_alcancado"));
-          evento.setDescricao(resultSet.getString("descricao"));
-          evento.setDataInicial(resultSet.getDate("data_inicial"));
-          evento.setDataFinal(resultSet.getDate("data_final"));
-          evento.setHorario(resultSet.getTime("horario"));
-          evento.setClassificacaoEtaria(resultSet.getString("classificacao_etaria"));
-          evento.setCertificavel(resultSet.getBoolean("certificavel"));
-          evento.setCargaHoraria(resultSet.getTime("carga_horaria"));
-          evento.setAcessivelEmLibras(resultSet.getBoolean("acessivel_em_libras"));
-          evento.setParticipantesEsperado(resultSet.getInt("num_participantes_esperado"));
-          evento.setMunicipiosEsperado(resultSet.getInt("num_municipios_esperado"));
-          evento.setLocais(this.buscarLocaisPorEvento(evento.getIdEvento()));
-          evento.setListaOrganizadores(this.buscarOrganizadoresPorEvento(evento.getIdEvento()));
-          evento.setListaColaboradores(this.buscarColaboradoresPorEvento(evento.getIdEvento()));
-          evento.setListaParticipantes(this.buscarLocaisPorEvento(evento.getIdEvento()));
-          eventos.add(evento);
-        }     
-        return eventos;
-      } catch (SQLException e) {
-        return null;
-      }
-    }
-    else if(inicioDate != null && fimDate == null){
-      try {
-        ArrayList<Evento> eventos = new ArrayList<>();
-        
-        String sql = "select * from evento where nome_evento like ? and data_inicial = ?";
-        
-        PreparedStatement stmt = connection.prepareStatement(sql);
-        stmt.setString(1, "%"+nome+"%");
-        stmt.setDate(2, inicioDate);
-        ResultSet resultSet = stmt.executeQuery();
+    String sql = "select * from evento where nome_evento ilike ? ";
+    if(inicioDate != null)
+      sql += "and data_inicial >= '" + inicioDate.toString() + "' ";
 
-        while(resultSet.next()){
-          Evento evento = new Evento();
-          evento.setIdEvento(resultSet.getInt("id_evento"));
-          evento.setNome(resultSet.getString("nome_evento"));
-          evento.setPublicoEsperado(resultSet.getInt("publico_esperado"));
-          evento.setPublicoAlcancado(resultSet.getInt("publico_alcancado"));
-          evento.setDescricao(resultSet.getString("descricao"));
-          evento.setDataInicial(resultSet.getDate("data_inicial"));
-          evento.setDataFinal(resultSet.getDate("data_final"));
-          evento.setHorario(resultSet.getTime("horario"));
-          evento.setClassificacaoEtaria(resultSet.getString("classificacao_etaria"));
-          evento.setCertificavel(resultSet.getBoolean("certificavel"));
-          evento.setCargaHoraria(resultSet.getTime("carga_horaria"));
-          evento.setAcessivelEmLibras(resultSet.getBoolean("acessivel_em_libras"));
-          evento.setParticipantesEsperado(resultSet.getInt("num_participantes_esperado"));
-          evento.setMunicipiosEsperado(resultSet.getInt("num_municipios_esperado"));
-          evento.setLocais(this.buscarLocaisPorEvento(evento.getIdEvento()));
-          evento.setListaOrganizadores(this.buscarOrganizadoresPorEvento(evento.getIdEvento()));
-          evento.setListaColaboradores(this.buscarColaboradoresPorEvento(evento.getIdEvento()));
-          evento.setListaParticipantes(this.buscarLocaisPorEvento(evento.getIdEvento()));
-          eventos.add(evento);
-        }     
-        return eventos;
-      } catch (SQLException e) {
-        return null;
-      }
-    }
-    else if(inicioDate == null && fimDate != null){
-      try {
-        ArrayList<Evento> eventos = new ArrayList<>();
-        
-        String sql = "select * from evento where nome_evento like ? and data_final = ?";
-        
-        PreparedStatement stmt = connection.prepareStatement(sql);
-        stmt.setString(1, "%"+nome+"%");
-        stmt.setDate(2, fimDate);
-        ResultSet resultSet = stmt.executeQuery();
+    if(fimDate != null)
+      sql += "and data_final <= '" + fimDate.toString() + "' ";
 
-        while(resultSet.next()){
-          Evento evento = new Evento();
-          evento.setIdEvento(resultSet.getInt("id_evento"));
-          evento.setNome(resultSet.getString("nome_evento"));
-          evento.setPublicoEsperado(resultSet.getInt("publico_esperado"));
-          evento.setPublicoAlcancado(resultSet.getInt("publico_alcancado"));
-          evento.setDescricao(resultSet.getString("descricao"));
-          evento.setDataInicial(resultSet.getDate("data_inicial"));
-          evento.setDataFinal(resultSet.getDate("data_final"));
-          evento.setHorario(resultSet.getTime("horario"));
-          evento.setClassificacaoEtaria(resultSet.getString("classificacao_etaria"));
-          evento.setCertificavel(resultSet.getBoolean("certificavel"));
-          evento.setCargaHoraria(resultSet.getTime("carga_horaria"));
-          evento.setAcessivelEmLibras(resultSet.getBoolean("acessivel_em_libras"));
-          evento.setParticipantesEsperado(resultSet.getInt("num_participantes_esperado"));
-          evento.setMunicipiosEsperado(resultSet.getInt("num_municipios_esperado"));
-          evento.setLocais(this.buscarLocaisPorEvento(evento.getIdEvento()));
-          evento.setListaOrganizadores(this.buscarOrganizadoresPorEvento(evento.getIdEvento()));
-          evento.setListaColaboradores(this.buscarColaboradoresPorEvento(evento.getIdEvento()));
-          evento.setListaParticipantes(this.buscarLocaisPorEvento(evento.getIdEvento()));
-          eventos.add(evento);
-        }     
-        return eventos;
-      } catch (SQLException e) {
-        return null;
-      }
-    }
-    else if(inicioDate != null && fimDate != null){
-      try {
-        ArrayList<Evento> eventos = new ArrayList<>();
-        
-        String sql = "select * from evento where nome_evento like ? and data_inicial = ? and data_final = ?";
-        
-        PreparedStatement stmt = connection.prepareStatement(sql);
-        stmt.setString(1, "%"+nome+"%");
-        stmt.setDate(2, inicioDate);
-        stmt.setDate(3, fimDate);
-        ResultSet resultSet = stmt.executeQuery();
+    if(nome == "" && inicioDate == null && fimDate == null)
+      sql += "limit 30";
 
-        while(resultSet.next()){
-          Evento evento = new Evento();
-          evento.setIdEvento(resultSet.getInt("id_evento"));
-          evento.setNome(resultSet.getString("nome_evento"));
-          evento.setPublicoEsperado(resultSet.getInt("publico_esperado"));
-          evento.setPublicoAlcancado(resultSet.getInt("publico_alcancado"));
-          evento.setDescricao(resultSet.getString("descricao"));
-          evento.setDataInicial(resultSet.getDate("data_inicial"));
-          evento.setDataFinal(resultSet.getDate("data_final"));
-          evento.setHorario(resultSet.getTime("horario"));
-          evento.setClassificacaoEtaria(resultSet.getString("classificacao_etaria"));
-          evento.setCertificavel(resultSet.getBoolean("certificavel"));
-          evento.setCargaHoraria(resultSet.getTime("carga_horaria"));
-          evento.setAcessivelEmLibras(resultSet.getBoolean("acessivel_em_libras"));
-          evento.setParticipantesEsperado(resultSet.getInt("num_participantes_esperado"));
-          evento.setMunicipiosEsperado(resultSet.getInt("num_municipios_esperado"));
-          evento.setLocais(this.buscarLocaisPorEvento(evento.getIdEvento()));
-          evento.setListaOrganizadores(this.buscarOrganizadoresPorEvento(evento.getIdEvento()));
-          evento.setListaColaboradores(this.buscarColaboradoresPorEvento(evento.getIdEvento()));
-          evento.setListaParticipantes(this.buscarLocaisPorEvento(evento.getIdEvento()));
-          eventos.add(evento);
-        }     
-        return eventos;
-      } catch (SQLException e) {
-        return null;
-      }
-    } else{
-      return null;
-    }
+    try {
+      ArrayList<Evento> eventos = new ArrayList<>();
+      
+      PreparedStatement stmt = connection.prepareStatement(sql);
+      stmt.setString(1, "%"+nome+"%");
+      ResultSet resultSet = stmt.executeQuery();
+      while(resultSet.next()){
+        Evento evento = new Evento();
+        evento.setIdEvento(resultSet.getInt("id_evento"));
+        evento.setNome(resultSet.getString("nome_evento"));
+        evento.setDataFinal(resultSet.getDate("data_final"));
+        evento.setHorario(resultSet.getTime("horario"));
+        eventos.add(evento);
+      }     
+      return eventos;
+    } catch (SQLException e) {
+      return new ArrayList<Evento>();
+    } 
   }
 
   public Optional<Evento> buscarEvento(Evento evento) {

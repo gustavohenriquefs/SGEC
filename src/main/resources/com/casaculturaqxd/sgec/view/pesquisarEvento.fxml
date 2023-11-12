@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox id="pagePesquisarEvento" fx:id="root" stylesheets="@../css/page/pesquisarEventoStyle.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.PesquisarEventoController">
+<VBox id="pagePesquisarEvento" fx:id="root" stylesheets="@../css/page/pesquisarEventoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.PesquisarEventoController">
    <children>
       <AnchorPane id="container" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #E9E3CA;" VBox.vgrow="ALWAYS">
       <children>
@@ -67,7 +67,7 @@
          </AnchorPane>
          <AnchorPane layoutX="180.0" layoutY="204.0" prefHeight="174.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="225.6">
             <children>
-                  <ScrollPane fx:id="scrollResultados" layoutY="35.0" prefHeight="329.0" prefWidth="780.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="35.0">
+                  <ScrollPane fx:id="scrollResultados" layoutY="35.0" prefHeight="329.0" prefWidth="780.0" visible="false" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="35.0">
                      <content>
                         <FlowPane fx:id="campoResultados" alignment="CENTER" columnHalignment="CENTER" hgap="20.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="316.0" prefWidth="766.0" vgap="20.0">
                            <padding>

@@ -80,15 +80,16 @@ public class PesquisarEventoController {
             eventosFinais = filtroNomeCidade(eventosFinais, cidade);
         }
 
-        if(acessivelLibras.isSelected()){
+        if(acessivelLibras.isSelected() && !eventosFinais.isEmpty()){
             eventosFinais = filtroLibras(eventosFinais);
         }
 
         ArrayList<Integer> metasSelecionadas = veridicaMetas();
-        if(!metasSelecionadas.isEmpty()){
+        if(!metasSelecionadas.isEmpty() && !eventosFinais.isEmpty()){
             eventosFinais = filtroMetas(eventosFinais, metasSelecionadas);
         }
 
+        scrollResultados.setVisible(true);
         carregarEventos(eventosFinais);
     }
 
@@ -101,6 +102,7 @@ public class PesquisarEventoController {
             dataFinal = Date.valueOf(dataFim.getValue());
         }
         
+
         return eventoDAO.pesquisarEvento(nomeEvento, dataInicial, dataFinal);
     }
 
@@ -135,9 +137,10 @@ public class PesquisarEventoController {
             if (menuItem instanceof CheckMenuItem) {
                 CheckMenuItem checkMenuItem = (CheckMenuItem) menuItem;
                 if (checkMenuItem.isSelected()) {
-                    Meta meta = metaDAO.getMetaPorNome(checkMenuItem.getText());
-                    if(meta != null)
+                    Meta meta = metaDAO.getMetaPorNome(checkMenuItem.getText()).get();
+                    if(meta != null){
                         metasSelecionadas.add(meta.getIdMeta());
+                    }
                 } 
             }
         }
@@ -172,7 +175,6 @@ public class PesquisarEventoController {
     }
 
     public void addListenersEventos(ObservableMap<Evento, FXMLLoader> observablemap) {
-        PesquisarEventoController superController = this;
         observablemap.addListener(new MapChangeListener<Evento, FXMLLoader>() {
             @Override
             public void onChanged(
@@ -184,7 +186,6 @@ public class PesquisarEventoController {
                             PreviewEventoController controller =
                                 change.getValueAdded().getController();
                             controller.setEvento(addedKey);
-                            controller.setParentController(superController);
                             campoResultados.getChildren().add(previewEvento);
                     } catch (IOException e) {
                         e.printStackTrace();
