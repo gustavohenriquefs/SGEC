@@ -1,5 +1,8 @@
 package com.casaculturaqxd.sgec.controller;
 
+import javafx.collections.FXCollections;
+import javafx.collections.MapChangeListener;
+import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -19,7 +22,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
 import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
@@ -34,9 +36,10 @@ import com.casaculturaqxd.sgec.builder.EventoBuilder;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.Meta;
+import com.casaculturaqxd.sgec.models.Participante;
 
 
-public class CadastrarEventoController {
+public class CadastrarEventoController implements ControllerEvento {
     private final int MAX_LOCALIZACOES = 4;
     DatabasePostgres db = DatabasePostgres.getInstance("URL", "USER_NAME", "PASSWORD");
     EventoBuilder builderEvento = new EventoBuilder();
@@ -68,6 +71,7 @@ public class CadastrarEventoController {
     RadioButton certificavel, acessivelEmLibras;
 
     // Botoes
+    // Botoes
     @FXML
     Button botaoNovaLocalizacao;
 
@@ -97,8 +101,6 @@ public class CadastrarEventoController {
         if (!camposObrigatoriosPreenchidos()) {
             Alert erroLocalizacao = new Alert(AlertType.ERROR,
                     "nem todos os campos obrigatorios foram preenchidos");
-            erroLocalizacao.show();
-        }
 
         builderEvento.resetar();
         eventoDAO.setConnection(db.getConnection());
@@ -111,10 +113,37 @@ public class CadastrarEventoController {
             builderEvento.setDataInicial(Date.valueOf(dataInicial.getValue()));
         }
         if (dataFinal.getValue() != null) {
+        builderEvento.setNome(titulo.getText());
+        builderEvento.setDescricao(titulo.getText());
+        builderEvento
+                .setClassificacaoEtaria(classificacaoEtaria.getSelectionModel().getSelectedItem());
+        if (dataInicial.getValue() != null) {
+            builderEvento.setDataInicial(Date.valueOf(dataInicial.getValue()));
+        }
+        if (dataFinal.getValue() != null) {
             builderEvento.setDataFinal(Date.valueOf(dataFinal.getValue()));
         }
         if (!publicoEsperado.getText().isEmpty()) {
+        }
+        if (!publicoEsperado.getText().isEmpty()) {
             builderEvento.setPublicoEsperado(Integer.parseInt(publicoEsperado.getText()));
+        }
+        if (!publicoAlcancado.getText().isEmpty()) {
+            builderEvento.setPublicoAlcancado(Integer.parseInt(publicoAlcancado.getText()));
+        }
+        builderEvento.setCertificavel(certificavel.isSelected());
+        if (!horasCargaHoraria.getText().isEmpty()) {
+            builderEvento.setCargaHoraria(new java.sql.Time(
+                    formatterHorario.parse(horasCargaHoraria.getText() + ":00:00").getTime()));
+        }
+        builderEvento.setAcessivelEmLibras(acessivelEmLibras.isSelected());
+        if (!numMunicipiosEsperado.getText().isEmpty()) {
+            builderEvento.setMunicipiosEsperado(Integer.parseInt(numMunicipiosEsperado.getText()));
+        }
+        if (!numParticipantesEsperado.getText().isEmpty()) {
+            builderEvento
+                    .setParticipantesEsperado(Integer.parseInt(numParticipantesEsperado.getText()));
+        }
         }
         if (!publicoAlcancado.getText().isEmpty()) {
             builderEvento.setPublicoAlcancado(Integer.parseInt(publicoAlcancado.getText()));
@@ -144,9 +173,9 @@ public class CadastrarEventoController {
             eventoDAO.vincularMetas(novoEvento.getListaMetas(), novoEvento.getIdEvento());
             novoEvento = eventoDAO.buscarEvento(novoEvento).get();
             App.setRoot("view/home");
-        }
-
+        }}
     }
+
 
 
     public void cancelar() throws IOException {
@@ -283,5 +312,29 @@ public class CadastrarEventoController {
 
     public boolean emptyLocalizacoes() {
         return Localizacoes.getChildren().isEmpty();
+    }
+
+    @Override
+    public void adicionarParticipante(Participante participante) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'adicionarParticipante'");
+    }
+
+    @Override
+    public void removerParticipante(Participante participante) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'removerParticipante'");
+    }
+
+    @Override
+    public void adicionarLocalizacao(String localizacao) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'adicionarLocalizacao'");
+    }
+
+    @Override
+    public void removerLocalizacao(String localizacao) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'removerLocalizacao'");
     }
 }

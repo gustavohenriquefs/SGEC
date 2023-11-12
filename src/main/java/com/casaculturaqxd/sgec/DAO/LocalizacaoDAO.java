@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -155,4 +157,49 @@ public class LocalizacaoDAO {
 
   }
 
+  public Localizacao getLocalizacaoByNome(String nome){
+    String sql = "SELECT * FROM localizacao WHERE nome_localizacao LIKE ?";
+    
+    try {
+        PreparedStatement stmt = connection.prepareStatement(sql);
+        stmt.setString(1, "%" + nome + "%"); // Add '%' before and after the nome parameter
+        ResultSet resultado = stmt.executeQuery();
+        if (resultado.next()) {
+            Localizacao localizacao = new Localizacao();
+
+            localizacao.setIdLocalizacao(resultado.getInt("id_localizacao"));
+            localizacao.setNome(resultado.getString("nome_localizacao"));
+            localizacao.setRua(resultado.getString("rua"));
+            localizacao.setNumeroRua(resultado.getInt("numero_rua"));
+            localizacao.setBairro(resultado.getString("bairro"));
+            localizacao.setCep(resultado.getString("cep"));
+            localizacao.setCidade(resultado.getString("cidade"));
+            localizacao.setEstado(resultado.getString("estado"));
+            localizacao.setPais(resultado.getString("pais"));
+
+            return localizacao;
+        } else {
+            return null;
+        }
+    } catch (Exception e) {
+        return null;
+    }
+  }
+
+  public List<String> getListaLocais() {
+    String sql = "SELECT nome_localizacao FROM localizacao";
+    List<String> listaLocais = new ArrayList<>();
+    try {
+      PreparedStatement stmt = connection.prepareStatement(sql);
+      ResultSet resultado = stmt.executeQuery();
+      while (resultado.next()) {
+        listaLocais.add(resultado.getString("nome_localizacao"));
+      }
+      stmt.close();
+    } catch (SQLException ex) {
+      Logger.getLogger(LocalizacaoDAO.class.getName()).log(Level.SEVERE, null, ex);
+    }
+
+    return listaLocais;
+  }
 }
