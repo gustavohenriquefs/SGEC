@@ -10,7 +10,7 @@ public class Localizacao {
     private String cidade;
     private String estado;
     private String pais;
-
+    
     public Localizacao(String nome, String rua, String cidade, String estado, String pais) {
         this.nome = nome;
         this.rua = rua;
