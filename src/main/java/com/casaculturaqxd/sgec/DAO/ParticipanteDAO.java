@@ -79,12 +79,8 @@ public class ParticipanteDAO {
     } catch (SQLException e) {
       Logger erro = Logger.getLogger("erroSQl");
       erro.log(Level.SEVERE, "excecao levantada:", e);
-      conn.rollback();
 
       return false;
-
-    } finally {
-      conn.commit();
     }
 
     return true;
@@ -112,11 +108,8 @@ public class ParticipanteDAO {
     } catch (SQLException e) {
       Logger erro = Logger.getLogger("erroSQL");
       erro.log(Level.SEVERE, "excecao levantada:", e);
-      conn.rollback();
 
       return false;
-    } finally {
-      conn.commit();
     }
   }
 
@@ -134,11 +127,7 @@ public class ParticipanteDAO {
     } catch (SQLException e) {
       Logger erro = Logger.getLogger("erroSQl");
       erro.log(Level.SEVERE, "excecao levantada:", e);
-      conn.rollback();
-
       return false;
-    } finally {
-      conn.commit();
     }
   }
 
