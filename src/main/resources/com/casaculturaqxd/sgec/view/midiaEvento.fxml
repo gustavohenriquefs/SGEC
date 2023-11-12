@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox id="pageMidiaEvento" fx:id="root" alignment="CENTER" styleClass="fundo" stylesheets="@../css/page/midiaEventoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:controller="com.casaculturaqxd.sgec.controller.MidiaEventoController" id="pageMidiaEvento" fx:id="root" alignment="CENTER" styleClass="fundo" stylesheets="@../css/page/midiaEventoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" >
    <children>
       <ScrollPane styleClass="fundo">
          <content>
@@ -26,7 +26,7 @@
                                     <Label text="Pesquisar Arquivos" />
                                     <HBox prefHeight="57.0" prefWidth="760.0" spacing="20.0">
                                        <children>
-                                          <TextField fx:id="nomeArquivo" maxWidth="534.0" prefHeight="26.0" prefWidth="534.0" promptText="Nome" HBox.hgrow="ALWAYS" />
+                                          <TextField fx:id="filtroNomeArquivo" maxWidth="534.0" prefHeight="26.0" prefWidth="534.0" promptText="Nome do arquivo" HBox.hgrow="ALWAYS" />
                                           <Button fx:id="buscarArquivos" mnemonicParsing="false" styleClass="botoes" text="Buscar" />
                                        </children>
                                     </HBox>
@@ -60,7 +60,7 @@
                                                          <children>
                                                             <HBox alignment="CENTER">
                                                                <children>
-                                                                  <Button fx:id="imagens" mnemonicParsing="false" prefHeight="26.0" prefWidth="321.0" styleClass="opcoes" text="Imagens">
+                                                                  <Button fx:id="imagens" onAction="swapToImagens" mnemonicParsing="false" prefHeight="26.0" prefWidth="321.0" styleClass="opcoes" text="Imagens">
                                                                      <HBox.margin>
                                                                         <Insets top="20.0" />
                                                                      </HBox.margin>
@@ -69,20 +69,20 @@
                                                             </HBox>
                                                             <HBox alignment="CENTER">
                                                                <children>
-                                                                  <Button fx:id="videos" mnemonicParsing="false" prefHeight="26.0" prefWidth="322.0" styleClass="opcoes" text="Vídeos" />
+                                                                  <Button fx:id="videos" onAction="swapToVideos" mnemonicParsing="false" prefHeight="26.0" prefWidth="322.0" styleClass="opcoes" text="Vídeos" />
                                                                </children>
                                                             </HBox>
                                                             <HBox alignment="CENTER">
                                                                <children>
-                                                                  <Button fx:id="audio" mnemonicParsing="false" prefHeight="26.0" prefWidth="322.0" styleClass="opcoes" text="Áudio" HBox.hgrow="ALWAYS" />
+                                                                  <Button fx:id="audio" onAction="swapToAudios" mnemonicParsing="false" prefHeight="26.0" prefWidth="322.0" styleClass="opcoes" text="Áudio" HBox.hgrow="ALWAYS" />
                                                                </children>
                                                             </HBox>
                                                             <HBox alignment="CENTER">
                                                                <children>
-                                                                  <Button fx:id="documentos" mnemonicParsing="false" prefHeight="26.0" prefWidth="322.0" styleClass="opcoes" text="Documentos" HBox.hgrow="ALWAYS" />
+                                                                  <Button fx:id="documentos" onAction="swapToDocumentos" mnemonicParsing="false" prefHeight="26.0" prefWidth="322.0" styleClass="opcoes" text="Documentos" HBox.hgrow="ALWAYS" />
                                                                </children>
                                                             </HBox>
-                                                            <Button fx:id="adicionarArquivos" mnemonicParsing="false" styleClass="botoes" text="Adicionar Arquivos +" />
+                                                            <Button fx:id="adicionarArquivos" onAction="selectNovoArquivo" mnemonicParsing="false" styleClass="botoes" text="Adicionar Arquivos +" />
                                                          </children>
                                                       </VBox>
                                                    </children>
