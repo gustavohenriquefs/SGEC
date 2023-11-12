@@ -98,9 +98,9 @@ public class InstituicaoDAO {
 
   public boolean inserirInstituicao(Instituicao instituicao) throws SQLException {
     String inserirInstituicaoQuery = "INSERT INTO instituicao (nome_instituicao, id_service_file) VALUES (?, ?)";
-
+    PreparedStatement statement = conn.prepareStatement(inserirInstituicaoQuery, Statement.RETURN_GENERATED_KEYS);
     try {
-      PreparedStatement statement = conn.prepareStatement(inserirInstituicaoQuery, Statement.RETURN_GENERATED_KEYS);
+
       Integer idServiceFile = null;
       if (instituicao.getImagemCapa() != null) {
         instituicao.getImagemCapa().getServiceFileId();
@@ -118,6 +118,8 @@ public class InstituicaoDAO {
     } catch (SQLException e) {
       Logger erro = Logger.getLogger("erroSQl");
       erro.log(Level.SEVERE, "excecao levantada:", e);
+
+      statement.close();
       return false;
     }
 
