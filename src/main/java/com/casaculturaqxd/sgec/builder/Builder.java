@@ -2,7 +2,6 @@ package com.casaculturaqxd.sgec.builder;
 
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.SortedSet;
 import com.casaculturaqxd.sgec.models.Instituicao;
 
 public interface Builder {
@@ -21,10 +20,6 @@ public interface Builder {
   Builder setPublicoAlcancado(int publicoAlcancado);
 
   Builder setClassificacaoEtaria(String classificacaoEtaria);
-
-  Builder setColaboradores(SortedSet<Integer> colaboradores);
-
-  Builder setOrganizadores(SortedSet<Integer> organizadores);
 
   Builder setColaboradores(ArrayList<Instituicao> colaboradores);
 

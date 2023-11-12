@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.SortedSet;
 
 import com.casaculturaqxd.sgec.models.Evento;
+import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 import com.casaculturaqxd.sgec.models.Instituicao;
 import com.casaculturaqxd.sgec.models.Meta;
 
@@ -48,8 +49,14 @@ public class EventoBuilder implements Builder {
     evento.setParticipantesEsperado(participantesEsperado);
   }
 
+  public EventoBuilder setListaArquivos(ArrayList<ServiceFile> listaArquivos) {
+    evento.setListaArquivos(listaArquivos);
+    return this;
+  }
+
   public void setListaMetas(ArrayList<Meta> metas) {
     evento.setListaMetas(metas);
+
   }
 
   @Override
@@ -100,27 +107,15 @@ public class EventoBuilder implements Builder {
   }
 
   @Override
-  public Builder setColaboradores(SortedSet<Integer> colaboradores) {
-    evento.setListaColaboradores(colaboradores);
-    return this;
-  }
-
-  @Override
-  public Builder setOrganizadores(SortedSet<Integer> organizadores) {
-    evento.setListaOrganizadores(organizadores);
-    return this;
-  }
-
-  @Override
   public Builder setColaboradores(ArrayList<Instituicao> colaboradores) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'setColaboradores'");
+    evento.setListaOrganizadores(colaboradores);
+    return this;
   }
 
   @Override
   public Builder setOrganizadores(ArrayList<Instituicao> organizadores) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'setOrganizadores'");
+    evento.setListaColaboradores(organizadores);
+    return this;
   }
 
 }

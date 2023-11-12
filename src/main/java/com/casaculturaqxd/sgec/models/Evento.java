@@ -1,11 +1,10 @@
 package com.casaculturaqxd.sgec.models;
 
-
 import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.SortedSet;
-
+import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 
 public class Evento {
     private Integer idEvento;
@@ -24,11 +23,13 @@ public class Evento {
     private boolean acessivelEmLibras;
     private Date cadastradoEm;
 
+
+
     private SortedSet<Integer> locais;
     private SortedSet<Integer> listaParticipantes;
-    private SortedSet<Integer> listaOrganizadores;
-    private SortedSet<Integer> listaColaboradores;
-    private SortedSet<Integer> listaArquivos;
+    private ArrayList<ServiceFile> listaArquivos;
+    private ArrayList<Instituicao> listaOrganizadores;
+    private ArrayList<Instituicao> listaColaboradores;
     private ArrayList<Meta> listaMetas;
 
     public ArrayList<Meta> getListaMetas() {
@@ -176,15 +177,15 @@ public class Evento {
         return this.listaParticipantes.remove(participante);
     }
 
-    public SortedSet<Integer> getListaOrganizadores() {
+    public ArrayList<Instituicao> getListaOrganizadores() {
         return listaOrganizadores;
     }
 
-    public void setListaOrganizadores(SortedSet<Integer> listaOrganizadores) {
+    public void setListaOrganizadores(ArrayList<Instituicao> listaOrganizadores) {
         this.listaOrganizadores = listaOrganizadores;
     }
 
-    public void addOrganizador(Integer organizador) {
+    public void addOrganizador(Instituicao organizador) {
         this.listaOrganizadores.add(organizador);
     }
 
@@ -192,35 +193,35 @@ public class Evento {
         return this.listaOrganizadores.remove(organizador);
     }
 
-    public SortedSet<Integer> getListaColaboradores() {
+    public ArrayList<Instituicao> getListaColaboradores() {
         return listaColaboradores;
     }
 
-    public void setListaColaboradores(SortedSet<Integer> listaColaboradores) {
+    public void setListaColaboradores(ArrayList<Instituicao> listaColaboradores) {
         this.listaColaboradores = listaColaboradores;
     }
 
-    public void addColaborador(Integer colaborador) {
+    public void addColaborador(Instituicao colaborador) {
         this.listaColaboradores.add(colaborador);
     }
 
-    public boolean removeColaborador(Integer colaborador) {
+    public boolean removeColaborador(Instituicao colaborador) {
         return this.listaColaboradores.remove(colaborador);
     }
 
-    public SortedSet<Integer> getListaArquivos() {
+    public ArrayList<ServiceFile> getListaArquivos() {
         return listaArquivos;
     }
-
-    public void setListaArquivos(SortedSet<Integer> listaArquivos) {
+  
+    public void setListaArquivos(ArrayList<ServiceFile> listaArquivos) {
         this.listaArquivos = listaArquivos;
     }
 
-    public void addArquivo(Integer arquivo) {
+    public void addArquivo(ServiceFile arquivo) {
         this.listaArquivos.add(arquivo);
     }
 
-    public boolean removeArquivo(Integer arquivo) {
+    public boolean removeArquivo(ServiceFile arquivo) {
         return this.listaArquivos.remove(arquivo);
     }
 
@@ -256,5 +257,3 @@ public class Evento {
     }
 
 }
-
-
