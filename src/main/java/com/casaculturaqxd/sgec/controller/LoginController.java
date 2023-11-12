@@ -1,6 +1,7 @@
 package com.casaculturaqxd.sgec.controller;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.UserDAO;
@@ -42,8 +43,9 @@ public class LoginController {
      * para a proxima tela.
      * 
      * @throws IOException
+     * @throws NoSuchAlgorithmException
      */
-    public void authUsuario() throws IOException {
+    public void authUsuario() throws IOException, NoSuchAlgorithmException {
         usuario = new User(email.getText(), senha.getText());
         if (userDAO.validar(usuario)) {
             App.setUsuario(usuario);
