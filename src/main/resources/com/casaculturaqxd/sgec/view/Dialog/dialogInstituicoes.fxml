@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<DialogPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="630.0" stylesheets="@../../css/dialog/dialogInstituicoesStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<DialogPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="630.0" stylesheets="@../../css/dialog/dialogInstituicoesStyle.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
    <content>
       <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="630.0">
          <children>
@@ -47,13 +47,7 @@
             </HBox>
             <HBox alignment="CENTER" layoutX="35.0" layoutY="537.0" prefHeight="113.0" prefWidth="625.0" spacing="30.0" AnchorPane.bottomAnchor="-0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="0.0">
                <children>
-                  <Button id="cancelar" fx:id="cancelar" mnemonicParsing="false" text="Cancelar" />
-                  <Button fx:id="cadastrarInstituicao" mnemonicParsing="false" styleClass="adicionar" text="Cadastrar nova instituição" />
                   <VBox alignment="CENTER" prefHeight="118.0" prefWidth="184.0" spacing="5.0">
-                     <children>
-                        <Button fx:id="vincularColaborador" mnemonicParsing="false" styleClass="vincular" text="Vincular como colaboradora" />
-                        <Button fx:id="vincularOrganizadora" mnemonicParsing="false" styleClass="vincular" text="Vincular como organizadora" />
-                     </children>
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
