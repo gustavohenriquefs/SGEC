@@ -199,11 +199,11 @@ public class ServiceFileDAO {
   }
 
   public ArrayList<ServiceFile> pesquisarArquivoEvento(String fileKey, int idEVento) {
-    String sql = "SELECT * FROM service_file_evento WHERE filekey ILIKE ? AND id_evento = ?";
+    String sql = "SELECT * FROM nome_arquivo_evento WHERE file_key ILIKE ? AND id_evento = ?";
     ArrayList<ServiceFile> listaArquivos = new ArrayList<>();
     try {
       PreparedStatement statement = connection.prepareStatement(sql);
-      statement.setString(1, fileKey);
+      statement.setString(1, "%" + fileKey + "%");
       statement.setInt(2, idEVento);
       ResultSet resultSet = statement.executeQuery();
 
