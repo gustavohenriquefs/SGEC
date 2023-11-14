@@ -29,7 +29,7 @@
                                     <HBox prefHeight="57.0" prefWidth="760.0" spacing="20.0">
                                        <children>
                                           <TextField fx:id="filtroNomeArquivo" maxWidth="534.0" prefHeight="26.0" prefWidth="534.0" promptText="Nome do arquivo" HBox.hgrow="ALWAYS" />
-                                          <Button fx:id="buscarArquivos" mnemonicParsing="false" onAction="#pesquisarArquivo" styleClass="botoes" text="Buscar" />
+                                          <Button fx:id="buscarArquivos" defaultButton="true" mnemonicParsing="false" onAction="#pesquisarArquivo" styleClass="botoes" text="Buscar" />
                                        </children>
                                     </HBox>
                                  </children>

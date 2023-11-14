@@ -18,7 +18,6 @@ import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 import com.casaculturaqxd.sgec.controller.preview.PreviewArquivoController;
 
-import javafx.animation.RotateTransition;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
@@ -83,13 +82,24 @@ public class MidiaEventoController implements ControllerServiceFile {
 
     // filtra os resultados atuais de acordo com o nome pesquisado
     public void pesquisarArquivo() {
+        Predicate<Map.Entry<PreviewArquivoController, Parent>> lambdaPreviewCarregado = entry -> filesContainer
+                .getChildren().contains(entry.getValue());
+        Predicate<Map.Entry<PreviewArquivoController, Parent>> lambdaNomePesquisado = entry -> entry.getKey()
+                .getServiceFile().getFileKey().contains(filtroNomeArquivo.getText());
+        ArrayList<Map.Entry<PreviewArquivoController, Parent>> entries = new ArrayList<>(mapPreviews.entrySet().stream()
+                .filter(lambdaPreviewCarregado.and(lambdaNomePesquisado)).collect(Collectors.toList()));
 
+        ObservableList<Parent> filteredByName = FXCollections.observableArrayList();
+        for (Map.Entry<PreviewArquivoController, Parent> entry : entries) {
+            filteredByName.add(entry.getValue());
+        }
+
+        filesContainer.getChildren().setAll(filteredByName);
     }
 
     public void orderByNome() {
         comparatorContext.setStrategy(new ComparatorServiceFileKey());
         nomeProperty.set(nomeProperty.get() == false);
-        ;
         ArrayList<Map.Entry<PreviewArquivoController, Parent>> entries = new ArrayList<>(mapPreviews.entrySet().stream()
                 .filter(entry -> filesContainer.getChildren().contains(entry.getValue())).collect(Collectors.toList()));
         entries.sort((entry, otherEntry) -> {
@@ -192,23 +202,22 @@ public class MidiaEventoController implements ControllerServiceFile {
 
     private boolean isImage(ServiceFile serviceFile) {
         String mimeType = URLConnection.guessContentTypeFromName(serviceFile.getFileKey());
-        return mimeType.startsWith("image");
+        return mimeType != null ? mimeType.startsWith("image") : false;
     }
 
     private boolean isVideo(ServiceFile serviceFile) {
         String mimeType = URLConnection.guessContentTypeFromName(serviceFile.getFileKey());
-        return mimeType.startsWith("video");
+        return mimeType != null ? mimeType.startsWith("video") : false;
     }
 
     private boolean isAudio(ServiceFile serviceFile) {
         String mimeType = URLConnection.guessContentTypeFromName(serviceFile.getFileKey());
-        return mimeType.startsWith("audio");
+        return mimeType != null ? mimeType.startsWith("audio") : false;
     }
 
     private boolean isDocument(ServiceFile serviceFile) {
         String mimeType = URLConnection.guessContentTypeFromName(serviceFile.getFileKey());
-        URLConnection.guessContentTypeFromName(serviceFile.getFileKey());
-        return mimeType.startsWith("application/pdf");
+        return mimeType != null ? mimeType.startsWith("application/pdf") : false;
     }
 
     private boolean isOutros(ServiceFile serviceFile) {
@@ -234,6 +243,10 @@ public class MidiaEventoController implements ControllerServiceFile {
         try {
             serviceFileDAO.inserirArquivo(serviceFile);
             serviceFileDAO.vincularArquivo(serviceFile.getServiceFileId(), evento.getIdEvento());
+
+            mapArquivos.putIfAbsent(serviceFile,
+                    new FXMLLoader(App.class.getResource("view/preview/previewArquivo.fxml")));
+
         } catch (Exception e) {
             e.printStackTrace();
         }
