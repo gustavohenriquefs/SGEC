@@ -119,6 +119,14 @@ public class ServiceFile {
         this.ultimaModificacao = ultimaModificacao;
     }
 
+    public long getFileSize() {
+        return fileSize;
+    }
+
+    public void setFileSize(long fileSize) {
+        this.fileSize = fileSize;
+    }
+
     private String findFileSuffix(String fileName) {
         Pattern pattern = Pattern.compile("\\..*");
         Matcher matcher = pattern.matcher(fileName);
