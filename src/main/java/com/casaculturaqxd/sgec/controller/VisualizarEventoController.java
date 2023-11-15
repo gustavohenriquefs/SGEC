@@ -51,6 +51,7 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -61,13 +62,13 @@ import javafx.util.Duration;
 
 public class VisualizarEventoController implements ControllerServiceFile {
     private Evento evento;
-    private DatabasePostgres db = DatabasePostgres.getInstance("URL", "USER_NAME", "PASSWORD");
+    private DatabasePostgres db = DatabasePostgres.getInstance("URL_TEST", "USER_NAME_TEST", "PASSWORD_TEST");
     private EventoDAO eventoDAO = new EventoDAO();
     private LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO();
     @FXML
     VBox root;
     @FXML
-    StackPane secaoArquivos;
+    FlowPane secaoArquivos;
     @FXML
     VBox frameLocais;
     @FXML
