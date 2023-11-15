@@ -73,7 +73,10 @@
                                                             </Button>
                                                          </children>
                                                       </HBox>
-                                                      <FlowPane fx:id="filesContainer" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1160.0" rowValignment="TOP" />
+                                                      <FlowPane fx:id="filesContainer" hgap="20.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1160.0" rowValignment="TOP" vgap="10.0">
+                                                         <padding>
+                                                            <Insets left="40.0" />
+                                                         </padding></FlowPane>
                                                    </children>
                                                 </VBox>
                                              </content>
