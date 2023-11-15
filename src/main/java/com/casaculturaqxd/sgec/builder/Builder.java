@@ -1,17 +1,27 @@
 package com.casaculturaqxd.sgec.builder;
 
 import java.sql.Date;
-import java.util.SortedSet;
+import java.util.ArrayList;
+import com.casaculturaqxd.sgec.models.Instituicao;
 
 public interface Builder {
   void resetar();
-  void setNome(String nome);
-  void setDescricao(String descricao);
-  void setDataInicial(Date dataInicial);
-  void setDataFinal(Date dataFinal);
-  void setPublicoEsperado(int publicoEsperado);
-  void setPublicoAlcancado(int publicoAlcancado);
-  void setClassificacaoEtaria(String classificacaoEtaria);
-  void setColaboradores(SortedSet<Integer> colaboradores);
-  void setOrganizadores(SortedSet<Integer> organizadores);
+
+  Builder setNome(String nome);
+
+  Builder setDescricao(String descricao);
+
+  Builder setDataInicial(Date dataInicial);
+
+  Builder setDataFinal(Date dataFinal);
+
+  Builder setPublicoEsperado(int publicoEsperado);
+
+  Builder setPublicoAlcancado(int publicoAlcancado);
+
+  Builder setClassificacaoEtaria(String classificacaoEtaria);
+
+  Builder setColaboradores(ArrayList<Instituicao> colaboradores);
+
+  Builder setOrganizadores(ArrayList<Instituicao> organizadores);
 }

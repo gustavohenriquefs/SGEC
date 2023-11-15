@@ -60,14 +60,12 @@ public class ParticipanteDAO {
   }
 
   public boolean inserirParticipante(Participante participante) throws SQLException {
-    String inserirParticipanteQuery =
-        "INSERT INTO participante (nome_participante, area_atuacao, bio, link_perfil, id_service_file) VALUES (?, ?, ?, ?, ?)";
+    String inserirParticipanteQuery = "INSERT INTO participante (nome_participante, area_atuacao, bio, link_perfil, id_service_file) VALUES (?, ?, ?, ?, ?)";
     Integer serviceFileId = null;
     if (participante.getImagemCapa() != null)
       serviceFileId = participante.getImagemCapa().getServiceFileId();
     try {
-      PreparedStatement statement =
-          conn.prepareStatement(inserirParticipanteQuery, Statement.RETURN_GENERATED_KEYS);
+      PreparedStatement statement = conn.prepareStatement(inserirParticipanteQuery, Statement.RETURN_GENERATED_KEYS);
 
       statement.setString(1, participante.getNome());
       statement.setString(2, participante.getAreaDeAtuacao());
@@ -83,6 +81,8 @@ public class ParticipanteDAO {
       statement.close();
 
     } catch (SQLException e) {
+      Logger erro = Logger.getLogger("erroSQl");
+      erro.log(Level.SEVERE, "excecao levantada:", e);
       conn.rollback();
 
       return false;
@@ -95,8 +95,7 @@ public class ParticipanteDAO {
   }
 
   public boolean updateParticipante(Participante participante) throws SQLException {
-    String atualizarParticipanteQuery =
-        "UPDATE participante SET nome_participante=?, area_atuacao=?, bio=?, link_perfil=?, id_service_file =? WHERE id_participante=?";
+    String atualizarParticipanteQuery = "UPDATE participante SET nome_participante=?, area_atuacao=?, bio=?, link_perfil=?, id_service_file =? WHERE id_participante=?";
     Integer serviceFileId = null;
     if (participante.getImagemCapa() != null)
       serviceFileId = participante.getImagemCapa().getServiceFileId();
@@ -123,7 +122,6 @@ public class ParticipanteDAO {
     } finally {
       conn.commit();
     }
-
   }
 
   public boolean deletarParticipante(Participante participante) throws SQLException {
@@ -138,6 +136,8 @@ public class ParticipanteDAO {
       statement.close();
       return numRemocoes > 0;
     } catch (SQLException e) {
+      Logger erro = Logger.getLogger("erroSQl");
+      erro.log(Level.SEVERE, "excecao levantada:", e);
       conn.rollback();
 
       return false;
@@ -161,8 +161,7 @@ public class ParticipanteDAO {
   }
 
   boolean desvincularEvento(Integer idParticipante, Integer idEvento) {
-    String vincLocaisSql =
-        "DELETE FROM participante_evento WHERE id_participante=? AND id_evento=?";
+    String vincLocaisSql = "DELETE FROM participante_evento WHERE id_participante=? AND id_evento=?";
 
     try {
       PreparedStatement stmt = conn.prepareStatement(vincLocaisSql);
@@ -178,6 +177,5 @@ public class ParticipanteDAO {
       erro.log(Level.SEVERE, "excecao levantada:", e);
       return false;
     }
-
   }
 }

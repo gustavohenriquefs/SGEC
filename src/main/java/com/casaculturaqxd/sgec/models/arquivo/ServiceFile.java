@@ -2,21 +2,38 @@ package com.casaculturaqxd.sgec.models.arquivo;
 
 import java.io.File;
 import java.sql.Date;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.casaculturaqxd.sgec.enums.ServiceType;
 import com.casaculturaqxd.sgec.service.Service;
 import com.casaculturaqxd.sgec.service.ServiceFactory;
+import io.github.cdimascio.dotenv.Dotenv;
 
 public class ServiceFile {
     private Integer serviceFileId;
     private String fileKey;
     private String suffix;
+    private long fileSize;
     private Service service;
     private String bucket;
     private Date ultimaModificacao;
     private File preview;
     private File content;
+
+    public ServiceFile(int serviceFileId) {
+        this.serviceFileId = serviceFileId;
+    }
+
+    public ServiceFile(File content) {
+        this.content = content;
+        this.fileKey = content.getName();
+        this.fileSize = content.length();
+        this.suffix = findFileSuffix(content.getName());
+        Dotenv dotenv = Dotenv.load();
+        this.bucket = dotenv.get("BUCKET");
+        this.service = ServiceFactory.getService(ServiceType.S3, "ACCESS_KEY", "SECRET_KEY");
+    }
 
     public ServiceFile(File content, String bucket) {
         this.content = content;
@@ -30,7 +47,6 @@ public class ServiceFile {
         this.bucket = bucket;
         this.service = ServiceFactory.getService(ServiceType.S3, "ACCESS_KEY", "SECRET_KEY");
     }
-
 
     public ServiceFile(String fileKey, String bucket, Date ultimaModificacao, File content) {
         this.fileKey = fileKey;
@@ -56,7 +72,6 @@ public class ServiceFile {
         this.fileKey = fileKey;
     }
 
-
     public String getSuffix() {
         return suffix;
     }
@@ -70,8 +85,8 @@ public class ServiceFile {
     }
 
     public void setService(String serviceType) {
-        this.service = ServiceFactory.getService(ServiceType.valueOf(serviceType.toUpperCase()),
-                "ACCESS_KEY", "SECRET_KEY");
+        this.service = ServiceFactory.getService(ServiceType.valueOf(serviceType.toUpperCase()), "ACCESS_KEY",
+                "SECRET_KEY");
     }
 
     public String getBucket() {
@@ -83,11 +98,22 @@ public class ServiceFile {
     }
 
     public File getContent() {
+        if (this.content == null) {
+            this.content = service.getArquivo(bucket, fileKey);
+        }
         return content;
     }
 
     public void setContent(File content) {
         this.content = content;
+    }
+
+    public File getPreview() {
+        return preview;
+    }
+
+    public void setPreview(File preview) {
+        this.preview = preview;
     }
 
     public Date getUltimaModificacao() {
@@ -96,6 +122,16 @@ public class ServiceFile {
 
     public void setUltimaModificacao(Date ultimaModificacao) {
         this.ultimaModificacao = ultimaModificacao;
+    }
+
+    private String findFileSuffix(String fileName) {
+        Pattern pattern = Pattern.compile("\\..*");
+        Matcher matcher = pattern.matcher(fileName);
+        if (matcher.find()) {
+            String suffix = matcher.group(0);
+            return suffix;
+        }
+        return null;
     }
 
     @Override

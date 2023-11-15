@@ -1,14 +1,14 @@
 package com.casaculturaqxd.sgec.controller;
 
-
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.Time;
 
-
+import java.util.ArrayList;
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.EventoDAO;
 import com.casaculturaqxd.sgec.DAO.LocalizacaoDAO;
+import com.casaculturaqxd.sgec.controller.preview.PreviewArquivoController;
 import com.casaculturaqxd.sgec.controller.preview.PreviewLocalizacaoController;
 import com.casaculturaqxd.sgec.controller.preview.PreviewParticipanteController;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
@@ -16,6 +16,13 @@ import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.Indicador;
 import com.casaculturaqxd.sgec.models.Localizacao;
 import com.casaculturaqxd.sgec.models.Participante;
+import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
+import com.casaculturaqxd.sgec.service.Service;
+import com.casaculturaqxd.sgec.models.Meta;
+
+import javafx.animation.KeyFrame;
+import javafx.animation.PauseTransition;
+import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
@@ -23,8 +30,10 @@ import javafx.collections.ObservableMap;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -32,22 +41,27 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Control;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.converter.IntegerStringConverter;
+import javafx.scene.image.ImageView;
+import javafx.util.Duration;
 
-public class VisualizarEventoController implements ControllerEvento {
+public class VisualizarEventoController implements ControllerServiceFile, ControllerEvento {
     private Evento evento;
     private Stage stage;
     private DatabasePostgres db = DatabasePostgres.getInstance("URL", "USER_NAME", "PASSWORD");
@@ -56,11 +70,11 @@ public class VisualizarEventoController implements ControllerEvento {
     @FXML
     VBox root;
     @FXML
-    AnchorPane secaoArquivos;
-    @FXML
-    StackPane secaoParticipantes;
+    StackPane secaoParticipantes, secaoArquivos;
     @FXML
     VBox frameLocais;
+    @FXML
+    HBox secaoMetas;
     @FXML
     TextArea descricao;
     @FXML
@@ -71,15 +85,15 @@ public class VisualizarEventoController implements ControllerEvento {
     TextField cargaHoraria, horario;
     @FXML
     CheckBox certificavel, libras;
+    ArrayList<CheckBox> checkBoxesMetas = new ArrayList<>();
     @FXML
     ChoiceBox<String> classificacaoEtaria;
     @FXML
-    private String[] classificacoes =
-            {"Livre", "10 anos", "12 anos", "14 anos", "16 anos", "18 anos"};
+    private String[] classificacoes = { "Livre", "10 anos", "12 anos", "14 anos", "16 anos", "18 anos" };
     // listas
-    ObservableMap<Participante, FXMLLoader> participantes =
-            FXCollections.<Participante, FXMLLoader> observableHashMap();
+    ObservableMap<Participante, FXMLLoader> participantes = FXCollections.<Participante, FXMLLoader>observableHashMap();
 
+    private ObservableMap<ServiceFile, FXMLLoader> mapServiceFiles = FXCollections.observableHashMap();
     // Tabela com todos os campos de input
     ObservableList<Control> camposInput = FXCollections.observableArrayList();
     // Indicadores
@@ -90,37 +104,39 @@ public class VisualizarEventoController implements ControllerEvento {
     ObservableList<TableView<Indicador>> tabelas = FXCollections.observableArrayList();
 
     @FXML
-    Button novoParticipante, novoOrganizador, novoColaborador, salvarAlteracoes, adicionarArquivo,
-            visualizarTodos;
+    Button salvarAlteracoes;
+    @FXML
+    private ImageView copiaCola;
+    @FXML
+    private Tooltip tooltipCliboard;
 
     public void initialize() throws IOException {
+        tooltipCliboard = new Tooltip("Copiado para a área de transferência");
+        tooltipCliboard.setHideDelay(Duration.seconds(1));
+        Tooltip.install(copiaCola, tooltipCliboard);
+        copiaCola.setOnMouseClicked(event -> copyToClipboard(event));
         addControls(root, camposInput);
         addPropriedadeAlterar(camposInput);
+        addListenersServiceFile(mapServiceFiles);
         addListenersParticipante(participantes);
         loadMenu();
 
         eventoDAO.setConnection(db.getConnection());
         localizacaoDAO.setConnection(db.getConnection());
-
-        /*
-         * TODO: adicionar funcionalidade de arquivos e reativar o botao
-         */
-        temporaryHideUnimplementedFields();
     }
 
     private void loadMenu() throws IOException {
-        FXMLLoader carregarMenu =
-                new FXMLLoader(App.class.getResource("view/componentes/menu.fxml"));
+        FXMLLoader carregarMenu = new FXMLLoader(App.class.getResource("view/componentes/menu.fxml"));
         root.getChildren().add(0, carregarMenu.load());
     }
 
     private void loadContent() throws IOException {
-
+        loadMetas();
         classificacaoEtaria.getItems().addAll(classificacoes);
         titulo.setText(evento.getNome());
         descricao.setText(evento.getDescricao());
         classificacaoEtaria.getSelectionModel().select(evento.getClassificacaoEtaria());
-
+        loadArquivos();
         if (evento.getHorario() != null) {
             horario.setText(evento.getHorario().toString());
         }
@@ -140,8 +156,7 @@ public class VisualizarEventoController implements ControllerEvento {
         certificavel.setSelected(evento.isCertificavel());
         libras.setSelected(evento.isAcessivelEmLibras());
 
-        FXMLLoader loaderLocal =
-                new FXMLLoader(App.class.getResource("view/preview/previewLocalizacao.fxml"));
+        FXMLLoader loaderLocal = new FXMLLoader(App.class.getResource("view/preview/previewLocalizacao.fxml"));
 
         if (evento.getLocais() != null) {
             for (Integer idLocal : evento.getLocais()) {
@@ -173,6 +188,18 @@ public class VisualizarEventoController implements ControllerEvento {
         addIndicador(tabelaIndicadoresMeta2, numeroMunicipios);
     }
 
+    private void loadMetas() {
+        for (Node node : secaoMetas.getChildren()) {
+            if (node instanceof CheckBox) {
+                checkBoxesMetas.add((CheckBox) node);
+            }
+        }
+        for (Meta meta : evento.getListaMetas()) {
+            // ids sao 1-based
+            checkBoxesMetas.get(meta.getIdMeta() - 1).setSelected(true);
+        }
+    }
+
     public void setEvento(Evento evento) throws IOException {
         this.evento = evento;
         loadContent();
@@ -197,7 +224,7 @@ public class VisualizarEventoController implements ControllerEvento {
             evento.setPublicoAlcancado(numeroPublico.getValorAlcancado());
             evento.setPublicoEsperado(numeroPublico.getValorEsperado());
             evento.setParticipantesEsperado(numeroMestres.getValorEsperado());
-            evento.setMunicipiosEsperado(numeroMunicipios.getValorEsperado());;
+            evento.setMunicipiosEsperado(numeroMunicipios.getValorEsperado());
             eventoDAO.alterarEvento(evento);
 
             Alert sucessoAtualizacao = new Alert(AlertType.INFORMATION);
@@ -268,7 +295,8 @@ public class VisualizarEventoController implements ControllerEvento {
 
     /**
      * <p>
-     * Retorna todos os elementos que suportam interacao do usuario presentes na pagina, exceto
+     * Retorna todos os elementos que suportam interacao do usuario presentes na
+     * pagina, exceto
      * botoes, labels e tableviews
      * <p>
      */
@@ -282,14 +310,80 @@ public class VisualizarEventoController implements ControllerEvento {
         }
     }
 
-    /**
-     * oculta e desabilita todas as funcionalidades nao implementadas TODO: remover o metodo apos
-     * arquivos serem implementados
-     */
-    private void temporaryHideUnimplementedFields() {
-        for (Node node : secaoArquivos.getChildren()) {
-            node.setVisible(false);
+    public void loadArquivos() {
+        if (evento.getListaArquivos() != null) {
+            for (ServiceFile arquivo : evento.getListaArquivos()) {
+                adicionarArquivo(arquivo);
+            }
         }
+    }
+
+    @Override
+    public void adicionarArquivo(ServiceFile serviceFile) {
+        mapServiceFiles.put(serviceFile,
+                new FXMLLoader(App.class.getResource("view/preview/previewArquivo.fxml")));
+    }
+
+    @Override
+    public void removerArquivo(ServiceFile serviceFile) {
+        Service service = serviceFile.getService();
+        try {
+            service.deletarArquivo(serviceFile.getBucket(), serviceFile.getFileKey());
+
+        } catch (IllegalArgumentException e) {
+            // caso arquivo ja nao esteja registrado
+            mapServiceFiles.remove(serviceFile);
+        } catch (Exception e) {
+            // em qualquer outro erro
+            e.printStackTrace();
+        }
+    }
+
+    public void addListenersServiceFile(ObservableMap<ServiceFile, FXMLLoader> observablemap) {
+        ControllerServiceFile superController = this;
+        observablemap.addListener(new MapChangeListener<ServiceFile, FXMLLoader>() {
+            @Override
+            public void onChanged(
+                    MapChangeListener.Change<? extends ServiceFile, ? extends FXMLLoader> change) {
+
+                if (change.wasAdded()) {
+                    ServiceFile addedKey = change.getKey();
+                    // carregar o fxml de preview e setar o ServiceFile deste para o
+                    // arquivo adicionado
+                    try {
+                        Parent previewParticipante = change.getValueAdded().load();
+                        PreviewArquivoController controller = change.getValueAdded().getController();
+                        controller.setServiceFile(addedKey);
+                        controller.setParentController(superController);
+
+                        secaoArquivos.getChildren().add(previewParticipante);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (change.wasRemoved()) {
+                    PreviewArquivoController removedController = change.getValueRemoved().getController();
+                    // Remover o Pane de preview ao deletar um Arquivo da lista
+                    secaoArquivos.getChildren().remove(removedController.getRoot());
+                }
+            }
+        });
+    }
+
+    private void getDescricao() {
+        Clipboard clipboard = Clipboard.getSystemClipboard();
+        ClipboardContent content = new ClipboardContent();
+        content.putString(descricao.getText());
+        clipboard.setContent(content);
+    }
+
+    private void copyToClipboard(MouseEvent event) {
+        getDescricao();
+        // Exibe a mensagem e determina sua duração
+        tooltipCliboard.show(copiaCola, event.getScreenX(), event.getScreenY());
+        PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
+        pause.setOnFinished(e -> tooltipCliboard.hide());
+        pause.play();
     }
 
     @Override
@@ -322,8 +416,7 @@ public class VisualizarEventoController implements ControllerEvento {
                     // participante adicionado
                     try {
                         Parent previewParticipante = change.getValueAdded().load();
-                        PreviewParticipanteController controller =
-                                change.getValueAdded().getController();
+                        PreviewParticipanteController controller = change.getValueAdded().getController();
                         controller.setParticipante(addedKey);
                         controller.setParentController(superController);
 
@@ -333,8 +426,7 @@ public class VisualizarEventoController implements ControllerEvento {
                     }
                 }
                 if (change.wasRemoved()) {
-                    PreviewParticipanteController removedController =
-                            change.getValueRemoved().getController();
+                    PreviewParticipanteController removedController = change.getValueRemoved().getController();
                     // Remover o Pane de preview ao deletar um Participante da lista
                     secaoParticipantes.getChildren().remove(removedController.getContainer());
 
