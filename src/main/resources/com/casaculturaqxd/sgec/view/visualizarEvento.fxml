@@ -13,6 +13,7 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
@@ -23,7 +24,7 @@
    <children>
       <ScrollPane prefHeight="2079.0" prefWidth="1440.0">
          <content>
-            <AnchorPane id="container" prefHeight="2066.0" prefWidth="1560.0" style="-fx-background-color: #E9E3CA;">
+            <AnchorPane id="container" style="-fx-background-color: #E9E3CA;">
                <children>
                   <HBox alignment="CENTER" layoutX="153.0" layoutY="55.0" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="203.0" prefWidth="1155.0" style="-fx-background-color: FFFEF7;">
                      <children>
@@ -135,7 +136,7 @@
                         <VBox alignment="CENTER" layoutY="54.0">
                            <children>
                               <Pane prefHeight="6.0" prefWidth="1425.0" style="-fx-background-color: #A22D2E;" />
-                              <StackPane id="arquivos" fx:id="secaoArquivos" prefHeight="131.0" prefWidth="1425.0" />
+                              <FlowPane fx:id="secaoArquivos" prefHeight="200.0" />
                               <Button fx:id="adicionarArquivo" alignment="CENTER" mnemonicParsing="false" style="-fx-background-color: #2A3F25;" text="Adicionar novo arquivo +" textFill="WHITE" />
                            </children>
                         </VBox>

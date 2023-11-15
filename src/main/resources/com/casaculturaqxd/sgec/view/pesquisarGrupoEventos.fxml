@@ -16,20 +16,20 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox id="pagePesquisarGrupoEventos" fx:id="root" maxHeight="1024.0" maxWidth="1440.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1440.0" stylesheets="@../css/page/pesquisarGrupoEventosStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.pesquisarGrupoEventosController">
+<VBox id="pagePesquisarGrupoEventos" fx:id="root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@../css/page/pesquisarGrupoEventosStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.pesquisarGrupoEventosController">
    <children>
-      <VBox maxHeight="1024.0" maxWidth="1440.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="231.0" prefWidth="1440.0" spacing="5.0" VBox.vgrow="ALWAYS">
+      <VBox minHeight="-Infinity" minWidth="-Infinity" spacing="5.0" VBox.vgrow="ALWAYS">
          <children>
-            <AnchorPane prefHeight="200.0" prefWidth="200.0">
+            <AnchorPane>
                <children>
-                  <VBox layoutX="200.0" layoutY="-42.0" prefHeight="58.0" prefWidth="600.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
+                  <VBox layoutX="200.0" layoutY="-42.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="50.0">
                      <children>
                         <Label text="Pesquisar Grupos de Eventos">
                            <font>
                               <Font name="System Bold" size="20.0" />
                            </font>
                         </Label>
-                        <HBox prefHeight="100.0" prefWidth="200.0">
+                        <HBox>
                            <children>
                               <TextField fx:id="nomeGrupoEventos" maxWidth="1000.0" HBox.hgrow="ALWAYS" />
                               <Button id="botao" fx:id="pesquisarGrupo" maxWidth="200.0" mnemonicParsing="false" text="Pesquisar" HBox.hgrow="ALWAYS" />
@@ -37,13 +37,13 @@
                         </HBox>
                      </children>
                   </VBox>
-                  <VBox layoutX="158.0" layoutY="108.0" prefHeight="58.0" prefWidth="308.0" spacing="15.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                  <VBox layoutX="158.0" layoutY="108.0" spacing="15.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                      <children>
                         <Label text="Filtros">
                            <font>
                               <Font name="System Bold" size="20.0" />
                            </font></Label>
-                        <HBox fx:id="localidade" alignment="BOTTOM_CENTER" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="40.0" prefWidth="1440.0" spacing="100.0">
+                        <HBox fx:id="localidade" alignment="BOTTOM_CENTER" spacing="100.0">
                            <children>
                               <MenuButton fx:id="metas" mnemonicParsing="false" text="Metas">
                                 <items>
@@ -95,7 +95,7 @@
                         <Insets top="10.0" />
                      </padding>
                   </VBox>
-                  <VBox alignment="TOP_CENTER" layoutX="469.0" layoutY="184.0" prefHeight="73.0" prefWidth="1440.0" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                  <VBox alignment="TOP_CENTER" layoutX="469.0" layoutY="184.0" prefHeight="73.0" prefWidth="1440.0" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="220.0">
                      <children>
                         <Label text="Exibir resultados para">
                            <font>
@@ -145,7 +145,7 @@
             </AnchorPane>
          </children>
       </VBox>
-      <AnchorPane prefHeight="267.0" prefWidth="1440.0" VBox.vgrow="ALWAYS">
+      <AnchorPane prefHeight="267.0" VBox.vgrow="ALWAYS">
          <children>
             <ScrollPane fx:id="campoResultados" hbarPolicy="ALWAYS" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <content>

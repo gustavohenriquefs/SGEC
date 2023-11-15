@@ -51,7 +51,10 @@
                   <Insets left="20.0" />
                </padding>
             </Label>
-            <FlowPane fx:id="secaoUltimosEventos" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="265.0" prefWidth="740.0" />
+            <FlowPane fx:id="secaoUltimosEventos" hgap="20.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="265.0" prefWidth="740.0" vgap="10.0">
+               <VBox.margin>
+                  <Insets top="15.0" />
+               </VBox.margin></FlowPane>
          </children>
          <VBox.margin>
             <Insets left="12.0" right="12.0" />
