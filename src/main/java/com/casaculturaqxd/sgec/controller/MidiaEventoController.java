@@ -13,6 +13,7 @@ import com.casaculturaqxd.sgec.comparator.ComparatorServiceFileContext;
 import com.casaculturaqxd.sgec.comparator.ComparatorServiceFileDate;
 import com.casaculturaqxd.sgec.comparator.ComparatorServiceFileKey;
 import com.casaculturaqxd.sgec.comparator.ComparatorServiceFileSize;
+import com.casaculturaqxd.sgec.comparator.ComparatorServiceFileStrategy;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
@@ -23,6 +24,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
+import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -55,9 +57,10 @@ public class MidiaEventoController implements ControllerServiceFile {
     // map contendo todos os service files de um evento como chave e os FXMLLoaders
     // de preview arquivo como valores
     private ObservableMap<ServiceFile, FXMLLoader> mapArquivos = FXCollections.observableHashMap();
-    // map contendo o conteudo carregado que e acessado a partir do seu controller
-    private ObservableMap<PreviewArquivoController, Parent> mapPreviews = FXCollections.observableHashMap();
+    // lista contendo os controllers de todos os arquivos
+    private ObservableList<PreviewArquivoController> controllersPreviews = FXCollections.observableArrayList();
     private ComparatorServiceFileContext comparatorContext;
+    // propriedades que definem se a ordenacao eh reversa ou nao
     private BooleanProperty nomeProperty, dataCriacaoProperty, tamanhoProperty;
 
     public void initialize() throws IOException {
@@ -82,76 +85,30 @@ public class MidiaEventoController implements ControllerServiceFile {
 
     // filtra os resultados atuais de acordo com o nome pesquisado
     public void pesquisarArquivo() {
-        Predicate<Map.Entry<PreviewArquivoController, Parent>> lambdaPreviewCarregado = entry -> filesContainer
-                .getChildren().contains(entry.getValue());
-        Predicate<Map.Entry<PreviewArquivoController, Parent>> lambdaNomePesquisado = entry -> entry.getKey()
-                .getServiceFile().getFileKey().contains(filtroNomeArquivo.getText());
-        ArrayList<Map.Entry<PreviewArquivoController, Parent>> entries = new ArrayList<>(mapPreviews.entrySet().stream()
-                .filter(lambdaPreviewCarregado.and(lambdaNomePesquisado)).collect(Collectors.toList()));
+        Predicate<PreviewArquivoController> lambdaPreviewCarregado = entry -> filesContainer
+                .getChildren().contains(entry.getRoot());
+        Predicate<PreviewArquivoController> lambdaNomePesquisado = entry -> entry.getServiceFile().getFileKey()
+                .contains(filtroNomeArquivo.getText());
 
         ObservableList<Parent> filteredByName = FXCollections.observableArrayList();
-        for (Map.Entry<PreviewArquivoController, Parent> entry : entries) {
-            filteredByName.add(entry.getValue());
+        for (PreviewArquivoController controller : controllersPreviews
+                .filtered(lambdaPreviewCarregado.and(lambdaNomePesquisado))) {
+            filteredByName.add(controller.getRoot());
         }
 
         filesContainer.getChildren().setAll(filteredByName);
     }
 
     public void orderByNome() {
-        comparatorContext.setStrategy(new ComparatorServiceFileKey());
-        nomeProperty.set(nomeProperty.get() == false);
-        ArrayList<Map.Entry<PreviewArquivoController, Parent>> entries = new ArrayList<>(mapPreviews.entrySet().stream()
-                .filter(entry -> filesContainer.getChildren().contains(entry.getValue())).collect(Collectors.toList()));
-        entries.sort((entry, otherEntry) -> {
-            PreviewArquivoController controller = entry.getKey(), otherController = otherEntry.getKey();
-            return comparatorContext.compare(controller.getServiceFile(), otherController.getServiceFile(),
-                    nomeProperty.get());
-        });
-
-        ObservableList<Parent> sortedChildren = FXCollections.observableArrayList();
-        for (Map.Entry<PreviewArquivoController, Parent> entry : entries) {
-            sortedChildren.add(entry.getValue());
-        }
-
-        filesContainer.getChildren().setAll(sortedChildren);
+        applyOrdering(new ComparatorServiceFileKey(), nomeProperty);
     }
 
     public void orderByDataCriacao() {
-        comparatorContext.setStrategy(new ComparatorServiceFileDate());
-        dataCriacaoProperty.set(dataCriacaoProperty.get() == false);
-        ArrayList<Map.Entry<PreviewArquivoController, Parent>> entries = new ArrayList<>(mapPreviews.entrySet().stream()
-                .filter(entry -> filesContainer.getChildren().contains(entry.getValue())).collect(Collectors.toList()));
-        entries.sort((entry, otherEntry) -> {
-            PreviewArquivoController controller = entry.getKey(), otherController = otherEntry.getKey();
-            return comparatorContext.compare(controller.getServiceFile(), otherController.getServiceFile(),
-                    dataCriacaoProperty.get());
-        });
-
-        ObservableList<Parent> sortedChildren = FXCollections.observableArrayList();
-        for (Map.Entry<PreviewArquivoController, Parent> entry : entries) {
-            sortedChildren.add(entry.getValue());
-        }
-
-        filesContainer.getChildren().setAll(sortedChildren);
+        applyOrdering(new ComparatorServiceFileDate(), dataCriacaoProperty);
     }
 
     public void orderByTamanho() {
-        comparatorContext.setStrategy(new ComparatorServiceFileSize());
-        tamanhoProperty.set(tamanhoProperty.get() == false);
-        ArrayList<Map.Entry<PreviewArquivoController, Parent>> entries = new ArrayList<>(mapPreviews.entrySet().stream()
-                .filter(entry -> filesContainer.getChildren().contains(entry.getValue())).collect(Collectors.toList()));
-        entries.sort((entry, otherEntry) -> {
-            PreviewArquivoController controller = entry.getKey(), otherController = otherEntry.getKey();
-            return comparatorContext.compare(controller.getServiceFile(), otherController.getServiceFile(),
-                    tamanhoProperty.get());
-        });
-
-        ObservableList<Parent> sortedChildren = FXCollections.observableArrayList();
-        for (Map.Entry<PreviewArquivoController, Parent> entry : entries) {
-            sortedChildren.add(entry.getValue());
-        }
-
-        filesContainer.getChildren().setAll(sortedChildren);
+        applyOrdering(new ComparatorServiceFileSize(), tamanhoProperty);
     }
 
     public void swapToImagens() {
@@ -175,7 +132,7 @@ public class MidiaEventoController implements ControllerServiceFile {
     }
 
     // mostra somente os arquivos do tipo especificado no predicado,
-    // se um fxml ja foi carregado
+    // chama o metodo load caso o controller do fxmlloader seja nulo
     private void filterArquivos(Predicate<ServiceFile> predicate) {
         filesContainer.getChildren().clear();
         for (ServiceFile serviceFile : mapArquivos.keySet()) {
@@ -184,20 +141,38 @@ public class MidiaEventoController implements ControllerServiceFile {
                 PreviewArquivoController controller = loader.getController();
                 try {
                     if (controller == null) {
-                        Parent preview = loader.load();
+                        loader.load();
                         controller = loader.getController();
-                        mapPreviews.put(loader.getController(), preview);
-                        controller = mapArquivos.get(serviceFile).getController();
+                        controllersPreviews.add(controller);
                     }
                     controller.setServiceFile(serviceFile);
                     controller.setParentController(this);
-                    filesContainer.getChildren().add(mapPreviews.get(controller));
+                    filesContainer.getChildren().add(controller.getRoot());
 
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         }
+    }
+
+    // ordena os previews presentes na tela seguindo alguma das strategies
+    // existentes, a propriedade vinculada define se a ordem eh reversa
+    private void applyOrdering(ComparatorServiceFileStrategy comparator, BooleanProperty booleanProperty) {
+        comparatorContext.setStrategy(comparator);
+        booleanProperty.set(booleanProperty.get() == false);
+        // filtrando entre todos os controllers apenas os que tem sua root na tela,
+        // depois ordena usando a estrategia passada
+        SortedList<PreviewArquivoController> orderedControllers = controllersPreviews
+                .filtered(controller -> filesContainer.getChildren().contains(controller.getRoot()))
+                .sorted((oneController, otherController) -> {
+                    return comparatorContext.compare(oneController.getServiceFile(), otherController.getServiceFile(),
+                            booleanProperty.get());
+                });
+
+        ObservableList<Parent> orderedPreviews = orderedControllers.stream().map(PreviewArquivoController::getRoot)
+                .collect(Collectors.toCollection(FXCollections::observableArrayList));
+        filesContainer.getChildren().setAll(orderedPreviews);
     }
 
     private boolean isImage(ServiceFile serviceFile) {
@@ -225,6 +200,7 @@ public class MidiaEventoController implements ControllerServiceFile {
                 !isAudio(serviceFile) && !isDocument(serviceFile);
     }
 
+    // seta o evento da pagina e adiciona os arquivos dele ao mapa cd arquivos
     public void setEvento(Evento evento) {
         this.evento = evento;
         for (ServiceFile serviceFile : serviceFileDAO.listarArquivosEvento(evento)) {
