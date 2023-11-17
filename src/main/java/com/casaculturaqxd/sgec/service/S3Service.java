@@ -50,7 +50,15 @@ public class S3Service implements Service {
       }
    }
 
-   private void requestCriarBucket(String nomeBucket) {
+   /**
+    * realiza um request do tipo createBucket
+    * 
+    * @param nomeBucket
+    * @throws IllegalArgumentException se o bucket nao existir
+    * @throws SdkClientException       se o servico nao receber o request ou o
+    *                                  cliente nao conseguir processar a resposta
+    */
+   private void requestCriarBucket(String nomeBucket) throws SdkClientException {
       if (client.doesBucketExistV2(nomeBucket)) {
          throw new IllegalArgumentException();
       }
@@ -70,6 +78,15 @@ public class S3Service implements Service {
       }
    }
 
+   /**
+    * realiza um request deleteBucket
+    * 
+    * @param nomeBucket
+    * @throws IllegalArgumentException se nao houver nenhum bucket com o nome
+    *                                  especificado
+    * @throws SdkClientException       se o servico nao receber o request ou o
+    *                                  cliente nao conseguir processar a resposta
+    */
    private void requestDeletarBucket(String nomeBucket) throws SdkClientException {
       if (!client.doesBucketExistV2(nomeBucket)) {
          throw new IllegalArgumentException();
@@ -91,6 +108,18 @@ public class S3Service implements Service {
       }
    }
 
+   /**
+    * realiza um request do tipo putObject armazenando o conteudo com o nome
+    * escolhido
+    * 
+    * @param nomeBucket
+    * @param chaveArquivo
+    * @param content
+    * @throws IllegalArgumentException se ja houver um arquivo com o nome
+    *                                  especificado
+    * @throws SdkClientException       se o servico nao receber o request ou o
+    *                                  cliente nao conseguir processar a resposta
+    */
    private void requestEnviarArquivo(String nomeBucket, String chaveArquivo, File content) {
       if (client.doesObjectExist(nomeBucket, chaveArquivo)) {
          throw new IllegalArgumentException();
@@ -110,6 +139,16 @@ public class S3Service implements Service {
       }
    }
 
+   /**
+    * 
+    * @param nomeBucket
+    * @param chaveArquivo
+    * @return wrapper do arquivo com todos os metadados
+    * @throws IllegalArgumentException se nao houver nenhum arquivo com a chave
+    *                                  passada no bucket
+    * @throws SdkClientException       se o servico nao receber o request ou o
+    *                                  cliente nao conseguir processar a resposta
+    */
    private ServiceFile requestGetMetadata(String nomeBucket, String chaveArquivo) {
       if (!client.doesObjectExist(nomeBucket, chaveArquivo)) {
          throw new IllegalArgumentException();
@@ -124,12 +163,6 @@ public class S3Service implements Service {
       return new ServiceFile(suffix, nomeBucket, ultimaModificacao, null);
    }
 
-   /**
-    * captura o conteudo do objeto em uma InputStream depois cria um arquivo
-    * temporário com esse conteúdo, por fim retorna um service file desse conteudo
-    * 
-    * @throws ServiceOperationException
-    */
    @Override
    public File getArquivo(String nomeBucket, String chaveArquivo) throws ServiceOperationException {
       try {
@@ -143,6 +176,16 @@ public class S3Service implements Service {
       }
    }
 
+   /**
+    * captura o conteudo do objeto em uma InputStream depois cria um arquivo
+    * temporário com esse conteúdo, por fim retorna um service file desse conteudo
+    * 
+    * @throws IllegalArgumentException
+    * @throws IOException              se a criacao do arquivo temporario ou
+    *                                  leitura ou escrita do arquivo falharem
+    * @throws SdkClientException       se o servico nao receber o request ou o
+    *                                  cliente nao conseguir processar a resposta
+    */
    private File requestGetArquivo(String nomeBucket, String chaveArquivo) throws IOException {
       if (!client.doesObjectExist(nomeBucket, chaveArquivo)) {
          throw new IllegalArgumentException();
@@ -176,6 +219,15 @@ public class S3Service implements Service {
       }
    }
 
+   /**
+    * realiza um request de listagem da chave dos arquivos no bucket especificado
+    * 
+    * @param nomeBucket
+    * @return lista com as chaves de todos os arquivos no bucket
+    * @throws IllegalArgumentException se o bucket informado nao existir
+    * @throws SdkClientException       se o servico nao receber o request ou o
+    *                                  cliente nao conseguir processar a resposta
+    */
    private List<String> requestListaArquivos(String nomeBucket) {
       if (!client.doesBucketExistV2(nomeBucket)) {
          throw new IllegalArgumentException();
@@ -196,6 +248,15 @@ public class S3Service implements Service {
       }
    }
 
+   /**
+    * realiza um request para deletar o arquivo
+    * 
+    * @param nomeBucket
+    * @param chaveArquivo
+    * @throws IllegalArgumentException se a chav e passada nao estiver no bucket
+    * @throws SdkClientException       se o servico nao receber o request ou o
+    *                                  cliente nao conseguir processar a resposta
+    */
    private void requestDeleteArquivo(String nomeBucket, String chaveArquivo) {
       if (!client.doesObjectExist(nomeBucket, chaveArquivo)) {
          throw new IllegalArgumentException("arquivo nao encontrado: " + chaveArquivo);

@@ -40,8 +40,7 @@ public interface Service {
 
       /**
        * realiza upload do arquivo para o bucket especificado, salvando-o com a chave
-       * de destino escolhida retorna uma exceção caso o bucket ou o arquivo sejam
-       * inválidos
+       * de destino escolhida
        * 
        * @param serviceFile wrapper de conteudo de arquivo
        */
@@ -55,8 +54,7 @@ public interface Service {
       public List<String> listarArquivos(String nomeBucket) throws ServiceOperationException;
 
       /**
-       * Remove o arquivo com a chave especificada do bucket lança uma exceção caso a
-       * chave ou o nome do bucket sejam inválidos
+       * Remove o arquivo com a chave especificada do bucket
        * 
        * @param nomeBucket
        * @param chaveArquivo
