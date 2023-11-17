@@ -54,9 +54,8 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
     EventoDAO eventoDAO = new EventoDAO();
     ParticipanteDAO participanteDAO = new ParticipanteDAO();
     ServiceFileDAO serviceFileDAO;
-    ArrayList<FieldLocalizacaoController> controllersLocais =
-
-            new ArrayList<FieldLocalizacaoController>();
+    private File lastDirectoryOpen;
+    ArrayList<FieldLocalizacaoController> controllersLocais = new ArrayList<FieldLocalizacaoController>();
     DateFormat formatterHorario;
     Stage stage;
     @FXML
@@ -69,8 +68,8 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
     FlowPane secaoArquivos;
 
     @FXML
-    TextField titulo, publicoEsperado, publicoAlcancado, horas, minutos, horasCargaHoraria,
-            numParticipantesEsperado, numMunicipiosEsperado;
+    TextField titulo, publicoEsperado, publicoAlcancado, horas, minutos, horasCargaHoraria, numParticipantesEsperado,
+            numMunicipiosEsperado;
     @FXML
     TextArea descricao;
     @FXML
@@ -107,6 +106,7 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
 
     private void loadMenu() throws IOException {
         FXMLLoader carregarMenu = new FXMLLoader(App.class.getResource("view/componentes/menu.fxml"));
+
         root.getChildren().add(0, carregarMenu.load());
     }
 
@@ -117,8 +117,7 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
             erroLocalizacao.show();
         }
         if (!camposObrigatoriosPreenchidos()) {
-            Alert erroLocalizacao = new Alert(AlertType.ERROR,
-                    "nem todos os campos obrigatorios foram preenchidos");
+            Alert erroLocalizacao = new Alert(AlertType.ERROR, "nem todos os campos obrigatorios foram preenchidos");
             erroLocalizacao.show();
         }
 
@@ -129,8 +128,7 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
 
         builderEvento.setNome(titulo.getText());
         builderEvento.setDescricao(titulo.getText());
-        builderEvento
-                .setClassificacaoEtaria(classificacaoEtaria.getSelectionModel().getSelectedItem());
+        builderEvento.setClassificacaoEtaria(classificacaoEtaria.getSelectionModel().getSelectedItem());
         if (dataInicial.getValue() != null) {
             builderEvento.setDataInicial(Date.valueOf(dataInicial.getValue()));
         }
@@ -145,16 +143,15 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
         }
         builderEvento.setCertificavel(certificavel.isSelected());
         if (!horasCargaHoraria.getText().isEmpty()) {
-            builderEvento.setCargaHoraria(new java.sql.Time(
-                    formatterHorario.parse(horasCargaHoraria.getText() + ":00:00").getTime()));
+            builderEvento.setCargaHoraria(
+                    new java.sql.Time(formatterHorario.parse(horasCargaHoraria.getText() + ":00:00").getTime()));
         }
         builderEvento.setAcessivelEmLibras(acessivelEmLibras.isSelected());
         if (!numMunicipiosEsperado.getText().isEmpty()) {
             builderEvento.setMunicipiosEsperado(Integer.parseInt(numMunicipiosEsperado.getText()));
         }
         if (!numParticipantesEsperado.getText().isEmpty()) {
-            builderEvento
-                    .setParticipantesEsperado(Integer.parseInt(numParticipantesEsperado.getText()));
+            builderEvento.setParticipantesEsperado(Integer.parseInt(numParticipantesEsperado.getText()));
         }
         TreeSet<Integer> idLocais = new TreeSet<>();
         for (FieldLocalizacaoController controller : controllersLocais) {
@@ -236,8 +233,7 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
 
     public void adicionarParticipante(Participante participante) {
         // TODO remover implementacao de teste
-        participantes.put(
-                new Participante(1, "new_participante", "new_area atuacao", "new link", null),
+        participantes.put(new Participante(1, "new_participante", "new_area atuacao", "new link", null),
                 new FXMLLoader(App.class.getResource("view/preview/previewParticipante.fxml")));
     }
 
@@ -265,21 +261,19 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
     public void adicionarArquivo() {
         FileChooser fileChooser = new FileChooser();
         File arquivoSelecionado = fileChooser.showOpenDialog(stage);
+        lastDirectoryOpen = arquivoSelecionado.getParentFile();
         adicionarArquivo(new ServiceFile(arquivoSelecionado));
     }
 
     @Override
     public void adicionarArquivo(ServiceFile serviceFile) {
-        mapServiceFiles.put(serviceFile,
-                new FXMLLoader(App.class.getResource("view/preview/previewArquivo.fxml")));
+        mapServiceFiles.put(serviceFile, new FXMLLoader(App.class.getResource("view/preview/previewArquivo.fxml")));
     }
 
     @Override
     public void removerArquivo(ServiceFile serviceFile) {
-        Service service = serviceFile.getService();
         try {
-            service.deletarArquivo(serviceFile.getBucket(), serviceFile.getFileKey());
-
+            serviceFileDAO.deleteArquivo(serviceFile);
         } catch (IllegalArgumentException e) {
             // caso arquivo ja nao esteja registrado
             mapServiceFiles.remove(serviceFile);
@@ -290,9 +284,8 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
     }
 
     public boolean camposObrigatoriosPreenchidos() {
-        if (classificacaoEtaria.getSelectionModel().getSelectedItem() == null
-                || titulo.getText().isEmpty() || dataInicial.getValue() == null
-                || dataFinal.getValue() == null) {
+        if (classificacaoEtaria.getSelectionModel().getSelectedItem() == null || titulo.getText().isEmpty()
+                || dataInicial.getValue() == null || dataFinal.getValue() == null) {
             return false;
         }
         return true;
@@ -302,8 +295,7 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
         CadastrarEventoController superController = this;
         observablemap.addListener(new MapChangeListener<Participante, FXMLLoader>() {
             @Override
-            public void onChanged(
-                    MapChangeListener.Change<? extends Participante, ? extends FXMLLoader> change) {
+            public void onChanged(MapChangeListener.Change<? extends Participante, ? extends FXMLLoader> change) {
 
                 if (change.wasAdded()) {
                     Participante addedKey = change.getKey();
@@ -346,8 +338,7 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
         ControllerServiceFile superController = this;
         observablemap.addListener(new MapChangeListener<ServiceFile, FXMLLoader>() {
             @Override
-            public void onChanged(
-                    MapChangeListener.Change<? extends ServiceFile, ? extends FXMLLoader> change) {
+            public void onChanged(MapChangeListener.Change<? extends ServiceFile, ? extends FXMLLoader> change) {
 
                 if (change.wasAdded()) {
                     ServiceFile addedKey = change.getKey();

@@ -35,4 +35,4 @@ Imagem de localização: <a href="https://www.freepik.com/icon/security-pin_6125
 
 Imagem da leftArrow: <a href="https://images.app.goo.gl/NkXbvK76VHFTzero6">LeftArrow</a>
 
-Imagem do participante de teste
+Imagem Up Arrow: <a href="https://www.freepik.com/icon/arrow_5180326#fromView=search&term=up+arrow&page=1&position=10&track=ais">Icon by Creatype</a>

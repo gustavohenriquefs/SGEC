@@ -6,12 +6,14 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox id="pageMidiaEvento" fx:id="root" alignment="CENTER" styleClass="fundo" stylesheets="@../css/page/midiaEventoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox id="pageMidiaEvento" fx:id="root" alignment="CENTER" styleClass="fundo" stylesheets="@../css/page/midiaEventoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.MidiaEventoController">
    <children>
       <ScrollPane styleClass="fundo">
          <content>
@@ -26,8 +28,8 @@
                                     <Label text="Pesquisar Arquivos" />
                                     <HBox prefHeight="57.0" prefWidth="760.0" spacing="20.0">
                                        <children>
-                                          <TextField fx:id="nomeArquivo" maxWidth="534.0" prefHeight="26.0" prefWidth="534.0" promptText="Nome" HBox.hgrow="ALWAYS" />
-                                          <Button fx:id="buscarArquivos" mnemonicParsing="false" styleClass="botoes" text="Buscar" />
+                                          <TextField fx:id="filtroNomeArquivo" maxWidth="534.0" prefHeight="26.0" prefWidth="534.0" promptText="Nome do arquivo" HBox.hgrow="ALWAYS" />
+                                          <Button fx:id="buscarArquivos" defaultButton="true" mnemonicParsing="false" onAction="#pesquisarArquivo" styleClass="botoes" text="Buscar" />
                                        </children>
                                     </HBox>
                                  </children>
@@ -42,12 +44,39 @@
                                                    <children>
                                                       <HBox alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="1160.0" spacing="400.0">
                                                          <children>
-                                                            <Label text="Nome" />
-                                                            <Label text="Adicionado em" />
-                                                            <Label text="Tamanho" />
+                                                            <Button contentDisplay="RIGHT" mnemonicParsing="false" onAction="#orderByNome" styleClass="opcoes" text="Nome">
+                                                               <graphic>
+                                                                  <ImageView fx:id="arrowNome" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                                                     <image>
+                                                                        <Image url="@../imagens/arrow-up.png" />
+                                                                     </image>
+                                                                  </ImageView>
+                                                               </graphic>
+                                                            </Button>
+                                                            <Button contentDisplay="RIGHT" mnemonicParsing="false" onAction="#orderByDataCriacao" styleClass="opcoes" text="Data de criação">
+                                                               <graphic>
+                                                                  <ImageView fx:id="arrowData" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                                                     <image>
+                                                                        <Image url="@../imagens/arrow-up.png" />
+                                                                     </image>
+                                                                  </ImageView>
+                                                               </graphic>
+                                                            </Button>
+                                                            <Button contentDisplay="RIGHT" mnemonicParsing="false" onAction="#orderByTamanho" styleClass="opcoes" text="Tamanho">
+                                                               <graphic>
+                                                                  <ImageView fx:id="arrowTamanho" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                                                     <image>
+                                                                        <Image url="@../imagens/arrow-up.png" />
+                                                                     </image>
+                                                                  </ImageView>
+                                                               </graphic>
+                                                            </Button>
                                                          </children>
                                                       </HBox>
-                                                      <FlowPane fx:id="filesContainer" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1160.0" />
+                                                      <FlowPane fx:id="filesContainer" hgap="20.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1160.0" rowValignment="TOP" vgap="10.0">
+                                                         <padding>
+                                                            <Insets left="40.0" />
+                                                         </padding></FlowPane>
                                                    </children>
                                                 </VBox>
                                              </content>
@@ -60,7 +89,7 @@
                                                          <children>
                                                             <HBox alignment="CENTER">
                                                                <children>
-                                                                  <Button fx:id="imagens" mnemonicParsing="false" prefHeight="26.0" prefWidth="321.0" styleClass="opcoes" text="Imagens">
+                                                                  <Button fx:id="imagens" mnemonicParsing="false" onAction="#swapToImagens" prefHeight="26.0" prefWidth="321.0" styleClass="opcoes" text="Imagens">
                                                                      <HBox.margin>
                                                                         <Insets top="20.0" />
                                                                      </HBox.margin>
@@ -69,20 +98,25 @@
                                                             </HBox>
                                                             <HBox alignment="CENTER">
                                                                <children>
-                                                                  <Button fx:id="videos" mnemonicParsing="false" prefHeight="26.0" prefWidth="322.0" styleClass="opcoes" text="Vídeos" />
+                                                                  <Button fx:id="videos" mnemonicParsing="false" onAction="#swapToVideos" prefHeight="26.0" prefWidth="322.0" styleClass="opcoes" text="Vídeos" />
                                                                </children>
                                                             </HBox>
                                                             <HBox alignment="CENTER">
                                                                <children>
-                                                                  <Button fx:id="audio" mnemonicParsing="false" prefHeight="26.0" prefWidth="322.0" styleClass="opcoes" text="Áudio" HBox.hgrow="ALWAYS" />
+                                                                  <Button fx:id="audio" mnemonicParsing="false" onAction="#swapToAudios" prefHeight="26.0" prefWidth="322.0" styleClass="opcoes" text="Áudio" HBox.hgrow="ALWAYS" />
                                                                </children>
                                                             </HBox>
                                                             <HBox alignment="CENTER">
                                                                <children>
-                                                                  <Button fx:id="documentos" mnemonicParsing="false" prefHeight="26.0" prefWidth="322.0" styleClass="opcoes" text="Documentos" HBox.hgrow="ALWAYS" />
+                                                                  <Button fx:id="documentos" mnemonicParsing="false" onAction="#swapToDocumentos" prefHeight="26.0" prefWidth="322.0" styleClass="opcoes" text="Documentos" HBox.hgrow="ALWAYS" />
                                                                </children>
                                                             </HBox>
-                                                            <Button fx:id="adicionarArquivos" mnemonicParsing="false" styleClass="botoes" text="Adicionar Arquivos +" />
+                                                            <HBox>
+                                                               <children>
+                                                                  <Button fx:id="outros" mnemonicParsing="false" onAction="#swapToOutros" prefHeight="26.0" prefWidth="322.0" styleClass="opcoes" text="Outros" />
+                                                               </children>
+                                                            </HBox>
+                                                            <Button fx:id="adicionarArquivos" mnemonicParsing="false" onAction="#selectNovoArquivo" styleClass="botoes" text="Adicionar Arquivos +" />
                                                          </children>
                                                       </VBox>
                                                    </children>
