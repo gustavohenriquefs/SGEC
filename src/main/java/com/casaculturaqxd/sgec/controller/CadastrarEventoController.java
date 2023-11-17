@@ -50,8 +50,8 @@ public class CadastrarEventoController implements ControllerServiceFile {
     EventoBuilder builderEvento = new EventoBuilder();
     EventoDAO eventoDAO = new EventoDAO();
     ServiceFileDAO serviceFileDAO;
-    ArrayList<FieldLocalizacaoController> controllersLocais =
-            new ArrayList<FieldLocalizacaoController>();
+    private File lastDirectoryOpen;
+    ArrayList<FieldLocalizacaoController> controllersLocais = new ArrayList<FieldLocalizacaoController>();
     DateFormat formatterHorario;
     Stage stage;
     @FXML
@@ -72,8 +72,7 @@ public class CadastrarEventoController implements ControllerServiceFile {
     DatePicker dataInicial, dataFinal;
     @FXML
     ChoiceBox<String> classificacaoEtaria;
-    private final String[] classificacoes =
-            {"Livre", "10 anos", "12 anos", "14 anos", "16 anos", "18 anos"};
+    private final String[] classificacoes = { "Livre", "10 anos", "12 anos", "14 anos", "16 anos", "18 anos" };
     @FXML
     CheckBox checkMeta3;
     @FXML
@@ -96,8 +95,7 @@ public class CadastrarEventoController implements ControllerServiceFile {
     }
 
     private void loadMenu() throws IOException {
-        FXMLLoader carregarMenu =
-                new FXMLLoader(App.class.getResource("view/componentes/menu.fxml"));
+        FXMLLoader carregarMenu = new FXMLLoader(App.class.getResource("view/componentes/menu.fxml"));
 
         root.getChildren().add(0, carregarMenu.load());
     }
@@ -180,7 +178,7 @@ public class CadastrarEventoController implements ControllerServiceFile {
     }
 
     public void cancelar() throws IOException {
-        
+
         builderEvento.resetar();
         App.setRoot("view/home");
     }
@@ -197,7 +195,8 @@ public class CadastrarEventoController implements ControllerServiceFile {
     }
 
     /**
-     * retorna uma lista de metas com id igual ao indice de cada checkbox de meta selecionada,
+     * retorna uma lista de metas com id igual ao indice de cada checkbox de meta
+     * selecionada,
      */
     public ArrayList<Meta> getMetasSelecionadas() {
         ArrayList<CheckBox> checkBoxes = new ArrayList<>();
@@ -229,8 +228,7 @@ public class CadastrarEventoController implements ControllerServiceFile {
         // TODO: permitir adicionar uma instituicao existente, neste caso o preview dela
         // que e adicionado a pagina
         SubSceneLoader loaderOrganizadores = new SubSceneLoader();
-        AnchorPane novoOrganizador =
-                (AnchorPane) loaderOrganizadores.getPage("fields/fieldInstituicao");
+        AnchorPane novoOrganizador = (AnchorPane) loaderOrganizadores.getPage("fields/fieldInstituicao");
         Organizadores.getChildren().add(novoOrganizador);
 
     }
@@ -239,14 +237,14 @@ public class CadastrarEventoController implements ControllerServiceFile {
         // TODO: permitir adicionar uma instituicao existente, neste caso o preview dela
         // que e adicionado a pagina
         SubSceneLoader loaderColaboradores = new SubSceneLoader();
-        AnchorPane novoColaborador =
-                (AnchorPane) loaderColaboradores.getPage("fields/fieldInstituicao");
+        AnchorPane novoColaborador = (AnchorPane) loaderColaboradores.getPage("fields/fieldInstituicao");
         Colaboradores.getChildren().add(novoColaborador);
     }
 
     public void adicionarArquivo() {
         FileChooser fileChooser = new FileChooser();
         File arquivoSelecionado = fileChooser.showOpenDialog(stage);
+        lastDirectoryOpen = arquivoSelecionado.getParentFile();
         adicionarArquivo(new ServiceFile(arquivoSelecionado));
     }
 
@@ -258,10 +256,8 @@ public class CadastrarEventoController implements ControllerServiceFile {
 
     @Override
     public void removerArquivo(ServiceFile serviceFile) {
-        Service service = serviceFile.getService();
         try {
-            service.deletarArquivo(serviceFile.getBucket(), serviceFile.getFileKey());
-
+            serviceFileDAO.deleteArquivo(serviceFile);
         } catch (IllegalArgumentException e) {
             // caso arquivo ja nao esteja registrado
             mapServiceFiles.remove(serviceFile);
@@ -322,7 +318,7 @@ public class CadastrarEventoController implements ControllerServiceFile {
             }
         });
     }
-  
+
     public TextFormatter<String> getNumericalFormatter() {
         return new TextFormatter<>(change -> {
             if (change.getText().matches("\\d+")) {
