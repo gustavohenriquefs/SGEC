@@ -18,9 +18,7 @@ import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 import com.casaculturaqxd.sgec.service.Service;
 import com.casaculturaqxd.sgec.models.Meta;
 
-import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
-import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
@@ -28,10 +26,8 @@ import javafx.collections.ObservableMap;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -229,6 +225,15 @@ public class VisualizarEventoController implements ControllerServiceFile {
             erroAtualizacao.setContentText("Erro ao alterar evento");
             erroAtualizacao.show();
         }
+    }
+
+    public void goToMidiaEvento() throws IOException {
+        FXMLLoader loadTelaMidia = new FXMLLoader(App.class.getResource("view/midiaEvento.fxml"));
+        Parent nextScreen = loadTelaMidia.load();
+        MidiaEventoController controllerNextScreen = loadTelaMidia.getController();
+        controllerNextScreen.setEvento(evento);
+
+        App.setRoot(nextScreen);
     }
 
     /**

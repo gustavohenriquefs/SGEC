@@ -198,6 +198,27 @@ public class ServiceFileDAO {
     return true;
   }
 
+  public ArrayList<ServiceFile> pesquisarArquivoEvento(String fileKey, int idEVento) {
+    String sql = "SELECT * FROM nome_arquivo_evento WHERE file_key ILIKE ? AND id_evento = ?";
+    ArrayList<ServiceFile> listaArquivos = new ArrayList<>();
+    try {
+      PreparedStatement statement = connection.prepareStatement(sql);
+      statement.setString(1, "%" + fileKey + "%");
+      statement.setInt(2, idEVento);
+      ResultSet resultSet = statement.executeQuery();
+
+      while (resultSet.next()) {
+        ServiceFile serviceFile = new ServiceFile(resultSet.getInt("id_service_file"));
+        listaArquivos.add(getArquivo(serviceFile));
+      }
+      statement.close();
+      return listaArquivos;
+    } catch (Exception e) {
+      logException(e);
+      return null;
+    }
+  }
+
   public void setService(ServiceFile arquivo) {
     this.service = arquivo.getService();
   }
