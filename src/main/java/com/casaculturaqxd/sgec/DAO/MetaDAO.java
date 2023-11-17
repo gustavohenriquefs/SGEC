@@ -72,8 +72,7 @@ public class MetaDAO {
     public boolean inserirMeta(Meta meta) {
         String insertQuery = "INSERT INTO meta(nome_meta) VALUES(?)";
         try {
-            PreparedStatement statement =
-                    connection.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement statement = connection.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, meta.getNomeMeta());
             statement.execute();
 
@@ -156,13 +155,34 @@ public class MetaDAO {
     }
 
     public ArrayList<Meta> listarMetasEvento(Integer idEvento) {
-        String queryListarMetas =
-                "SELECT * FROM meta_evento INNER JOIN meta USING(id_meta) WHERE id_evento=?";
+        String queryListarMetas = "SELECT * FROM meta_evento INNER JOIN meta USING(id_meta) WHERE id_evento=?";
 
         ArrayList<Meta> listaMetas = new ArrayList<>();
         try {
             PreparedStatement statement = connection.prepareStatement(queryListarMetas);
             statement.setInt(1, idEvento);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                Meta meta = new Meta(resultSet.getInt("id_meta"), resultSet.getString("nome_meta"));
+                listaMetas.add(meta);
+            }
+            statement.close();
+        } catch (SQLException e) {
+            Logger erro = Logger.getLogger("erroSQL");
+            erro.log(Level.SEVERE, "excecao levantada:", e);
+
+            return null;
+        }
+        return listaMetas;
+    }
+
+    public ArrayList<Meta> listarMetasGrupoEventos(Integer idGrupoEventos) {
+        String queryListarMetas = "SELECT * FROM meta_grupo_eventos INNER JOIN meta USING(id_meta) WHERE id_evento=?";
+
+        ArrayList<Meta> listaMetas = new ArrayList<>();
+        try {
+            PreparedStatement statement = connection.prepareStatement(queryListarMetas);
+            statement.setInt(1, idGrupoEventos);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Meta meta = new Meta(resultSet.getInt("id_meta"), resultSet.getString("nome_meta"));
@@ -237,8 +257,7 @@ public class MetaDAO {
     }
 
     public boolean desvincularGrupoEventos(Integer idMeta, Integer idGrupoEventos) {
-        String queryVincularGrupo =
-                "DELETE FROM meta_grupo_eventos WHERE id_meta=? AND id_grupo_eventos=?)";
+        String queryVincularGrupo = "DELETE FROM meta_grupo_eventos WHERE id_meta=? AND id_grupo_eventos=?)";
         try {
             PreparedStatement statement = connection.prepareStatement(queryVincularGrupo);
             statement.setInt(1, idMeta);
