@@ -10,41 +10,46 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="296.0" stylesheets="@../../css/preview/previewEventoExistenteStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.preview.PreviewEventoController">
+<VBox minHeight="-Infinity" minWidth="-Infinity" stylesheets="@../../css/preview/previewEventoExistenteStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.preview.PreviewEventoController">
    <children>
-      <AnchorPane id="container" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" prefHeight="300.0" prefWidth="600.0">
+      <AnchorPane id="container" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
          <children>
-            <HBox fx:id="campoImagem" alignment="CENTER" layoutX="20.0" layoutY="29.0" prefHeight="158.0" prefWidth="298.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="10.0">
+            <VBox layoutY="10.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="10.0">
                <children>
-                  <ImageView fx:id="imagem" fitHeight="140.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
-                     <image>
-                        <Image url="@../../imagens/default_image.png" />
-                     </image></ImageView>
+                  <HBox fx:id="campoImagem" alignment="CENTER">
+                     <children>
+                        <ImageView fx:id="imagem" fitHeight="140.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS">
+                           <image>
+                              <Image url="@../../imagens/default_image.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </HBox>
+                  <HBox fx:id="campoDataHora" minHeight="-Infinity" prefHeight="20.0" prefWidth="173.0" styleClass="data">
+                     <children>
+                        <Label fx:id="dataHora" textFill="WHITE">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox fx:id="campoTitulo">
+                     <children>
+                        <Label id="titulo" fx:id="titulo" prefHeight="18.0" prefWidth="277.0" text="Label" wrapText="true">
+                           <font>
+                              <Font name="System Bold" size="16.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox fx:id="campoBotao">
+                     <children>
+                        <Button id="botao" fx:id="detalhes" mnemonicParsing="false" onAction="#verDetalhes" prefHeight="26.0" prefWidth="234.0" text="Ver detalhes" textFill="WHITE" />
+                     </children>
+                  </HBox>
                </children>
-            </HBox>
-            <HBox fx:id="campoDataHora" layoutX="20.0" layoutY="169.0" minHeight="-Infinity" prefHeight="20.0" prefWidth="173.0" styleClass="data" AnchorPane.leftAnchor="20.0">
-               <children>
-                  <Label fx:id="dataHora" textFill="WHITE">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-               </children>
-            </HBox>
-            <HBox fx:id="campoTitulo" layoutX="20.0" layoutY="204.0" AnchorPane.leftAnchor="20.0">
-               <children>
-                  <Label id="titulo" fx:id="titulo" prefHeight="18.0" prefWidth="277.0" text="Label">
-                     <font>
-                        <Font name="System Bold" size="16.0" />
-                     </font>
-                  </Label>
-               </children>
-            </HBox>
-            <HBox fx:id="campoBotao" layoutX="20.0" layoutY="251.0" AnchorPane.leftAnchor="20.0">
-               <children>
-                  <Button id="botao" fx:id="detalhes" mnemonicParsing="false" onAction="#verDetalhes" prefHeight="26.0" prefWidth="234.0" text="Ver detalhes" textFill="WHITE" />
-               </children>
-            </HBox>
+            </VBox>
          </children>
       </AnchorPane>
    </children>

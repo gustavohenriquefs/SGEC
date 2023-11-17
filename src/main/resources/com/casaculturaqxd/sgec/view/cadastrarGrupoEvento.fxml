@@ -59,28 +59,37 @@
                      <Font name="System Bold" size="12.0" />
                   </font>
                </Label>
-               <DatePicker fx:id="dataInicial" layoutX="13.0" layoutY="229.0" AnchorPane.leftAnchor="20.0" />
-               <DatePicker fx:id="daataFinal" layoutX="604.0" layoutY="224.0" AnchorPane.rightAnchor="20.0" />
-               <Label layoutX="22.0" layoutY="215.0" text="Data Inicial" AnchorPane.leftAnchor="22.0">
-                  <font>
-                     <Font name="System Bold" size="12.0" />
-                  </font>
-               </Label>
-               <Label layoutX="1365.0" layoutY="206.0" text="Data Final">
-                  <font>
-                     <Font name="System Bold" size="12.0" />
-                  </font>
-               </Label>
-               <Label layoutX="23.0" layoutY="276.0" text="Descrição" AnchorPane.leftAnchor="20.0">
-                  <font>
-                     <Font name="System Bold" size="12.0" />
-                  </font>
-               </Label>
-               <ScrollPane hbarPolicy="ALWAYS" layoutX="20.0" layoutY="294.0" vbarPolicy="ALWAYS" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
-                  <content>
+               <VBox layoutX="22.0" layoutY="215.0" AnchorPane.leftAnchor="22.0">
+                  <children>
+                     <Label text="Data Inicial">
+                        <font>
+                           <Font name="System Bold" size="12.0" />
+                        </font>
+                     </Label>
+                     <DatePicker fx:id="dataInicial" />
+                  </children>
+               </VBox>
+               <VBox layoutX="1365.0" layoutY="206.0">
+                  <children>
+                     <Label text="Data Final">
+                        <font>
+                           <Font name="System Bold" size="12.0" />
+                        </font>
+                     </Label>
+                     <DatePicker fx:id="daataFinal" />
+                  </children>
+               </VBox>
+               <VBox layoutX="20.0" layoutY="276.0" AnchorPane.leftAnchor="20.0">
+                  <children>
+                     <Label text="Descrição">
+                        <font>
+                           <Font name="System Bold" size="12.0" />
+                        </font>
+                     </Label>
                      <TextArea fx:id="descricao" prefHeight="150.0" prefWidth="1506.0" />
-                  </content>
-               </ScrollPane>
+                  </children>
+               </VBox>
+               <ScrollPane hbarPolicy="ALWAYS" layoutX="20.0" layoutY="294.0" prefHeight="154.0" prefWidth="1520.0" vbarPolicy="ALWAYS" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" />
                <HBox fx:id="metricas" layoutX="20.0" layoutY="496.0" prefHeight="75.0" prefWidth="1520.0" spacing="30.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
                   <children>
                      <TextField fx:id="publicoEsperado">

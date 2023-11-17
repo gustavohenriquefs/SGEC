@@ -9,9 +9,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox id="pageHome" fx:id="root" prefHeight="576.0" prefWidth="780.0" stylesheets="@../css/page/HomeStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.HomeController">
+<VBox id="pageHome" fx:id="root" stylesheets="@../css/page/HomeStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.HomeController">
    <children>
-      <GridPane fx:id="gridMetas" prefHeight="227.0" prefWidth="780.0">
+      <GridPane fx:id="gridMetas">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
         </columnConstraints>
@@ -30,7 +30,7 @@
                         <Insets bottom="12.0" left="20.0" top="12.0" />
                      </padding>
                   </Label>
-                  <FlowPane prefHeight="200.0" prefWidth="200.0" />
+                  <FlowPane />
                </children>
             </VBox>
          </children>
