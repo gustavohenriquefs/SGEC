@@ -8,22 +8,18 @@ import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 
 public interface Service {
       /**
-       * Cria um novo bucket com o nome especificado, se já existir um bucket com esse
-       * nome lança
-       * uma exceção
+       * Cria um novo bucket com o nome especificado
        * 
        * @param nomeBucket
-       * @throws IllegalArgumentException
+       * @throws IllegalArgumentException se o bucket ja existir
        */
       public void criarBucket(String nomeBucket) throws IllegalArgumentException;
 
       /**
-       * Deleta o bucket com o nome passado, se não existir nenhum bucket com esse
-       * nome lança uma
-       * exceção
+       * Deleta o bucket com o nome passado
        * 
        * @param nomeBucket
-       * @throws IllegalArgumentException
+       * @throws IllegalArgumentException se nao existir um bucket com esse nome
        */
       public void deletarBucket(String nomeBucket) throws IllegalArgumentException;
 
@@ -32,55 +28,48 @@ public interface Service {
        * 
        * @param nomeBucket
        * @param chaveArquivo
-       * @return serviceFile com os metadados encontrados
-       * @throws IllegalArgumentException
+       * @return wrapper do arquivo com os metadados encontrados
+       * @throws IllegalArgumentException se o arquivo nao for encontrado
        */
-      public ServiceFile getMetadata(String nomeBucket, String chaveArquivo)
-                  throws IllegalArgumentException;
+      public ServiceFile getMetadata(String nomeBucket, String chaveArquivo) throws IllegalArgumentException;
 
       /**
-       * Retorna um arquivo individual convertido para uma java.io.File, levanta uma
-       * exceção caso o
-       * nome do bucket ou do arquivo sejam inválidos
+       * Retorna um arquivo individual convertido para uma java.io.File
        * 
        * @param nomeBucket
        * @param chaveArquivo
-       * @throws IllegalArgumentException
+       * @throws IOException              se a transferencia do conteudo falhar
+       * @throws IllegalArgumentException se o arquivo nao for encontrado
        */
-      public File getArquivo(String nomeBucket, String chaveArquivo)
-                  throws IllegalArgumentException;
+      public File getArquivo(String nomeBucket, String chaveArquivo) throws IllegalArgumentException, IOException;
 
       /**
        * realiza upload do arquivo para o bucket especificado, salvando-o com a chave
-       * de destino
-       * escolhida retorna uma exceção caso o bucket ou o arquivo sejam inválidos
+       * de destino escolhida retorna uma exceção caso o bucket ou o arquivo sejam
+       * inválidos
        * 
-       * @param nomeBucket
-       * @param chaveDestino
-       * @param arquivo
-       * @throws IllegalArgumentException
-       * @throws IOException
+       * @param serviceFile wrapper de conteudo de arquivo
+       * @throws IllegalArgumentException - se ja existir uma chave com o mesmo nome
+       *                                  do arquivo no bucket
+       * @throws IOException              - se a operacao com o conteudo falhar
        */
-      public void enviarArquivo(ServiceFile serviceFile)
-                  throws IllegalArgumentException, IOException;
+      public void enviarArquivo(ServiceFile serviceFile) throws IllegalArgumentException, IOException;
 
       /**
        * Retorna uma lista com o nome de todos os arquivos no bucket especificado
        * 
        * @param nomeBucket
-       * @throws IllegalArgumentException
+       * @throws IllegalArgumentException se o bucket nao existir
        */
       public List<String> listarArquivos(String nomeBucket) throws IllegalArgumentException;
 
       /**
        * Remove o arquivo com a chave especificada do bucket lança uma exceção caso a
-       * chave ou o
-       * nome do bucket sejam inválidos
+       * chave ou o nome do bucket sejam inválidos
        * 
        * @param nomeBucket
        * @param chaveArquivo
-       * @throws IllegalArgumentException
+       * @throws IllegalArgumentException se o arquivo nao existir
        */
-      public void deletarArquivo(String nomeBucket, String chaveArquivo)
-                  throws IllegalArgumentException;
+      public void deletarArquivo(String nomeBucket, String chaveArquivo) throws IllegalArgumentException;
 }
