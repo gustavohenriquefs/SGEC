@@ -40,72 +40,81 @@ public class S3Service implements Service {
    }
 
    @Override
-   public void criarBucket(String nomeBucket) throws IllegalArgumentException {
-      if (client.doesBucketExistV2(nomeBucket)) {
-         throw new IllegalArgumentException();
-
-      }
+   public void criarBucket(String nomeBucket) throws ServiceOperationException {
       try {
          requestCriarBucket(nomeBucket);
+      } catch (IllegalArgumentException e) {
+         throw new ServiceOperationException("bucket ja existe", e);
       } catch (SdkClientException e) {
-         throw new SdkClientException("erro cliente S3", e);
+         throw new ServiceOperationException("erro cliente S3", e);
       }
    }
 
-   private void requestCriarBucket(String nomebucket) throws SdkClientException {
-      CreateBucketRequest request = new CreateBucketRequest(nomebucket);
+   private void requestCriarBucket(String nomeBucket) {
+      if (client.doesBucketExistV2(nomeBucket)) {
+         throw new IllegalArgumentException();
+      }
+      CreateBucketRequest request = new CreateBucketRequest(nomeBucket);
       client.createBucket(request);
    }
 
    @Override
-   public void deletarBucket(String nomeBucket) throws IllegalArgumentException, SdkClientException {
-      if (!client.doesBucketExistV2(nomeBucket)) {
-         throw new IllegalArgumentException("bucket nao encontrado");
-      }
+   public void deletarBucket(String nomeBucket) throws ServiceOperationException {
+
       try {
          requestDeletarBucket(nomeBucket);
+      } catch (IllegalArgumentException e) {
+         throw new ServiceOperationException("bucket nao encontrado", e);
       } catch (SdkClientException e) {
-         throw new SdkClientException("erro cliente S3", e);
+         throw new ServiceOperationException("erro cliente S3", e);
       }
    }
 
    private void requestDeletarBucket(String nomeBucket) throws SdkClientException {
+      if (!client.doesBucketExistV2(nomeBucket)) {
+         throw new IllegalArgumentException();
+      }
       DeleteBucketRequest request = new DeleteBucketRequest(nomeBucket);
       client.deleteBucket(request);
    }
 
    @Override
-   public void enviarArquivo(ServiceFile serviceFile) throws IllegalArgumentException, SdkClientException, IOException {
-      if (client.doesObjectExist(serviceFile.getBucket(), serviceFile.getFileKey())) {
-         throw new IllegalArgumentException("arquivo ja existe: " + serviceFile.getFileKey());
-      }
+   public void enviarArquivo(ServiceFile serviceFile) throws ServiceOperationException {
       try {
          requestEnviarArquivo(serviceFile.getBucket(), serviceFile.getFileKey(), serviceFile.getContent());
+      } catch (IllegalArgumentException e) {
+         throw new ServiceOperationException("arquivo ja existe: " + serviceFile.getFileKey(), e);
       } catch (SdkClientException e) {
-         throw new SdkClientException("erro cliente S3", e);
+         throw new ServiceOperationException("erro cliente S3", e);
+      } catch (IOException e) {
+         throw new ServiceOperationException("erro carregando conteudo do arquivo: " + serviceFile.getFileKey(), e);
       }
    }
 
-   private void requestEnviarArquivo(String nomeBucket, String chaveArquivo, File content) throws SdkClientException {
+   private void requestEnviarArquivo(String nomeBucket, String chaveArquivo, File content) {
+      if (client.doesObjectExist(nomeBucket, chaveArquivo)) {
+         throw new IllegalArgumentException();
+      }
       PutObjectRequest request = new PutObjectRequest(nomeBucket, chaveArquivo, content);
       client.putObject(request);
    }
 
    @Override
-   public ServiceFile getMetadata(String nomeBucket, String chaveArquivo)
-         throws IllegalArgumentException, SdkClientException {
-      if (!client.doesObjectExist(nomeBucket, chaveArquivo)) {
-         throw new IllegalArgumentException("arquivo nao encontrado: " + chaveArquivo);
-      }
+   public ServiceFile getMetadata(String nomeBucket, String chaveArquivo) throws ServiceOperationException {
       try {
          return requestGetMetadata(nomeBucket, chaveArquivo);
+      } catch (IllegalArgumentException e) {
+         throw new ServiceOperationException("arquivo nao encontrado: " + chaveArquivo, e);
       } catch (SdkClientException e) {
-         throw new SdkClientException("erro cliente S3", e);
+         throw new ServiceOperationException("erro cliente S3", e);
       }
-
    }
 
-   private ServiceFile requestGetMetadata(String nomeBucket, String chaveArquivo) throws SdkClientException {
+   private ServiceFile requestGetMetadata(String nomeBucket, String chaveArquivo) {
+      if (!client.doesObjectExist(nomeBucket, chaveArquivo)) {
+         throw new IllegalArgumentException();
+      }
+
       GetObjectRequest request = new GetObjectRequest(nomeBucket, chaveArquivo);
       S3Object object = client.getObject(request);
       var metadata = object.getObjectMetadata();
@@ -119,24 +128,26 @@ public class S3Service implements Service {
     * captura o conteudo do objeto em uma InputStream depois cria um arquivo
     * temporário com esse conteúdo, por fim retorna um service file desse conteudo
     * 
-    * @throws IOException
+    * @throws ServiceOperationException
     */
    @Override
-   public File getArquivo(String nomeBucket, String chaveArquivo)
-         throws IllegalArgumentException, SdkClientException, IOException {
-      if (!client.doesObjectExist(nomeBucket, chaveArquivo)) {
-         throw new IllegalArgumentException("arquivo nao encontrado: " + chaveArquivo);
-      }
+   public File getArquivo(String nomeBucket, String chaveArquivo) throws ServiceOperationException {
       try {
          return requestGetArquivo(nomeBucket, chaveArquivo);
+      } catch (IllegalArgumentException e) {
+         throw new ServiceOperationException("arquivo nao encontrado: " + chaveArquivo, e);
       } catch (SdkClientException e) {
-         throw new SdkClientException("erro cliente S3:" + e.getMessage());
+         throw new ServiceOperationException("erro cliente S3", e);
       } catch (IOException e) {
-         throw new IOException("erro carregando conteudo do arquivo: " + chaveArquivo, e);
+         throw new ServiceOperationException("erro carregando conteudo do arquivo: " + chaveArquivo, e);
       }
    }
 
-   private File requestGetArquivo(String nomeBucket, String chaveArquivo) throws SdkClientException, IOException {
+   private File requestGetArquivo(String nomeBucket, String chaveArquivo) throws IOException {
+      if (!client.doesObjectExist(nomeBucket, chaveArquivo)) {
+         throw new IllegalArgumentException();
+      }
+
       GetObjectRequest request = new GetObjectRequest(nomeBucket, chaveArquivo);
       S3Object object = client.getObject(request);
       InputStream content = object.getObjectContent();
@@ -151,39 +162,44 @@ public class S3Service implements Service {
    /**
     * Baseado no codigo disponivel neste
     * <a href="https://github.com/feltex/aws-s3">link</a>
+    * 
+    * @throws ServiceOperationException
     */
    @Override
-   public List<String> listarArquivos(String nomeBucket) throws IllegalArgumentException, SdkClientException {
-      if (!client.doesBucketExistV2(nomeBucket)) {
-         throw new IllegalArgumentException("bucket nao encontrado");
-      }
+   public List<String> listarArquivos(String nomeBucket) throws ServiceOperationException {
       try {
          return requestListaArquivos(nomeBucket);
+      } catch (IllegalArgumentException e) {
+         throw new ServiceOperationException("bucket nao encontrado", e);
       } catch (SdkClientException e) {
-         throw new SdkClientException("erro cliente S3:" + e.getMessage());
+         throw new ServiceOperationException("erro cliente S3:" + e.getMessage());
       }
    }
 
-   private List<String> requestListaArquivos(String nomeBucket) throws SdkClientException {
+   private List<String> requestListaArquivos(String nomeBucket) {
+      if (!client.doesBucketExistV2(nomeBucket)) {
+         throw new IllegalArgumentException();
+      }
       ListObjectsV2Request request = new ListObjectsV2Request().withBucketName(nomeBucket);
       return client.listObjectsV2(request).getObjectSummaries().stream().map(sumario -> sumario.getKey())
             .collect(Collectors.toList());
    }
 
    @Override
-   public void deletarArquivo(String nomeBucket, String chaveArquivo)
-         throws IllegalArgumentException, SdkClientException {
-      if (!client.doesObjectExist(nomeBucket, chaveArquivo)) {
-         throw new IllegalArgumentException("arquivo nao encontrado: " + chaveArquivo);
-      }
+   public void deletarArquivo(String nomeBucket, String chaveArquivo) throws ServiceOperationException {
       try {
          requestDeleteArquivo(nomeBucket, chaveArquivo);
+      } catch (IllegalArgumentException e) {
+         throw new ServiceOperationException("arquivo nao encontrado: " + chaveArquivo, e);
       } catch (SdkClientException e) {
-         throw new SdkClientException("erro cliente S3:" + e.getMessage());
+         throw new ServiceOperationException("erro cliente S3:" + e.getMessage());
       }
    }
 
-   private void requestDeleteArquivo(String nomeBucket, String chaveArquivo) throws SdkClientException {
+   private void requestDeleteArquivo(String nomeBucket, String chaveArquivo) {
+      if (!client.doesObjectExist(nomeBucket, chaveArquivo)) {
+         throw new IllegalArgumentException("arquivo nao encontrado: " + chaveArquivo);
+      }
       DeleteObjectRequest request = new DeleteObjectRequest(nomeBucket, chaveArquivo);
       client.deleteObject(request);
    }
