@@ -1,4 +1,4 @@
-package com.casaculturaqxd.sgec;
+package com.casaculturaqxd.sgec.controller;
 
 import java.io.IOException;
 import java.net.URL;
@@ -9,12 +9,12 @@ import com.casaculturaqxd.sgec.DAO.EventoDAO;
 import com.casaculturaqxd.sgec.controller.preview.PreviewEventoController;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.Evento;
+import com.casaculturaqxd.sgec.App;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 
@@ -33,13 +33,10 @@ public class HomeController {
   private GridPane gridMetas;
 
   @FXML
-  private HBox listaEventos;
+  private FlowPane secaoUltimosEventos;
 
   @FXML
   private RowConstraints titulo1;
-
-  @FXML
-  private HBox menuContainer;
 
   @FXML
   public void initialize() throws IOException {
@@ -51,13 +48,13 @@ public class HomeController {
     ArrayList<Evento> ultimosEventos = getUltimosEventos();
 
     if (ultimosEventos != null) {
-      for (int idxEvento = 0; idxEvento < ultimosEventos.size(); idxEvento++) {
-        this.adicionarEventoEmGrid(ultimosEventos.get(idxEvento), idxEvento);
+      for (Evento evento : ultimosEventos) {
+        this.adicionarEventoEmGrid(evento);
       }
     }
   }
 
-  private void adicionarEventoEmGrid(Evento evento, int idxEvento) {
+  private void adicionarEventoEmGrid(Evento evento) {
     try {
 
       FXMLLoader childLoader = obterFXMLPreviewEventoExistenteLoader();
@@ -68,16 +65,15 @@ public class HomeController {
 
       childController.setEvento(evento);
 
-      listaEventos.getChildren().add(childNode);
+      secaoUltimosEventos.getChildren().add(childNode);
     } catch (IOException e) {
       e.printStackTrace();
     }
   }
 
   private FXMLLoader obterFXMLPreviewEventoExistenteLoader() {
-    URL fxmlUrl = getClass().getResource("view/preview/previewEventoExistente.fxml");
 
-    return new FXMLLoader(fxmlUrl);
+    return new FXMLLoader(App.class.getResource("view/preview/previewEventoExistente.fxml"));
   }
 
   private ArrayList<Evento> getUltimosEventos() {

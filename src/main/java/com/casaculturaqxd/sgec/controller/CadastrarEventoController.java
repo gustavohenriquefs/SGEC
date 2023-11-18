@@ -5,7 +5,7 @@ import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -30,13 +30,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.TreeSet;
-
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.EventoDAO;
 import com.casaculturaqxd.sgec.builder.EventoBuilder;
-import com.casaculturaqxd.sgec.controller.preview.PreviewParticipanteController;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.Evento;
+import com.casaculturaqxd.sgec.models.Meta;
 import com.casaculturaqxd.sgec.models.Participante;
 
 
@@ -54,7 +53,7 @@ public class CadastrarEventoController implements ControllerEvento {
     @FXML
     VBox Localizacoes, cargaHoraria;
     @FXML
-    HBox header, secaoParticipantes, Organizadores, Colaboradores;
+    HBox Participantes, Organizadores, Colaboradores, secaoMetas;
     @FXML
     TextField titulo, publicoEsperado, publicoAlcancado, horas, minutos, horasCargaHoraria,
             numParticipantesEsperado, numMunicipiosEsperado;
@@ -64,39 +63,27 @@ public class CadastrarEventoController implements ControllerEvento {
     DatePicker dataInicial, dataFinal;
     @FXML
     ChoiceBox<String> classificacaoEtaria;
-    private String[] classificacoes =
+    private final String[] classificacoes =
             {"Livre", "10 anos", "12 anos", "14 anos", "16 anos", "18 anos"};
     @FXML
-    CheckBox checkMeta1, checkMeta2, checkMeta3, checkMeta4;
+    CheckBox checkMeta3;
     @FXML
     RadioButton certificavel, acessivelEmLibras;
 
     // Botoes
+    // Botoes
     @FXML
-    Button botaoNovaLocalizacao, botaoOrganizadores, botaoColaboradores, botaoParticipantes,
-            botaoArquivos, cancelar, criarEvento;
-    // Listas
-    ObservableMap<Participante, FXMLLoader> participantes =
-            FXCollections.<Participante, FXMLLoader> observableHashMap();
-
+    Button botaoNovaLocalizacao;
 
     public void initialize() throws IOException {
         formatterHorario = new SimpleDateFormat("HH:mm");
 
         loadMenu();
         // inicia com o local obrigatorio carregado na pagina
-        addListenersParticipante(participantes);
-
-        // FXMLLoader loaderMenu = new
-        // FXMLLoader(App.class.getResource("view/componentes/menu.fxml"));
-        // header.getChildren().add(loaderMenu.load());
-        // inicia com o local obrigatorio carregado na pagina
         carregarCampoLocalizacao();
         classificacaoEtaria.getItems().addAll(classificacoes);
         addInputConstraints();
 
-        showCargaHoraria(checkMeta3.isSelected());
-        showCertificavel(checkMeta3.isSelected());
     }
 
     private void loadMenu() throws IOException {
@@ -114,8 +101,6 @@ public class CadastrarEventoController implements ControllerEvento {
         if (!camposObrigatoriosPreenchidos()) {
             Alert erroLocalizacao = new Alert(AlertType.ERROR,
                     "nem todos os campos obrigatorios foram preenchidos");
-            erroLocalizacao.show();
-        }
 
         builderEvento.resetar();
         eventoDAO.setConnection(db.getConnection());
@@ -128,10 +113,37 @@ public class CadastrarEventoController implements ControllerEvento {
             builderEvento.setDataInicial(Date.valueOf(dataInicial.getValue()));
         }
         if (dataFinal.getValue() != null) {
+        builderEvento.setNome(titulo.getText());
+        builderEvento.setDescricao(titulo.getText());
+        builderEvento
+                .setClassificacaoEtaria(classificacaoEtaria.getSelectionModel().getSelectedItem());
+        if (dataInicial.getValue() != null) {
+            builderEvento.setDataInicial(Date.valueOf(dataInicial.getValue()));
+        }
+        if (dataFinal.getValue() != null) {
             builderEvento.setDataFinal(Date.valueOf(dataFinal.getValue()));
         }
         if (!publicoEsperado.getText().isEmpty()) {
+        }
+        if (!publicoEsperado.getText().isEmpty()) {
             builderEvento.setPublicoEsperado(Integer.parseInt(publicoEsperado.getText()));
+        }
+        if (!publicoAlcancado.getText().isEmpty()) {
+            builderEvento.setPublicoAlcancado(Integer.parseInt(publicoAlcancado.getText()));
+        }
+        builderEvento.setCertificavel(certificavel.isSelected());
+        if (!horasCargaHoraria.getText().isEmpty()) {
+            builderEvento.setCargaHoraria(new java.sql.Time(
+                    formatterHorario.parse(horasCargaHoraria.getText() + ":00:00").getTime()));
+        }
+        builderEvento.setAcessivelEmLibras(acessivelEmLibras.isSelected());
+        if (!numMunicipiosEsperado.getText().isEmpty()) {
+            builderEvento.setMunicipiosEsperado(Integer.parseInt(numMunicipiosEsperado.getText()));
+        }
+        if (!numParticipantesEsperado.getText().isEmpty()) {
+            builderEvento
+                    .setParticipantesEsperado(Integer.parseInt(numParticipantesEsperado.getText()));
+        }
         }
         if (!publicoAlcancado.getText().isEmpty()) {
             builderEvento.setPublicoAlcancado(Integer.parseInt(publicoAlcancado.getText()));
@@ -154,13 +166,16 @@ public class CadastrarEventoController implements ControllerEvento {
             idLocais.add(controller.getLocalizacao().getIdLocalizacao());
         }
         builderEvento.setLocalizacoes(idLocais);
+        builderEvento.setListaMetas(getMetasSelecionadas());
+
         Evento novoEvento = builderEvento.getEvento();
         if (eventoDAO.inserirEvento(novoEvento)) {
+            eventoDAO.vincularMetas(novoEvento.getListaMetas(), novoEvento.getIdEvento());
             novoEvento = eventoDAO.buscarEvento(novoEvento).get();
             App.setRoot("view/home");
-        }
-
+        }}
     }
+
 
 
     public void cancelar() throws IOException {
@@ -180,21 +195,35 @@ public class CadastrarEventoController implements ControllerEvento {
         Localizacoes.getChildren().add(novoLocal);
         FieldLocalizacaoController controller = loaderLocais.getLoader().getController();
         controllersLocais.add(controller);
-        System.out.println(controllersLocais);
+    }
+
+    /**
+     * retorna uma lista de metas com id igual ao indice de cada checkbox de meta selecionada,
+     */
+    public ArrayList<Meta> getMetasSelecionadas() {
+        ArrayList<CheckBox> checkBoxes = new ArrayList<>();
+        ArrayList<Meta> metasSelecionadas = new ArrayList<>();
+        for (Node node : secaoMetas.getChildren()) {
+            if (node instanceof CheckBox) {
+                checkBoxes.add((CheckBox) node);
+            }
+        }
+        for (CheckBox checkBox : checkBoxes) {
+            // ids sao 1-based
+            if (checkBox.isSelected()) {
+                metasSelecionadas.add(new Meta(checkBoxes.indexOf(checkBox) + 1));
+            }
+        }
+        return metasSelecionadas;
     }
 
     public void removerLocalizacao() throws IOException {
     }
 
-    public void adicionarParticipante(Participante participante) {
-        // TODO remover implementacao de teste
-        participantes.put(
-                new Participante(1, "new_participante", "new_area atuacao", "new link", null),
-                new FXMLLoader(App.class.getResource("view/preview/previewParticipante.fxml")));
-    }
-
-    public void removerParticipante(Participante participante) {
-        participantes.remove(participante);
+    public void adicionarParticipante() throws IOException {
+        SubSceneLoader loaderParticipantes = new SubSceneLoader();
+        VBox novoParticipante = (VBox) loaderParticipantes.getPage("fields/fieldParticipante");
+        Participantes.getChildren().add(novoParticipante);
     }
 
     public void adicionarOrganizador() throws IOException {
@@ -228,40 +257,6 @@ public class CadastrarEventoController implements ControllerEvento {
             return false;
         }
         return true;
-    }
-
-    public void addListenersParticipante(ObservableMap<Participante, FXMLLoader> observablemap) {
-        CadastrarEventoController superController = this;
-        observablemap.addListener(new MapChangeListener<Participante, FXMLLoader>() {
-            @Override
-            public void onChanged(
-                    MapChangeListener.Change<? extends Participante, ? extends FXMLLoader> change) {
-
-                if (change.wasAdded()) {
-                    Participante addedKey = change.getKey();
-                    // carregar o fxml de preview e setar o participante deste para o
-                    // participante adicionado
-                    try {
-                        Parent previewParticipante = change.getValueAdded().load();
-                        PreviewParticipanteController controller =
-                                change.getValueAdded().getController();
-                        controller.setParticipante(addedKey);
-                        controller.setParentController(superController);
-
-                        secaoParticipantes.getChildren().add(previewParticipante);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                if (change.wasRemoved()) {
-                    PreviewParticipanteController removedController =
-                            change.getValueRemoved().getController();
-                    // Remover o Pane de preview ao deletar um Participante da lista
-                    secaoParticipantes.getChildren().remove(removedController.getContainer());
-
-                }
-            }
-        });
     }
 
     public void addInputConstraints() {
@@ -317,5 +312,29 @@ public class CadastrarEventoController implements ControllerEvento {
 
     public boolean emptyLocalizacoes() {
         return Localizacoes.getChildren().isEmpty();
+    }
+
+    @Override
+    public void adicionarParticipante(Participante participante) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'adicionarParticipante'");
+    }
+
+    @Override
+    public void removerParticipante(Participante participante) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'removerParticipante'");
+    }
+
+    @Override
+    public void adicionarLocalizacao(String localizacao) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'adicionarLocalizacao'");
+    }
+
+    @Override
+    public void removerLocalizacao(String localizacao) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'removerLocalizacao'");
     }
 }

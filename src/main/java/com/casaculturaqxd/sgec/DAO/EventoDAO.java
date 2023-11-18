@@ -1,17 +1,19 @@
 package com.casaculturaqxd.sgec.DAO;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 import com.casaculturaqxd.sgec.models.Evento;
+import com.casaculturaqxd.sgec.models.Instituicao;
+import com.casaculturaqxd.sgec.models.Meta;
 
 public class EventoDAO {
   private Connection connection;
@@ -21,88 +23,91 @@ public class EventoDAO {
   }
 
   public boolean inserirEvento(Evento evento) {
-    
-    if(evento.getLocais() == null || evento.getLocais().size() == 0) {
+
+    if (evento.getLocais() == null || evento.getLocais().size() == 0) {
       return false;
     }
 
     try {
       String sql = "INSERT INTO evento (nome_evento, publico_esperado, publico_alcancado, descricao, data_inicial, data_final, horario, classificacao_etaria, certificavel, carga_horaria, acessivel_em_libras, num_participantes_esperado, num_municipios_esperado) VALUES (?, ?, ?, ?, ?, ?, ?, ?::faixa_etaria, ?, ?, ?, ?, ?) RETURNING id_evento";
-      
+
       PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
-      stmt.setString( 1, evento.getNome());
-      stmt.setInt(    2, evento.getPublicoEsperado());
-      stmt.setInt(    3, evento.getPublicoAlcancado());
-      stmt.setString( 4, evento.getDescricao());
-      stmt.setDate(   5, evento.getDataInicial());
-      stmt.setDate(   6, evento.getDataFinal());
-      stmt.setTime(   7, evento.getHorario());
-      stmt.setString( 8, evento.getClassificacaoEtaria());
+      stmt.setString(1, evento.getNome());
+      stmt.setInt(2, evento.getPublicoEsperado());
+      stmt.setInt(3, evento.getPublicoAlcancado());
+      stmt.setString(4, evento.getDescricao());
+      stmt.setDate(5, evento.getDataInicial());
+      stmt.setDate(6, evento.getDataFinal());
+      stmt.setTime(7, evento.getHorario());
+      stmt.setString(8, evento.getClassificacaoEtaria());
       stmt.setBoolean(9, evento.isCertificavel());
-      stmt.setTime(   10, evento.getCargaHoraria());
+      stmt.setTime(10, evento.getCargaHoraria());
       stmt.setBoolean(11, evento.isAcessivelEmLibras());
-      stmt.setInt(    12, evento.getParticipantesEsperado());
-      stmt.setInt(    13, evento.getMunicipiosEsperado());
+      stmt.setInt(12, evento.getParticipantesEsperado());
+      stmt.setInt(13, evento.getMunicipiosEsperado());
 
       stmt.executeUpdate();
-      
+
       ResultSet rs = stmt.getGeneratedKeys();
       if (rs.next()) {
-          evento.setIdEvento(rs.getInt("id_evento"));
+        evento.setIdEvento(rs.getInt("id_evento"));
       }
 
       stmt.close();
-      
+
     } catch (SQLException e) {
       return false;
     }
-    
-    if(evento.getLocais() != null) {
+
+    if (evento.getLocais() != null) {
       boolean vinculoLocais = this.vincularLocais(evento.getLocais(), evento.getIdEvento());
 
-      if(vinculoLocais == false) {
+      if (vinculoLocais == false) {
         return false;
       }
     }
+    /*
+     * if(evento.getListaOrganizadores() != null) { boolean vinculoOrganizadores =
+     * this.vincularOrganizadores(evento.getListaOrganizadores(),
+     * evento.getIdEvento());
+     * if(vinculoOrganizadores == false) { return false; } }
+     */
 
-    /* if(evento.getListaOrganizadores() != null) {
-      boolean vinculoOrganizadores = this.vincularOrganizadores(evento.getListaOrganizadores(), evento.getIdEvento());
-
-      if(vinculoOrganizadores == false) {
-        return false;
-      }
-    } */
-
-    /* if(evento.getListaColaboradores() != null) {
-      boolean vinculoColaboradores = this.vincularColaboradores(evento.getListaColaboradores(), evento.getIdEvento());
-
-      if(vinculoColaboradores == false) {
-        return false;
-      }
-    }
-
-    if(evento.getListaParticipantes() != null) {
-      boolean vinculoParticipantes = this.vincularParticipantes(evento.getListaParticipantes(), evento.getIdEvento());
-
-      if(vinculoParticipantes == false) {
-        return false;
-      }
-    } */
+    /*
+     * if(evento.getListaColaboradores() != null) { boolean vinculoColaboradores =
+     * this.vincularColaboradores(evento.getListaColaboradores(),
+     * evento.getIdEvento());
+     * if(vinculoColaboradores == false) { return false; } }
+     * if(evento.getListaParticipantes() !=
+     * null) { boolean vinculoParticipantes =
+     * this.vincularParticipantes(evento.getListaParticipantes(),
+     * evento.getIdEvento());
+     * if(vinculoParticipantes == false) { return false; } }
+     */
 
     return true;
+  }
+
+  public boolean vincularMetas(List<Meta> metas, Integer idEvento) {
+    MetaDAO metaDAO = new MetaDAO(connection);
+    List<Boolean> vinculos = new ArrayList<>();
+    for (Meta meta : metas) {
+      vinculos.add(metaDAO.vincularEvento(meta.getIdMeta(), idEvento));
+    }
+    return vinculos.contains(false);
   }
 
   private boolean vincularLocais(SortedSet<Integer> locais, Integer idEvento) {
-    for(Integer local: locais) {
-      if(!this.vincularLocal(local, idEvento)) {
+    for (Integer local : locais) {
+      if (!this.vincularLocal(local, idEvento)) {
         return false;
       }
     }
 
     return true;
   }
-  
+
   private boolean vincularLocal(Integer local, Integer idEvento) {
     String vincLocaisSql = "INSERT INTO localizacao_evento(id_localizacao, id_evento) VALUES (?, ?)";
 
@@ -120,8 +125,8 @@ public class EventoDAO {
   }
 
   private boolean vincularOrganizadores(SortedSet<Integer> organizadores, Integer idEvento) {
-    for(Integer organizador: organizadores) {
-      if(!this.vincularOrganizador(organizador, idEvento)) {
+    for (Integer organizador : organizadores) {
+      if (!this.vincularOrganizador(organizador, idEvento)) {
         return false;
       }
     }
@@ -146,8 +151,8 @@ public class EventoDAO {
   }
 
   private boolean vincularColaboradores(SortedSet<Integer> colaboradores, Integer idEvento) {
-    for(Integer colaborador: colaboradores) {
-      if(!this.vincularColaborador(colaborador, idEvento)) {
+    for (Integer colaborador : colaboradores) {
+      if (!this.vincularColaborador(colaborador, idEvento)) {
         return false;
       }
     }
@@ -172,8 +177,8 @@ public class EventoDAO {
   }
 
   private boolean vincularParticipantes(SortedSet<Integer> participantes, Integer idEvento) {
-    for(Integer participante: participantes) {
-      if(!this.vincularParticipante(participante, idEvento)) {
+    for (Integer participante : participantes) {
+      if (!this.vincularParticipante(participante, idEvento)) {
         return false;
       }
     }
@@ -255,7 +260,7 @@ public class EventoDAO {
       stmt.setInt(1, evento.getIdEvento());
       ResultSet resultSet = stmt.executeQuery();
       Evento eventoRetorno = null;
-      
+
       if (resultSet.next()) {
         eventoRetorno = new Evento();
         eventoRetorno.setIdEvento(resultSet.getInt("id_evento"));
@@ -273,9 +278,13 @@ public class EventoDAO {
         eventoRetorno.setParticipantesEsperado(resultSet.getInt("num_participantes_esperado"));
         eventoRetorno.setMunicipiosEsperado(resultSet.getInt("num_municipios_esperado"));
         eventoRetorno.setLocais(this.buscarLocaisPorEvento(eventoRetorno.getIdEvento()));
-        eventoRetorno.setListaOrganizadores(this.buscarOrganizadoresPorEvento(eventoRetorno.getIdEvento()));
-        eventoRetorno.setListaColaboradores(this.buscarColaboradoresPorEvento(eventoRetorno.getIdEvento()));
-        eventoRetorno.setListaParticipantes(this.buscarLocaisPorEvento(eventoRetorno.getIdEvento()));
+        eventoRetorno
+            .setListaOrganizadores(this.buscarOrganizadoresPorEvento(eventoRetorno.getIdEvento()));
+        eventoRetorno
+            .setListaColaboradores(this.buscarColaboradoresPorEvento(eventoRetorno.getIdEvento()));
+        eventoRetorno
+            .setListaParticipantes(this.buscarLocaisPorEvento(eventoRetorno.getIdEvento()));
+        eventoRetorno.setListaMetas(this.listarMetasEvento(eventoRetorno));
       }
       stmt.close();
       return Optional.ofNullable(eventoRetorno);
@@ -284,50 +293,14 @@ public class EventoDAO {
     }
   }
 
-  private SortedSet<Integer> buscarColaboradoresPorEvento(int idEvento) {
-    String sql = "select id_instituicao from colaborador_evento where id_evento=?";
-
-    SortedSet<Integer> colaboradores = new TreeSet<>();
-
-    try {
-      PreparedStatement stmt = connection.prepareStatement(sql);
-      
-      stmt.setInt(1, idEvento);
-      
-      ResultSet resultSet = stmt.executeQuery();
-
-      while (resultSet.next()) {
-        colaboradores.add(resultSet.getInt("id_instituicao"));
-      }
-      stmt.close();
-    } catch (SQLException e) {
-      return null;
-    }
-
-    return colaboradores;
+  private ArrayList<Instituicao> buscarColaboradoresPorEvento(int idEvento) {
+    InstituicaoDAO instituicaoDAO = new InstituicaoDAO(connection);
+    return instituicaoDAO.listarColaboradoresEvento(idEvento);
   }
 
-  private SortedSet<Integer> buscarOrganizadoresPorEvento(int idEvento) {
-    String sql = "select id_instituicao from organizador_evento where id_evento=?";
-
-    SortedSet<Integer> organizadores = new TreeSet<>();
-
-    try {
-      PreparedStatement stmt = connection.prepareStatement(sql);
-      
-      stmt.setInt(1, idEvento);
-      
-      ResultSet resultSet = stmt.executeQuery();
-
-      while (resultSet.next()) {
-        organizadores.add(resultSet.getInt("id_instituicao"));
-      }
-      stmt.close();
-    } catch (SQLException e) {
-      return null;
-    }
-
-    return organizadores;
+  private ArrayList<Instituicao> buscarOrganizadoresPorEvento(int idEvento) {
+    InstituicaoDAO instituicaoDAO = new InstituicaoDAO(connection);
+    return instituicaoDAO.listarOrganizadoresEvento(idEvento);
   }
 
   public int getNumeroMunicipiosDiferentes(Integer idEvento) {
@@ -336,9 +309,9 @@ public class EventoDAO {
 
     try {
       PreparedStatement stmt = connection.prepareStatement(sql);
-      
+
       stmt.setInt(1, 1);
-      
+
       ResultSet resultSet = stmt.executeQuery();
 
       if (resultSet.next()) {
@@ -360,9 +333,9 @@ public class EventoDAO {
 
     try {
       PreparedStatement stmt = connection.prepareStatement(sql);
-      
+
       stmt.setInt(1, idEvento);
-      
+
       ResultSet resultSet = stmt.executeQuery();
 
       while (resultSet.next()) {
@@ -373,16 +346,15 @@ public class EventoDAO {
       return null;
     }
 
-
     return locais;
   }
 
   public boolean alterarEvento(Evento evento) {
     try {
       String sql = "update evento set nome_evento=?, publico_esperado=?, publico_alcancado=?, descricao=?, data_inicial=?, data_final=?, horario=?, classificacao_etaria=?::faixa_etaria, certificavel=?, carga_horaria=?, acessivel_em_libras=?, num_participantes_esperado = ?, num_municipios_esperado = ? where id_evento=?";
-      
+
       PreparedStatement stmt = connection.prepareStatement(sql);
-      
+
       stmt.setString(1, evento.getNome());
       stmt.setInt(2, evento.getPublicoEsperado());
       stmt.setInt(3, evento.getPublicoAlcancado());
@@ -405,25 +377,25 @@ public class EventoDAO {
 
     boolean sincLocais = this.sincronizarLocais(evento);
 
-    if(!sincLocais) {
+    if (!sincLocais) {
       return false;
     }
-    
+
     boolean sincOrganizadores = this.sincronizarOrganizadores(evento);
 
-    if(!sincOrganizadores) {
+    if (!sincOrganizadores) {
       return false;
     }
 
     boolean sincColaboradores = this.sincronizarColaboradores(evento);
 
-    if(!sincColaboradores) {
+    if (!sincColaboradores) {
       return false;
     }
 
     boolean sincParticipantes = this.sincronizarParticipantes(evento);
 
-    if(!sincParticipantes) {
+    if (!sincParticipantes) {
       return false;
     }
 
@@ -433,20 +405,20 @@ public class EventoDAO {
   private boolean sincronizarParticipantes(Evento evento) {
     SortedSet<Integer> participantesEventoIds = this.buscarParticipantesPorEvento(evento.getIdEvento());
 
-    for(Integer participanteId: participantesEventoIds) {
-      if(!evento.getListaParticipantes().contains(participanteId)) {
-        boolean participanteFoiDesvinculado = this.desvincularParticipante(participanteId, evento.getIdEvento()); 
+    for (Integer participanteId : participantesEventoIds) {
+      if (!evento.getListaParticipantes().contains(participanteId)) {
+        boolean participanteFoiDesvinculado = this.desvincularParticipante(participanteId, evento.getIdEvento());
 
-        if(!participanteFoiDesvinculado) {
+        if (!participanteFoiDesvinculado) {
           return false;
         }
       }
     }
 
-    for(Integer participanteId: evento.getListaParticipantes()) {
+    for (Integer participanteId : evento.getListaParticipantes()) {
       boolean participanteFoiVinculado = this.vincularParticipante(participanteId, evento.getIdEvento());
 
-      if(!participanteFoiVinculado) {
+      if (!participanteFoiVinculado) {
         return false;
       }
     }
@@ -455,22 +427,24 @@ public class EventoDAO {
   }
 
   private boolean sincronizarColaboradores(Evento evento) {
-    SortedSet<Integer> colaboradoresEventoIds = this.buscarColaboradoresPorEvento(evento.getIdEvento());
+    ArrayList<Instituicao> colaboradoresEvento = this.buscarColaboradoresPorEvento(evento.getIdEvento());
 
-    for(Integer colaboradorId: colaboradoresEventoIds) {
-      if(!evento.getListaColaboradores().contains(colaboradorId)) {
-        boolean colaboradorFoiDesvinculado = this.desvincularColaborador(colaboradorId, evento.getIdEvento()); 
+    for (Instituicao colaborador : colaboradoresEvento) {
+      if (!evento.getListaColaboradores().contains(colaborador)) {
+        boolean colaboradorFoiDesvinculado = this.desvincularColaborador(colaborador.getIdInstituicao(),
+            evento.getIdEvento());
 
-        if(!colaboradorFoiDesvinculado) {
+        if (!colaboradorFoiDesvinculado) {
           return false;
         }
       }
     }
 
-    for(Integer colaboradorId: evento.getListaColaboradores()) {
-      boolean colaboradorFoiVinculado = this.vincularColaborador(colaboradorId, evento.getIdEvento());
+    for (Instituicao colaborador : evento.getListaColaboradores()) {
+      boolean colaboradorFoiVinculado = this.vincularColaborador(colaborador.getIdInstituicao(),
+          evento.getIdEvento());
 
-      if(!colaboradorFoiVinculado) {
+      if (!colaboradorFoiVinculado) {
         return false;
       }
     }
@@ -479,22 +453,24 @@ public class EventoDAO {
   }
 
   private boolean sincronizarOrganizadores(Evento evento) {
-    SortedSet<Integer> organizadoresEventoIds = this.buscarOrganizadoresPorEvento(evento.getIdEvento());
+    ArrayList<Instituicao> organizadoresEvento = this.buscarOrganizadoresPorEvento(evento.getIdEvento());
 
-    for(Integer organizadorId: organizadoresEventoIds) {
-      if(!evento.getListaOrganizadores().contains(organizadorId)) {
-        boolean organizadorFoiDesvinculado = this.desvincularOrganizador(organizadorId, evento.getIdEvento()); 
+    for (Instituicao organizador : organizadoresEvento) {
+      if (!evento.getListaOrganizadores().contains(organizador)) {
+        boolean organizadorFoiDesvinculado = this.desvincularOrganizador(organizador.getIdInstituicao(),
+            evento.getIdEvento());
 
-        if(!organizadorFoiDesvinculado) {
+        if (!organizadorFoiDesvinculado) {
           return false;
         }
       }
     }
 
-    for(Integer organizadorId: evento.getListaOrganizadores()) {
-      boolean organizadorFoiVinculado = this.vincularOrganizador(organizadorId, evento.getIdEvento());
+    for (Instituicao organizador : evento.getListaOrganizadores()) {
+      boolean organizadorFoiVinculado = this.vincularOrganizador(organizador.getIdInstituicao(),
+          evento.getIdEvento());
 
-      if(!organizadorFoiVinculado) {
+      if (!organizadorFoiVinculado) {
         return false;
       }
     }
@@ -504,21 +480,21 @@ public class EventoDAO {
 
   private boolean sincronizarLocais(Evento evento) {
     SortedSet<Integer> locaisEventoIds = this.buscarLocaisPorEvento(evento.getIdEvento());
-    
-    for(Integer localId: locaisEventoIds) {
-      if(!evento.getLocais().contains(localId)) {
-        boolean localFoiDesvinculado = this.desvincularLocal(localId, evento.getIdEvento()); 
 
-        if(!localFoiDesvinculado) {
+    for (Integer localId : locaisEventoIds) {
+      if (!evento.getLocais().contains(localId)) {
+        boolean localFoiDesvinculado = this.desvincularLocal(localId, evento.getIdEvento());
+
+        if (!localFoiDesvinculado) {
           return false;
         }
       }
     }
-    
-    for(Integer localId: evento.getLocais()) {
+
+    for (Integer localId : evento.getLocais()) {
       boolean localFoiVinculado = this.vincularLocal(localId, evento.getIdEvento());
 
-      if(!localFoiVinculado) {
+      if (!localFoiVinculado) {
         return false;
       }
     }
@@ -549,9 +525,9 @@ public class EventoDAO {
 
     try {
       PreparedStatement stmt = connection.prepareStatement(sql);
-      
+
       stmt.setInt(1, idEvento);
-      
+
       ResultSet resultSet = stmt.executeQuery();
 
       while (resultSet.next()) {
@@ -563,6 +539,11 @@ public class EventoDAO {
     }
 
     return participantes;
+  }
+
+  public ArrayList<Meta> listarMetasEvento(Evento evento) {
+    MetaDAO metaDAO = new MetaDAO(connection);
+    return metaDAO.listarMetasEvento(evento.getIdEvento());
   }
 
   private boolean desvincularColaborador(Integer colaboradorId, Integer idEvento) {
@@ -597,7 +578,7 @@ public class EventoDAO {
     return true;
   }
 
-  private boolean  desvincularLocal(Integer localId, Integer idEvento) {
+  private boolean desvincularLocal(Integer localId, Integer idEvento) {
     String vincLocaisSql = "DELETE FROM localizacao_evento WHERE id_localizacao=? AND id_evento=?";
 
     try {
@@ -613,6 +594,11 @@ public class EventoDAO {
     return true;
   }
 
+  private boolean desvincularMeta(Integer meta, Integer idEvento) {
+    MetaDAO metaDAO = new MetaDAO(connection);
+    return metaDAO.desvincularEvento(meta, idEvento);
+  }
+
   public ArrayList<Evento> obterEventos() {
     return this.obterEventos(null, true, 5);
   }
@@ -621,16 +607,17 @@ public class EventoDAO {
     return this.obterEventos(campoUsadoOrdenar, ehAscendente, 5);
   }
 
-  public ArrayList<Evento> obterEventos(String campoUsadoOrdenar, boolean ehAscendente, Integer limite) {
-    if(campoUsadoOrdenar == null) {
+  public ArrayList<Evento> obterEventos(String campoUsadoOrdenar, boolean ehAscendente,
+      Integer limite) {
+    if (campoUsadoOrdenar == null) {
       campoUsadoOrdenar = "cadastrado_em";
     }
 
     String sql = "select * from evento order by ";
     sql += campoUsadoOrdenar;
     sql += ehAscendente ? " asc" : " desc";
-    sql += " limit ?"; 
-    // qual o outro tipo de ordenação além do desc? 
+    sql += " limit ?";
+    // qual o outro tipo de ordenação além do desc?
     ArrayList<Evento> eventos = new ArrayList<>();
 
     try {
