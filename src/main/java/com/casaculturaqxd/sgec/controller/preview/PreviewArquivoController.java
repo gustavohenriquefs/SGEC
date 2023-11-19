@@ -49,8 +49,7 @@ public class PreviewArquivoController {
     public void download() throws IOException {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Salvar arquivo");
-        fileChooser.getExtensionFilters()
-                .add(new ExtensionFilter("Tipo de arquivo", "*" + serviceFile.getSuffix()));
+        fileChooser.getExtensionFilters().add(new ExtensionFilter("Tipo de arquivo", "*" + serviceFile.getSuffix()));
         File downloadFile = fileChooser.showSaveDialog(stage);
         if (!writeFileContent(downloadFile)) {
             // mudando tipo de alerta e removendo opcao de visualizacao em caso de falha
@@ -63,8 +62,7 @@ public class PreviewArquivoController {
 
     }
 
-    private void executeCloseDialogAction(Optional<ButtonType> chosenButton, File result)
-            throws IOException {
+    private void executeCloseDialogAction(Optional<ButtonType> chosenButton, File result) throws IOException {
         if (chosenButton.isPresent()) {
             if (chosenButton.get() == showFileOption) {
                 Desktop desktop = Desktop.getDesktop();
@@ -104,7 +102,11 @@ public class PreviewArquivoController {
             String dataArquivo = serviceFile.getUltimaModificacao() == null ? " "
                     : String.valueOf(serviceFile.getUltimaModificacao());
             fileKey.setText(serviceFile.getFileKey());
-            tamanho.setText(formatFileSize(serviceFile.getContent().length()));
+            try {
+                tamanho.setText(formatFileSize(serviceFile.getContent().length()));
+            } catch (IOException e) {
+                tamanho.setText("--");
+            }
             date.setText(dataArquivo);
             fileType.setText(serviceFile.getSuffix());
             loadImage();
