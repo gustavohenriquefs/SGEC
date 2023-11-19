@@ -2,29 +2,61 @@ package com.casaculturaqxd.sgec.controller.preview;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.awt.Desktop;
 import com.casaculturaqxd.sgec.controller.ControllerEvento;
 import com.casaculturaqxd.sgec.models.Participante;
+import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.Control;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.control.Labeled;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import javafx.stage.FileChooser.ExtensionFilter;
 
 public class PreviewParticipanteController {
     private ControllerEvento parentController;
     private Participante participante;
+    private Stage stage;
     @FXML
     private Parent container;
     @FXML
-    private Label nomeArtista, areaAtuacao, minibio;
+    private HBox campoNome, campoAreaAtuacao, campoMinibio, campoLink;
     @FXML
-    private Hyperlink link;
+    private Label labelNomeArtista, labelAreaAtuacao, labelMinibio;
     @FXML
-    private ImageView imagem;
+    private Hyperlink linkMapaCultural;
+    @FXML
+    private ImageView imageViewParticipante;
+    @FXML
+    private Button buttonAlterarCapa;
+    private ObservableMap<Parent, List<Node>> previousChildren = FXCollections.observableHashMap();
 
     public void initialize() {
+        // manter o botao sempre no topo da imagem
+        buttonAlterarCapa.setViewOrder(-1);
     }
 
     public ControllerEvento getParentController() {
@@ -49,10 +81,10 @@ public class PreviewParticipanteController {
     }
 
     public void loadContent() {
-        nomeArtista.setText(participante.getNome());
-        areaAtuacao.setText(participante.getAreaDeAtuacao());
-        minibio.setText(participante.getBio());
-        link.setText(participante.getLinkMapaDaCultura());
+        labelNomeArtista.setText(participante.getNome());
+        labelAreaAtuacao.setText(participante.getAreaDeAtuacao());
+        labelMinibio.setText(participante.getBio());
+        linkMapaCultural.setText(participante.getLinkMapaDaCultura());
         loadImagem();
     }
 
@@ -61,7 +93,7 @@ public class PreviewParticipanteController {
 
         try {
             fileAsStream = new FileInputStream(participante.getImagemCapa().getContent());
-            imagem.setImage(new Image(fileAsStream));
+            imageViewParticipante.setImage(new Image(fileAsStream));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (NullPointerException e) {
@@ -71,6 +103,58 @@ public class PreviewParticipanteController {
 
     public void remover() {
         parentController.removerParticipante(getParticipante());
+    }
+
+    public void updateImagemCapa() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Alterar foto de participante");
+        ExtensionFilter filterImagens = new ExtensionFilter("imagem", "*.jpeg", "*.jpg", "*.png", "*.bmp");
+        fileChooser.getExtensionFilters().add(filterImagens);
+        participante.setImagemCapa(new ServiceFile(fileChooser.showOpenDialog(stage)));
+        loadImagem();
+    }
+
+    public void updateNome() {
+        updateField(labelNomeArtista, campoNome);
+    }
+
+    public void updateMinibio() {
+        updateField(labelMinibio, campoMinibio);
+    }
+
+    public void updateAreaAtuacao() {
+        updateField(labelAreaAtuacao, campoAreaAtuacao);
+    }
+
+    public void updateLinkMapaCultural() {
+        updateField(linkMapaCultural, campoLink);
+    }
+
+    // substitui o campo especificado por um textfield, se a alteracao for cancelada
+    // retorna ao estado anterior, se o novo texto for inserido, modifica o label
+    // presente
+    private void updateField(Labeled labeled, HBox fieldParent) {
+        ObservableList<Node> oldNodes = FXCollections.observableArrayList(fieldParent.getChildren());
+        previousChildren.put(campoNome, oldNodes);
+        TextField textField = new TextField(labeled.getText());
+        textField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                labeled.setText(textField.getText());
+                fieldParent.getChildren().setAll(previousChildren.get(campoNome));
+            } else if (event.getCode() == KeyCode.ESCAPE) {
+                fieldParent.getChildren().setAll(previousChildren.get(campoNome));
+            }
+        });
+        fieldParent.getChildren().setAll(textField);
+    }
+
+    public void openInBrowser() {
+        try {
+            Desktop.getDesktop().browse(new URI(linkMapaCultural.getText()));
+        } catch (Exception e) {
+            Alert alert = new Alert(AlertType.ERROR, "Falha ao abrir o link");
+            alert.showAndWait();
+        }
     }
 
     public Parent getContainer() {

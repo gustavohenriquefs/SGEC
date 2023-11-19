@@ -4,8 +4,10 @@
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -15,43 +17,68 @@
          <children>
             <HBox fx:id="campoImagem" alignment="CENTER" prefHeight="142.0" prefWidth="280.0">
                <children>
-                  <ImageView fx:id="imagem" fitHeight="145.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS" />
+                  <StackPane HBox.hgrow="ALWAYS">
+                     <children>
+                        <Button fx:id="buttonAlterarCapa" mnemonicParsing="false" onAction="#updateImagemCapa" style="-fx-background-color: #2A3F25; -fx-text-fill: #FFFEF7;" text="Alterar foto" />
+                        <ImageView fx:id="imageViewParticipante" fitHeight="145.0" fitWidth="300.0" pickOnBounds="true" preserveRatio="true" />
+                     </children>
+                  </StackPane>
                </children>
             </HBox>
-            <HBox fx:id="campoArtista" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="260.0" styleClass="meusLabels">
+            <HBox fx:id="campoNome" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="260.0" styleClass="meusLabels">
                <children>
-                  <Label id="artista" fx:id="nomeArtista" minHeight="-Infinity" prefHeight="28.0" prefWidth="310.0" styleClass="meusLabels" HBox.hgrow="ALWAYS">
+                  <Label id="artista" fx:id="labelNomeArtista" minHeight="-Infinity" prefHeight="28.0" prefWidth="310.0" styleClass="meusLabels" text="Nome" HBox.hgrow="ALWAYS">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Label>
+                  <ImageView fitHeight="16.0" fitWidth="16.0" onMouseClicked="#updateNome" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../imagens/edit-icon.png" />
+                     </image>
+                  </ImageView>
                </children>
             </HBox>
-            <HBox fx:id="campoArea" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="25.0" prefWidth="302.0" styleClass="meusLabels">
+            <HBox fx:id="campoAreaAtuacao" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="25.0" prefWidth="302.0" styleClass="meusLabels">
                <children>
-                  <Label id="area" fx:id="areaAtuacao" prefHeight="25.0" prefWidth="278.0" styleClass="meusLabels">
+                  <Label id="area" fx:id="labelAreaAtuacao" prefHeight="25.0" prefWidth="310.0" styleClass="meusLabels" text="Área de atuação">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Label>
+                  <ImageView fitHeight="16.0" fitWidth="16.0" onMouseClicked="#updateAreaAtuacao" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../imagens/edit-icon.png" />
+                     </image>
+                  </ImageView>
                </children>
             </HBox>
-            <HBox id="meusLabels" fx:id="miniBio" prefHeight="26.0" prefWidth="260.0">
+            <HBox id="meusLabels" fx:id="campoMinibio" prefHeight="26.0" prefWidth="260.0">
                <children>
-                  <Label fx:id="minibio" prefHeight="26.0" prefWidth="303.0" styleClass="meusLabels">
+                  <Label fx:id="labelMinibio" prefHeight="26.0" prefWidth="310.0" styleClass="meusLabels" text="Minibio">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Label>
+                  <ImageView fitHeight="16.0" fitWidth="16.0" onMouseClicked="#updateMinibio" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../imagens/edit-icon.png" />
+                     </image>
+                  </ImageView>
                </children>
             </HBox>
             <HBox fx:id="campoLink" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="18.0" prefWidth="281.0">
                <children>
-                  <Hyperlink fx:id="link" text="Hyperlink">
+                  <Hyperlink onMouseClicked="#openInBrowser" fx:id="linkMapaCultural" text="Hyperlink">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Hyperlink>
+                  <ImageView fitHeight="16.0" fitWidth="16.0" onMouseClicked="#updateLinkMapaCultural" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../imagens/edit-icon.png" />
+                     </image>
+                  </ImageView>
                </children>
             </HBox>
             <Button id="buttonRemover" mnemonicParsing="false" onAction="#remover" style="-fx-background-color: #A22D2E; -fx-text-fill: #E9E3CA;" text="Remover" />
