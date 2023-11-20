@@ -1,13 +1,12 @@
 package com.casaculturaqxd.sgec.controller.preview;
 
+import java.awt.Desktop;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
-import java.awt.Desktop;
+
 import com.casaculturaqxd.sgec.controller.ControllerEvento;
 import com.casaculturaqxd.sgec.models.Participante;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
@@ -19,22 +18,20 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.Control;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TextInputDialog;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
-import javafx.scene.text.Text;
+import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.stage.Stage;
 
 public class PreviewParticipanteController {
     private ControllerEvento parentController;
@@ -133,7 +130,7 @@ public class PreviewParticipanteController {
     // substitui o campo especificado por um textfield, se a alteracao for cancelada
     // retorna ao estado anterior, se o novo texto for inserido, modifica o label
     // presente
-    private void updateField(Labeled labeled, HBox fieldParent) {
+    private void updateField(Labeled labeled, Pane fieldParent) {
         ObservableList<Node> oldNodes = FXCollections.observableArrayList(fieldParent.getChildren());
         previousChildren.put(campoNome, oldNodes);
         TextField textField = new TextField(labeled.getText());
