@@ -34,18 +34,22 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.TreeSet;
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.EventoDAO;
+import com.casaculturaqxd.sgec.DAO.InstituicaoDAO;
 import com.casaculturaqxd.sgec.DAO.ServiceFileDAO;
 import com.casaculturaqxd.sgec.builder.EventoBuilder;
 import com.casaculturaqxd.sgec.controller.dialog.DialogNovaInstituicao;
 import com.casaculturaqxd.sgec.controller.preview.PreviewArquivoController;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.Evento;
+import com.casaculturaqxd.sgec.models.Instituicao;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 import com.casaculturaqxd.sgec.service.Service;
 import com.casaculturaqxd.sgec.models.Meta;
+import com.casaculturaqxd.sgec.models.Participante;
 
 public class CadastrarEventoController implements ControllerServiceFile {
     private final int MAX_LOCALIZACOES = 4;
@@ -81,7 +85,7 @@ public class CadastrarEventoController implements ControllerServiceFile {
     @FXML
     RadioButton certificavel, acessivelEmLibras;
     private ObservableMap<ServiceFile, FXMLLoader> mapServiceFiles = FXCollections.observableHashMap();
-
+    ObservableMap<Participante, FXMLLoader> participanteObservableMap;
     // Botoes
     @FXML
     Button botaoNovaLocalizacao;
@@ -228,27 +232,19 @@ public class CadastrarEventoController implements ControllerServiceFile {
     }
 
     public void adicionarOrganizador() throws IOException {
-        ButtonType buttonTypeCancelar = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
-        ButtonType buttonTypeCadastrar = new ButtonType("Cadastrar nova instituição", ButtonBar.ButtonData.APPLY);
         ButtonType buttonTypeVincularOrganizadora = new ButtonType("Vincular como organizadora", ButtonBar.ButtonData.OK_DONE);
-
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/Dialog/dialogInstituicoes.fxml"));
-        DialogNovaInstituicao dialogNovaInstituicao = new DialogNovaInstituicao();
-        dialogNovaInstituicao.setDialogPane(fxmlLoader.load());
-        dialogNovaInstituicao.getDialogPane().getButtonTypes().addAll(buttonTypeCancelar, buttonTypeCadastrar, buttonTypeVincularOrganizadora);
-        dialogNovaInstituicao.showAndWait();
+        DialogNovaInstituicao dialogNovaInstituicao = new DialogNovaInstituicao(buttonTypeVincularOrganizadora);
+        Optional<Instituicao> temp = dialogNovaInstituicao.showAndWait();
+    
+        temp.ifPresent(instituicao -> System.out.println(instituicao));
     }
 
     public void adicionarColaborador() throws IOException {
-        ButtonType buttonTypeCancelar = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
-        ButtonType buttonTypeCadastrar = new ButtonType("Cadastrar nova instituição", ButtonBar.ButtonData.APPLY);
-        ButtonType buttonTypeVincularColaboradora = new ButtonType("Vincular como colaboradora", ButtonBar.ButtonData.OK_DONE);
-
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/Dialog/dialogInstituicoes.fxml"));
-        DialogNovaInstituicao dialogNovaInstituicao = new DialogNovaInstituicao();
-        dialogNovaInstituicao.setDialogPane(fxmlLoader.load());
-        dialogNovaInstituicao.getDialogPane().getButtonTypes().addAll(buttonTypeCancelar, buttonTypeCadastrar, buttonTypeVincularColaboradora);
-        dialogNovaInstituicao.showAndWait();
+        ButtonType buttonTypeVincularColaborador = new ButtonType("Vincular como colaborador", ButtonBar.ButtonData.OK_DONE);
+        DialogNovaInstituicao dialogNovaInstituicao = new DialogNovaInstituicao(buttonTypeVincularColaborador);
+        Optional<Instituicao> temp = dialogNovaInstituicao.showAndWait();
+    
+        temp.ifPresent(instituicao -> System.out.println(instituicao));
     }
 
     public void adicionarArquivo() {
