@@ -9,6 +9,8 @@ import javafx.scene.Parent;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
@@ -37,6 +39,7 @@ import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.EventoDAO;
 import com.casaculturaqxd.sgec.DAO.ServiceFileDAO;
 import com.casaculturaqxd.sgec.builder.EventoBuilder;
+import com.casaculturaqxd.sgec.controller.dialog.DialogNovaInstituicao;
 import com.casaculturaqxd.sgec.controller.preview.PreviewArquivoController;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.Evento;
@@ -226,22 +229,27 @@ public class CadastrarEventoController implements ControllerServiceFile {
     }
 
     public void adicionarOrganizador() throws IOException {
-        // TODO: permitir adicionar uma instituicao existente, neste caso o preview dela
-        // que e adicionado a pagina
-        SubSceneLoader loaderOrganizadores = new SubSceneLoader();
-        AnchorPane novoOrganizador =
-                (AnchorPane) loaderOrganizadores.getPage("fields/fieldInstituicao");
-        Organizadores.getChildren().add(novoOrganizador);
+        ButtonType buttonTypeCancelar = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+        ButtonType buttonTypeCadastrar = new ButtonType("Cadastrar nova instituição", ButtonBar.ButtonData.APPLY);
+        ButtonType buttonTypeVincularOrganizadora = new ButtonType("Vincular como organizadora", ButtonBar.ButtonData.OK_DONE);
 
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/Dialog/dialogInstituicoes.fxml"));
+        DialogNovaInstituicao dialogNovaInstituicao = new DialogNovaInstituicao();
+        dialogNovaInstituicao.setDialogPane(fxmlLoader.load());
+        dialogNovaInstituicao.getDialogPane().getButtonTypes().addAll(buttonTypeCancelar, buttonTypeCadastrar, buttonTypeVincularOrganizadora);
+        dialogNovaInstituicao.showAndWait();
     }
 
     public void adicionarColaborador() throws IOException {
-        // TODO: permitir adicionar uma instituicao existente, neste caso o preview dela
-        // que e adicionado a pagina
-        SubSceneLoader loaderColaboradores = new SubSceneLoader();
-        AnchorPane novoColaborador =
-                (AnchorPane) loaderColaboradores.getPage("fields/fieldInstituicao");
-        Colaboradores.getChildren().add(novoColaborador);
+        ButtonType buttonTypeCancelar = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+        ButtonType buttonTypeCadastrar = new ButtonType("Cadastrar nova instituição", ButtonBar.ButtonData.APPLY);
+        ButtonType buttonTypeVincularColaboradora = new ButtonType("Vincular como colaboradora", ButtonBar.ButtonData.OK_DONE);
+
+        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/Dialog/dialogInstituicoes.fxml"));
+        DialogNovaInstituicao dialogNovaInstituicao = new DialogNovaInstituicao();
+        dialogNovaInstituicao.setDialogPane(fxmlLoader.load());
+        dialogNovaInstituicao.getDialogPane().getButtonTypes().addAll(buttonTypeCancelar, buttonTypeCadastrar, buttonTypeVincularColaboradora);
+        dialogNovaInstituicao.showAndWait();
     }
 
     public void adicionarArquivo() {

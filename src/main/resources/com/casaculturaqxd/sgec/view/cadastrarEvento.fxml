@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox id="pageCadastrarEvento" fx:id="root" prefHeight="1154.0" prefWidth="1461.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.CadastrarEventoController">
+<VBox id="pageCadastrarEvento" fx:id="root" prefHeight="1154.0" prefWidth="1461.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.CadastrarEventoController">
    <children>
       <ScrollPane hbarPolicy="ALWAYS" vbarPolicy="ALWAYS" VBox.vgrow="ALWAYS">
          <content>
@@ -156,7 +156,7 @@
                            <children>
                            <HBox fx:id="Organizadores" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                               <children>
-                                 <Button fx:id="botaoOrganizadores" disable="true" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#adicionarOrganizador" prefHeight="46.0" prefWidth="154.0" style="-fx-background-color: #352929;" text="Adicionar organizadores" textFill="WHITE" visible="false" VBox.vgrow="ALWAYS" />
+                                 <Button fx:id="botaoOrganizadores" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#adicionarOrganizador" prefHeight="46.0" prefWidth="154.0" style="-fx-background-color: #352929;" text="Adicionar organizadores" textFill="WHITE" VBox.vgrow="ALWAYS" />
                               </children>
                            </HBox>
                            </children>
@@ -165,7 +165,7 @@
                            <children>
                               <HBox fx:id="Colaboradores" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                                  <children>
-                                 <Button fx:id="botaoColaboradores" disable="true" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#adicionarColaborador" prefHeight="46.0" prefWidth="153.0" style="-fx-background-color: #352929;" text="Adicionar colaboradores" textFill="WHITE" visible="false" VBox.vgrow="ALWAYS" />
+                                 <Button fx:id="botaoColaboradores" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#adicionarColaborador" prefHeight="46.0" prefWidth="153.0" style="-fx-background-color: #352929;" text="Adicionar colaboradores" textFill="WHITE" VBox.vgrow="ALWAYS" />
                                  </children>
                               </HBox>
                            </children>

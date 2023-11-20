@@ -4,7 +4,6 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DialogPane?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
@@ -13,7 +12,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<DialogPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="630.0" stylesheets="@../../css/dialog/dialogInstituicoesStyle.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="src\main\java\com\casaculturaqxd\sgec\controller\dialog\DialogInstituicaoController.java">
+<DialogPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="630.0" stylesheets="@../../css/dialog/dialogInstituicoesStyle.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.dialog.DialogInstituicaoController">
    <content>
       <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="630.0">
          <children>
@@ -35,16 +34,6 @@
                   <TextField fx:id="valorContribuicao" maxWidth="-Infinity" minHeight="-Infinity" prefWidth="250.0" />
                </children>
             </VBox>
-            <HBox layoutX="20.0" layoutY="478.0" prefHeight="25.0" prefWidth="590.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="0.0">
-               <children>
-                  <RadioButton fx:id="colaborador" mnemonicParsing="false" text="Colaborador">
-                     <HBox.margin>
-                        <Insets left="10.0" />
-                     </HBox.margin>
-                  </RadioButton>
-                  <RadioButton fx:id="organizador" mnemonicParsing="false" text="Organizador" />
-               </children>
-            </HBox>
             <HBox alignment="CENTER" layoutX="35.0" layoutY="537.0" prefHeight="113.0" prefWidth="625.0" spacing="30.0" AnchorPane.bottomAnchor="-0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="0.0">
                <children>
                   <VBox alignment="CENTER" prefHeight="118.0" prefWidth="184.0" spacing="5.0">
