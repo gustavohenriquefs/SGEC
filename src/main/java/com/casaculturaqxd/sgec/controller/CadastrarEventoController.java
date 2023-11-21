@@ -24,10 +24,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
 import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -37,20 +37,24 @@ import java.util.function.Consumer;
 
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.EventoDAO;
+import com.casaculturaqxd.sgec.DAO.ParticipanteDAO;
 import com.casaculturaqxd.sgec.DAO.ServiceFileDAO;
 import com.casaculturaqxd.sgec.builder.EventoBuilder;
+import com.casaculturaqxd.sgec.controller.preview.PreviewParticipanteController;
 import com.casaculturaqxd.sgec.controller.preview.PreviewArquivoController;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.Evento;
+import com.casaculturaqxd.sgec.models.Participante;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 import com.casaculturaqxd.sgec.service.Service;
 import com.casaculturaqxd.sgec.models.Meta;
 
-public class CadastrarEventoController implements ControllerServiceFile {
+public class CadastrarEventoController implements ControllerServiceFile, ControllerEvento {
     private final int MAX_LOCALIZACOES = 4;
     DatabasePostgres db = DatabasePostgres.getInstance("URL", "USER_NAME", "PASSWORD");
     EventoBuilder builderEvento = new EventoBuilder();
     EventoDAO eventoDAO = new EventoDAO();
+    ParticipanteDAO participanteDAO = new ParticipanteDAO();
     ServiceFileDAO serviceFileDAO;
     private File lastDirectoryOpen;
     ArrayList<FieldLocalizacaoController> controllersLocais = new ArrayList<FieldLocalizacaoController>();
@@ -61,7 +65,7 @@ public class CadastrarEventoController implements ControllerServiceFile {
     @FXML
     VBox Localizacoes, cargaHoraria;
     @FXML
-    HBox header, Participantes, Organizadores, Colaboradores, secaoMetas;
+    HBox secaoParticipantes, Organizadores, Colaboradores, secaoMetas;
     @FXML
     FlowPane secaoArquivos;
 
@@ -84,11 +88,17 @@ public class CadastrarEventoController implements ControllerServiceFile {
     // Botoes
     @FXML
     Button botaoNovaLocalizacao;
+    // Listas
+    ObservableMap<Participante, FXMLLoader> participantes = FXCollections.<Participante, FXMLLoader>observableHashMap();
 
     public void initialize() throws IOException {
+        participanteDAO.setConnection(db.getConnection());
+
         formatterHorario = new SimpleDateFormat("HH:mm");
         addListenersServiceFile(mapServiceFiles);
         loadMenu();
+        addListenersParticipante(participantes);
+
         // inicia com o local obrigatorio carregado na pagina
         carregarCampoLocalizacao();
         classificacaoEtaria.getItems().addAll(classificacoes);
@@ -177,7 +187,6 @@ public class CadastrarEventoController implements ControllerServiceFile {
     }
 
     public void cancelar() throws IOException {
-
         builderEvento.resetar();
         App.setRoot("view/home");
     }
@@ -217,10 +226,21 @@ public class CadastrarEventoController implements ControllerServiceFile {
     public void removerLocalizacao() throws IOException {
     }
 
-    public void adicionarParticipante() throws IOException {
-        SubSceneLoader loaderParticipantes = new SubSceneLoader();
-        VBox novoParticipante = (VBox) loaderParticipantes.getPage("fields/fieldParticipante");
-        Participantes.getChildren().add(novoParticipante);
+    public void adicionarParticipante() throws SQLException {
+        // TODO: substituir por abrir o dialog de participante e chamar
+        // adicionarParticipante(resultado)
+        participantes.put(participanteDAO.getParticipante(new Participante(1)).get(),
+                new FXMLLoader(App.class.getResource("view/preview/previewParticipante.fxml")));
+    }
+
+    public void adicionarParticipante(Participante participante) {
+        // TODO remover implementacao de teste
+        participantes.put(new Participante(1, "new_participante", "new_area atuacao", "new link", null),
+                new FXMLLoader(App.class.getResource("view/preview/previewParticipante.fxml")));
+    }
+
+    public void removerParticipante(Participante participante) {
+        participantes.remove(participante);
     }
 
     public void adicionarOrganizador() throws IOException {
@@ -287,6 +307,37 @@ public class CadastrarEventoController implements ControllerServiceFile {
             return false;
         }
         return true;
+    }
+
+    public void addListenersParticipante(ObservableMap<Participante, FXMLLoader> observablemap) {
+        CadastrarEventoController superController = this;
+        observablemap.addListener(new MapChangeListener<Participante, FXMLLoader>() {
+            @Override
+            public void onChanged(MapChangeListener.Change<? extends Participante, ? extends FXMLLoader> change) {
+
+                if (change.wasAdded()) {
+                    Participante addedKey = change.getKey();
+                    // carregar o fxml de preview e setar o participante deste para o
+                    // participante adicionado
+                    try {
+                        Parent previewParticipante = change.getValueAdded().load();
+                        PreviewParticipanteController controller = change.getValueAdded().getController();
+                        controller.setParticipante(addedKey);
+                        controller.setParentController(superController);
+
+                        secaoParticipantes.getChildren().add(previewParticipante);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (change.wasRemoved()) {
+                    PreviewParticipanteController removedController = change.getValueRemoved().getController();
+                    // Remover o Pane de preview ao deletar um Participante da lista
+                    secaoParticipantes.getChildren().remove(removedController.getContainer());
+
+                }
+            }
+        });
     }
 
     public void addInputConstraints() {
@@ -372,5 +423,10 @@ public class CadastrarEventoController implements ControllerServiceFile {
 
     public boolean emptyLocalizacoes() {
         return Localizacoes.getChildren().isEmpty();
+    }
+
+    @Override
+    public Stage getStage() {
+        return this.stage;
     }
 }
