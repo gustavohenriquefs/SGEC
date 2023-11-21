@@ -1,5 +1,6 @@
 package com.casaculturaqxd.sgec.controller.dialog;
 
+import java.sql.SQLException;
 import java.util.Optional;
 
 import com.casaculturaqxd.sgec.DAO.InstituicaoDAO;
@@ -46,6 +47,19 @@ public class DialogInstituicaoController {
   public Optional<Instituicao> getInstituicao() {
     Optional<Instituicao> temp = instituicaoDAO.getInstituicao(nomeInstituicao.getText());
     return temp;
+  }
+
+  public boolean cadastrarInstituicao() {
+    if(nomeInstituicao.getText() != ""){
+      Instituicao instituicao = new Instituicao(nomeInstituicao.getText());
+      try {
+        instituicaoDAO.inserirInstituicao(instituicao);
+        return true;
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
+    } 
+    return false;
   }
   
 }
