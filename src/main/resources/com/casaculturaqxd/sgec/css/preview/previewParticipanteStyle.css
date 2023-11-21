@@ -1,9 +1,17 @@
 @import url(../colors/colorStyle.css);
 
-#principal, #container {
-    -fx-background-color: -branco;
+#principal,
+#container {
+  -fx-background-color: -branco;
 }
-#artista, #link, #area {
-    -fx-white-space: normal;
-    -fx-wrap-text: true;
+#artista,
+#link,
+#area {
+  -fx-white-space: normal;
+  -fx-wrap-text: true;
+}
+
+#buttonRemover {
+  -fx-background-color: -vermelho;
+  -fx-text-fill: -branco;
 }
