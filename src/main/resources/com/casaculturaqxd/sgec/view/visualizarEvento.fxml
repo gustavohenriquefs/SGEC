@@ -69,7 +69,7 @@
                            <children>
                               <VBox alignment="CENTER">
                                  <children>
-                                    <StackPane id="listaParticipantes" fx:id="listaParticipantes" prefHeight="140.0" prefWidth="1426.0" visible="false">
+                                    <StackPane id="listaParticipantes" fx:id="secaoParticipantes" prefHeight="140.0" prefWidth="1426.0" visible="false">
                                        <children>
                                           <Label text="Participantes" StackPane.alignment="TOP_LEFT">
                                              <StackPane.margin>
@@ -81,7 +81,7 @@
                                           </Label>
                                        </children>
                                     </StackPane>
-                                    <Button id="botaoNovoParticipante" fx:id="novoParticipante" mnemonicParsing="false" style="-fx-background-color: #2A3F25;" text="Adicionar novo participante +" textFill="WHITE" visible="false" />
+                                    <Button id="botaoNovoParticipante" fx:id="novoParticipante" mnemonicParsing="false" style="-fx-background-color: #2A3F25;" text="Adicionar novo participante +" textFill="WHITE" />
                                  </children>
                               </VBox>
                            </children>

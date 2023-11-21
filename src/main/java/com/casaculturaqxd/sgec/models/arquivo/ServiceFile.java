@@ -22,6 +22,10 @@ public class ServiceFile {
     private File preview;
     private File content;
 
+    public ServiceFile(int serviceFileId) {
+        this.serviceFileId = serviceFileId;
+    }
+
     public ServiceFile(File content) {
         this.content = content;
         this.fileKey = content.getName();
@@ -39,8 +43,9 @@ public class ServiceFile {
         this.service = ServiceFactory.getService(ServiceType.S3, "ACCESS_KEY", "SECRET_KEY");
     }
 
-    public ServiceFile(Integer serviceFileId) {
+    public ServiceFile(Integer serviceFileId, String bucket) {
         this.serviceFileId = serviceFileId;
+        this.bucket = bucket;
         this.service = ServiceFactory.getService(ServiceType.S3, "ACCESS_KEY", "SECRET_KEY");
     }
 
