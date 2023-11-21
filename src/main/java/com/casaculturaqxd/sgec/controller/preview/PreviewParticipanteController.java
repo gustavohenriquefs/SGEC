@@ -3,6 +3,7 @@ package com.casaculturaqxd.sgec.controller.preview;
 import java.awt.Desktop;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.List;
@@ -94,6 +95,8 @@ public class PreviewParticipanteController {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (NullPointerException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
