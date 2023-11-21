@@ -154,7 +154,7 @@
                         </VBox>
                         <VBox alignment="CENTER_LEFT" prefHeight="46.0" prefWidth="150.0">
                            <children>
-                           <HBox fx:id="Organizadores" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                           <HBox fx:id="secaoOrganizadores" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                               <children>
                                  <Button fx:id="botaoOrganizadores" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#adicionarOrganizador" prefHeight="46.0" prefWidth="154.0" style="-fx-background-color: #352929;" text="Adicionar organizadores" textFill="WHITE" VBox.vgrow="ALWAYS" />
                               </children>
@@ -163,7 +163,7 @@
                         </VBox>
                         <VBox prefHeight="46.0" prefWidth="150.0" spacing="15.0">
                            <children>
-                              <HBox fx:id="Colaboradores" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                              <HBox fx:id="secaoColaboradores" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
                                  <children>
                                  <Button fx:id="botaoColaboradores" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#adicionarColaborador" prefHeight="46.0" prefWidth="153.0" style="-fx-background-color: #352929;" text="Adicionar colaboradores" textFill="WHITE" VBox.vgrow="ALWAYS" />
                                  </children>
