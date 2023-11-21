@@ -3,7 +3,9 @@ package com.casaculturaqxd.sgec.controller;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLConnection;
+import java.sql.SQLException;
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -219,7 +221,7 @@ public class MidiaEventoController implements ControllerServiceFile {
 
     // seta o evento da pagina e adiciona um novo controller contendo o preview e o
     // arquivo na lista
-    public void setEvento(Evento evento) throws IOException {
+    public void setEvento(Evento evento) throws IOException, SQLException {
         this.evento = evento;
         for (ServiceFile serviceFile : serviceFileDAO.listarArquivosEvento(evento)) {
             try {
@@ -238,20 +240,19 @@ public class MidiaEventoController implements ControllerServiceFile {
     @Override
     public void adicionarArquivo(ServiceFile serviceFile) throws IOException {
         try {
-            ServiceFile checkArquivoJaExiste = serviceFileDAO.getArquivo(serviceFile.getFileKey());
-            if (checkArquivoJaExiste != null) {
-                serviceFile = checkArquivoJaExiste;
+            Optional<ServiceFile> checkArquivoJaExiste = serviceFileDAO.getArquivo(serviceFile.getFileKey());
+            if (checkArquivoJaExiste.isPresent()) {
+                serviceFile = checkArquivoJaExiste.get();
             } else {
                 serviceFileDAO.inserirArquivo(serviceFile);
             }
             serviceFileDAO.vincularArquivo(serviceFile.getServiceFileId(), evento.getIdEvento());
             addPreviewArquivo(serviceFile);
             goToSecaoArquivo(serviceFile);
-        } catch (IllegalArgumentException e) {
+        } catch (SQLException | IllegalArgumentException e) {
             Alert alert = new Alert(AlertType.ERROR, e.getMessage(), new ButtonType("Ok", ButtonData.CANCEL_CLOSE));
             alert.showAndWait();
         }
-
     }
 
     @Override

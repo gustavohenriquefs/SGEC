@@ -86,20 +86,16 @@ public class EventoDAO {
     /*
      * if(evento.getListaOrganizadores() != null) { boolean vinculoOrganizadores =
      * this.vincularOrganizadores(evento.getListaOrganizadores(),
-     * evento.getIdEvento());
-     * if(vinculoOrganizadores == false) { return false; } }
+     * evento.getIdEvento()); if(vinculoOrganizadores == false) { return false; } }
      */
 
     /*
      * if(evento.getListaColaboradores() != null) { boolean vinculoColaboradores =
      * this.vincularColaboradores(evento.getListaColaboradores(),
-     * evento.getIdEvento());
-     * if(vinculoColaboradores == false) { return false; } }
-     * if(evento.getListaParticipantes() !=
-     * null) { boolean vinculoParticipantes =
+     * evento.getIdEvento()); if(vinculoColaboradores == false) { return false; } }
+     * if(evento.getListaParticipantes() != null) { boolean vinculoParticipantes =
      * this.vincularParticipantes(evento.getListaParticipantes(),
-     * evento.getIdEvento());
-     * if(vinculoParticipantes == false) { return false; } }
+     * evento.getIdEvento()); if(vinculoParticipantes == false) { return false; } }
      */
 
     return true;
@@ -116,7 +112,7 @@ public class EventoDAO {
     return true;
   }
 
-  public boolean vincularArquivos(Evento evento) {
+  public boolean vincularArquivos(Evento evento) throws SQLException {
     ServiceFileDAO serviceFileDAO = new ServiceFileDAO(getConnection());
     return serviceFileDAO.vincularAllArquivos(evento);
   }
@@ -276,35 +272,35 @@ public class EventoDAO {
     return eventos;
   }
 
-  public ArrayList<Evento> pesquisarEvento(String nome, Date inicioDate, Date fimDate){
+  public ArrayList<Evento> pesquisarEvento(String nome, Date inicioDate, Date fimDate) {
     String sql = "select * from evento where nome_evento ilike ? ";
-    if(inicioDate != null)
+    if (inicioDate != null)
       sql += "and data_inicial >= '" + inicioDate.toString() + "' ";
 
-    if(fimDate != null)
+    if (fimDate != null)
       sql += "and data_final <= '" + fimDate.toString() + "' ";
 
-    if(nome == "" && inicioDate == null && fimDate == null)
+    if (nome == "" && inicioDate == null && fimDate == null)
       sql += "limit 30";
 
     try {
       ArrayList<Evento> eventos = new ArrayList<>();
-      
+
       PreparedStatement stmt = connection.prepareStatement(sql);
-      stmt.setString(1, "%"+nome+"%");
+      stmt.setString(1, "%" + nome + "%");
       ResultSet resultSet = stmt.executeQuery();
-      while(resultSet.next()){
+      while (resultSet.next()) {
         Evento evento = new Evento();
         evento.setIdEvento(resultSet.getInt("id_evento"));
         evento.setNome(resultSet.getString("nome_evento"));
         evento.setDataFinal(resultSet.getDate("data_final"));
         evento.setHorario(resultSet.getTime("horario"));
         eventos.add(evento);
-      }     
+      }
       return eventos;
     } catch (SQLException e) {
       return new ArrayList<Evento>();
-    } 
+    }
   }
 
   public Optional<Evento> buscarEvento(Evento evento) {
@@ -332,12 +328,9 @@ public class EventoDAO {
         eventoRetorno.setParticipantesEsperado(resultSet.getInt("num_participantes_esperado"));
         eventoRetorno.setMunicipiosEsperado(resultSet.getInt("num_municipios_esperado"));
         eventoRetorno.setLocais(this.buscarLocaisPorEvento(eventoRetorno.getIdEvento()));
-        eventoRetorno
-            .setListaOrganizadores(this.buscarOrganizadoresPorEvento(eventoRetorno.getIdEvento()));
-        eventoRetorno
-            .setListaColaboradores(this.buscarColaboradoresPorEvento(eventoRetorno.getIdEvento()));
-        eventoRetorno
-            .setListaParticipantes(this.buscarLocaisPorEvento(eventoRetorno.getIdEvento()));
+        eventoRetorno.setListaOrganizadores(this.buscarOrganizadoresPorEvento(eventoRetorno.getIdEvento()));
+        eventoRetorno.setListaColaboradores(this.buscarColaboradoresPorEvento(eventoRetorno.getIdEvento()));
+        eventoRetorno.setListaParticipantes(this.buscarLocaisPorEvento(eventoRetorno.getIdEvento()));
         eventoRetorno.setListaArquivos(this.buscarArquivosPorEvento(eventoRetorno));
         eventoRetorno.setListaMetas(this.listarMetasEvento(eventoRetorno));
       }
@@ -348,7 +341,7 @@ public class EventoDAO {
     }
   }
 
-  private ArrayList<ServiceFile> buscarArquivosPorEvento(Evento evento) {
+  private ArrayList<ServiceFile> buscarArquivosPorEvento(Evento evento) throws SQLException {
     ServiceFileDAO serviceFileDAO = new ServiceFileDAO(connection);
     return serviceFileDAO.listarArquivosEvento(evento);
   }
@@ -501,8 +494,7 @@ public class EventoDAO {
     }
 
     for (Instituicao colaborador : evento.getListaColaboradores()) {
-      boolean colaboradorFoiVinculado = this.vincularColaborador(colaborador.getIdInstituicao(),
-          evento.getIdEvento());
+      boolean colaboradorFoiVinculado = this.vincularColaborador(colaborador.getIdInstituicao(), evento.getIdEvento());
 
       if (!colaboradorFoiVinculado) {
         return false;
@@ -527,8 +519,7 @@ public class EventoDAO {
     }
 
     for (Instituicao organizador : evento.getListaOrganizadores()) {
-      boolean organizadorFoiVinculado = this.vincularOrganizador(organizador.getIdInstituicao(),
-          evento.getIdEvento());
+      boolean organizadorFoiVinculado = this.vincularOrganizador(organizador.getIdInstituicao(), evento.getIdEvento());
 
       if (!organizadorFoiVinculado) {
         return false;
@@ -667,8 +658,7 @@ public class EventoDAO {
     return this.obterEventos(campoUsadoOrdenar, ehAscendente, 5);
   }
 
-  public ArrayList<Evento> obterEventos(String campoUsadoOrdenar, boolean ehAscendente,
-      Integer limite) {
+  public ArrayList<Evento> obterEventos(String campoUsadoOrdenar, boolean ehAscendente, Integer limite) {
     if (campoUsadoOrdenar == null) {
       campoUsadoOrdenar = "cadastrado_em";
     }
