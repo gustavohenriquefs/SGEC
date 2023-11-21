@@ -16,13 +16,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox id="pageCadastrarEvento" fx:id="root" stylesheets="@../css/page/cadastrarEventoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.CadastrarEventoController">
+<VBox id="pageCadastrarEvento" fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="1200.0" stylesheets="@../css/page/cadastrarEventoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.CadastrarEventoController">
    <children>
       <ScrollPane id="scroll" vbarPolicy="ALWAYS" VBox.vgrow="ALWAYS">
          <content>
-            <AnchorPane id="container">
+            <AnchorPane id="container" prefWidth="1550.0">
                <children>
-                  <VBox layoutX="29.0" layoutY="45.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="45.0">
+                  <VBox layoutX="29.0" layoutY="45.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="45.0">
                      <VBox.margin>
                         <Insets left="30.0" top="10.0" />
                      </VBox.margin>
