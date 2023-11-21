@@ -86,6 +86,9 @@ public class CadastrarEventoController implements ControllerServiceFile {
     RadioButton certificavel, acessivelEmLibras;
     private ObservableMap<ServiceFile, FXMLLoader> mapServiceFiles = FXCollections.observableHashMap();
     ObservableMap<Participante, FXMLLoader> participanteObservableMap;
+    private ObservableMap<Instituicao, FXMLLoader> organizadorObservableMap = FXCollections.observableHashMap();
+    private ObservableMap<Instituicao, FXMLLoader> colaboradorObservableMap = FXCollections.observableHashMap();
+    private Alert mensagem = new Alert(AlertType.NONE);
     // Botoes
     @FXML
     Button botaoNovaLocalizacao;
@@ -234,17 +237,27 @@ public class CadastrarEventoController implements ControllerServiceFile {
     public void adicionarOrganizador() throws IOException {
         ButtonType buttonTypeVincularOrganizadora = new ButtonType("Vincular como organizadora", ButtonBar.ButtonData.OK_DONE);
         DialogNovaInstituicao dialogNovaInstituicao = new DialogNovaInstituicao(buttonTypeVincularOrganizadora);
-        Optional<Instituicao> temp = dialogNovaInstituicao.showAndWait();
-    
-        temp.ifPresent(instituicao -> System.out.println(instituicao));
+        Optional<Instituicao> novaInstituicao = dialogNovaInstituicao.showAndWait();
+        if(novaInstituicao.isPresent()){
+            organizadorObservableMap.put(novaInstituicao.get(), new FXMLLoader(App.class.getResource("view/preview/previewInstituicao.fxml")));
+        }
     }
 
     public void adicionarColaborador() throws IOException {
         ButtonType buttonTypeVincularColaborador = new ButtonType("Vincular como colaborador", ButtonBar.ButtonData.OK_DONE);
         DialogNovaInstituicao dialogNovaInstituicao = new DialogNovaInstituicao(buttonTypeVincularColaborador);
-        Optional<Instituicao> temp = dialogNovaInstituicao.showAndWait();
-    
-        temp.ifPresent(instituicao -> System.out.println(instituicao));
+        Optional<Instituicao> novaInstituicao = dialogNovaInstituicao.showAndWait();
+        if(novaInstituicao.isPresent()){
+            colaboradorObservableMap.put(novaInstituicao.get(), new FXMLLoader(App.class.getResource("view/preview/previewInstituicao.fxml")));
+        }
+    }
+
+    private void removerInstituicao(Instituicao instituicao){
+
+    }
+
+    private void adicionarInstituicao(Instituicao instituicao){
+
     }
 
     public void adicionarArquivo() {
