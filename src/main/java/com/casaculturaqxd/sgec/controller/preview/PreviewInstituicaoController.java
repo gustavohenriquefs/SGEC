@@ -9,6 +9,7 @@ import java.util.List;
 import com.casaculturaqxd.sgec.controller.ControllerEvento;
 import com.casaculturaqxd.sgec.models.Instituicao;
 import com.casaculturaqxd.sgec.models.Participante;
+import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,6 +26,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.stage.Stage;
 
 public class PreviewInstituicaoController {
     @FXML
@@ -34,17 +38,19 @@ public class PreviewInstituicaoController {
     @FXML
     private Label nomeInstituicao, contribuicao, valorContribuicao; 
     @FXML
-    private Button buttonAlterarCapa;
+    private Button buttonAlterarCapa, buttonRemover;
     @FXML
     private ImageView imagemViewInstituicao;
 
     private Instituicao instituicao;
     private ControllerEvento parentController;
     private ObservableMap<Parent, List<Node>> previousChildren = FXCollections.observableHashMap();
+    private Stage stage;
 
     public void initialize() {
         // manter o botao sempre no topo da imagem
         buttonAlterarCapa.setViewOrder(-1);
+        buttonRemover.setViewOrder(-1);
     }
 
     public ControllerEvento getParentController() {
@@ -88,6 +94,15 @@ public class PreviewInstituicaoController {
         } 
     }
 
+    public void updateImagemCapa() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Alterar foto da instituição");
+        ExtensionFilter filterImagens = new ExtensionFilter("imagem", "*.jpeg", "*.jpg", "*.png", "*.bmp");
+        fileChooser.getExtensionFilters().add(filterImagens);
+        instituicao.setImagemCapa(new ServiceFile(fileChooser.showOpenDialog(stage)));
+        loadImagem();
+    }
+
     private void updateField(Labeled labeled, Pane fieldParent) {
         ObservableList<Node> oldNodes = FXCollections.observableArrayList(fieldParent.getChildren());
         previousChildren.put(campoNome, oldNodes);
@@ -112,6 +127,19 @@ public class PreviewInstituicaoController {
     }
 
     public void remover() {
+        instituicao.setImagemCapa(null);
         parentController.removerInstituicao(getInstituicao());
+    }
+
+    public void updateNome() {
+        updateField(nomeInstituicao, campoNome);
+    }
+
+    public void updateContribuica() {
+        updateField(contribuicao, campoContribuicao);
+    }
+
+    public void updateValorContribuicao() {
+        updateField(valorContribuicao, campoValorContribuicao);
     }
 }

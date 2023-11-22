@@ -18,7 +18,7 @@
                   <StackPane prefHeight="142.0" prefWidth="296.0">
                      <children>
                         <ImageView fx:id="imagemViewInstituicao" fitHeight="150.0" fitWidth="290.0" pickOnBounds="true" preserveRatio="true" />
-                        <Button fx:id="buttonAlterarCapa" mnemonicParsing="false" text="Alterar Foto" textFill="WHITE" />
+                        <Button fx:id="buttonAlterarCapa" mnemonicParsing="false" onAction="#updateImagemCapa" text="Alterar Foto" textFill="WHITE" />
                      </children>
                   </StackPane>
                </children>
@@ -26,7 +26,7 @@
             <HBox fx:id="campoNome" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="260.0" styleClass="meusLabels">
                <children>
                   <Label fx:id="nomeInstituicao" prefHeight="24.0" prefWidth="285.0" text="Nome" />
-                  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="16.0" fitWidth="16.0" onMouseClicked="#updateNome" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../imagens/edit-icon.png" />
                      </image>
@@ -36,7 +36,7 @@
             <HBox fx:id="campoContribuicao" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="25.0" prefWidth="302.0" styleClass="meusLabels">
                <children>
                   <Label fx:id="contribuicao" prefHeight="29.0" prefWidth="285.0" text="Contribuições" />
-                  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="16.0" fitWidth="16.0" onMouseClicked="#updateContribuica" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../imagens/edit-icon.png" />
                      </image>
@@ -46,14 +46,14 @@
             <HBox id="meusLabels" fx:id="campoValorContribuicao" prefHeight="26.0" prefWidth="260.0">
                <children>
                   <Label fx:id="valorContribuicao" prefHeight="30.0" prefWidth="284.0" text="Valor contribuição" />
-                  <ImageView fitHeight="16.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="16.0" fitWidth="16.0" onMouseClicked="#updateValorContribuicao" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../../imagens/edit-icon.png" />
                      </image>
                   </ImageView>
                </children>
             </HBox>
-            <Button id="buttonRemover" mnemonicParsing="false" onAction="#remover" style="-fx-background-color: #A22D2E; -fx-text-fill: #E9E3CA;" text="Remover" />
+            <Button id="buttonRemover" fx:id="buttonRemover" mnemonicParsing="false" onAction="#remover" style="-fx-background-color: #A22D2E; -fx-text-fill: #E9E3CA;" text="Remover" />
          </children>
       </VBox>
    </children>

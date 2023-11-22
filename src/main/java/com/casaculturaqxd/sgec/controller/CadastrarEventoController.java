@@ -279,10 +279,6 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
         }
     }
 
-    private void adicionarInstituicao(Instituicao instituicao){
-
-    }
-
     public void adicionarArquivo() {
         FileChooser fileChooser = new FileChooser();
         File arquivoSelecionado = fileChooser.showOpenDialog(stage);
