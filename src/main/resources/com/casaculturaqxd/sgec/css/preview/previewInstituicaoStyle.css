@@ -1,9 +1,21 @@
 @import url(../colors/colorStyle.css);
 
-#principal, #container {
-    -fx-background-color: -branco;
+#principal,
+#container {
+  -fx-background-color: -branco;
 }
-#descricao, #valor, #nomeInstituicao {
-    -fx-white-space: normal;
-    -fx-wrap-text: true;
+
+#area {
+  -fx-white-space: normal;
+  -fx-wrap-text: true;
+}
+
+#buttonRemover {
+  -fx-background-color: -vermelho;
+  -fx-text-fill: -branco;
+}
+
+#buttonAlterarCapa {
+  -fx-background-color:  #2A3F25;
+  -fx-text-fill: -branco;
 }
