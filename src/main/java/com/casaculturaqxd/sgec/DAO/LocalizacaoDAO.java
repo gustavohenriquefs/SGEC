@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.Localizacao;
 
 public class LocalizacaoDAO {
@@ -18,7 +17,7 @@ public class LocalizacaoDAO {
   public Connection getConnection() {
     return connection;
   }
-  
+
   public void setConnection(Connection connection) {
     this.connection = connection;
   }
@@ -53,7 +52,7 @@ public class LocalizacaoDAO {
   public boolean inserirLocalizacao(Localizacao obj) {
     try {
       String sql = "insert into localizacao (nome_localizacao,rua,numero_rua,bairro,cep,cidade,estado,pais)"
-              + " values(?,?,?,?,?,?,?,?)";
+          + " values(?,?,?,?,?,?,?,?)";
       PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
       stmt.setString(1, obj.getNome());
       stmt.setString(2, obj.getRua());
@@ -64,7 +63,7 @@ public class LocalizacaoDAO {
       stmt.setString(7, obj.getEstado());
       stmt.setString(8, obj.getPais());
       stmt.executeUpdate();
-      
+
       ResultSet rs = stmt.getGeneratedKeys();
       if (rs.next()) {
         obj.setIdLocalizacao(rs.getInt("id_localizacao"));
@@ -79,8 +78,7 @@ public class LocalizacaoDAO {
     }
   }
 
-
-  boolean updateLocalizacao(Localizacao obj){
+  boolean updateLocalizacao(Localizacao obj) {
     String sql = "UPDATE localizacao SET nome_localizacao=?,rua=?,numero_rua=?,bairro=?,cep=?,cidade=?,estado=?,pais=? WHERE id_localizacao=?";
     try {
       PreparedStatement stmt = connection.prepareStatement(sql);
@@ -96,8 +94,8 @@ public class LocalizacaoDAO {
 
       int numModificacoes = stmt.executeUpdate();
       stmt.close();
-      return numModificacoes>0;
-      
+      return numModificacoes > 0;
+
     } catch (SQLException e) {
       Logger erro = Logger.getLogger("erroSQl");
       erro.log(Level.SEVERE, "excecao levantada:", e);
@@ -110,10 +108,10 @@ public class LocalizacaoDAO {
     try {
       PreparedStatement stmt = connection.prepareStatement(sql);
       stmt.setInt(1, obj.getIdLocalizacao());
-      
+
       int numRemocoes = stmt.executeUpdate();
       stmt.close();
-      return numRemocoes>0;
+      return numRemocoes > 0;
     } catch (SQLException e) {
       Logger erro = Logger.getLogger("erroSQl");
       erro.log(Level.SEVERE, "excecao levantada:", e);
@@ -137,12 +135,12 @@ public class LocalizacaoDAO {
     }
   }
 
-  public ArrayList<Localizacao> pesquisarLocalizacao(String nomeCidade){
+  public ArrayList<Localizacao> pesquisarLocalizacao(String nomeCidade) {
     String sql = "select * from localizacao where cidade like ?";
     ArrayList<Localizacao> localizacaos = new ArrayList<>();
     try {
       PreparedStatement stmt = connection.prepareStatement(sql);
-      stmt.setString(1, "%"+nomeCidade+"%");
+      stmt.setString(1, "%" + nomeCidade + "%");
       ResultSet resultSet = stmt.executeQuery();
 
       while (resultSet.next()) {
@@ -165,7 +163,7 @@ public class LocalizacaoDAO {
     }
   }
 
-  public boolean verificaLocalidade(int id_evento, int id_localizacao){
+  public boolean verificaLocalidade(int id_evento, int id_localizacao) {
     String sql = "select * from localizacao_evento where id_evento = ? and id_localizacao = ?";
     try {
       PreparedStatement stmt = connection.prepareStatement(sql);
@@ -182,6 +180,7 @@ public class LocalizacaoDAO {
       return false;
     }
   }
+
   boolean desvincularEvento(Integer idLocalizacao, Integer idEvento) {
     String vincLocaisSql = "DELETE FROM localizacao_evento WHERE id_localizacao=? AND id_evento=?";
 
@@ -192,10 +191,10 @@ public class LocalizacaoDAO {
 
       int numRemocoes = stmt.executeUpdate();
       stmt.close();
-      return numRemocoes>0;
-      
+      return numRemocoes > 0;
+
     } catch (SQLException e) {
-      Logger erro  = Logger.getLogger("erroSQl");
+      Logger erro = Logger.getLogger("erroSQl");
       erro.log(Level.SEVERE, "excecao levantada:", e);
       return false;
     }

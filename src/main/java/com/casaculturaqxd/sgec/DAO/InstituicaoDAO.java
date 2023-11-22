@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import com.casaculturaqxd.sgec.models.Instituicao;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 
@@ -27,11 +28,6 @@ public class InstituicaoDAO {
   public void setConnection(Connection conn) {
     this.conn = conn;
 
-    try {
-      conn.setAutoCommit(true);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
   }
 
   public Optional<Instituicao> getInstituicao(Instituicao instituicao) {

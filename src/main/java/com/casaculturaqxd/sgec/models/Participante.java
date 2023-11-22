@@ -30,6 +30,10 @@ public class Participante {
         this.imagemCapa = null;
     }
 
+    public Participante(int idParticipante) {
+        this.idParticipante = idParticipante;
+    }
+
     public Participante(String nome, String areaDeAtuacao, String bio, String linkMapaDaCultura) {
         this.nome = nome;
         this.areaDeAtuacao = areaDeAtuacao;
