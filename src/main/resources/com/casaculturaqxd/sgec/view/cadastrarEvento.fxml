@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ChoiceBox?>
@@ -16,9 +17,9 @@
 
 <VBox id="pageCadastrarEvento" fx:id="root" styleClass="root" stylesheets="@../css/page/cadastrarEventoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.CadastrarEventoController">
    <children>
-      <ScrollPane id="scroll" style="-fx-background-color: #E9E3CA;" vbarPolicy="ALWAYS" VBox.vgrow="ALWAYS">
+      <ScrollPane id="scroll" maxWidth="-Infinity" minWidth="-Infinity" prefWidth="1200.0" style="-fx-background-color: #E9E3CA;" vbarPolicy="ALWAYS" VBox.vgrow="ALWAYS">
          <content>
-            <VBox id="container">
+            <VBox id="container" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="1200.0">
                <children>
                   <VBox>
                      <children>
@@ -242,6 +243,9 @@
                </children>
             </VBox>
          </content>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
       </ScrollPane>
    </children>
 </VBox>
