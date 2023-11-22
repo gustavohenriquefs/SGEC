@@ -197,9 +197,9 @@
                                     </VBox>
                               <VBox alignment="CENTER_LEFT" VBox.vgrow="ALWAYS">
                                  <children>
-                                          <HBox fx:id="Participantes" alignment="CENTER_LEFT" spacing="40.0">
+                                          <HBox fx:id="secaoParticipantes" alignment="CENTER_LEFT" spacing="40.0">
                                              <children>
-                                          <Button fx:id="botaoParticipantes" disable="true" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#adicionarParticipante" style="-fx-background-color: #352929;" text="Adicionar participantes" textFill="WHITE" visible="false" HBox.hgrow="ALWAYS" />
+                                          <Button fx:id="botaoParticipantes" onAction="#adicionarParticipante" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" style="-fx-background-color: #352929;" text="Adicionar participantes" textFill="WHITE" HBox.hgrow="ALWAYS" />
                                              </children>
                                     </HBox>
                                           <VBox VBox.vgrow="NEVER">
