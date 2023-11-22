@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 import com.casaculturaqxd.sgec.models.Instituicao;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 
@@ -28,6 +27,11 @@ public class InstituicaoDAO {
   public void setConnection(Connection conn) {
     this.conn = conn;
 
+    try {
+      conn.setAutoCommit(true);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
   }
 
   public Optional<Instituicao> getInstituicao(Instituicao instituicao) {
@@ -254,8 +258,8 @@ public class InstituicaoDAO {
     }
   }
 
-  public boolean vincularOrganizador(Integer idInstituicao, Integer idEvento, String descricaoContribuicao,
-      String valorContribuicao) {
+  public boolean vincularOrganizador(Integer idInstituicao, Integer idEvento,
+      String descricaoContribuicao, String valorContribuicao) {
     try {
       String sql = "insert into organizador_evento (id_instituicao,id_evento,descricao_contribuicao, valor_contribuicao)"
           + " values(?, ?, ?, ?)";
@@ -297,8 +301,8 @@ public class InstituicaoDAO {
     }
   }
 
-  public boolean vincularColaborador(Integer idInstituicao, Integer idEvento, String descricaoContribuicao,
-      String valorContribuicao) {
+  public boolean vincularColaborador(Integer idInstituicao, Integer idEvento,
+      String descricaoContribuicao, String valorContribuicao) {
     try {
       String sql = "insert into colaborador_evento (id_instituicao,id_evento,descricao_contribuicao, valor_contribuicao)"
           + " values(?, ?, ?, ?)";
