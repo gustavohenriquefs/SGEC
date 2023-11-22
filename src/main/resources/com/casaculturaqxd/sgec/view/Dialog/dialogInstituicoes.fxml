@@ -31,12 +31,12 @@
                   <Label fx:id="labelContribuicao" text="Contribuições" />
                   <TextArea fx:id="contribuicoes" maxWidth="-Infinity" prefHeight="200.0" prefWidth="400.0" wrapText="true" />
                   <Label fx:id="labelValorContribuicao" text="Valor contribuição" />
-                  <TextField fx:id="valorContribuicao" maxWidth="-Infinity" minHeight="-Infinity" prefWidth="250.0" />
+                  <TextField fx:id="valorContribuicao" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="250.0" />
                </children>
             </VBox>
-            <HBox alignment="CENTER" layoutX="35.0" layoutY="537.0" prefHeight="113.0" prefWidth="625.0" spacing="30.0" AnchorPane.bottomAnchor="-0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="0.0">
+            <HBox alignment="CENTER" layoutX="41.0" layoutY="485.0" prefHeight="80.0" prefWidth="578.0" spacing="30.0" AnchorPane.bottomAnchor="14.200000000000045" AnchorPane.leftAnchor="41.0" AnchorPane.rightAnchor="31.799999999999955">
                <children>
-                  <VBox alignment="CENTER" prefHeight="118.0" prefWidth="184.0" spacing="5.0">
+                  <VBox alignment="CENTER" minWidth="-Infinity" prefHeight="83.0" prefWidth="183.0" spacing="5.0">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
