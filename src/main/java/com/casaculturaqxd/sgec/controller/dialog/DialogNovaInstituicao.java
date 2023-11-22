@@ -30,12 +30,28 @@ public class DialogNovaInstituicao extends Dialog<Instituicao> {
       if (dialogButton == okButtonType) {
         Optional<Instituicao> instituicao = dialogInstituicaoController.getInstituicao();
         if(instituicao.isPresent()){
-          mensagem.setAlertType(AlertType.INFORMATION);
-          mensagem.setContentText("Vinculação realizada com sucesso!");
+          Instituicao temp = instituicao.get();
+
+          if(!dialogInstituicaoController.getContribuicoes().getText().isEmpty()){
+            temp.setDescricaoContribuicao(dialogInstituicaoController.getContribuicoes().getText());
+          } else {
+            temp.setDescricaoContribuicao("Descrição das contribuições");
+          }
+            
+          if(!dialogInstituicaoController.getValorContribuicao().getText().isEmpty()) {
+            temp.setValorContribuicao(dialogInstituicaoController.getValorContribuicao().getText());
+          } else{
+            temp.setValorContribuicao("Valor das contribuições"); 
+          }
+
+          return temp;
+
+        } else {
+          mensagem.setAlertType(AlertType.ERROR);
+          mensagem.setContentText("Instituição não encontrada!");
           mensagem.show();
-          return instituicao.get();
         }
-        return null;
+        
       } else if(dialogButton == buttonTypeCadastrar){
           Optional<Instituicao> instituicao = dialogInstituicaoController.getInstituicao();
           if(instituicao.isEmpty()) {
@@ -48,14 +64,14 @@ public class DialogNovaInstituicao extends Dialog<Instituicao> {
             mensagem.setContentText("Instituição cadastrada");
             mensagem.show();
           } else {
-              mensagem.setAlertType(AlertType.ERROR);
-              mensagem.setContentText("Não foi possivel realizar o cadastro: Instituição já existe");
-              mensagem.show();
+            mensagem.setAlertType(AlertType.ERROR);
+            mensagem.setContentText("Não foi possivel realizar o cadastro: Instituição já existe");
+            mensagem.show();
           }
       }
       return null;
   });
-  
+
   }
 
 }
