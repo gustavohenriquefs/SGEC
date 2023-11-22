@@ -102,6 +102,7 @@ public class PreviewInstituicaoController {
         instituicao.setImagemCapa(new ServiceFile(fileChooser.showOpenDialog(stage)));
         loadImagem();
     }
+    
 
     private void updateField(Labeled labeled, Pane fieldParent) {
         ObservableList<Node> oldNodes = FXCollections.observableArrayList(fieldParent.getChildren());

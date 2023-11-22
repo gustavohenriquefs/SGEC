@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.models.Instituicao;
+import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
@@ -12,6 +13,8 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 
 public class DialogNovaInstituicao extends Dialog<Instituicao> {
   DialogInstituicaoController dialogInstituicaoController = new DialogInstituicaoController();
@@ -42,6 +45,13 @@ public class DialogNovaInstituicao extends Dialog<Instituicao> {
             temp.setValorContribuicao(dialogInstituicaoController.getValorContribuicao().getText());
           } else{
             temp.setValorContribuicao("Valor das contribuições"); 
+          }
+
+          if(dialogInstituicaoController.getImagem() != null){
+            FileChooser fileChooser = new FileChooser();
+            ExtensionFilter filterImagens = new ExtensionFilter("imagem", "*.jpeg", "*.jpg", "*.png", "*.bmp");
+            fileChooser.getExtensionFilters().add(filterImagens);
+            temp.setImagemCapa(new ServiceFile(dialogInstituicaoController.getFile()));
           }
 
           return temp;

@@ -21,7 +21,7 @@
                   <ImageView fx:id="imagem" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
                </center>
                <bottom>
-                  <Button fx:id="adicionarImagem" mnemonicParsing="false" styleClass="adicionar" text="Adicionar Imagem +" BorderPane.alignment="CENTER" />
+                  <Button fx:id="adicionarImagem" mnemonicParsing="false" onAction="#carregarImagem" styleClass="adicionar" text="Adicionar Imagem +" BorderPane.alignment="CENTER" />
                </bottom>
             </BorderPane>
             <VBox layoutX="20.0" layoutY="248.0" prefHeight="213.0" prefWidth="620.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="0.0">
