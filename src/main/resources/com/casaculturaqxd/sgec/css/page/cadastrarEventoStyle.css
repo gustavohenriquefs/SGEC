@@ -1,5 +1,5 @@
 @import url(../colors/colorStyle.css);
 
-.root, #scroll, #pageCadastrarEvento, #container {
+.root, #scroll, #pageCadastrarEvento, #container, #principal {
     -fx-background-color: -bege;
 }
