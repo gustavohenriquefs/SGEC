@@ -1,5 +1,6 @@
 package com.casaculturaqxd.sgec.controller;
 
+import com.casaculturaqxd.sgec.models.Instituicao;
 import com.casaculturaqxd.sgec.models.Participante;
 import javafx.stage.Stage;
 
@@ -13,4 +14,6 @@ public interface ControllerEvento {
 
     // retorna o stage da tela, necessario para abrir o FileChooser
     public Stage getStage();
+
+    public void removerInstituicao(Instituicao instituicao);
 }

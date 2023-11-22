@@ -18,7 +18,7 @@
                   <StackPane prefHeight="142.0" prefWidth="296.0">
                      <children>
                         <ImageView fx:id="imagemViewInstituicao" fitHeight="150.0" fitWidth="290.0" pickOnBounds="true" preserveRatio="true" />
-                        <Button fx:id="buttonAlterarCapa" mnemonicParsing="false" text="Alterar Foto" />
+                        <Button fx:id="buttonAlterarCapa" mnemonicParsing="false" text="Alterar Foto" textFill="WHITE" />
                      </children>
                   </StackPane>
                </children>
@@ -53,7 +53,7 @@
                   </ImageView>
                </children>
             </HBox>
-            <Button id="buttonRemover" mnemonicParsing="false" style="-fx-background-color: #A22D2E; -fx-text-fill: #E9E3CA;" text="Remover" />
+            <Button id="buttonRemover" mnemonicParsing="false" onAction="#remover" style="-fx-background-color: #A22D2E; -fx-text-fill: #E9E3CA;" text="Remover" />
          </children>
       </VBox>
    </children>

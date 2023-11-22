@@ -258,7 +258,6 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
         DialogNovaInstituicao dialogNovaInstituicao = new DialogNovaInstituicao(buttonTypeVincularOrganizadora);
         Optional<Instituicao> novaInstituicao = dialogNovaInstituicao.showAndWait();
         if(novaInstituicao.isPresent()){
-            System.out.println("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH");
             organizadorObservableMap.put(novaInstituicao.get(), new FXMLLoader(App.class.getResource("view/preview/previewInstituicao.fxml")));
         }
     }
@@ -272,8 +271,12 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
         }
     }
 
-    private void removerInstituicao(Instituicao instituicao){
-
+    public void removerInstituicao(Instituicao instituicao){
+        if(organizadorObservableMap.containsKey(instituicao)){
+            organizadorObservableMap.remove(instituicao);
+        } else {
+            colaboradorObservableMap.remove(instituicao);
+        }
     }
 
     private void adicionarInstituicao(Instituicao instituicao){

@@ -110,4 +110,8 @@ public class PreviewInstituicaoController {
     public void setContainer(Parent container) {
         this.container = container;
     }
+
+    public void remover() {
+        parentController.removerInstituicao(getInstituicao());
+    }
 }
