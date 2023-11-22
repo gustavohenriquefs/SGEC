@@ -162,7 +162,7 @@
                         </VBox>
                      </children>
                   </VBox>
-                  <VBox spacing="60.0">
+                  <VBox spacing="60.0" VBox.vgrow="ALWAYS">
                      <children>
                         <VBox fx:id="Localizacoes" spacing="15.0" VBox.vgrow="ALWAYS">
                            <children>
