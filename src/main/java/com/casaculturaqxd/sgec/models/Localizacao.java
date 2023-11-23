@@ -80,11 +80,46 @@ public class Localizacao {
     public void setIdLocalizacao(int idLocalizacao) {
         this.idLocalizacao = idLocalizacao;
     }
+
+    private boolean verifyValidFildStrValue(String fieldVal) {
+        return fieldVal != null && fieldVal.trim().length() > 0;
+    }
     
     public String toString(){
-        String[] firstLine = {rua,Integer.toString(numeroRua),bairro};
-        String secondLine = "\n"+cidade+" ("+cep+") "+estado+"-"+pais;
-        String[] fields = {String.join(", ",firstLine),secondLine};
-        return String.join(" ",fields);
+        StringBuilder localizacao = new StringBuilder();
+
+        if (verifyValidFildStrValue(rua)) {
+            localizacao.append(rua);
+        }
+
+        if (numeroRua != 0) {
+            localizacao.append(" ").append(numeroRua);
+        }
+
+        if (verifyValidFildStrValue(bairro)) {
+            localizacao.append(", ").append(bairro);
+        }
+
+        localizacao.append("\n");
+        
+        if (verifyValidFildStrValue(cidade)) {
+            localizacao.append(cidade);
+        }
+
+        if (verifyValidFildStrValue(cep)) {
+            localizacao.append(" (").append(cep).append(")");
+        }
+
+        if (verifyValidFildStrValue(estado)) {
+            localizacao.append(" ").append(estado);
+        }
+
+        if (verifyValidFildStrValue(pais)) {
+            localizacao.append("-").append(pais);
+        }
+    
+        return localizacao.toString();
     }
+
+    
 }
