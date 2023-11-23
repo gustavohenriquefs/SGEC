@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.EventoDAO;
 import com.casaculturaqxd.sgec.DAO.LocalizacaoDAO;
+import com.casaculturaqxd.sgec.DAO.ServiceFileDAO;
 import com.casaculturaqxd.sgec.controller.preview.PreviewArquivoController;
 import com.casaculturaqxd.sgec.controller.preview.PreviewLocalizacaoController;
 import com.casaculturaqxd.sgec.controller.preview.PreviewParticipanteController;
@@ -310,14 +311,13 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
     }
 
     public void loadArquivos() {
-        if (evento.getListaArquivos() != null) {
-            for (ServiceFile arquivo : evento.getListaArquivos()) {
-                try {
-                    adicionarArquivo(arquivo);
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
+        ServiceFileDAO serviceFileDAO = new ServiceFileDAO(db.getConnection());
+        for (ServiceFile arquivo : serviceFileDAO.listarArquivosEvento(evento, 5)) {
+            try {
+                adicionarArquivo(arquivo);
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
         }
     }
@@ -396,8 +396,7 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
     @Override
     public void adicionarParticipante(Participante participante) {
         // TODO chamar metodo para todo participante vinculado ao evento
-        participantes.put(participante,
-                new FXMLLoader(App.class.getResource("view/preview/previewParticipante.fxml")));
+        participantes.put(participante, new FXMLLoader(App.class.getResource("view/preview/previewParticipante.fxml")));
     }
 
     @Override
@@ -414,8 +413,7 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
         VisualizarEventoController superController = this;
         observablemap.addListener(new MapChangeListener<Participante, FXMLLoader>() {
             @Override
-            public void onChanged(
-                    MapChangeListener.Change<? extends Participante, ? extends FXMLLoader> change) {
+            public void onChanged(MapChangeListener.Change<? extends Participante, ? extends FXMLLoader> change) {
 
                 if (change.wasAdded()) {
                     Participante addedKey = change.getKey();
