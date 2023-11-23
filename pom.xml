@@ -27,6 +27,11 @@
             <artifactId>aws-java-sdk-s3</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.controlsfx</groupId>
+            <artifactId>controlsfx</artifactId>
+            <version>9.0.0</version>
+        </dependency>
+        <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-media</artifactId>
             <version>20.0.2</version>
@@ -99,6 +104,10 @@
                 <version>0.0.4</version>
                 <configuration>
                     <mainClass>com.casaculturaqxd.sgec.App</mainClass>
+                    <options>
+                        <option>--add-exports</option>
+                        <option>javafx.base/com.sun.javafx.event=org.controlsfx.controls</option>
+                    </options>
                 </configuration>
                 <executions>
                     <execution>
