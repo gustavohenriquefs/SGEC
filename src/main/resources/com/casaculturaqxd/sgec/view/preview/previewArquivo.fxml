@@ -49,24 +49,27 @@
                <children>
                   <HBox>
                      <children>
-                        <Label fx:id="fileKey" text="Label" />
+                        <Label fx:id="fileKey" text="Label" wrapText="true">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font></Label>
                      </children>
                   </HBox>
-                  <HBox spacing="75.0">
+                  <HBox spacing="60.0">
                      <children>
-                        <Label fx:id="date" text="Label">
+                        <Label fx:id="date" text="Label" wrapText="true">
                            <font>
-                              <Font size="10.0" />
+                              <Font name="System Bold" size="10.0" />
                            </font>
                         </Label>
-                        <Label fx:id="fileType" text="Label">
+                        <Label fx:id="fileType" text="Label" wrapText="true">
                            <font>
-                              <Font size="10.0" />
+                              <Font name="System Bold" size="10.0" />
                            </font>
                         </Label>
-                        <Label fx:id="tamanho" text="Label">
+                        <Label fx:id="tamanho" text="Label" wrapText="true">
                            <font>
-                              <Font size="10.0" />
+                              <Font name="System Bold" size="10.0" />
                            </font>
                         </Label>
                      </children>

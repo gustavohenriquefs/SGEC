@@ -12,7 +12,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -86,45 +85,30 @@
                         </VBox>
                      </children>
                   </VBox>
-                  <VBox VBox.vgrow="ALWAYS">
+                  <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
                      <children>
-                     <AnchorPane>
-                        <children>
-                              <ScrollPane fx:id="scrollResultados" layoutY="35.0" visible="false" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="35.0">
+                        <Label fx:id="exibir" text="Exibir resultados para">
+                           <font>
+                              <Font name="System Bold" size="20.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </VBox>
+                  <VBox>
+                     <children>
+                        <AnchorPane prefHeight="300.0" VBox.vgrow="ALWAYS">
+                           <children>
+                              <ScrollPane fx:id="scrollResultados" fitToHeight="true" fitToWidth="true" layoutX="10.0" layoutY="35.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <content>
-                                    <FlowPane fx:id="campoResultados" alignment="CENTER" columnHalignment="CENTER" hgap="20.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="316.0" prefWidth="766.0" vgap="20.0">
+                                    <FlowPane fx:id="campoResultados" alignment="CENTER" columnHalignment="CENTER" hgap="20.0" vgap="20.0">
                                        <padding>
                                           <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                                        </padding>
                                     </FlowPane>
                                  </content>
                               </ScrollPane>
-                           <StackPane alignment="TOP_CENTER" layoutX="243.0" layoutY="14.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                              <children>
-                                 <Label id="exibir" fx:id="exibir" text="Exibir resultados para" visible="false" StackPane.alignment="CENTER">
-                                    <StackPane.margin>
-                                       <Insets />
-                                    </StackPane.margin>
-                                    <font>
-                                       <Font name="System Bold" size="20.0" />
-                                    </font>
-                                 </Label>
-                              </children>
-                           </StackPane>
-                           <HBox alignment="TOP_CENTER" layoutX="28.0" layoutY="40.0">
-                              <children>
-                                 <Label id="metasResultados" fx:id="metasResultados" prefWidth="130.0">
-                                    <HBox.margin>
-                                       <Insets />
-                                    </HBox.margin>
-                                 </Label>
-                                 <Label id="inicioResultados" fx:id="inicioResultados" prefWidth="130.0" />
-                                 <Label id="finalResultados" fx:id="finalResultados" prefWidth="130.0" />
-                                 <Label fx:id="localizacaoResultados" prefWidth="130.0" />
-                              </children>
-                           </HBox>
-                        </children>
-                     </AnchorPane>
+                           </children>
+                        </AnchorPane>
                      </children>
                   </VBox>
                </children>
