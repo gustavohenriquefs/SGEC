@@ -6,91 +6,116 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<GridPane id="fieldLocalizacao" fx:id="paneLocalizacoes" alignment="CENTER" maxWidth="1406.0" prefHeight="136.0" prefWidth="1382.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.FieldLocalizacaoController">
-   <columnConstraints>
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="898.2000122070312" minWidth="10.0" prefWidth="428.0000366210937" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="612.7999877929686" minWidth="10.0" prefWidth="490.39996337890625" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="475.59991455078125" minWidth="10.0" prefWidth="475.59991455078125" />
-      <ColumnConstraints hgrow="SOMETIMES" maxWidth="475.59991455078125" minWidth="10.0" prefWidth="475.59991455078125" />
-   </columnConstraints>
-   <rowConstraints>
-      <RowConstraints maxHeight="52.8000244140625" minHeight="10.0" prefHeight="34.4" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="44.00000190734864" minHeight="10.0" prefHeight="32.800000000000004" vgrow="SOMETIMES" />
-      <RowConstraints maxHeight="44.00000190734864" minHeight="10.0" prefHeight="32.800000000000004" vgrow="SOMETIMES" />
-   </rowConstraints>
+<VBox xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.FieldLocalizacaoController">
    <children>
-      <Label prefHeight="17.0" prefWidth="63.0" text="Rua" textFill="#352929">
-         <GridPane.margin>
-            <Insets bottom="20.0" left="20.0" />
-         </GridPane.margin>
-      </Label>
-      <TextField fx:id="rua" maxHeight="10.0" minWidth="26.0" prefHeight="26.0" prefWidth="190.0">
-         <GridPane.margin>
-            <Insets left="20.0" top="20.0" />
-         </GridPane.margin>
-      </TextField>
-      <TextField fx:id="bairro" layoutX="30.0" layoutY="34.0" minWidth="26.0" prefHeight="26.0" GridPane.columnIndex="1">
-         <GridPane.margin>
-            <Insets left="20.0" top="20.0" />
-         </GridPane.margin>
-      </TextField>
-      <Label text="Bairro" textFill="#352929" GridPane.columnIndex="1">
-         <GridPane.margin>
-            <Insets bottom="20.0" left="20.0" />
-         </GridPane.margin>
-      </Label>
-      <TextField fx:id="numero" layoutX="290.0" layoutY="34.0" maxHeight="10.0" minWidth="26.0" prefHeight="26.0" prefWidth="190.0" GridPane.columnIndex="2">
-         <GridPane.margin>
-            <Insets left="20.0" top="20.0" />
-         </GridPane.margin>
-      </TextField>
-      <Label text="Número" textFill="#352929" GridPane.columnIndex="2">
-         <GridPane.margin>
-            <Insets bottom="20.0" left="20.0" />
-         </GridPane.margin>
-      </Label>
-      <Label text="Cidade" textFill="#352929" GridPane.columnIndex="1" GridPane.rowIndex="1">
-         <GridPane.margin>
-            <Insets bottom="20.0" left="20.0" />
-         </GridPane.margin>
-      </Label>
-      <Label text="Estado" textFill="#352929" GridPane.columnIndex="2" GridPane.rowIndex="1">
-         <GridPane.margin>
-            <Insets bottom="20.0" left="20.0" />
-         </GridPane.margin>
-      </Label>
-      <TextField fx:id="cidade" layoutX="30.0" layoutY="80.0" maxHeight="10.0" minWidth="26.0" prefHeight="26.0" prefWidth="190.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
-         <GridPane.margin>
-            <Insets left="20.0" top="20.0" />
-         </GridPane.margin>
-      </TextField>
-      <TextField fx:id="estado" layoutX="290.0" layoutY="80.0" maxHeight="10.0" minWidth="26.0" prefHeight="26.0" prefWidth="190.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
-         <GridPane.margin>
-            <Insets left="20.0" top="20.0" />
-         </GridPane.margin>
-      </TextField>
-      <TextField fx:id="cep" layoutX="30.0" layoutY="29.0" maxHeight="10.0" minWidth="26.0" prefHeight="26.0" prefWidth="190.0" promptText="Ex: 01001-000" GridPane.rowIndex="1">
-         <GridPane.margin>
-            <Insets left="20.0" top="20.0" />
-         </GridPane.margin>
-      </TextField>
-      <Label layoutX="30.0" layoutY="13.0" prefHeight="18.0" prefWidth="30.0" text="CEP" textFill="#352929" GridPane.rowIndex="1">
-         <GridPane.margin>
-            <Insets bottom="20.0" left="20.0" />
-         </GridPane.margin>
-      </Label>
-      <Button id="botaoRemover" fx:id="botaoRemover" onAction="#remover" alignment="BASELINE_RIGHT" mnemonicParsing="false" prefHeight="25.0" prefWidth="65.0" style="-fx-background-color: A22D2E;" text="Remover" textAlignment="CENTER" textFill="#fffef7" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
-         <GridPane.margin>
-            <Insets />
-         </GridPane.margin></Button>
-      <VBox GridPane.rowIndex="2">
+      <HBox alignment="BOTTOM_LEFT" spacing="20.0">
          <children>
-            <Label prefHeight="18.0" prefWidth="30.0" text="País" textFill="#352929" />
-            <TextField fx:id="pais" maxHeight="25.0" minWidth="26.0" prefHeight="25.0" prefWidth="254.0" promptText="Ex: 01001-000" />
+            <VBox prefHeight="43.0" prefWidth="912.0">
+               <children>
+                  <Label prefHeight="18.0" prefWidth="37.0" text="Local" textFill="#352929" />
+                  <TextField fx:id="fdNomeLocal" maxHeight="25.0" maxWidth="-Infinity" minWidth="26.0" prefHeight="25.0" prefWidth="912.0" />
+               </children>
+            </VBox>
+            <Button id="botaoRemover" fx:id="botaoRemover" alignment="BASELINE_RIGHT" mnemonicParsing="false" onAction="#remover" prefHeight="25.0" prefWidth="77.0" style="-fx-background-color: A22D2E;" text="Remover" textAlignment="CENTER" textFill="#fffef7">
+               <HBox.margin>
+                  <Insets bottom="1.0" />
+               </HBox.margin>
+            </Button>
          </children>
-      </VBox>
+         <VBox.margin>
+            <Insets left="20.0" />
+         </VBox.margin>
+      </HBox>
+      <GridPane id="fieldLocalizacao" fx:id="paneLocalizacoes" alignment="CENTER" maxWidth="1406.0" prefHeight="136.0" prefWidth="1382.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="898.2000122070312" minWidth="10.0" prefWidth="428.0000366210937" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="612.7999877929686" minWidth="10.0" prefWidth="490.39996337890625" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="475.59991455078125" minWidth="10.0" prefWidth="475.59991455078125" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints maxHeight="52.8000244140625" minHeight="10.0" prefHeight="34.4" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="44.00000190734864" minHeight="10.0" prefHeight="32.800000000000004" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="44.00000190734864" minHeight="10.0" prefHeight="32.800000000000004" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <Label prefHeight="17.0" prefWidth="63.0" text="Rua" textFill="#352929" GridPane.columnIndex="2" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets bottom="20.0" left="20.0" />
+               </GridPane.margin>
+            </Label>
+            <TextField fx:id="rua" maxHeight="10.0" minWidth="26.0" prefHeight="26.0" prefWidth="190.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets left="20.0" top="20.0" />
+               </GridPane.margin>
+            </TextField>
+            <TextField fx:id="bairro" layoutX="30.0" layoutY="34.0" minWidth="26.0" prefHeight="26.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets left="20.0" top="20.0" />
+               </GridPane.margin>
+            </TextField>
+            <Label text="Bairro" textFill="#352929" GridPane.columnIndex="1" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets bottom="20.0" left="20.0" />
+               </GridPane.margin>
+            </Label>
+            <TextField fx:id="numero" layoutX="290.0" layoutY="34.0" maxHeight="10.0" minWidth="26.0" prefHeight="26.0" prefWidth="190.0" GridPane.rowIndex="2">
+               <GridPane.margin>
+                  <Insets left="20.0" top="20.0" />
+               </GridPane.margin>
+            </TextField>
+            <Label text="Número" textFill="#352929" GridPane.rowIndex="2">
+               <GridPane.margin>
+                  <Insets bottom="20.0" left="20.0" />
+               </GridPane.margin>
+            </Label>
+            <Label text="Cidade" textFill="#352929" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets bottom="20.0" left="20.0" />
+               </GridPane.margin>
+            </Label>
+            <Label text="Estado" textFill="#352929" GridPane.columnIndex="2">
+               <GridPane.margin>
+                  <Insets bottom="20.0" left="20.0" />
+               </GridPane.margin>
+            </Label>
+            <TextField fx:id="cidade" layoutX="30.0" layoutY="80.0" maxHeight="10.0" minWidth="26.0" prefHeight="26.0" prefWidth="190.0" GridPane.rowIndex="1">
+               <GridPane.margin>
+                  <Insets left="20.0" top="20.0" />
+               </GridPane.margin>
+            </TextField>
+            <TextField fx:id="estado" layoutX="290.0" layoutY="80.0" maxHeight="10.0" minWidth="26.0" prefHeight="26.0" prefWidth="190.0" GridPane.columnIndex="2">
+               <GridPane.margin>
+                  <Insets left="20.0" top="20.0" />
+               </GridPane.margin>
+            </TextField>
+            <TextField fx:id="cep" layoutX="30.0" layoutY="29.0" maxHeight="10.0" minWidth="26.0" prefHeight="26.0" prefWidth="190.0" promptText="Ex: 01001-000">
+               <GridPane.margin>
+                  <Insets left="20.0" top="20.0" />
+               </GridPane.margin>
+            </TextField>
+            <Label layoutX="30.0" layoutY="13.0" prefHeight="18.0" prefWidth="30.0" text="CEP" textFill="#352929">
+               <GridPane.margin>
+                  <Insets bottom="20.0" left="20.0" />
+               </GridPane.margin>
+            </Label>
+            <Label prefHeight="18.0" prefWidth="30.0" text="País" textFill="#352929" GridPane.columnIndex="1">
+               <GridPane.margin>
+                  <Insets left="22.0" top="-22.0" />
+               </GridPane.margin>
+            </Label>
+            <TextField fx:id="pais" maxHeight="25.0" minWidth="26.0" prefHeight="25.0" prefWidth="254.0" promptText="Ex: 01001-000" GridPane.columnIndex="1">
+               <GridPane.margin>
+                  <Insets left="21.0" top="20.0" />
+               </GridPane.margin>
+            </TextField>
+         </children>
+         <VBox.margin>
+            <Insets right="20.0" />
+         </VBox.margin>
+      </GridPane>
    </children>
-</GridPane>
+</VBox>
