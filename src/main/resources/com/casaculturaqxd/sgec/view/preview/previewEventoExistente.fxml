@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.effect.DropShadow?>
@@ -45,7 +46,10 @@
                   </HBox>
                   <HBox fx:id="campoBotao">
                      <children>
-                        <Button id="botao" fx:id="detalhes" mnemonicParsing="false" onAction="#verDetalhes" prefHeight="26.0" prefWidth="234.0" text="Ver detalhes" textFill="WHITE" />
+                        <Button id="botao" fx:id="detalhes" maxWidth="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#verDetalhes" prefHeight="26.0" prefWidth="200.0" text="Ver detalhes" textFill="WHITE" HBox.hgrow="ALWAYS">
+                           <HBox.margin>
+                              <Insets bottom="5.0" />
+                           </HBox.margin></Button>
                      </children>
                   </HBox>
                </children>
