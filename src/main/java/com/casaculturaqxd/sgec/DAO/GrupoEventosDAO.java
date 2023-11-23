@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Optional;
@@ -30,19 +31,39 @@ public class GrupoEventosDAO {
         this.connection = connection;
     }
 
-    public Optional<GrupoEventos> getGrupoEventos(GrupoEventos grupoEventos) {
-        String sql = "SELECT * FROM GRUPO_EVENTOS WHERE id_grupo_eventos = ?";
-
+    public boolean inserirGrupoEventos(GrupoEventos grupoEventos) throws SQLException {
+        String sql = "INSERT INTO grupo_eventos VALUES()";
+        PreparedStatement statement = connection.prepareStatement(sql);
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
+            return true;
+        } catch (Exception exception) {
+            String nomeGrupoEventosCausa = "";
+            if (grupoEventos != null) {
+                nomeGrupoEventosCausa = grupoEventos.getNome() != null ? grupoEventos.getNome() : " ";
+            }
+            throw new SQLException("falha ao inserir grupo de eventos " + nomeGrupoEventosCausa, exception);
+
+        }
+
+        finally {
+            statement.close();
+        }
+    }
+
+    public Optional<GrupoEventos> getGrupoEventos(GrupoEventos grupoEventos) throws SQLException {
+        String sql = "SELECT * FROM GRUPO_EVENTOS WHERE id_grupo_eventos = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        try {
             preparedStatement.setInt(1, grupoEventos.getIdGrupoEventos());
             ResultSet resultSet = preparedStatement.executeQuery();
-
+            ServiceFileDAO serviceFileDAO = new ServiceFileDAO(connection);
             if (resultSet.next()) {
-                int idImagemCapa = resultSet.getInt("id_service_file");
+                ServiceFile resultFile = new ServiceFile(resultSet.getInt("id_service_file"));
                 GrupoEventosBuilder grupoEventosBuilder = new GrupoEventosBuilder();
-                grupoEventosBuilder.setNome(resultSet.getString("nome_grupo_eventos"))
-                        .setImagemCapa(idImagemCapa != 0 ? new ServiceFile(idImagemCapa) : null)
+                grupoEventosBuilder.setIdGrupoEventos(resultSet.getInt("id_grupo_eventos"))
+                        .setNome(resultSet.getString("nome_grupo_eventos"))
+                        .setImagemCapa(serviceFileDAO.getArquivo(resultFile))
                         .setDescricao(resultSet.getString("descricao"))
                         .setClassificacaoEtaria(resultSet.getString("classificacao_etaria"))
                         .setDataInicial(resultSet.getDate("data_inicial")).setDataFinal(resultSet.getDate("data_final"))
@@ -55,38 +76,50 @@ public class GrupoEventosDAO {
                         .setNumParticipantesEsperado(resultSet.getInt("num_participantes_esperado"))
                         .setNumParticipantesAlcancado(resultSet.getInt("num_participantes_alcancado"));
 
-                preparedStatement.close();
                 return Optional.of(grupoEventosBuilder.getGrupoEventos());
             } else {
                 return Optional.empty();
             }
         } catch (Exception exception) {
-            return Optional.empty();
+            String nomeGrupoEventosCausa = "";
+            if (grupoEventos != null) {
+                nomeGrupoEventosCausa = grupoEventos.getNome() != null ? grupoEventos.getNome() : " ";
+            }
+            throw new SQLException("falha ao buscar grupo de eventos " + nomeGrupoEventosCausa, exception);
+
+        } finally {
+            preparedStatement.close();
         }
     }
 
-    public Optional<GrupoEventos> getGrupoEventosPreview(GrupoEventos grupoEventos) {
+    public Optional<GrupoEventos> getPreviewGrupoEventos(GrupoEventos grupoEventos) throws SQLException {
         String sql = "SELECT * FROM GRUPO_EVENTOS WHERE id_grupo_eventos = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setInt(1, grupoEventos.getIdGrupoEventos());
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
                 GrupoEventosBuilder grupoEventosBuilder = new GrupoEventosBuilder();
-                grupoEventosBuilder.setNome(resultSet.getString("nome_grupo_eventos"))
+                grupoEventosBuilder.setIdGrupoEventos(resultSet.getInt("id_grupo_eventos"))
+                        .setNome(resultSet.getString("nome_grupo_eventos"))
                         .setImagemCapa(new ServiceFile(resultSet.getInt("id_service_file")))
                         .setDataInicial(resultSet.getDate("data_inicial"))
                         .setDataFinal(resultSet.getDate("data_final"));
 
-                preparedStatement.close();
                 return Optional.of(grupoEventosBuilder.getGrupoEventos());
             } else {
                 return Optional.empty();
             }
         } catch (Exception exception) {
-            return Optional.empty();
+            String nomeGrupoEventosCausa = "";
+            if (grupoEventos != null) {
+                nomeGrupoEventosCausa = grupoEventos.getNome() != null ? grupoEventos.getNome() : " ";
+            }
+            throw new SQLException("falha ao buscar grupo de eventos " + nomeGrupoEventosCausa, exception);
+        } finally {
+            preparedStatement.close();
         }
     }
 
@@ -95,39 +128,44 @@ public class GrupoEventosDAO {
      *
      * @return lista de grupos de eventos somente com os atributos necessarios para
      *         preview
+     * @throws SQLException
      */
-    public ArrayList<GrupoEventos> listUltimosGrupoEventos() {
+    public ArrayList<GrupoEventos> listUltimosGrupoEventos() throws SQLException {
         return listPreviewGrupoEventos(null, false, 5);
     }
 
-    private ArrayList<GrupoEventos> listPreviewGrupoEventos(String colunaOrdenacao, boolean ascending, int limit) {
+    private ArrayList<GrupoEventos> listPreviewGrupoEventos(String colunaOrdenacao, boolean ascending, int limit)
+            throws SQLException {
         if (colunaOrdenacao == null) {
             colunaOrdenacao = "cadastrado_em";
         }
-        String sql = "SELECT * FROM grupo_eventos";
+        String sql = "SELECT id_grupo_eventos,nome_grupo_eventos,data_inicial,data_final,id_service_file FROM grupo_eventos";
 
         String ordering = colunaOrdenacao == null ? " ORDER BY " + colunaOrdenacao : " ";
-        String limitClause = limit > 0 ? "LIMIT" + String.valueOf(limit) : " ";
+        String limitClause = limit > 0 ? " LIMIT " + String.valueOf(limit) : " ";
         sql += ordering += limitClause;
+        PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+
         ArrayList<GrupoEventos> listaPreviewGrupoEventos = new ArrayList<>();
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
                 GrupoEventosBuilder grupoEventosBuilder = new GrupoEventosBuilder();
-                grupoEventosBuilder.setNome(resultSet.getString("nome_grupo_eventos"))
+                grupoEventosBuilder.setIdGrupoEventos(resultSet.getInt("id_grupo_eventos"))
+                        .setNome(resultSet.getString("nome_grupo_eventos"))
                         .setImagemCapa(new ServiceFile(resultSet.getInt("id_service_file")))
                         .setDataInicial(resultSet.getDate("data_inicial"))
                         .setDataFinal(resultSet.getDate("data_final"));
 
-                preparedStatement.close();
                 listaPreviewGrupoEventos.add(grupoEventosBuilder.getGrupoEventos());
             }
+            return listaPreviewGrupoEventos;
         } catch (Exception exception) {
-            return null;
+            throw new SQLException("falha ao listar grupos de eventos ", exception);
+        } finally {
+            preparedStatement.close();
         }
-        return listaPreviewGrupoEventos;
     }
 
     public ArrayList<GrupoEventos> pesquisaPreviewGrupoEventos(String nome, String cidade, String classficacaoEtaria,
@@ -138,9 +176,43 @@ public class GrupoEventosDAO {
         return null;
     }
 
-    public boolean updateGrupoEventos(GrupoEventos grupoEventos) {
-        String sql = "UPDATE grupo_eventos  SET  WHERE id_grupo_eventos = ?";
-        return false;
+    public boolean updateGrupoEventos(GrupoEventos grupoEventos) throws SQLException {
+        String sql = """
+                    UPDATE grupo_eventos
+                    SET
+                    nome_grupo_eventos = ?,
+                    descricao = ?,
+                    classificacao_etaria = ?,
+                    publico_esperado = ?,
+                    publico_alcancado = ?
+                    num_acoes_alcancado = ?
+                    num_municipios_alcancado = ?
+                    num_participantes_alcancado = ?
+                    num_acoes_esperado = ?
+                    num_municipios_esperado = ?
+                    num_participantes_esperado = ?
+                    id_service_file = ?
+                    data_inicial = ?
+                    data_final = ?
+                WHERE
+                id_grupo_eventos = ?
+                    """;
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        try {
+            preparedStatement.setString(1, grupoEventos.getNome());
+
+            preparedStatement.setInt(14, grupoEventos.getIdGrupoEventos());
+            int numAtualizacoes = preparedStatement.executeUpdate();
+            return numAtualizacoes > 0;
+        } catch (Exception e) {
+            String nomeGrupoEventosCausa = "";
+            if (grupoEventos != null) {
+                nomeGrupoEventosCausa = grupoEventos.getNome() != null ? grupoEventos.getNome() : " ";
+            }
+            throw new SQLException("falha ao atualizar grupo de eventos " + nomeGrupoEventosCausa, e);
+        } finally {
+            preparedStatement.close();
+        }
     }
 
     public boolean deleteGrupoEventos(GrupoEventos grupoEventos) {
