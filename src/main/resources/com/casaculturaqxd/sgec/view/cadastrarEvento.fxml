@@ -142,7 +142,7 @@
                            <children>
                                     <HBox fx:id="secaoParticipantes" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="40.0">
                                        <children>
-                                    <Button fx:id="botaoParticipantes" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="46.0" prefWidth="152.0" style="-fx-background-color: #352929;" text="Adicionar participantes" textFill="WHITE" HBox.hgrow="ALWAYS" />
+                                    <Button fx:id="botaoParticipantes" onAction="#adicionarParticipante" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="46.0" prefWidth="152.0" style="-fx-background-color: #352929;" text="Adicionar participantes" textFill="WHITE" HBox.hgrow="ALWAYS" />
                                        </children></HBox>
                                     <VBox VBox.vgrow="NEVER">
                                        <children>

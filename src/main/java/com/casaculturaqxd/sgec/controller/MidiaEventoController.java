@@ -1,7 +1,9 @@
 package com.casaculturaqxd.sgec.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URLConnection;
+import java.util.Iterator;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -21,13 +23,16 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
@@ -47,16 +52,13 @@ public class MidiaEventoController implements ControllerServiceFile {
     @FXML
     private TextField filtroNomeArquivo;
 
-    private DatabasePostgres db = DatabasePostgres.getInstance("URL",
-            "USER_NAME", "PASSWORD");
+    private DatabasePostgres db = DatabasePostgres.getInstance("URL", "USER_NAME", "PASSWORD");
     private ServiceFileDAO serviceFileDAO;
+    private File ultimoDiretorioAcessado;
     private Evento evento;
-    @FXML
-    // map contendo todos os service files de um evento como chave e os FXMLLoaders
-    // de preview arquivo como valores
-    private ObservableMap<ServiceFile, FXMLLoader> mapArquivos = FXCollections.observableHashMap();
     // lista contendo os controllers de todos os arquivos
     private ObservableList<PreviewArquivoController> controllersPreviews = FXCollections.observableArrayList();
+    // Context que realiza ordenacoes usando diferentes strategies
     private ComparatorServiceFileContext comparatorContext;
     // propriedades que definem se a ordenacao eh reversa ou nao
     private BooleanProperty nomeProperty, dataCriacaoProperty, tamanhoProperty;
@@ -76,15 +78,28 @@ public class MidiaEventoController implements ControllerServiceFile {
         root.getChildren().add(0, carregarMenu.load());
     }
 
-    public void selectNovoArquivo() {
+    /**
+     * abre o explorador de arquivos no diretorio raiz do usuario, em uma segunda
+     * chamada abre o ultimo diretorio aberto pelo usuario, chama a operacao de
+     * adicionar o arquivo arquivoSelecionado
+     */
+    public void selectNovoArquivo() throws IOException {
         FileChooser fileChooser = new FileChooser();
-        adicionarArquivo(new ServiceFile(fileChooser.showOpenDialog(stage)));
+        if (ultimoDiretorioAcessado != null) {
+            fileChooser.setInitialDirectory(ultimoDiretorioAcessado);
+        }
+        File arquivoSelecionado = fileChooser.showOpenDialog(stage);
+        if (arquivoSelecionado.getParentFile().isDirectory()) {
+            ultimoDiretorioAcessado = arquivoSelecionado.getParentFile();
+        }
+        adicionarArquivo(new ServiceFile(arquivoSelecionado));
     }
 
-    // filtra os resultados atuais de acordo com o nome pesquisado
+    // filtra os resultados mostrados atualmente na tela de acordo com o nome
+    // pesquisado
     public void pesquisarArquivo() {
-        Predicate<PreviewArquivoController> lambdaPreviewCarregado = entry -> filesContainer
-                .getChildren().contains(entry.getRoot());
+        Predicate<PreviewArquivoController> lambdaPreviewCarregado = entry -> filesContainer.getChildren()
+                .contains(entry.getRoot());
         Predicate<PreviewArquivoController> lambdaNomePesquisado = entry -> entry.getServiceFile().getFileKey()
                 .contains(filtroNomeArquivo.getText());
 
@@ -129,27 +144,32 @@ public class MidiaEventoController implements ControllerServiceFile {
         filterArquivos(serviceFile -> isOutros(serviceFile));
     }
 
-    // mostra somente os arquivos do tipo especificado no predicado,
-    // chama o metodo load caso o controller do fxmlloader seja nulo
+    /**
+     * carrega a secao especifica na tela dependendo do tipo do arquivo passado,
+     * chama os mesmos metodos swapTo que sao usados pelos buttons da interface
+     */
+    private void goToSecaoArquivo(ServiceFile serviceFile) {
+        if (isImage(serviceFile)) {
+            swapToImagens();
+        } else if (isVideo(serviceFile)) {
+            swapToVideos();
+        } else if (isAudio(serviceFile)) {
+            swapToAudios();
+        } else if (isDocument(serviceFile)) {
+            swapToDocumentos();
+        } else if (isOutros(serviceFile)) {
+            swapToOutros();
+        }
+    }
+
+    /**
+     * mostra somente os arquivos do tipo especificado no predicado
+     */
     private void filterArquivos(Predicate<ServiceFile> predicate) {
         filesContainer.getChildren().clear();
-        for (ServiceFile serviceFile : mapArquivos.keySet()) {
-            if (predicate.test(serviceFile)) {
-                FXMLLoader loader = mapArquivos.get(serviceFile);
-                PreviewArquivoController controller = loader.getController();
-                try {
-                    if (controller == null) {
-                        loader.load();
-                        controller = loader.getController();
-                        controllersPreviews.add(controller);
-                    }
-                    controller.setServiceFile(serviceFile);
-                    controller.setParentController(this);
-                    filesContainer.getChildren().add(controller.getRoot());
-
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        for (PreviewArquivoController controllerPreview : controllersPreviews) {
+            if (predicate.test(controllerPreview.getServiceFile())) {
+                filesContainer.getChildren().add(controllerPreview.getRoot());
             }
         }
     }
@@ -194,16 +214,19 @@ public class MidiaEventoController implements ControllerServiceFile {
     }
 
     private boolean isOutros(ServiceFile serviceFile) {
-        return !isImage(serviceFile) && !isVideo(serviceFile) &&
-                !isAudio(serviceFile) && !isDocument(serviceFile);
+        return !isImage(serviceFile) && !isVideo(serviceFile) && !isAudio(serviceFile) && !isDocument(serviceFile);
     }
 
-    // seta o evento da pagina e adiciona os arquivos dele ao mapa cd arquivos
-    public void setEvento(Evento evento) {
+    // seta o evento da pagina e adiciona um novo controller contendo o preview e o
+    // arquivo na lista
+    public void setEvento(Evento evento) throws IOException {
         this.evento = evento;
         for (ServiceFile serviceFile : serviceFileDAO.listarArquivosEvento(evento)) {
-            mapArquivos.putIfAbsent(serviceFile,
-                    new FXMLLoader(App.class.getResource("view/preview/previewArquivo.fxml")));
+            try {
+                addPreviewArquivo(serviceFile);
+            } catch (IOException e) {
+                throw new IOException("falha ao carregar preview:", e);
+            }
         }
         swapToImagens();
     }
@@ -213,25 +236,55 @@ public class MidiaEventoController implements ControllerServiceFile {
     }
 
     @Override
-    public void adicionarArquivo(ServiceFile serviceFile) {
+    public void adicionarArquivo(ServiceFile serviceFile) throws IOException {
         try {
-            serviceFileDAO.inserirArquivo(serviceFile);
+            ServiceFile checkArquivoJaExiste = serviceFileDAO.getArquivo(serviceFile.getFileKey());
+            if (checkArquivoJaExiste != null) {
+                serviceFile = checkArquivoJaExiste;
+            } else {
+                serviceFileDAO.inserirArquivo(serviceFile);
+            }
             serviceFileDAO.vincularArquivo(serviceFile.getServiceFileId(), evento.getIdEvento());
-
-            mapArquivos.putIfAbsent(serviceFile,
-                    new FXMLLoader(App.class.getResource("view/preview/previewArquivo.fxml")));
-
-        } catch (Exception e) {
-            e.printStackTrace();
+            addPreviewArquivo(serviceFile);
+            goToSecaoArquivo(serviceFile);
+        } catch (IllegalArgumentException e) {
+            Alert alert = new Alert(AlertType.ERROR, e.getMessage(), new ButtonType("Ok", ButtonData.CANCEL_CLOSE));
+            alert.showAndWait();
         }
+
     }
 
     @Override
     public void removerArquivo(ServiceFile serviceFile) {
         try {
             serviceFileDAO.desvincularArquivo(serviceFile.getServiceFileId(), evento.getIdEvento());
+            Iterator<PreviewArquivoController> iteratorPreviews = controllersPreviews.iterator();
+            while (iteratorPreviews.hasNext()) {
+                PreviewArquivoController controllerArquivoRemovido = iteratorPreviews.next();
+                if (controllerArquivoRemovido.getServiceFile().equals(serviceFile)) {
+                    iteratorPreviews.remove();
+                    filesContainer.getChildren().remove(controllerArquivoRemovido.getRoot());
+                }
+            }
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    // adiciona o controller do novo arquivo a lista de controllers
+    // levanta uma excecao caso ja exista um arquivo com o mesmo nome
+    private PreviewArquivoController addPreviewArquivo(ServiceFile serviceFile) throws IOException {
+        FXMLLoader loaderPreviewArquivo = new FXMLLoader(App.class.getResource("view/preview/previewArquivo.fxml"));
+        loaderPreviewArquivo.load();
+        PreviewArquivoController previewArquivoController = loaderPreviewArquivo.getController();
+        previewArquivoController.setParentController(this);
+        previewArquivoController.setServiceFile(serviceFile);
+        if (controllersPreviews.stream()
+                .anyMatch(controller -> controller.getServiceFile().getFileKey().equals(serviceFile.getFileKey()))) {
+            throw new IllegalArgumentException("Arquivo ja esta vinculado ao evento: " + serviceFile.getFileKey());
+        } else {
+            controllersPreviews.add(previewArquivoController);
+            return previewArquivoController;
         }
     }
 
