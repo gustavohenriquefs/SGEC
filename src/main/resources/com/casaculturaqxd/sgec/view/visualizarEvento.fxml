@@ -70,18 +70,7 @@
                            <children>
                               <VBox alignment="CENTER">
                                  <children>
-                                    <StackPane id="listaParticipantes" fx:id="secaoParticipantes" prefHeight="140.0" prefWidth="1426.0" visible="false">
-                                       <children>
-                                          <Label text="Participantes" StackPane.alignment="TOP_LEFT">
-                                             <StackPane.margin>
-                                                <Insets left="20.0" top="10.0" />
-                                             </StackPane.margin>
-                                             <font>
-                                                <Font name="System Bold" size="20.0" />
-                                             </font>
-                                          </Label>
-                                       </children>
-                                    </StackPane>
+                                    <FlowPane fx:id="secaoParticipantes" prefHeight="150.0" prefWidth="1500.0" />
                                     <Button id="botaoNovoParticipante" fx:id="novoParticipante" mnemonicParsing="false" style="-fx-background-color: #2A3F25;" text="Adicionar novo participante +" textFill="WHITE" />
                                  </children>
                               </VBox>
