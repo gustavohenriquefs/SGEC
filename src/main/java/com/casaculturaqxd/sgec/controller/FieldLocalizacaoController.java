@@ -4,81 +4,111 @@ package com.casaculturaqxd.sgec.controller;
 
 import java.io.IOException;
 
-import com.casaculturaqxd.sgec.App;
+import org.controlsfx.control.textfield.TextFields;
+
 import com.casaculturaqxd.sgec.DAO.LocalizacaoDAO;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.Localizacao;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.layout.GridPane;
 
 
 public class FieldLocalizacaoController {
     DatabasePostgres db = DatabasePostgres.getInstance("URL","USER_NAME","PASSWORD");
     @FXML
-    GridPane paneLocalizacoes;
+    Parent paneLocalizacoes;
     @FXML
     Button botaoRemover; 
     @FXML 
-    TextField rua, bairro, numero, cidade, cep, estado, pais;
+    TextField fdNomeLocal, rua, bairro, numero, cidade, cep, estado, pais;
 
-    // EventoController parentController;
+    ControllerEvento parentController;
 
     Alert campoFaltando = new Alert(AlertType.WARNING);
 
-    public void initialize(){
+    Localizacao localizacao = new Localizacao();
+
+    public Parent getPaneLocalizacao() {
+        return paneLocalizacoes;
+    }
+
+    public void setPaneLocalizacao(Parent paneLocalizacao) {
+        this.paneLocalizacoes = paneLocalizacao;
+    }
+
+    public void initialize() {
+        // initAutoComplete();
+
         pais.setText("Brasil");
+
         cep.setTextFormatter(new TextFormatter<>(change -> {
             if(change.getText().matches("\\d+") && change.getRangeEnd() < 9){
                 if(change.getRangeEnd() == 5){
                     change.setText("-"); 
                 }
                 return change;
-            }
-
-            else{
+            } else{
                 change.setText(""); 
                 return change;
             }
         }));
     }
 
-    public void remover() throws IOException{
-      FXMLLoader loaderSuperScene = new FXMLLoader(App.class.getResource("view/cadastrarEvento.fxml"));
+    private void initAutoComplete() {
+        LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO();
+
+        localizacaoDAO.setConnection(db.getConnection());
+
+
+        TextFields.bindAutoCompletion(fdNomeLocal, localizacaoDAO.getListaLocais());
     }
 
-    public Localizacao getLocalizacao(){
-        Localizacao novoLocal = new Localizacao();
-        if(rua.getText() == null
-            ||cidade.getText() == null
+    public void remover() throws IOException{
+      parentController.removerLocalizacao(this.getLocalizacao());
+    }
+
+    public void setParentController(ControllerEvento parentController) {
+        this.parentController = parentController;
+    }
+
+    public Localizacao getLocalizacao() {
+    // TODO: get do dao por nome
+    // evento on click
+    // TODO: Dialog de Participante
+        if(    fdNomeLocal.getText() == null  
+            || rua.getText() == null
+            || cidade.getText() == null
             || estado.getText() == null
-            || pais.getText() == null){
-                campoFaltando.show();
-            }
-            else{
-            novoLocal.setRua(rua.getText());
-            novoLocal.setBairro(bairro.getText());
-            if(!numero.getText().isEmpty()){
-            novoLocal.setNumeroRua(Integer.parseInt(numero.getText()));
-            }
-            novoLocal.setCep(cep.getText());
-            novoLocal.setCidade(cidade.getText());
-            novoLocal.setEstado(estado.getText());
-            novoLocal.setPais(pais.getText());
+            || pais.getText() == null)
+        {
+               campoFaltando.show();
+               return null;
         }
-        System.out.println(novoLocal);
+            else{
+            localizacao.setNome(fdNomeLocal.getText());
+            localizacao.setRua(rua.getText());
+            localizacao.setBairro(bairro.getText());
+            
+            if(!numero.getText().isEmpty()){
+                localizacao.setNumeroRua(Integer.parseInt(numero.getText()));
+            }
+
+            localizacao.setCep(cep.getText());
+            localizacao.setCidade(cidade.getText());
+            localizacao.setEstado(estado.getText());
+            localizacao.setPais(pais.getText());
+        }
+        
         LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO();
         localizacaoDAO.setConnection(db.getConnection());
-        if(localizacaoDAO.inserirLocalizacao(novoLocal)){
-            return novoLocal;
-        }
-        return null;
+        
+        return localizacao;
     }
 
 }
