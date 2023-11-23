@@ -56,7 +56,6 @@ public class ServiceFileDAO {
 
   public ServiceFile getArquivo(ServiceFile arquivo) {
     try {
-      setService(arquivo.getService());
       String sql = "select * from service_file where id_service_file=?";
       PreparedStatement stmt = connection.prepareStatement(sql);
       stmt.setInt(1, arquivo.getServiceFileId());
@@ -67,6 +66,7 @@ public class ServiceFileDAO {
         arquivoRetorno.setBucket(resultSet.getString("bucket"));
         arquivoRetorno.setService(resultSet.getString("service"));
 
+        setService(arquivo.getService());
         arquivoRetorno.copyMetadata(service.getMetadata(arquivo.getBucket(), arquivo.getFileKey()));
       }
       return arquivo;
