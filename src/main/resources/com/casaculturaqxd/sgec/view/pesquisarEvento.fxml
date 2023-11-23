@@ -87,7 +87,7 @@
                   </VBox>
                   <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
                      <children>
-                        <Label fx:id="exibir" text="Exibir resultados para">
+                        <Label fx:id="exibir" pickOnBounds="false" text="Exibir resultados para" visible="false">
                            <font>
                               <Font name="System Bold" size="20.0" />
                            </font>
