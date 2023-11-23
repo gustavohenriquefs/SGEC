@@ -213,10 +213,10 @@ public class CadastrarEventoController implements ControllerEvento, ControllerSe
         if (Localizacoes.getChildren().size() >= MAX_LOCALIZACOES) {
             botaoNovaLocalizacao.setDisable(true);
         }
-        SubSceneLoader loaderLocais = new SubSceneLoader();
-        GridPane novoLocal = (GridPane) loaderLocais.getPage("fields/fieldLocalizacao");
+        FXMLLoader loaderLocais = new FXMLLoader(App.class.getResource("view/fields/fieldLocalizacao.fxml"));
+        Parent novoLocal = loaderLocais.load();
         Localizacoes.getChildren().add(novoLocal);
-        FieldLocalizacaoController controller = loaderLocais.getLoader().getController();
+        FieldLocalizacaoController controller = loaderLocais.getController();
         controllersLocais.add(controller);
     }
 
