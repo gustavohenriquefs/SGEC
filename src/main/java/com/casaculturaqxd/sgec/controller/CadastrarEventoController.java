@@ -39,6 +39,7 @@ import com.casaculturaqxd.sgec.builder.EventoBuilder;
 import com.casaculturaqxd.sgec.controller.preview.PreviewArquivoController;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.Evento;
+import com.casaculturaqxd.sgec.models.Localizacao;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 import com.casaculturaqxd.sgec.service.Service;
 import com.casaculturaqxd.sgec.models.Meta;
@@ -401,13 +402,13 @@ public class CadastrarEventoController implements ControllerEvento, ControllerSe
     }
 
     @Override
-    public void adicionarLocalizacao(String localizacao) {
+    public void adicionarLocalizacao(Localizacao localizacao) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'adicionarLocalizacao'");
     }
 
     @Override
-    public void removerLocalizacao(String localizacao) {
+    public void removerLocalizacao(Localizacao localizacao) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'removerLocalizacao'");
     }

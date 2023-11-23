@@ -1,5 +1,6 @@
 package com.casaculturaqxd.sgec.controller;
 
+import com.casaculturaqxd.sgec.models.Localizacao;
 import com.casaculturaqxd.sgec.models.Participante;
 
 /**
@@ -10,7 +11,7 @@ public interface ControllerEvento {
 
     public void removerParticipante(Participante participante);
 
-    public void adicionarLocalizacao(String localizacao);
+    public void adicionarLocalizacao(Localizacao localizacao);
 
-    public void removerLocalizacao(String localizacao);
+    public void removerLocalizacao(Localizacao localizacao);
 }
