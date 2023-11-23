@@ -63,9 +63,11 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
     @FXML
     VBox Localizacoes, cargaHoraria;
     @FXML
-    HBox secaoParticipantes, Organizadores, Colaboradores, secaoMetas;
+    FlowPane secaoParticipantes, secaoOrganizadores, Colaboradores;
     @FXML
     FlowPane secaoArquivos;
+    @FXML
+    HBox secaoMetas;
 
     @FXML
     TextField titulo, publicoEsperado, publicoAlcancado, horas, minutos, horasCargaHoraria, numParticipantesEsperado,
@@ -246,7 +248,7 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
         // que e adicionado a pagina
         SubSceneLoader loaderOrganizadores = new SubSceneLoader();
         AnchorPane novoOrganizador = (AnchorPane) loaderOrganizadores.getPage("fields/fieldInstituicao");
-        Organizadores.getChildren().add(novoOrganizador);
+        secaoOrganizadores.getChildren().add(novoOrganizador);
 
     }
 
