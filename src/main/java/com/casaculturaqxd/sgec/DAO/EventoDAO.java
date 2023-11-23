@@ -1,6 +1,7 @@
 package com.casaculturaqxd.sgec.DAO;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,12 +15,25 @@ import java.util.TreeSet;
 import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.Instituicao;
 import com.casaculturaqxd.sgec.models.Meta;
+import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 
 public class EventoDAO {
   private Connection connection;
 
+  public EventoDAO() {
+
+  }
+
+  public EventoDAO(Connection connection) {
+    this.connection = connection;
+  }
+
   public void setConnection(Connection connection) {
     this.connection = connection;
+  }
+
+  public Connection getConnection() {
+    return this.connection;
   }
 
   public boolean inserirEvento(Evento evento) {
@@ -91,11 +105,18 @@ public class EventoDAO {
 
   public boolean vincularMetas(List<Meta> metas, Integer idEvento) {
     MetaDAO metaDAO = new MetaDAO(connection);
-    List<Boolean> vinculos = new ArrayList<>();
     for (Meta meta : metas) {
-      vinculos.add(metaDAO.vincularEvento(meta.getIdMeta(), idEvento));
+      boolean temp = metaDAO.vincularEvento(meta.getIdMeta(), idEvento);
+      if (temp == false) {
+        return false;
+      }
     }
-    return vinculos.contains(false);
+    return true;
+  }
+
+  public boolean vincularArquivos(Evento evento) {
+    ServiceFileDAO serviceFileDAO = new ServiceFileDAO(getConnection());
+    return serviceFileDAO.vincularAllArquivos(evento);
   }
 
   private boolean vincularLocais(SortedSet<Integer> locais, Integer idEvento) {
@@ -253,6 +274,37 @@ public class EventoDAO {
     return eventos;
   }
 
+  public ArrayList<Evento> pesquisarEvento(String nome, Date inicioDate, Date fimDate){
+    String sql = "select * from evento where nome_evento ilike ? ";
+    if(inicioDate != null)
+      sql += "and data_inicial >= '" + inicioDate.toString() + "' ";
+
+    if(fimDate != null)
+      sql += "and data_final <= '" + fimDate.toString() + "' ";
+
+    if(nome == "" && inicioDate == null && fimDate == null)
+      sql += "limit 30";
+
+    try {
+      ArrayList<Evento> eventos = new ArrayList<>();
+      
+      PreparedStatement stmt = connection.prepareStatement(sql);
+      stmt.setString(1, "%"+nome+"%");
+      ResultSet resultSet = stmt.executeQuery();
+      while(resultSet.next()){
+        Evento evento = new Evento();
+        evento.setIdEvento(resultSet.getInt("id_evento"));
+        evento.setNome(resultSet.getString("nome_evento"));
+        evento.setDataFinal(resultSet.getDate("data_final"));
+        evento.setHorario(resultSet.getTime("horario"));
+        eventos.add(evento);
+      }     
+      return eventos;
+    } catch (SQLException e) {
+      return new ArrayList<Evento>();
+    } 
+  }
+
   public Optional<Evento> buscarEvento(Evento evento) {
     try {
       String sql = "select * from evento where id_evento=?";
@@ -284,6 +336,7 @@ public class EventoDAO {
             .setListaColaboradores(this.buscarColaboradoresPorEvento(eventoRetorno.getIdEvento()));
         eventoRetorno
             .setListaParticipantes(this.buscarLocaisPorEvento(eventoRetorno.getIdEvento()));
+        eventoRetorno.setListaArquivos(this.buscarArquivosPorEvento(eventoRetorno));
         eventoRetorno.setListaMetas(this.listarMetasEvento(eventoRetorno));
       }
       stmt.close();
@@ -291,6 +344,11 @@ public class EventoDAO {
     } catch (SQLException e) {
       return Optional.empty();
     }
+  }
+
+  private ArrayList<ServiceFile> buscarArquivosPorEvento(Evento evento) {
+    ServiceFileDAO serviceFileDAO = new ServiceFileDAO(connection);
+    return serviceFileDAO.listarArquivosEvento(evento);
   }
 
   private ArrayList<Instituicao> buscarColaboradoresPorEvento(int idEvento) {
@@ -326,7 +384,7 @@ public class EventoDAO {
     return numMunicipiosDistintos;
   }
 
-  private SortedSet<Integer> buscarLocaisPorEvento(Integer idEvento) {
+  public SortedSet<Integer> buscarLocaisPorEvento(Integer idEvento) {
     String sql = "select id_localizacao from localizacao_evento where id_evento=?";
 
     SortedSet<Integer> locais = new TreeSet<>();

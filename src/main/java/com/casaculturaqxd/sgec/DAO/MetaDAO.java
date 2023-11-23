@@ -48,7 +48,7 @@ public class MetaDAO {
     }
 
     public Optional<Meta> getMetaPorNome(String nomeMeta) {
-        String queryGet = "SELECT * FROM meta WHERE nome_meta=?";
+        String queryGet = "SELECT * FROM meta WHERE nome_meta like ?";
         Meta meta = new Meta(nomeMeta);
         try {
             PreparedStatement statement = connection.prepareStatement(queryGet);

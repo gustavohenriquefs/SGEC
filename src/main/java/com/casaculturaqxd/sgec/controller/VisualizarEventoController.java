@@ -1,33 +1,35 @@
 package com.casaculturaqxd.sgec.controller;
 
-
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
+
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.EventoDAO;
 import com.casaculturaqxd.sgec.DAO.LocalizacaoDAO;
+import com.casaculturaqxd.sgec.controller.preview.PreviewArquivoController;
 import com.casaculturaqxd.sgec.controller.preview.PreviewLocalizacaoController;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.Indicador;
 import com.casaculturaqxd.sgec.models.Localizacao;
 import com.casaculturaqxd.sgec.models.Meta;
+import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
+import com.casaculturaqxd.sgec.service.Service;
 
-import javafx.animation.KeyFrame;
 import javafx.animation.PauseTransition;
-import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
+import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
@@ -39,22 +41,19 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-import javafx.util.converter.IntegerStringConverter;
-import javafx.scene.image.ImageView;
 import javafx.util.Duration;
+import javafx.util.converter.IntegerStringConverter;
 
-public class VisualizarEventoController {
+public class VisualizarEventoController implements ControllerServiceFile {
     private Evento evento;
     private DatabasePostgres db = DatabasePostgres.getInstance("URL", "USER_NAME", "PASSWORD");
     private EventoDAO eventoDAO = new EventoDAO();
@@ -62,7 +61,7 @@ public class VisualizarEventoController {
     @FXML
     VBox root;
     @FXML
-    AnchorPane secaoArquivos;
+    StackPane secaoArquivos;
     @FXML
     VBox frameLocais;
     @FXML
@@ -81,8 +80,8 @@ public class VisualizarEventoController {
     @FXML
     ChoiceBox<String> classificacaoEtaria;
     @FXML
-    private String[] classificacoes =
-            {"Livre", "10 anos", "12 anos", "14 anos", "16 anos", "18 anos"};
+    private String[] classificacoes = { "Livre", "10 anos", "12 anos", "14 anos", "16 anos", "18 anos" };
+    private ObservableMap<ServiceFile, FXMLLoader> mapServiceFiles = FXCollections.observableHashMap();
     // Tabela com todos os campos de input
     ObservableList<Control> camposInput = FXCollections.observableArrayList();
     // Indicadores
@@ -93,8 +92,7 @@ public class VisualizarEventoController {
     ObservableList<TableView<Indicador>> tabelas = FXCollections.observableArrayList();
 
     @FXML
-    Button novoParticipante, novoOrganizador, novoColaborador, salvarAlteracoes, adicionarArquivo,
-            visualizarTodos;
+    Button salvarAlteracoes;
     @FXML
     private ImageView copiaCola;
     @FXML
@@ -107,21 +105,15 @@ public class VisualizarEventoController {
         copiaCola.setOnMouseClicked(event -> copyToClipboard(event));
         addControls(root, camposInput);
         addPropriedadeAlterar(camposInput);
-
+        addListenersServiceFile(mapServiceFiles);
         loadMenu();
 
         eventoDAO.setConnection(db.getConnection());
         localizacaoDAO.setConnection(db.getConnection());
-
-        /*
-         * TODO: adicionar funcionalidade de arquivos e reativar o botao
-         */
-        temporaryHideUnimplementedFields();
     }
 
     private void loadMenu() throws IOException {
-        FXMLLoader carregarMenu =
-                new FXMLLoader(App.class.getResource("view/componentes/menu.fxml"));
+        FXMLLoader carregarMenu = new FXMLLoader(App.class.getResource("view/componentes/menu.fxml"));
         root.getChildren().add(0, carregarMenu.load());
     }
 
@@ -131,7 +123,7 @@ public class VisualizarEventoController {
         titulo.setText(evento.getNome());
         descricao.setText(evento.getDescricao());
         classificacaoEtaria.getSelectionModel().select(evento.getClassificacaoEtaria());
-
+        loadArquivos();
         if (evento.getHorario() != null) {
             horario.setText(evento.getHorario().toString());
         }
@@ -151,8 +143,7 @@ public class VisualizarEventoController {
         certificavel.setSelected(evento.isCertificavel());
         libras.setSelected(evento.isAcessivelEmLibras());
 
-        FXMLLoader loaderLocal =
-                new FXMLLoader(App.class.getResource("view/preview/previewLocalizacao.fxml"));
+        FXMLLoader loaderLocal = new FXMLLoader(App.class.getResource("view/preview/previewLocalizacao.fxml"));
 
         if (evento.getLocais() != null) {
             for (Integer idLocal : evento.getLocais()) {
@@ -220,7 +211,7 @@ public class VisualizarEventoController {
             evento.setPublicoAlcancado(numeroPublico.getValorAlcancado());
             evento.setPublicoEsperado(numeroPublico.getValorEsperado());
             evento.setParticipantesEsperado(numeroMestres.getValorEsperado());
-            evento.setMunicipiosEsperado(numeroMunicipios.getValorEsperado());;
+            evento.setMunicipiosEsperado(numeroMunicipios.getValorEsperado());
             eventoDAO.alterarEvento(evento);
 
             Alert sucessoAtualizacao = new Alert(AlertType.INFORMATION);
@@ -231,6 +222,15 @@ public class VisualizarEventoController {
             erroAtualizacao.setContentText("Erro ao alterar evento");
             erroAtualizacao.show();
         }
+    }
+
+    public void goToMidiaEvento() throws IOException {
+        FXMLLoader loadTelaMidia = new FXMLLoader(App.class.getResource("view/midiaEvento.fxml"));
+        Parent nextScreen = loadTelaMidia.load();
+        MidiaEventoController controllerNextScreen = loadTelaMidia.getController();
+        controllerNextScreen.setEvento(evento);
+
+        App.setRoot(nextScreen);
     }
 
     /**
@@ -291,7 +291,8 @@ public class VisualizarEventoController {
 
     /**
      * <p>
-     * Retorna todos os elementos que suportam interacao do usuario presentes na pagina, exceto
+     * Retorna todos os elementos que suportam interacao do usuario presentes na
+     * pagina, exceto
      * botoes, labels e tableviews
      * <p>
      */
@@ -305,30 +306,79 @@ public class VisualizarEventoController {
         }
     }
 
-    /**
-     * oculta e desabilita todas as funcionalidades nao implementadas TODO: remover o metodo apos
-     * arquivos serem implementados
-     */
-    private void temporaryHideUnimplementedFields() {
-        for (Node node : secaoArquivos.getChildren()) {
-            node.setVisible(false);
+    public void loadArquivos() {
+        if (evento.getListaArquivos() != null) {
+            for (ServiceFile arquivo : evento.getListaArquivos()) {
+                adicionarArquivo(arquivo);
+            }
         }
     }
 
-    private void getDescricao(){
+    @Override
+    public void adicionarArquivo(ServiceFile serviceFile) {
+        mapServiceFiles.put(serviceFile,
+                new FXMLLoader(App.class.getResource("view/preview/previewArquivo.fxml")));
+    }
+
+    @Override
+    public void removerArquivo(ServiceFile serviceFile) {
+        Service service = serviceFile.getService();
+        try {
+            service.deletarArquivo(serviceFile.getBucket(), serviceFile.getFileKey());
+
+        } catch (IllegalArgumentException e) {
+            // caso arquivo ja nao esteja registrado
+            mapServiceFiles.remove(serviceFile);
+        } catch (Exception e) {
+            // em qualquer outro erro
+            e.printStackTrace();
+        }
+    }
+
+    public void addListenersServiceFile(ObservableMap<ServiceFile, FXMLLoader> observablemap) {
+        ControllerServiceFile superController = this;
+        observablemap.addListener(new MapChangeListener<ServiceFile, FXMLLoader>() {
+            @Override
+            public void onChanged(
+                    MapChangeListener.Change<? extends ServiceFile, ? extends FXMLLoader> change) {
+
+                if (change.wasAdded()) {
+                    ServiceFile addedKey = change.getKey();
+                    // carregar o fxml de preview e setar o ServiceFile deste para o
+                    // arquivo adicionado
+                    try {
+                        Parent previewParticipante = change.getValueAdded().load();
+                        PreviewArquivoController controller = change.getValueAdded().getController();
+                        controller.setServiceFile(addedKey);
+                        controller.setParentController(superController);
+
+                        secaoArquivos.getChildren().add(previewParticipante);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (change.wasRemoved()) {
+                    PreviewArquivoController removedController = change.getValueRemoved().getController();
+                    // Remover o Pane de preview ao deletar um Arquivo da lista
+                    secaoArquivos.getChildren().remove(removedController.getRoot());
+                }
+            }
+        });
+    }
+
+    private void getDescricao() {
         Clipboard clipboard = Clipboard.getSystemClipboard();
         ClipboardContent content = new ClipboardContent();
         content.putString(descricao.getText());
         clipboard.setContent(content);
     }
 
-    private void copyToClipboard(MouseEvent event){        
+    private void copyToClipboard(MouseEvent event) {
         getDescricao();
-         // Exibe a mensagem e determina sua duração
-         tooltipCliboard.show(copiaCola, event.getScreenX(), event.getScreenY());
-         PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
-         pause.setOnFinished(e -> tooltipCliboard.hide());
-         pause.play();
+        // Exibe a mensagem e determina sua duração
+        tooltipCliboard.show(copiaCola, event.getScreenX(), event.getScreenY());
+        PauseTransition pause = new PauseTransition(Duration.seconds(0.5));
+        pause.setOnFinished(e -> tooltipCliboard.hide());
+        pause.play();
     }
-
 }

@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.Localizacao;
 
 public class LocalizacaoDAO {
@@ -137,6 +138,51 @@ public class LocalizacaoDAO {
     }
   }
 
+  public ArrayList<Localizacao> pesquisarLocalizacao(String nomeCidade){
+    String sql = "select * from localizacao where cidade like ?";
+    ArrayList<Localizacao> localizacaos = new ArrayList<>();
+    try {
+      PreparedStatement stmt = connection.prepareStatement(sql);
+      stmt.setString(1, "%"+nomeCidade+"%");
+      ResultSet resultSet = stmt.executeQuery();
+
+      while (resultSet.next()) {
+        Localizacao localizacao = new Localizacao();
+        localizacao.setIdLocalizacao(resultSet.getInt("id_localizacao"));
+        localizacao.setEstado(resultSet.getString("estado"));
+        localizacao.setRua(resultSet.getString("rua"));
+        localizacao.setBairro(resultSet.getString("bairro"));
+        localizacao.setNumeroRua(resultSet.getInt("numero_rua"));
+        localizacao.setPais(resultSet.getString("pais"));
+        localizacao.setCidade(resultSet.getString("cidade"));
+        localizacao.setCep(resultSet.getString("cep"));
+        localizacao.setNome(resultSet.getString("nome_localizacao"));
+        localizacaos.add(localizacao);
+      }
+      stmt.close();
+      return localizacaos;
+    } catch (SQLException e) {
+      return null;
+    }
+  }
+
+  public boolean verificaLocalidade(int id_evento, int id_localizacao){
+    String sql = "select * from localizacao_evento where id_evento = ? and id_localizacao = ?";
+    try {
+      PreparedStatement stmt = connection.prepareStatement(sql);
+      stmt.setInt(1, id_evento);
+      stmt.setInt(2, id_localizacao);
+      ResultSet resultSet = stmt.executeQuery();
+      while (resultSet.next()) {
+        stmt.close();
+        return true;
+      }
+      stmt.close();
+      return false;
+    } catch (SQLException e) {
+      return false;
+    }
+  }
   boolean desvincularEvento(Integer idLocalizacao, Integer idEvento) {
     String vincLocaisSql = "DELETE FROM localizacao_evento WHERE id_localizacao=? AND id_evento=?";
 

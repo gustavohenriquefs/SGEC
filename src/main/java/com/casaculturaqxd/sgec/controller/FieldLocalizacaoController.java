@@ -28,7 +28,7 @@ public class FieldLocalizacaoController {
     @FXML 
     TextField rua, bairro, numero, cidade, cep, estado, pais;
 
-    EventoController parentController;
+    // EventoController parentController;
 
     Alert campoFaltando = new Alert(AlertType.WARNING);
 
