@@ -96,7 +96,7 @@
                   </VBox>
                   <VBox>
                      <children>
-                        <AnchorPane prefHeight="300.0" VBox.vgrow="ALWAYS">
+                        <AnchorPane prefHeight="300.0" visible="false" VBox.vgrow="ALWAYS">
                            <children>
                               <ScrollPane fx:id="scrollResultados" fitToHeight="true" fitToWidth="true" layoutX="10.0" layoutY="35.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <content>
