@@ -197,9 +197,9 @@
                                     <Button fx:id="botaoParticipantes" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#adicionarParticipante" prefHeight="45.0" prefWidth="150.0" style="-fx-background-color: #352929;" text="Adicionar participantes" textFill="WHITE" />
                                     <VBox>
                                        <children>
-                                          <HBox fx:id="secaoParticipantes" alignment="CENTER_LEFT" spacing="40.0">
+                                          <HBox alignment="CENTER_LEFT" spacing="40.0">
                                              <children>
-                                                <FlowPane fx:id="secaParticipantes" prefHeight="200.0" HBox.hgrow="ALWAYS" />
+                                                <FlowPane fx:id="secaoParticipantes" hgap="10.0" prefHeight="200.0" vgap="10.0" HBox.hgrow="ALWAYS" />
                                              </children>
                                           </HBox>
                                        </children>
@@ -218,23 +218,19 @@
                               <VBox alignment="CENTER_LEFT">
                                  <children>
                                     <Button fx:id="botaoOrganizadores" disable="true" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#adicionarOrganizador" prefHeight="46.0" prefWidth="154.0" style="-fx-background-color: #352929;" text="Adicionar organizadores" textFill="WHITE" visible="false" VBox.vgrow="ALWAYS" />
-                                    <FlowPane fx:id="secaoOrganizadores" prefHeight="200.0" VBox.vgrow="ALWAYS" />
+                                    <FlowPane fx:id="secaoOrganizadores" hgap="10.0" prefHeight="200.0" vgap="10.0" VBox.vgrow="ALWAYS" />
                                  </children>
                               </VBox>
-                              <VBox prefHeight="46.0" prefWidth="150.0" spacing="15.0">
+                              <VBox spacing="15.0">
                                  <children>
-                                    <HBox alignment="CENTER_LEFT" spacing="20.0">
-                                       <children>
-                                          <Button fx:id="botaoColaboradores" disable="true" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#adicionarColaborador" prefHeight="46.0" prefWidth="153.0" style="-fx-background-color: #352929;" text="Adicionar colaboradores" textFill="WHITE" visible="false" VBox.vgrow="ALWAYS" />
-                                          <FlowPane fx:id="Colaboradores" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
-                                       </children>
-                                    </HBox>
+                                    <Button fx:id="botaoColaboradores" disable="true" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#adicionarColaborador" prefHeight="46.0" prefWidth="153.0" style="-fx-background-color: #352929;" text="Adicionar colaboradores" textFill="WHITE" visible="false" VBox.vgrow="ALWAYS" />
+                                    <FlowPane fx:id="Colaboradores" hgap="10.0" prefHeight="200.0" vgap="10.0" VBox.vgrow="ALWAYS" />
                                  </children>
                               </VBox>
                               <VBox>
                                  <children>
                                     <Button fx:id="botaoArquivos" mnemonicParsing="false" onAction="#adicionarArquivo" prefHeight="46.0" prefWidth="152.0" style="-fx-background-color: #352929;" text="Adicionar arquivos" textFill="WHITE" />
-                                    <FlowPane fx:id="secaoArquivos" prefHeight="200.0" VBox.vgrow="ALWAYS" />
+                                    <FlowPane fx:id="secaoArquivos" hgap="10.0" prefHeight="200.0" vgap="10.0" VBox.vgrow="ALWAYS" />
                                  </children>
                               </VBox>
                               <VBox>
