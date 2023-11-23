@@ -176,12 +176,12 @@ public class MetaDAO {
         return listaMetas;
     }
 
-    public ArrayList<Meta> listarMetasGrupoEventos(Integer idGrupoEventos) {
-        String queryListarMetas = "SELECT * FROM meta_grupo_eventos INNER JOIN meta USING(id_meta) WHERE id_evento=?";
+    public ArrayList<Meta> listarMetasGrupoEventos(Integer idGrupoEventos) throws SQLException {
+        String queryListarMetas = "SELECT * FROM meta_grupo_eventos INNER JOIN meta USING(id_meta) WHERE id_grupo_eventos=?";
+        PreparedStatement statement = connection.prepareStatement(queryListarMetas);
 
         ArrayList<Meta> listaMetas = new ArrayList<>();
         try {
-            PreparedStatement statement = connection.prepareStatement(queryListarMetas);
             statement.setInt(1, idGrupoEventos);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
@@ -189,11 +189,10 @@ public class MetaDAO {
                 listaMetas.add(meta);
             }
             statement.close();
-        } catch (SQLException e) {
-            Logger erro = Logger.getLogger("erroSQL");
-            erro.log(Level.SEVERE, "excecao levantada:", e);
-
-            return null;
+        } catch (Exception e) {
+            throw new SQLException("falha listando metas do grupo de eventos", e);
+        } finally {
+            statement.close();
         }
         return listaMetas;
     }
@@ -217,23 +216,21 @@ public class MetaDAO {
         }
     }
 
-    public boolean vincularGrupoEventos(Integer idMeta, Integer idGrupoEventos) {
+    public boolean vincularGrupoEventos(Integer idMeta, Integer idGrupoEventos) throws SQLException {
         String queryVincularGrupo = "INSERT INTO meta_grupo_eventos VALUES(?,?)";
+        PreparedStatement statement = connection.prepareStatement(queryVincularGrupo);
+
         try {
-            PreparedStatement statement = connection.prepareStatement(queryVincularGrupo);
             statement.setInt(1, idMeta);
             statement.setInt(2, idGrupoEventos);
             statement.execute();
-            statement.close();
 
             return true;
-        } catch (SQLException e) {
-            Logger erro = Logger.getLogger("erroSQL");
-            erro.log(Level.SEVERE, "excecao levantada:", e);
-
-            return false;
+        } catch (Exception e) {
+            throw new SQLException("falha vinculando meta ao grupo de eventos", e);
+        } finally {
+            statement.close();
         }
-
     }
 
     public boolean desvincularEvento(Integer idMeta, Integer idEvento) {
@@ -256,22 +253,20 @@ public class MetaDAO {
 
     }
 
-    public boolean desvincularGrupoEventos(Integer idMeta, Integer idGrupoEventos) {
-        String queryVincularGrupo = "DELETE FROM meta_grupo_eventos WHERE id_meta=? AND id_grupo_eventos=?)";
+    public boolean desvincularGrupoEventos(Integer idMeta, Integer idGrupoEventos) throws SQLException {
+        String queryVincularGrupo = "DELETE FROM meta_grupo_eventos WHERE id_meta=? AND id_grupo_eventos=?";
+        PreparedStatement statement = connection.prepareStatement(queryVincularGrupo);
         try {
-            PreparedStatement statement = connection.prepareStatement(queryVincularGrupo);
             statement.setInt(1, idMeta);
             statement.setInt(2, idGrupoEventos);
             int numRemocoes = statement.executeUpdate();
-            statement.close();
 
             return numRemocoes > 0;
 
-        } catch (SQLException e) {
-            Logger erro = Logger.getLogger("erroSQL");
-            erro.log(Level.SEVERE, "excecao levantada:", e);
-
-            return false;
+        } catch (Exception e) {
+            throw new SQLException("falha desvinculando meta do grupo de eventos", e);
+        } finally {
+            statement.close();
         }
     }
 }
