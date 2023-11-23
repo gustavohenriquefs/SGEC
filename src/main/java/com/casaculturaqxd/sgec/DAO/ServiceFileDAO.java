@@ -1,31 +1,24 @@
 package com.casaculturaqxd.sgec.DAO;
 
 import java.io.File;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 import com.casaculturaqxd.sgec.service.Service;
 
-public class ServiceFileDAO {
+public class ServiceFileDAO extends DAO {
   Connection connection;
   Service service;
 
   public ServiceFileDAO(Connection connection) {
-    this.connection = connection;
-  }
-
-  public void setConnection(Connection connection) {
     this.connection = connection;
   }
 
@@ -240,17 +233,4 @@ public class ServiceFileDAO {
     this.service = arquivo.getService();
   }
 
-  private void logException(Exception exception) {
-    if (exception instanceof SQLException) {
-      Logger erro = Logger.getLogger("erroSQL");
-      erro.log(Level.SEVERE, "excecao levantada:", exception);
-    } else if (exception instanceof IllegalArgumentException) {
-      Logger erro = Logger.getLogger("erro service");
-      erro.log(Level.SEVERE, "excecao levantada:", exception);
-    } else if (exception instanceof IOException) {
-      Logger erro = Logger.getLogger("erro arquivo");
-      erro.log(Level.SEVERE, "excecao levantada:", exception);
-
-    }
-  }
 }
