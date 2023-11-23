@@ -1,86 +1,63 @@
 package com.casaculturaqxd.sgec.service;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 
 public interface Service {
       /**
-       * Cria um novo bucket com o nome especificado, se já existir um bucket com esse
-       * nome lança
-       * uma exceção
+       * Cria um novo bucket com o nome especificado
        * 
        * @param nomeBucket
-       * @throws IllegalArgumentException
        */
-      public void criarBucket(String nomeBucket) throws IllegalArgumentException;
+      public void criarBucket(String nomeBucket) throws ServiceOperationException;
 
       /**
-       * Deleta o bucket com o nome passado, se não existir nenhum bucket com esse
-       * nome lança uma
-       * exceção
+       * Deleta o bucket com o nome passado
        * 
        * @param nomeBucket
-       * @throws IllegalArgumentException
        */
-      public void deletarBucket(String nomeBucket) throws IllegalArgumentException;
+      public void deletarBucket(String nomeBucket) throws ServiceOperationException;
 
       /**
        * Captura os metadados do arquivo, como data de modificacao e tamanho
        * 
        * @param nomeBucket
        * @param chaveArquivo
-       * @return serviceFile com os metadados encontrados
-       * @throws IllegalArgumentException
+       * @return wrapper do arquivo com os metadados encontrados
        */
-      public ServiceFile getMetadata(String nomeBucket, String chaveArquivo)
-                  throws IllegalArgumentException;
+      public ServiceFile getMetadata(String nomeBucket, String chaveArquivo) throws ServiceOperationException;
 
       /**
-       * Retorna um arquivo individual convertido para uma java.io.File, levanta uma
-       * exceção caso o
-       * nome do bucket ou do arquivo sejam inválidos
+       * Retorna um arquivo individual convertido para uma java.io.File
        * 
        * @param nomeBucket
        * @param chaveArquivo
-       * @throws IllegalArgumentException
+       * @throws ServiceOperationException
        */
-      public File getArquivo(String nomeBucket, String chaveArquivo)
-                  throws IllegalArgumentException;
+      public File getArquivo(String nomeBucket, String chaveArquivo) throws ServiceOperationException;
 
       /**
        * realiza upload do arquivo para o bucket especificado, salvando-o com a chave
-       * de destino
-       * escolhida retorna uma exceção caso o bucket ou o arquivo sejam inválidos
+       * de destino escolhida
        * 
-       * @param nomeBucket
-       * @param chaveDestino
-       * @param arquivo
-       * @throws IllegalArgumentException
-       * @throws IOException
+       * @param serviceFile wrapper de conteudo de arquivo
        */
-      public void enviarArquivo(ServiceFile serviceFile)
-                  throws IllegalArgumentException, IOException;
+      public void enviarArquivo(ServiceFile serviceFile) throws ServiceOperationException;
 
       /**
        * Retorna uma lista com o nome de todos os arquivos no bucket especificado
        * 
        * @param nomeBucket
-       * @throws IllegalArgumentException
        */
-      public List<String> listarArquivos(String nomeBucket) throws IllegalArgumentException;
+      public List<String> listarArquivos(String nomeBucket) throws ServiceOperationException;
 
       /**
-       * Remove o arquivo com a chave especificada do bucket lança uma exceção caso a
-       * chave ou o
-       * nome do bucket sejam inválidos
+       * Remove o arquivo com a chave especificada do bucket
        * 
        * @param nomeBucket
        * @param chaveArquivo
-       * @throws IllegalArgumentException
        */
-      public void deletarArquivo(String nomeBucket, String chaveArquivo)
-                  throws IllegalArgumentException;
+      public void deletarArquivo(String nomeBucket, String chaveArquivo) throws ServiceOperationException;
 }

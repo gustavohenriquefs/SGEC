@@ -22,6 +22,14 @@ import com.casaculturaqxd.sgec.models.Meta;
 public class EventoDAO {
   private Connection connection;
 
+  public EventoDAO() {
+
+  }
+
+  public EventoDAO(Connection connection) {
+    this.connection = connection;
+  }
+
   public void setConnection(Connection connection) {
     this.connection = connection;
   }

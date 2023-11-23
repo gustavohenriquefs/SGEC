@@ -1,6 +1,7 @@
 package com.casaculturaqxd.sgec.models.arquivo;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -21,6 +22,10 @@ public class ServiceFile {
     private File preview;
     private File content;
 
+    public ServiceFile(int serviceFileId) {
+        this.serviceFileId = serviceFileId;
+    }
+
     public ServiceFile(File content) {
         this.content = content;
         this.fileKey = content.getName();
@@ -38,8 +43,9 @@ public class ServiceFile {
         this.service = ServiceFactory.getService(ServiceType.S3, "ACCESS_KEY", "SECRET_KEY");
     }
 
-    public ServiceFile(Integer serviceFileId) {
+    public ServiceFile(Integer serviceFileId, String bucket) {
         this.serviceFileId = serviceFileId;
+        this.bucket = bucket;
         this.service = ServiceFactory.getService(ServiceType.S3, "ACCESS_KEY", "SECRET_KEY");
     }
 
@@ -92,9 +98,13 @@ public class ServiceFile {
         this.bucket = bucket;
     }
 
-    public File getContent() {
+    public File getContent() throws IOException {
         if (this.content == null) {
-            this.content = service.getArquivo(bucket, fileKey);
+            try {
+                this.content = service.getArquivo(bucket, fileKey);
+            } catch (Exception e) {
+                throw new IOException("falha ao carregar conteudo", e);
+            }
         }
         return content;
     }
@@ -119,6 +129,14 @@ public class ServiceFile {
         this.ultimaModificacao = ultimaModificacao;
     }
 
+    public long getFileSize() {
+        return fileSize;
+    }
+
+    public void setFileSize(long fileSize) {
+        this.fileSize = fileSize;
+    }
+
     private String findFileSuffix(String fileName) {
         Pattern pattern = Pattern.compile("\\..*");
         Matcher matcher = pattern.matcher(fileName);
@@ -131,9 +149,9 @@ public class ServiceFile {
 
     @Override
     public String toString() {
-        return "ServiceFile [serviceFileId=" + serviceFileId + ", fileKey=" + fileKey + ", service="
-                + service + ", bucket=" + bucket + ", ultimaModificacao=" + ultimaModificacao
-                + ", preview=" + preview + ", content=" + content + "]";
+        return "ServiceFile [serviceFileId=" + serviceFileId + ", fileKey=" + fileKey + ", service=" + service
+                + ", bucket=" + bucket + ", ultimaModificacao=" + ultimaModificacao + ", preview=" + preview
+                + ", content=" + content + "]";
     }
 
 }

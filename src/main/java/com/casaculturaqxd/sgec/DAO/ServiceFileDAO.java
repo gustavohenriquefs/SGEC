@@ -37,16 +37,17 @@ public class ServiceFileDAO {
       PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
       stmt.setString(1, arquivo.getFileKey());
       stmt.setString(2, arquivo.getSuffix());
+      // nome do service e definido em uma enum no banco
       stmt.setObject(3, arquivo.getService().toString(), Types.OTHER);
       stmt.setString(4, arquivo.getBucket());
       stmt.setDate(5, arquivo.getUltimaModificacao());
-      int numRemocoes = stmt.executeUpdate();
+      int numInsercoes = stmt.executeUpdate();
       ResultSet rs = stmt.getGeneratedKeys();
       if (rs.next()) {
         arquivo.setServiceFileId(rs.getInt("id_service_file"));
       }
       stmt.close();
-      return numRemocoes > 0;
+      return numInsercoes > 0;
     } catch (Exception e) {
       logException(e);
       return false;
@@ -59,15 +60,14 @@ public class ServiceFileDAO {
       PreparedStatement stmt = connection.prepareStatement(sql);
       stmt.setInt(1, arquivo.getServiceFileId());
       ResultSet resultSet = stmt.executeQuery();
-      ServiceFile arquivoRetorno = null;
       if (resultSet.next()) {
-        arquivoRetorno = arquivo;
-        arquivoRetorno.setServiceFileId(resultSet.getInt("id_service_file"));
-        arquivoRetorno.setFileKey(resultSet.getString("file_key"));
-        arquivoRetorno.setSuffix(resultSet.getString("suffix"));
-        arquivoRetorno.setService(resultSet.getString("service"));
-        arquivoRetorno.setBucket(resultSet.getString("bucket"));
-        arquivoRetorno.setUltimaModificacao(resultSet.getDate("ultima_modificacao"));
+        arquivo.setServiceFileId(resultSet.getInt("id_service_file"));
+        arquivo.setFileKey(resultSet.getString("file_key"));
+        arquivo.setSuffix(resultSet.getString("suffix"));
+        arquivo.setService(resultSet.getString("service"));
+        arquivo.setBucket(resultSet.getString("bucket"));
+        arquivo.setUltimaModificacao(resultSet.getDate("ultima_modificacao"));
+
       }
       return arquivo;
     } catch (Exception e) {
@@ -89,7 +89,6 @@ public class ServiceFileDAO {
         arquivoRetorno.setService(resultSet.getString("service"));
         arquivoRetorno.setBucket(resultSet.getString("bucket"));
         arquivoRetorno.setUltimaModificacao(resultSet.getDate("ultima_modificacao"));
-
         return arquivoRetorno;
       } else {
         return null;
@@ -196,6 +195,27 @@ public class ServiceFileDAO {
     }
     evento.setListaArquivos(null);
     return true;
+  }
+
+  public ArrayList<ServiceFile> pesquisarArquivoEvento(String fileKey, int idEVento) {
+    String sql = "SELECT * FROM nome_arquivo_evento WHERE file_key ILIKE ? AND id_evento = ?";
+    ArrayList<ServiceFile> listaArquivos = new ArrayList<>();
+    try {
+      PreparedStatement statement = connection.prepareStatement(sql);
+      statement.setString(1, "%" + fileKey + "%");
+      statement.setInt(2, idEVento);
+      ResultSet resultSet = statement.executeQuery();
+
+      while (resultSet.next()) {
+        ServiceFile serviceFile = new ServiceFile(resultSet.getInt("id_service_file"));
+        listaArquivos.add(getArquivo(serviceFile));
+      }
+      statement.close();
+      return listaArquivos;
+    } catch (Exception e) {
+      logException(e);
+      return null;
+    }
   }
 
   public void setService(ServiceFile arquivo) {

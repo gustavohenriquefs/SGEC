@@ -9,18 +9,25 @@ import java.sql.Types;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import com.casaculturaqxd.sgec.models.Participante;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 
 public class ParticipanteDAO {
   private Connection conn;
-  
+  private ServiceFileDAO serviceFileDAO;
+
+  public ParticipanteDAO() {
+    serviceFileDAO = new ServiceFileDAO(null);
+  }
+
   public Connection getConn() {
     return conn;
   }
 
   public void setConnection(Connection conn) {
     this.conn = conn;
+    serviceFileDAO.setConnection(conn);
   }
 
   public Optional<Participante> getParticipante(Participante participante) throws SQLException {
@@ -34,12 +41,14 @@ public class ParticipanteDAO {
       ResultSet resultado = statement.executeQuery();
 
       if (resultado.next()) {
+        ServiceFile resultFile = new ServiceFile(resultado.getInt("id_service_file"), "sgecteste");
+
         participante.setIdParticipante(resultado.getInt("id_participante"));
         participante.setAreaDeAtuacao(resultado.getString("area_atuacao"));
         participante.setNome(resultado.getString("nome_participante"));
         participante.setBio(resultado.getString("bio"));
         participante.setLinkMapaDaCultura(resultado.getString("link_perfil"));
-        participante.setImagemCapa(new ServiceFile(resultado.getInt("id_service_file")));
+        participante.setImagemCapa(serviceFileDAO.getArquivo(resultFile));
       } else {
         return Optional.empty();
       }
@@ -52,14 +61,12 @@ public class ParticipanteDAO {
   }
 
   public boolean inserirParticipante(Participante participante) throws SQLException {
-    String inserirParticipanteQuery =
-        "INSERT INTO participante (nome_participante, area_atuacao, bio, link_perfil, id_service_file) VALUES (?, ?, ?, ?, ?)";
+    String inserirParticipanteQuery = "INSERT INTO participante (nome_participante, area_atuacao, bio, link_perfil, id_service_file) VALUES (?, ?, ?, ?, ?)";
     Integer serviceFileId = null;
     if (participante.getImagemCapa() != null)
       serviceFileId = participante.getImagemCapa().getServiceFileId();
     try {
-      PreparedStatement statement =
-          conn.prepareStatement(inserirParticipanteQuery, Statement.RETURN_GENERATED_KEYS);
+      PreparedStatement statement = conn.prepareStatement(inserirParticipanteQuery, Statement.RETURN_GENERATED_KEYS);
 
       statement.setString(1, participante.getNome());
       statement.setString(2, participante.getAreaDeAtuacao());
@@ -73,24 +80,19 @@ public class ParticipanteDAO {
         participante.setIdParticipante(rs.getInt("id_participante"));
       }
       statement.close();
-
     } catch (SQLException e) {
       Logger erro = Logger.getLogger("erroSQl");
       erro.log(Level.SEVERE, "excecao levantada:", e);
-      conn.rollback();
 
       return false;
 
-    } finally {
-      conn.commit();
     }
 
     return true;
   }
 
   public boolean updateParticipante(Participante participante) throws SQLException {
-    String atualizarParticipanteQuery =
-        "UPDATE participante SET nome_participante=?, area_atuacao=?, bio=?, link_perfil=?, id_service_file =? WHERE id_participante=?";
+    String atualizarParticipanteQuery = "UPDATE participante SET nome_participante=?, area_atuacao=?, bio=?, link_perfil=?, id_service_file =? WHERE id_participante=?";
     Integer serviceFileId = null;
     if (participante.getImagemCapa() != null)
       serviceFileId = participante.getImagemCapa().getServiceFileId();
@@ -111,11 +113,7 @@ public class ParticipanteDAO {
     } catch (SQLException e) {
       Logger erro = Logger.getLogger("erroSQL");
       erro.log(Level.SEVERE, "excecao levantada:", e);
-      conn.rollback();
-
       return false;
-    } finally {
-      conn.commit();
     }
   }
 
@@ -133,11 +131,7 @@ public class ParticipanteDAO {
     } catch (SQLException e) {
       Logger erro = Logger.getLogger("erroSQl");
       erro.log(Level.SEVERE, "excecao levantada:", e);
-      conn.rollback();
-
       return false;
-    } finally {
-      conn.commit();
     }
   }
 
@@ -156,8 +150,7 @@ public class ParticipanteDAO {
   }
 
   boolean desvincularEvento(Integer idParticipante, Integer idEvento) {
-    String vincLocaisSql =
-        "DELETE FROM participante_evento WHERE id_participante=? AND id_evento=?";
+    String vincLocaisSql = "DELETE FROM participante_evento WHERE id_participante=? AND id_evento=?";
 
     try {
       PreparedStatement stmt = conn.prepareStatement(vincLocaisSql);
