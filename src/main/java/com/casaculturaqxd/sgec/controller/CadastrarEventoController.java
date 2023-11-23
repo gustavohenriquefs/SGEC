@@ -93,6 +93,7 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
 
     public void initialize() throws IOException {
         participanteDAO.setConnection(db.getConnection());
+        serviceFileDAO = new ServiceFileDAO(eventoDAO.getConnection());
 
         formatterHorario = new SimpleDateFormat("HH:mm");
         addListenersServiceFile(mapServiceFiles);
@@ -125,8 +126,6 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
 
         builderEvento.resetar();
         eventoDAO.setConnection(db.getConnection());
-
-        serviceFileDAO = new ServiceFileDAO(eventoDAO.getConnection());
 
         builderEvento.setNome(titulo.getText());
         builderEvento.setDescricao(titulo.getText());
@@ -291,12 +290,8 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
     @Override
     public void removerArquivo(ServiceFile serviceFile) {
         try {
-            serviceFileDAO.deleteArquivo(serviceFile);
-        } catch (IllegalArgumentException e) {
-            // caso arquivo ja nao esteja registrado
             mapServiceFiles.remove(serviceFile);
         } catch (Exception e) {
-            // em qualquer outro erro
             e.printStackTrace();
         }
     }
