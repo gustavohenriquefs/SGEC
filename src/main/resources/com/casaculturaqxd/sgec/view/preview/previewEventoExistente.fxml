@@ -28,7 +28,7 @@
                   </HBox>
                   <HBox fx:id="campoDataHora" minHeight="-Infinity" prefHeight="20.0" prefWidth="173.0" styleClass="data">
                      <children>
-                        <Label fx:id="dataHora" textFill="WHITE">
+                        <Label fx:id="dataHora" textFill="WHITE" wrapText="true">
                            <font>
                               <Font size="14.0" />
                            </font>
