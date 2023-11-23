@@ -194,11 +194,16 @@
                               </VBox>
                               <VBox alignment="CENTER_LEFT" spacing="20.0" VBox.vgrow="ALWAYS">
                                  <children>
-                                    <HBox fx:id="secaoParticipantes" alignment="CENTER_LEFT" spacing="40.0">
+                                    <Button fx:id="botaoParticipantes" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#adicionarParticipante" prefHeight="45.0" prefWidth="150.0" style="-fx-background-color: #352929;" text="Adicionar participantes" textFill="WHITE" />
+                                    <VBox>
                                        <children>
-                                          <Button fx:id="botaoParticipantes" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#adicionarParticipante" prefHeight="45.0" prefWidth="150.0" style="-fx-background-color: #352929;" text="Adicionar participantes" textFill="WHITE" HBox.hgrow="ALWAYS" />
+                                          <HBox fx:id="secaoParticipantes" alignment="CENTER_LEFT" spacing="40.0">
+                                             <children>
+                                                <FlowPane fx:id="secaParticipantes" prefHeight="200.0" HBox.hgrow="ALWAYS" />
+                                             </children>
+                                          </HBox>
                                        </children>
-                                    </HBox>
+                                    </VBox>
                                     <VBox VBox.vgrow="NEVER">
                                        <children>
                                           <Label text="Número de participantes esperado" />
@@ -210,20 +215,18 @@
                                     <Insets />
                                  </VBox.margin>
                               </VBox>
-                              <VBox alignment="CENTER_LEFT" prefHeight="46.0" prefWidth="150.0">
+                              <VBox alignment="CENTER_LEFT">
                                  <children>
-                                    <HBox fx:id="Organizadores" alignment="CENTER_LEFT" spacing="20.0">
-                                       <children>
-                                          <Button fx:id="botaoOrganizadores" disable="true" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#adicionarOrganizador" prefHeight="46.0" prefWidth="154.0" style="-fx-background-color: #352929;" text="Adicionar organizadores" textFill="WHITE" visible="false" VBox.vgrow="ALWAYS" />
-                                       </children>
-                                    </HBox>
+                                    <Button fx:id="botaoOrganizadores" disable="true" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#adicionarOrganizador" prefHeight="46.0" prefWidth="154.0" style="-fx-background-color: #352929;" text="Adicionar organizadores" textFill="WHITE" visible="false" VBox.vgrow="ALWAYS" />
+                                    <FlowPane fx:id="secaoOrganizadores" prefHeight="200.0" VBox.vgrow="ALWAYS" />
                                  </children>
                               </VBox>
                               <VBox prefHeight="46.0" prefWidth="150.0" spacing="15.0">
                                  <children>
-                                    <HBox fx:id="Colaboradores" alignment="CENTER_LEFT" spacing="20.0">
+                                    <HBox alignment="CENTER_LEFT" spacing="20.0">
                                        <children>
                                           <Button fx:id="botaoColaboradores" disable="true" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#adicionarColaborador" prefHeight="46.0" prefWidth="153.0" style="-fx-background-color: #352929;" text="Adicionar colaboradores" textFill="WHITE" visible="false" VBox.vgrow="ALWAYS" />
+                                          <FlowPane fx:id="Colaboradores" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
                                        </children>
                                     </HBox>
                                  </children>
@@ -231,7 +234,7 @@
                               <VBox>
                                  <children>
                                     <Button fx:id="botaoArquivos" mnemonicParsing="false" onAction="#adicionarArquivo" prefHeight="46.0" prefWidth="152.0" style="-fx-background-color: #352929;" text="Adicionar arquivos" textFill="WHITE" />
-                                    <FlowPane prefHeight="200.0" VBox.vgrow="ALWAYS" />
+                                    <FlowPane fx:id="secaoArquivos" prefHeight="200.0" VBox.vgrow="ALWAYS" />
                                  </children>
                               </VBox>
                               <VBox>
