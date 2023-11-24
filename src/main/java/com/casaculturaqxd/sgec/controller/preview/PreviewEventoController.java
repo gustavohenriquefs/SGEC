@@ -38,8 +38,13 @@ public class PreviewEventoController {
     }
 
     private void setarInformacoesEvento() {
-        this.dataHora.setText(evento.getDataFinal().toString() + "\t" + evento.getHorario());
-        this.titulo.setText(evento.getNome());
+        if(evento.getHorario() == null){
+            this.dataHora.setText(evento.getDataFinal().toString() + "\t" + " ");
+            this.titulo.setText(evento.getNome());
+        }else{
+            this.dataHora.setText(evento.getDataFinal().toString() + "\t" + evento.getHorario());
+            this.titulo.setText(evento.getNome());
+        }
     }
     
     @FXML
