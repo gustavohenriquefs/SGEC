@@ -250,7 +250,7 @@ public class MidiaEventoController implements ControllerServiceFile {
             addPreviewArquivo(serviceFile);
             goToSecaoArquivo(serviceFile);
         } catch (SQLException | IllegalArgumentException e) {
-            Alert alert = new Alert(AlertType.ERROR, e.getMessage(), new ButtonType("Ok", ButtonData.CANCEL_CLOSE));
+            Alert alert = new Alert(AlertType.ERROR, "falha ao adicionar arquivo: " + serviceFile.getFileKey());
             alert.showAndWait();
         }
     }
