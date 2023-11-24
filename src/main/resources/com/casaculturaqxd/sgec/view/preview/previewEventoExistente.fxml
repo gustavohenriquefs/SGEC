@@ -24,16 +24,16 @@
             </HBox>
             <HBox fx:id="campoDataHora" layoutX="20.0" layoutY="169.0" minHeight="-Infinity" prefHeight="20.0" prefWidth="173.0" styleClass="data" AnchorPane.leftAnchor="20.0">
                <children>
-                  <Label fx:id="dataHora" textFill="WHITE">
+                  <Label fx:id="dataHora" textFill="WHITE" wrapText="true">
                      <font>
                         <Font size="14.0" />
                      </font>
                   </Label>
                </children>
             </HBox>
-            <HBox fx:id="campoTitulo" layoutX="20.0" layoutY="204.0" AnchorPane.leftAnchor="20.0">
+            <HBox fx:id="campoTitulo" layoutX="20.0" layoutY="204.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="40.0">
                <children>
-                  <Label id="titulo" fx:id="titulo" prefHeight="18.0" prefWidth="277.0" text="Label">
+                  <Label id="titulo" fx:id="titulo" text="Label" wrapText="true" HBox.hgrow="ALWAYS">
                      <font>
                         <Font name="System Bold" size="16.0" />
                      </font>
