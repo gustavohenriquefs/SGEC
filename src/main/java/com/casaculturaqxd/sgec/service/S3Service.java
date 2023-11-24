@@ -7,8 +7,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.Date;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import com.amazonaws.SdkClientException;
@@ -153,14 +151,13 @@ public class S3Service implements Service {
       if (!client.doesObjectExist(nomeBucket, chaveArquivo)) {
          throw new IllegalArgumentException();
       }
-
       GetObjectRequest request = new GetObjectRequest(nomeBucket, chaveArquivo);
       S3Object object = client.getObject(request);
       var metadata = object.getObjectMetadata();
       Date ultimaModificacao = new java.sql.Date(metadata.getLastModified().getTime());
       long fileSize = metadata.getContentLength();
       String suffix = findFileSuffix(chaveArquivo);
-      return new ServiceFile(suffix, nomeBucket, ultimaModificacao, null);
+      return new ServiceFile(chaveArquivo, nomeBucket, suffix, ultimaModificacao, fileSize);
    }
 
    @Override
@@ -266,13 +263,8 @@ public class S3Service implements Service {
    }
 
    private String findFileSuffix(String fileName) {
-      Pattern pattern = Pattern.compile("\\..*");
-      Matcher matcher = pattern.matcher(fileName);
-      if (matcher.find()) {
-         String suffix = matcher.group(0);
-         return suffix;
-      }
-      return null;
+      int previewStart = fileName.lastIndexOf(".");
+      return fileName.substring(previewStart);
    }
 
    @Override

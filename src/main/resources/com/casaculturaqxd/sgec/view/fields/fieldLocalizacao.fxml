@@ -82,7 +82,7 @@
             <Insets bottom="20.0" left="20.0" />
          </GridPane.margin>
       </Label>
-      <Button id="botaoRemover" fx:id="botaoRemover" onAction="#remover" alignment="BASELINE_RIGHT" mnemonicParsing="false" prefHeight="25.0" prefWidth="65.0" style="-fx-background-color: A22D2E;" text="Remover" textAlignment="CENTER" textFill="#fffef7" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+      <Button id="botaoRemover" fx:id="botaoRemover" alignment="BASELINE_RIGHT" mnemonicParsing="false" onAction="#remover" prefHeight="25.0" prefWidth="65.0" style="-fx-background-color: A22D2E;" text="Remover" textAlignment="CENTER" textFill="#fffef7" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
          <GridPane.margin>
             <Insets />
          </GridPane.margin></Button>
@@ -91,6 +91,9 @@
             <Label prefHeight="18.0" prefWidth="30.0" text="País" textFill="#352929" />
             <TextField fx:id="pais" maxHeight="25.0" minWidth="26.0" prefHeight="25.0" prefWidth="254.0" promptText="Ex: 01001-000" />
          </children>
+         <GridPane.margin>
+            <Insets left="20.0" />
+         </GridPane.margin>
       </VBox>
    </children>
 </GridPane>

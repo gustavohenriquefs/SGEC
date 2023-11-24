@@ -2,6 +2,7 @@ package com.casaculturaqxd.sgec.controller.preview;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.EventoDAO;
@@ -19,40 +20,47 @@ import javafx.scene.control.Label;
 
 public class PreviewEventoController {
     private EventoDAO dao = new EventoDAO();
-    private DatabasePostgres db = DatabasePostgres.getInstance("URL","USER_NAME","PASSWORD");
+    private DatabasePostgres db = DatabasePostgres.getInstance("URL", "USER_NAME", "PASSWORD");
     private Evento evento;
     @FXML
     Label dataHora, titulo;
     @FXML
     Button detalhes;
 
-
-    public void initialize(){
+    public void initialize() {
         dao.setConnection(db.getConnection());
     }
 
-    public void setEvento(Evento evento){
-        this.evento = dao.buscarEvento(evento).get();
-
-        this.setarInformacoesEvento();
+    public void setEvento(Evento evento) {
+        if (dao.buscarEvento(evento).isPresent()) {
+            this.evento = dao.buscarEvento(evento).get();
+            this.setarInformacoesEvento();
+        } else {
+            throw new IllegalArgumentException("evento nao encontrado");
+        }
     }
 
     private void setarInformacoesEvento() {
-        this.dataHora.setText(evento.getDataFinal().toString() + "\t" + evento.getHorario());
-        this.titulo.setText(evento.getNome());
+        if (evento.getHorario() == null) {
+            this.dataHora.setText(evento.getDataFinal().toString() + "\t" + " ");
+            this.titulo.setText(evento.getNome());
+        } else {
+            this.dataHora.setText(evento.getDataFinal().toString() + "\t" + evento.getHorario());
+            this.titulo.setText(evento.getNome());
+        }
     }
-    
+
     @FXML
-    public void verDetalhes(ActionEvent event) throws IOException {
+    public void verDetalhes(ActionEvent event) throws IOException, SQLException {
 
         URL url = App.class.getResource("view/visualizarEvento.fxml");
 
         FXMLLoader loaderVisualizacao = new FXMLLoader(url);
 
         Parent objVisualizacao = loaderVisualizacao.load();
-        
+
         VisualizarEventoController controller = loaderVisualizacao.getController();
-        
+
         controller.setEvento(this.evento);
 
         App.setRoot(objVisualizacao);

@@ -19,14 +19,6 @@ public abstract class DAO {
         this.connection = connection;
     }
 
-    public Connection getConnection() {
-        return this.connection;
-    }
-
-    public void setConnection(Connection connection) {
-        this.connection = connection;
-    }
-
     protected void logException(Exception exception) {
         if (exception instanceof SQLException) {
             Logger erro = Logger.getLogger("erroSQL");

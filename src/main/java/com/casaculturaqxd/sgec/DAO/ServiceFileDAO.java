@@ -22,11 +22,19 @@ public class ServiceFileDAO extends DAO {
     this.connection = connection;
   }
 
+  public Connection getConnection() {
+    return this.connection;
+  }
+
+  public void setConnection(Connection connection) {
+    this.connection = connection;
+  }
+
   public boolean inserirArquivo(ServiceFile arquivo) throws SQLException {
     String sql = "insert into service_file (file_key,suffix,service,bucket,ultima_modificacao)" + " values(?,?,?,?,?)";
     PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
     try {
-      setService(arquivo);
+      setService(arquivo.getService());
       service.enviarArquivo(arquivo);
       stmt.setString(1, arquivo.getFileKey());
       stmt.setString(2, arquivo.getSuffix());
@@ -55,13 +63,13 @@ public class ServiceFileDAO extends DAO {
       stmt.setInt(1, arquivo.getServiceFileId());
       ResultSet resultSet = stmt.executeQuery();
       if (resultSet.next()) {
-        arquivo.setServiceFileId(resultSet.getInt("id_service_file"));
-        arquivo.setFileKey(resultSet.getString("file_key"));
-        arquivo.setSuffix(resultSet.getString("suffix"));
-        arquivo.setService(resultSet.getString("service"));
-        arquivo.setBucket(resultSet.getString("bucket"));
-        arquivo.setUltimaModificacao(resultSet.getDate("ultima_modificacao"));
+        ServiceFile arquivoRetorno = arquivo;
+        arquivoRetorno.setFileKey(resultSet.getString("file_key"));
+        arquivoRetorno.setBucket(resultSet.getString("bucket"));
+        arquivoRetorno.setService(resultSet.getString("service"));
 
+        setService(arquivo.getService());
+        arquivoRetorno.copyMetadata(service.getMetadata(arquivo.getBucket(), arquivo.getFileKey()));
       }
       return Optional.of(arquivo);
     } catch (Exception e) {
@@ -84,8 +92,9 @@ public class ServiceFileDAO extends DAO {
         arquivoRetorno.setSuffix(resultSet.getString("suffix"));
         arquivoRetorno.setService(resultSet.getString("service"));
         arquivoRetorno.setBucket(resultSet.getString("bucket"));
-        arquivoRetorno.setUltimaModificacao(resultSet.getDate("ultima_modificacao"));
 
+        setService(arquivoRetorno.getService());
+        arquivoRetorno.copyMetadata(service.getMetadata(arquivoRetorno.getBucket(), arquivoRetorno.getFileKey()));
         return Optional.of(arquivoRetorno);
       } else {
         return Optional.empty();
@@ -100,7 +109,7 @@ public class ServiceFileDAO extends DAO {
 
   public File getContent(ServiceFile serviceFile) throws SQLException {
     try {
-      setService(serviceFile);
+      setService(serviceFile.getService());
       return service.getArquivo(serviceFile.getBucket(), serviceFile.getFileKey());
     } catch (Exception e) {
       logException(e);
@@ -112,7 +121,7 @@ public class ServiceFileDAO extends DAO {
     String sql = "delete from service_file where id_service_file=?";
     PreparedStatement stmt = connection.prepareStatement(sql);
     try {
-      setService(arquivo);
+      setService(arquivo.getService());
       service.deletarArquivo(arquivo.getBucket(), arquivo.getFileKey());
 
       stmt.setInt(1, arquivo.getServiceFileId());
@@ -126,6 +135,30 @@ public class ServiceFileDAO extends DAO {
     }
   }
 
+  public ArrayList<ServiceFile> listarArquivosEvento(Evento evento, int limit) throws SQLException {
+    String sql = "SELECT id_service_file FROM service_file_evento INNER JOIN service_file USING(id_service_file) WHERE id_evento=? ORDER BY adicionado_em DESC LIMIT ?";
+    ArrayList<ServiceFile> listaArquivos = new ArrayList<>();
+    PreparedStatement statement = connection.prepareStatement(sql);
+
+    try {
+      statement.setInt(1, evento.getIdEvento());
+      statement.setInt(2, limit);
+      ResultSet resultSet = statement.executeQuery();
+
+      while (resultSet.next()) {
+        ServiceFile serviceFile = new ServiceFile(resultSet.getInt("id_service_file"));
+        listaArquivos.add(getArquivo(serviceFile).get());
+      }
+      statement.close();
+      return listaArquivos;
+    } catch (Exception e) {
+      logException(e);
+      throw new SQLException("erro listando arquivos do evento: " + evento.getNome(), e);
+    } finally {
+      statement.close();
+    }
+  }
+
   public ArrayList<ServiceFile> listarArquivosEvento(Evento evento) throws SQLException {
     String sql = "SELECT id_service_file FROM service_file_evento WHERE id_evento=?";
     ArrayList<ServiceFile> listaArquivos = new ArrayList<>();
@@ -136,7 +169,11 @@ public class ServiceFileDAO extends DAO {
 
       while (resultSet.next()) {
         ServiceFile serviceFile = new ServiceFile(resultSet.getInt("id_service_file"));
-        listaArquivos.add(getArquivo(serviceFile).get());
+        try {
+          listaArquivos.add(getArquivo(serviceFile).get());
+        } catch (SQLException e) {
+          continue;
+        }
       }
       statement.close();
       return listaArquivos;
@@ -229,8 +266,8 @@ public class ServiceFileDAO extends DAO {
     }
   }
 
-  public void setService(ServiceFile arquivo) {
-    this.service = arquivo.getService();
+  public void setService(Service service) {
+    this.service = service;
   }
 
 }

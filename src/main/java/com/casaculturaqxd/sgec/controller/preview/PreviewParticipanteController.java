@@ -6,9 +6,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.sql.SQLException;
 import java.util.List;
 
+import com.casaculturaqxd.sgec.DAO.ServiceFileDAO;
 import com.casaculturaqxd.sgec.controller.ControllerEvento;
+import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.Participante;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 
@@ -37,6 +40,8 @@ import javafx.stage.Stage;
 public class PreviewParticipanteController {
     private ControllerEvento parentController;
     private Participante participante;
+    private DatabasePostgres database = DatabasePostgres.getInstance("URL", "USER_NAME", "PASSWORD");
+    private ServiceFileDAO serviceFileDAO;
     private Stage stage;
     @FXML
     private Parent container;
@@ -55,6 +60,7 @@ public class PreviewParticipanteController {
     public void initialize() {
         // manter o botao sempre no topo da imagem
         buttonAlterarCapa.setViewOrder(-1);
+        serviceFileDAO = new ServiceFileDAO(database.getConnection());
     }
 
     public ControllerEvento getParentController() {
@@ -68,7 +74,7 @@ public class PreviewParticipanteController {
         this.parentController = parentController;
     }
 
-    public void setParticipante(Participante participante) {
+    public void setParticipante(Participante participante) throws SQLException {
         this.participante = participante;
         loadContent();
 
@@ -78,7 +84,7 @@ public class PreviewParticipanteController {
         return participante;
     }
 
-    public void loadContent() {
+    public void loadContent() throws SQLException {
         labelNomeArtista.setText(participante.getNome());
         labelAreaAtuacao.setText(participante.getAreaDeAtuacao());
         labelMinibio.setText(participante.getBio());
@@ -86,10 +92,13 @@ public class PreviewParticipanteController {
         loadImagem();
     }
 
-    public void loadImagem() {
+    public void loadImagem() throws SQLException {
         InputStream fileAsStream;
 
         try {
+            if (participante.getImagemCapa().getContent() == null) {
+                participante.getImagemCapa().setContent(serviceFileDAO.getContent(participante.getImagemCapa()));
+            }
             fileAsStream = new FileInputStream(participante.getImagemCapa().getContent());
             imageViewParticipante.setImage(new Image(fileAsStream));
         } catch (FileNotFoundException e) {
@@ -105,7 +114,7 @@ public class PreviewParticipanteController {
         parentController.removerParticipante(getParticipante());
     }
 
-    public void updateImagemCapa() {
+    public void updateImagemCapa() throws SQLException {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Alterar foto de participante");
         ExtensionFilter filterImagens = new ExtensionFilter("imagem", "*.jpeg", "*.jpg", "*.png", "*.bmp");

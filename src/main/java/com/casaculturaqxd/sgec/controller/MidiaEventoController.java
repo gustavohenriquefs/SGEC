@@ -274,7 +274,7 @@ public class MidiaEventoController implements ControllerServiceFile {
 
     // adiciona o controller do novo arquivo a lista de controllers
     // levanta uma excecao caso ja exista um arquivo com o mesmo nome
-    private PreviewArquivoController addPreviewArquivo(ServiceFile serviceFile) throws IOException {
+    private PreviewArquivoController addPreviewArquivo(ServiceFile serviceFile) throws IOException, SQLException {
         FXMLLoader loaderPreviewArquivo = new FXMLLoader(App.class.getResource("view/preview/previewArquivo.fxml"));
         loaderPreviewArquivo.load();
         PreviewArquivoController previewArquivoController = loaderPreviewArquivo.getController();

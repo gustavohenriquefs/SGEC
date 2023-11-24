@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.EventoDAO;
 import com.casaculturaqxd.sgec.DAO.LocalizacaoDAO;
+import com.casaculturaqxd.sgec.DAO.ServiceFileDAO;
 import com.casaculturaqxd.sgec.controller.preview.PreviewArquivoController;
 import com.casaculturaqxd.sgec.controller.preview.PreviewLocalizacaoController;
 import com.casaculturaqxd.sgec.controller.preview.PreviewParticipanteController;
@@ -49,9 +50,8 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.converter.IntegerStringConverter;
@@ -61,13 +61,13 @@ import javafx.util.Duration;
 public class VisualizarEventoController implements ControllerServiceFile, ControllerEvento {
     private Evento evento;
     private Stage stage;
-    private DatabasePostgres db = DatabasePostgres.getInstance("URL", "USER_NAME", "PASSWORD");
+    private DatabasePostgres db = DatabasePostgres.getInstance("URL_TEST", "USER_NAME_TEST", "PASSWORD_TEST");
     private EventoDAO eventoDAO = new EventoDAO();
     private LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO();
     @FXML
     VBox root;
     @FXML
-    StackPane secaoParticipantes, secaoArquivos;
+    FlowPane secaoParticipantes, secaoArquivos;
     @FXML
     VBox frameLocais;
     @FXML
@@ -127,7 +127,7 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
         root.getChildren().add(0, carregarMenu.load());
     }
 
-    private void loadContent() throws IOException {
+    private void loadContent() throws IOException, SQLException {
         loadMetas();
         classificacaoEtaria.getItems().addAll(classificacoes);
         titulo.setText(evento.getNome());
@@ -197,7 +197,7 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
         }
     }
 
-    public void setEvento(Evento evento) throws IOException {
+    public void setEvento(Evento evento) throws IOException, SQLException {
         this.evento = evento;
         loadContent();
     }
@@ -310,16 +310,25 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
         }
     }
 
-    public void loadArquivos() {
-        if (evento.getListaArquivos() != null) {
-            for (ServiceFile arquivo : evento.getListaArquivos()) {
+    public void loadArquivos() throws SQLException {
+        ServiceFileDAO serviceFileDAO = new ServiceFileDAO(db.getConnection());
+        for (ServiceFile arquivo : serviceFileDAO.listarArquivosEvento(evento, 5)) {
+            try {
                 adicionarArquivo(arquivo);
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
         }
     }
 
     @Override
-    public void adicionarArquivo(ServiceFile serviceFile) {
+    public void adicionarArquivo(ServiceFile serviceFile) throws IOException {
+        for (ServiceFile existingFile : mapServiceFiles.keySet()) {
+            if (serviceFile.getFileKey().equals(existingFile.getFileKey())) {
+                throw new IOException("arquivo ja foi inserido");
+            }
+        }
         mapServiceFiles.put(serviceFile, new FXMLLoader(App.class.getResource("view/preview/previewArquivo.fxml")));
     }
 
@@ -357,6 +366,9 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
                         secaoArquivos.getChildren().add(previewParticipante);
                     } catch (IOException e) {
                         e.printStackTrace();
+                    } catch (SQLException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
                     }
                 }
                 if (change.wasRemoved()) {
@@ -387,8 +399,7 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
     @Override
     public void adicionarParticipante(Participante participante) {
         // TODO chamar metodo para todo participante vinculado ao evento
-        participantes.put(participante,
-                new FXMLLoader(App.class.getResource("view/preview/previewParticipante.fxml")));
+        participantes.put(participante, new FXMLLoader(App.class.getResource("view/preview/previewParticipante.fxml")));
     }
 
     @Override
@@ -405,8 +416,7 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
         VisualizarEventoController superController = this;
         observablemap.addListener(new MapChangeListener<Participante, FXMLLoader>() {
             @Override
-            public void onChanged(
-                    MapChangeListener.Change<? extends Participante, ? extends FXMLLoader> change) {
+            public void onChanged(MapChangeListener.Change<? extends Participante, ? extends FXMLLoader> change) {
 
                 if (change.wasAdded()) {
                     Participante addedKey = change.getKey();
@@ -419,7 +429,7 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
                         controller.setParentController(superController);
 
                         secaoParticipantes.getChildren().add(previewParticipante);
-                    } catch (IOException e) {
+                    } catch (IOException | SQLException e) {
                         e.printStackTrace();
                     }
                 }

@@ -8,26 +8,33 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URLConnection;
+import java.sql.SQLException;
 import java.util.Optional;
 
 import com.casaculturaqxd.sgec.App;
+import com.casaculturaqxd.sgec.DAO.ServiceFileDAO;
 import com.casaculturaqxd.sgec.controller.ControllerServiceFile;
+import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
+
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.stage.Stage;
 
 public class PreviewArquivoController {
+    private DatabasePostgres database = DatabasePostgres.getInstance("URL", "USER_NAME", "PASSWORD");
+    private ServiceFileDAO serviceFileDAO;
     private ServiceFile serviceFile;
     private ControllerServiceFile parentController;
     private Alert alertaArquivo;
@@ -74,13 +81,14 @@ public class PreviewArquivoController {
 
     private boolean writeFileContent(File file) {
         try {
-            InputStream readFromContent = new FileInputStream(serviceFile.getContent());
-            OutputStream writeToFile = new FileOutputStream(file);
-            readFromContent.transferTo(writeToFile);
-            return true;
-        } catch (FileNotFoundException exception) {
-            return false;
-        } catch (IOException e) {
+            serviceFileDAO = new ServiceFileDAO(database.getConnection());
+            serviceFile.setContent(serviceFileDAO.getContent(serviceFile));
+            try (InputStream readFromContent = new FileInputStream(serviceFile.getContent())) {
+                OutputStream writeToFile = new FileOutputStream(file);
+                readFromContent.transferTo(writeToFile);
+                return true;
+            }
+        } catch (Exception e) {
             return false;
         }
     }
@@ -103,8 +111,8 @@ public class PreviewArquivoController {
                     : String.valueOf(serviceFile.getUltimaModificacao());
             fileKey.setText(serviceFile.getFileKey());
             try {
-                tamanho.setText(formatFileSize(serviceFile.getContent().length()));
-            } catch (IOException e) {
+                tamanho.setText(formatFileSize(serviceFile.getFileSize()));
+            } catch (NullPointerException e) {
                 tamanho.setText("--");
             }
             date.setText(dataArquivo);
@@ -136,13 +144,21 @@ public class PreviewArquivoController {
         return serviceFile;
     }
 
-    public void setServiceFile(ServiceFile serviceFile) {
+    public void setServiceFile(ServiceFile serviceFile) throws SQLException {
         // opcao de download apenas para arquivos ja registrados
         if (serviceFile.getServiceFileId() == null) {
             downloadItem.setVisible(false);
             downloadItem.setDisable(true);
         }
-        imagemPreview.setImage(null);
+        if (isImage(serviceFile)) {
+            serviceFileDAO = new ServiceFileDAO(database.getConnection());
+            serviceFile.setContent(serviceFileDAO.getContent(serviceFile));
+            try {
+                serviceFile.setPreview(serviceFile.getContent());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         this.serviceFile = serviceFile;
         loadContent();
     }
@@ -161,6 +177,11 @@ public class PreviewArquivoController {
 
     public void setRoot(Parent root) {
         this.root = root;
+    }
+
+    private boolean isImage(ServiceFile serviceFile) {
+        String mimeType = URLConnection.guessContentTypeFromName(serviceFile.getFileKey());
+        return mimeType != null ? mimeType.startsWith("image") : false;
     }
 
     // recebe um tamanho de arquivo em bytes e retorna em KB, para tamanhos menores

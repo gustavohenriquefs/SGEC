@@ -34,6 +34,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.TreeSet;
+import java.util.function.Consumer;
+
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.EventoDAO;
 import com.casaculturaqxd.sgec.DAO.ParticipanteDAO;
@@ -64,9 +66,11 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
     @FXML
     VBox Localizacoes, cargaHoraria;
     @FXML
-    HBox secaoParticipantes, Organizadores, Colaboradores, secaoMetas;
+    FlowPane secaoParticipantes, secaoOrganizadores, Colaboradores;
     @FXML
     FlowPane secaoArquivos;
+    @FXML
+    HBox secaoMetas;
 
     @FXML
     TextField titulo, publicoEsperado, publicoAlcancado, horas, minutos, horasCargaHoraria, numParticipantesEsperado,
@@ -246,7 +250,7 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
         // que e adicionado a pagina
         SubSceneLoader loaderOrganizadores = new SubSceneLoader();
         AnchorPane novoOrganizador = (AnchorPane) loaderOrganizadores.getPage("fields/fieldInstituicao");
-        Organizadores.getChildren().add(novoOrganizador);
+        secaoOrganizadores.getChildren().add(novoOrganizador);
 
     }
 
@@ -258,27 +262,39 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
         Colaboradores.getChildren().add(novoColaborador);
     }
 
-    public void adicionarArquivo() {
+    public void adicionarArquivo() throws IOException {
         FileChooser fileChooser = new FileChooser();
+        if (lastDirectoryOpen != null) {
+            fileChooser.setInitialDirectory(lastDirectoryOpen);
+        }
         File arquivoSelecionado = fileChooser.showOpenDialog(stage);
         lastDirectoryOpen = arquivoSelecionado.getParentFile();
-        adicionarArquivo(new ServiceFile(arquivoSelecionado));
+
+        try {
+            adicionarArquivo(new ServiceFile(arquivoSelecionado));
+        } catch (Exception e) {
+            Alert alert = new Alert(AlertType.ERROR, "Arquivo já foi adicionado");
+            alert.showAndWait();
+        }
     }
 
     @Override
-    public void adicionarArquivo(ServiceFile serviceFile) {
+    public void adicionarArquivo(ServiceFile serviceFile) throws IOException {
+        // comparacao de arquivo duplicada e feita com o nome, ja que um mesmo conteudo
+        // pode estar em mais de um caminho
+        for (ServiceFile existingFile : mapServiceFiles.keySet()) {
+            if (serviceFile.getFileKey().equals(existingFile.getFileKey())) {
+                throw new IOException("arquivo ja foi inserido");
+            }
+        }
         mapServiceFiles.put(serviceFile, new FXMLLoader(App.class.getResource("view/preview/previewArquivo.fxml")));
     }
 
     @Override
     public void removerArquivo(ServiceFile serviceFile) {
         try {
-            serviceFileDAO.deleteArquivo(serviceFile);
-        } catch (IllegalArgumentException e) {
-            // caso arquivo ja nao esteja registrado
             mapServiceFiles.remove(serviceFile);
         } catch (Exception e) {
-            // em qualquer outro erro
             e.printStackTrace();
         }
     }
@@ -309,6 +325,9 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
 
                         secaoParticipantes.getChildren().add(previewParticipante);
                     } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (SQLException e) {
+                        // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
                 }
@@ -352,6 +371,9 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
 
                         secaoArquivos.getChildren().add(previewParticipante);
                     } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (SQLException e) {
+                        // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
                 }

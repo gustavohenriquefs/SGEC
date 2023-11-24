@@ -7,8 +7,8 @@
     <properties>
         <aws.java.sdk.version>2.20.162</aws.java.sdk.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.source>20</maven.compiler.source>
+        <maven.compiler.target>20</maven.compiler.target>
     </properties>
    <dependencyManagement>
         <dependencies>
@@ -22,6 +22,12 @@
         </dependencies>
     </dependencyManagement>
     <dependencies>
+    <!-- https://mvnrepository.com/artifact/org.controlsfx/controlsfx -->
+        <dependency>
+            <groupId>org.controlsfx</groupId>
+            <artifactId>controlsfx</artifactId>
+            <version>11.2.0</version>
+        </dependency>
          <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-s3</artifactId>
@@ -90,7 +96,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.0</version>
                 <configuration>
-                    <release>11</release>
+                    <release>20</release>
                 </configuration>
             </plugin>
             <plugin>
@@ -99,6 +105,10 @@
                 <version>0.0.4</version>
                 <configuration>
                     <mainClass>com.casaculturaqxd.sgec.App</mainClass>
+                    <options>
+                        <option>--add-exports</option>
+                        <option>javafx.base/com.sun.javafx.event=ALL-UNNAMED</option>
+                    </options> 
                 </configuration>
                 <executions>
                     <execution>
