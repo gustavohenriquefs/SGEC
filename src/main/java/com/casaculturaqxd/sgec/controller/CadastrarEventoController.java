@@ -298,9 +298,30 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
         }
     }
 
+    public void destacarCamposNaoPreenchidos(){
+         if(classificacaoEtaria.getSelectionModel().getSelectedItem() == null) {
+                classificacaoEtaria.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
+        } else {
+            classificacaoEtaria.setStyle(null);
+        } if(titulo.getText().isEmpty()) {
+            titulo.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
+        } else {
+            titulo.setStyle(null);
+        } if(dataInicial.getValue() == null) {
+            dataInicial.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
+        } else {
+            dataInicial.setStyle(null);
+        } if(dataFinal.getValue() == null) {
+            dataFinal.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
+        } else {
+            dataFinal.setStyle(null);
+        }
+    }
+
     public boolean camposObrigatoriosPreenchidos() {
         if (classificacaoEtaria.getSelectionModel().getSelectedItem() == null || titulo.getText().isEmpty()
                 || dataInicial.getValue() == null || dataFinal.getValue() == null) {
+            destacarCamposNaoPreenchidos();
             return false;
         }
         return true;
