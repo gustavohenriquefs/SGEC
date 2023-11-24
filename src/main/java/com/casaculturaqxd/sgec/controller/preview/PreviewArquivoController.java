@@ -151,8 +151,10 @@ public class PreviewArquivoController {
             downloadItem.setDisable(true);
         }
         if (isImage(serviceFile)) {
-            serviceFileDAO = new ServiceFileDAO(database.getConnection());
-            serviceFile.setContent(serviceFileDAO.getContent(serviceFile));
+            if (serviceFile.getServiceFileId() != null) {
+                serviceFileDAO = new ServiceFileDAO(database.getConnection());
+                serviceFile.setContent(serviceFileDAO.getContent(serviceFile));
+            }
             try {
                 serviceFile.setPreview(serviceFile.getContent());
             } catch (IOException e) {
@@ -160,7 +162,9 @@ public class PreviewArquivoController {
             }
         }
         this.serviceFile = serviceFile;
+
         loadContent();
+
     }
 
     public ControllerServiceFile getParentController() {
