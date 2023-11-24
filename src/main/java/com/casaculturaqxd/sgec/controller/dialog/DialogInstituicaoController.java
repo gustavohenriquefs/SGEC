@@ -64,13 +64,27 @@ public class DialogInstituicaoController {
 
   public boolean cadastrarInstituicao() {
     if(nomeInstituicao.getText() != ""){
-      Instituicao instituicao = new Instituicao(nomeInstituicao.getText());
-      try {
-        instituicaoDAO.inserirInstituicao(instituicao);
-        return true;
-      } catch (SQLException e) {
-        e.printStackTrace();
+      if(file == null){
+        Instituicao instituicao = new Instituicao(nomeInstituicao.getText(), contribuicoes.getText(), 
+        valorContribuicao.getText(), null);
+        try {
+          instituicaoDAO.inserirInstituicao(instituicao);
+          return true;
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
+      } else {
+        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+        Instituicao instituicao = new Instituicao(nomeInstituicao.getText(), contribuicoes.getText(), 
+        valorContribuicao.getText(), new ServiceFile(file));
+        try {
+          instituicaoDAO.inserirInstituicao(instituicao);
+          return true;
+        } catch (SQLException e) {
+          e.printStackTrace();
+        }
       }
+      
     } 
     return false;
   }
