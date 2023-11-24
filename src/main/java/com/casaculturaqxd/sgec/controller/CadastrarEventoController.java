@@ -82,7 +82,7 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
     ChoiceBox<String> classificacaoEtaria;
     private final String[] classificacoes = { "Livre", "10 anos", "12 anos", "14 anos", "16 anos", "18 anos" };
     @FXML
-    CheckBox checkMeta3;
+    CheckBox checkMeta1, checkMeta2, checkMeta3, checkMeta4;
     @FXML
     RadioButton certificavel, acessivelEmLibras;
     private ObservableMap<ServiceFile, FXMLLoader> mapServiceFiles = FXCollections.observableHashMap();
@@ -124,6 +124,11 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
         if (!camposObrigatoriosPreenchidos()) {
             Alert erroLocalizacao = new Alert(AlertType.ERROR, "nem todos os campos obrigatorios foram preenchidos");
             erroLocalizacao.show();
+        }
+        if(Colaboradores.getChildren().isEmpty() && checkMeta4.isSelected()) {
+            Alert mensagemErro = new Alert(AlertType.ERROR, "Convocatórias precisam de pelo menos um colaborador");
+            mensagemErro .show();
+            throw new RuntimeException("Convocatorias precisam de pelo menos um colaborador");
         }
 
         builderEvento.resetar();
