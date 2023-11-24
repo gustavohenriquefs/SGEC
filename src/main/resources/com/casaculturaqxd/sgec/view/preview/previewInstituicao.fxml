@@ -11,7 +11,7 @@
 
 <VBox id="container" fx:id="container" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="300.0" minWidth="-Infinity" prefHeight="360.0" prefWidth="300.0" style="-fx-background-color: #FFFEF7;" stylesheets="@../../css/preview/previewInstituicaoStyle.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.preview.PreviewInstituicaoController">
    <children>
-      <AnchorPane id="principal" fx:id="principal">
+      <VBox id="principal" fx:id="principal" alignment="CENTER" prefHeight="352.0" prefWidth="281.0" spacing="8.0">
          <children>
             <HBox fx:id="campoImagem" alignment="CENTER" prefHeight="142.0" prefWidth="280.0">
                <children>
