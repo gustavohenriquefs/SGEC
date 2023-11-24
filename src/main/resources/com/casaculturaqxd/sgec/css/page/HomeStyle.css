@@ -1,6 +1,9 @@
 #pageHome{
     -fx-background-color: #E9E3CA;
 }
+#scroll {
+    -fx-background-color: #E9E3CA;
+}
 #header{
     -fx-background-color: #A22D2E;
 }

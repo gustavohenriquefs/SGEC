@@ -13,119 +13,173 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox id="pageCadastrarEvento" fx:id="root" prefHeight="1154.0" prefWidth="1461.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.CadastrarEventoController">
+<VBox id="pageCadastrarEvento" fx:id="root" styleClass="root" stylesheets="@../css/page/cadastrarEventoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.CadastrarEventoController">
    <children>
-      <ScrollPane hbarPolicy="ALWAYS" vbarPolicy="ALWAYS" VBox.vgrow="ALWAYS">
+      <ScrollPane id="scroll" fitToWidth="true" style="-fx-background-color: #E9E3CA;" vbarPolicy="ALWAYS" VBox.vgrow="ALWAYS">
          <content>
-            <AnchorPane id="container" prefWidth="1800.0" stylesheets="@../css/page/cadastrarEventoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+            <AnchorPane id="principal">
                <children>
-                  <Label layoutX="29.0" layoutY="45.0" prefHeight="35.0" prefWidth="124.0" text="Criar Evento" textFill="#352929" AnchorPane.leftAnchor="29.0">
-                     <font>
-                        <Font name="System Bold" size="20.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets left="30.0" top="10.0" />
-                     </VBox.margin>
-                  </Label>
-                        <HBox alignment="CENTER" layoutX="45.0" layoutY="309.0" prefHeight="59.0" prefWidth="1371.0" spacing="400.0">
+                  <VBox id="container" spacing="20.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="50.0">
+                     <children>
+                        <VBox>
                            <children>
-                              <HBox spacing="25.0">
+                              <Label text="Criar Evento" textFill="#352929">
+                                 <font>
+                                    <Font name="System Bold" size="20.0" />
+                                 </font>
+                              </Label>
+                              <VBox>
                                  <children>
                                     <VBox>
                                        <children>
-                                    <Label prefHeight="18.0" prefWidth="105.0" text="Classificação etária" textFill="#352929" />
-                                    <ChoiceBox fx:id="classificacaoEtaria" prefWidth="150.0" />
-                                       </children>
-                                    </VBox>
-                                    <VBox>
-                                       <children>
-                                    <Label prefHeight="18.0" prefWidth="105.0" text="Público alcançado" textFill="#352929" />
-                                    <TextField fx:id="publicoAlcancado" />
-                                       </children>
-                                    </VBox>
-                                    <VBox>
-                                       <children>
-                                    <Label prefHeight="18.0" prefWidth="105.0" text="Público esperado" textFill="#352929" />
-                                    <TextField fx:id="publicoEsperado" />
-                                       </children>
-                                    </VBox>
-                                 </children>
-                              </HBox>
-                              <HBox alignment="BOTTOM_CENTER" spacing="30.0">
-                                 <children>
-                                    <VBox fx:id="cargaHoraria" alignment="CENTER" visible="false">
-                                       <children>
-                                          <Label text="Carga horária">
-                                             <font>
-                                                <Font name="System Bold" size="12.0" />
-                                             </font>
-                                          </Label>
-                                          <HBox>
+                                          <VBox>
                                              <children>
-                                                <VBox />
-                                                <VBox>
+                                                <HBox spacing="20.0">
                                                    <children>
-                                                      <Label fx:id="textoHoras1" prefHeight="17.0" prefWidth="44.0" text="Horas" textFill="#352929" />
-                                                      <TextField fx:id="horasCargaHoraria" />
+                                                      <VBox HBox.hgrow="ALWAYS">
+                                                         <children>
+                                                            <Label text="Título" textFill="#352929" />
+                                                            <TextField fx:id="titulo" />
+                                                         </children>
+                                                      </VBox>
+                                                      <VBox>
+                                                         <children>
+                                                            <Label text="Meta(s) do Evento" textFill="#352929" />
+                                                            <HBox fx:id="secaoMetas" spacing="45.0">
+                                                               <children>
+                                                                  <CheckBox fx:id="checkMeta1" mnemonicParsing="false" text="Fruição" />
+                                                                  <CheckBox fx:id="checkMeta2" mnemonicParsing="false" text="Fortalecimento Patrimônio Cultural" />
+                                                                  <CheckBox fx:id="checkMeta3" mnemonicParsing="false" onAction="#onClickMeta3" text="Formação em Arte e Cultura" />
+                                                                  <CheckBox fx:id="checkMeta4" mnemonicParsing="false" text="Convocatória" />
+                                                               </children>
+                                                            </HBox>
+                                                         </children>
+                                                      </VBox>
                                                    </children>
-                                                </VBox>
+                                                </HBox>
                                              </children>
-                                          </HBox>
+                                          </VBox>
+                                          <VBox>
+                                             <children>
+                                                <HBox spacing="40.0">
+                                                   <children>
+                                                      <VBox>
+                                                         <children>
+                                                            <Label text="Data inicial" textFill="#352929" />
+                                                            <DatePicker fx:id="dataInicial" />
+                                                         </children>
+                                                      </VBox>
+                                                      <VBox>
+                                                         <children>
+                                                            <Label text="Data final" textFill="#352929" />
+                                                            <DatePicker fx:id="dataFinal" />
+                                                         </children>
+                                                      </VBox>
+                                                      <VBox>
+                                                         <children>
+                                                            <Label fx:id="textoHoras" text="Horas" textFill="#352929" />
+                                                            <TextField fx:id="horas" />
+                                                         </children>
+                                                      </VBox>
+                                                      <VBox>
+                                                         <children>
+                                                            <Label fx:id="textoMinutos" text="Minutos" textFill="#352929" />
+                                                            <TextField fx:id="minutos" />
+                                                         </children>
+                                                      </VBox>
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                          </VBox>
+                                          <VBox>
+                                             <children>
+                                                <Label text="Descrição" textFill="#352929" />
+                                                <TextArea fx:id="descricao" />
+                                             </children>
+                                          </VBox>
+                                          <VBox>
+                                             <children>
+                                                <HBox alignment="CENTER" spacing="400.0">
+                                                   <children>
+                                                      <HBox spacing="25.0">
+                                                         <children>
+                                                            <VBox>
+                                                               <children>
+                                                                  <Label text="Classificação etária" textFill="#352929" />
+                                                                  <ChoiceBox fx:id="classificacaoEtaria" prefWidth="150.0" />
+                                                               </children>
+                                                            </VBox>
+                                                            <VBox>
+                                                               <children>
+                                                                  <Label text="Público alcançado" textFill="#352929" />
+                                                                  <TextField fx:id="publicoAlcancado" />
+                                                               </children>
+                                                            </VBox>
+                                                            <VBox>
+                                                               <children>
+                                                                  <Label text="Público esperado" textFill="#352929" />
+                                                                  <TextField fx:id="publicoEsperado" />
+                                                               </children>
+                                                            </VBox>
+                                                         </children>
+                                                      </HBox>
+                                                      <HBox alignment="BOTTOM_CENTER" spacing="30.0">
+                                                         <children>
+                                                            <VBox fx:id="cargaHoraria" alignment="CENTER" visible="false">
+                                                               <children>
+                                                                  <Label text="Carga horária">
+                                                                     <font>
+                                                                        <Font name="System Bold" size="12.0" />
+                                                                     </font>
+                                                                  </Label>
+                                                                  <HBox>
+                                                                     <children>
+                                                                        <VBox />
+                                                                        <VBox>
+                                                                           <children>
+                                                                              <Label fx:id="textoHoras1" text="Horas" textFill="#352929" />
+                                                                              <TextField fx:id="horasCargaHoraria" />
+                                                                           </children>
+                                                                        </VBox>
+                                                                     </children>
+                                                                  </HBox>
+                                                               </children>
+                                                            </VBox>
+                                                            <HBox alignment="CENTER" spacing="20.0">
+                                                               <children>
+                                                                  <RadioButton fx:id="certificavel" mnemonicParsing="false" text="Certificável" textFill="#352929" visible="false" />
+                                                                  <RadioButton fx:id="acessivelEmLibras" mnemonicParsing="false" text="Acessível em libras" textFill="#352929" />
+                                                               </children>
+                                                            </HBox>
+                                                         </children>
+                                                      </HBox>
+                                                   </children>
+                                                </HBox>
+                                             </children>
+                                          </VBox>
                                        </children>
                                     </VBox>
-                                    <HBox alignment="CENTER" spacing="20.0">
-                                       <children>
-                                    <RadioButton fx:id="certificavel" mnemonicParsing="false" text="Certificável" textFill="#352929" visible="false" />
-                                    <RadioButton fx:id="acessivelEmLibras" mnemonicParsing="false" text="Acessível em libras" textFill="#352929" />
-                                       </children>
-                                    </HBox>
                                  </children>
-                              </HBox>
+                              </VBox>
                            </children>
-                        </HBox>
-                  <Pane layoutY="80.0" maxWidth="1408.0" prefHeight="228.0" prefWidth="1408.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="38.0">
-                        <children>
-                           <Label layoutX="25.0" layoutY="6.0" prefHeight="17.0" prefWidth="40.0" text="Título" textFill="#352929" AnchorPane.leftAnchor="5.0" />
-                           <TextField fx:id="titulo" layoutX="23.0" layoutY="28.0" maxWidth="430.0" prefHeight="26.0" prefWidth="430.0" AnchorPane.leftAnchor="5.0" />
-                           <Label layoutX="469.0" layoutY="5.0" prefHeight="18.0" prefWidth="107.0" text="Meta(s) do Evento" textFill="#352929" AnchorPane.leftAnchor="469.0" AnchorPane.rightAnchor="203.39999999999998" />
-                           <Label layoutX="23.0" layoutY="57.0" prefHeight="17.0" prefWidth="63.0" text="Data inicial" textFill="#352929" AnchorPane.leftAnchor="5.0" />
-                           <Label layoutX="223.0" layoutY="57.0" prefHeight="17.0" prefWidth="63.0" text="Data final" textFill="#352929" />
-                           <Label fx:id="textoHoras" layoutX="425.0" layoutY="57.0" prefHeight="17.0" prefWidth="44.0" text="Horas" textFill="#352929" />
-                           <DatePicker fx:id="dataInicial" layoutX="23.0" layoutY="78.0" maxWidth="200.0" AnchorPane.leftAnchor="5.0" />
-                           <DatePicker fx:id="dataFinal" layoutX="223.0" layoutY="78.0" maxWidth="200.0" prefHeight="26.0" prefWidth="164.0" AnchorPane.leftAnchor="223.0" />
-                           <TextArea fx:id="descricao" layoutX="25.0" layoutY="128.0" maxWidth="1408.0" prefHeight="82.0" prefWidth="1373.0" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="40.0" />
-                           <Label layoutX="23.0" layoutY="111.0" prefHeight="17.0" prefWidth="63.0" text="Descrição" textFill="#352929" AnchorPane.leftAnchor="5.0" />
-                        <Label fx:id="textoMinutos" layoutX="611.0" layoutY="57.0" prefHeight="17.0" prefWidth="52.0" text="Minutos" textFill="#352929" AnchorPane.rightAnchor="116.39999999999998" />
-                        <TextField fx:id="horas" layoutX="425.0" layoutY="79.0" />
-                        <TextField fx:id="minutos" layoutX="611.0" layoutY="79.0" />
-                        <HBox fx:id="secaoMetas" layoutX="469.0" layoutY="28.0" prefHeight="40.0" prefWidth="667.0" spacing="45.0">
+                        </VBox>
+                        <VBox spacing="60.0">
                            <children>
-                              <CheckBox fx:id="checkMeta1" mnemonicParsing="false" text="Fruição" />
-                              <CheckBox fx:id="checkMeta2" mnemonicParsing="false" text="Fortalecimento Patrimônio Cultural" />
-                              <CheckBox fx:id="checkMeta3" mnemonicParsing="false" onAction="#onClickMeta3" text="Formação em Arte e Cultura" />
-                              <CheckBox fx:id="checkMeta4" mnemonicParsing="false" text="Convocatória" />
-                           </children>
-                        </HBox>
-                        </children>
-                  </Pane>
-                        <VBox layoutX="10.0" layoutY="413.0" spacing="60.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="40.0">
-                           <children>
-                           <VBox fx:id="Localizacoes" spacing="15.0">
+                              <VBox fx:id="Localizacoes" spacing="15.0" VBox.vgrow="ALWAYS">
                                  <children>
-                              <HBox alignment="CENTER_LEFT" prefHeight="35.0" prefWidth="790.0" spacing="800.0">
-                                 <children>
+                                    <HBox alignment="CENTER_LEFT" spacing="800.0">
+                                       <children>
                                           <HBox alignment="CENTER_LEFT" spacing="50.0">
                                              <children>
-                                          <Label text="Localização" textFill="#352929">
-                                             <font>
-                                                <Font name="System Bold" size="20.0" />
-                                             </font>
-                                          </Label>
-                                          <Button fx:id="botaoNovaLocalizacao" alignment="CENTER" mnemonicParsing="false" onAction="#carregarCampoLocalizacao" style="-fx-background-color: #2A3F25;" text="Adicionar nova localização +" textFill="WHITE" />
+                                                <Label text="Localização" textFill="#352929">
+                                                   <font>
+                                                      <Font name="System Bold" size="20.0" />
+                                                   </font>
+                                                </Label>
+                                                <Button fx:id="botaoNovaLocalizacao" alignment="CENTER" mnemonicParsing="false" onAction="#carregarCampoLocalizacao" style="-fx-background-color: #2A3F25;" text="Adicionar nova localização +" textFill="WHITE" />
                                              </children>
                                           </HBox>
                                           <VBox>
@@ -134,38 +188,42 @@
                                                 <TextField fx:id="numMunicipiosEsperado" />
                                              </children>
                                           </VBox>
-                                 </children>
-                              </HBox>
+                                       </children>
+                                    </HBox>
                                  </children>
                               </VBox>
-                        <VBox alignment="CENTER_LEFT" VBox.vgrow="ALWAYS">
-                           <children>
-                                    <HBox fx:id="secaoParticipantes" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="40.0">
+                              <VBox alignment="CENTER_LEFT" spacing="20.0" VBox.vgrow="ALWAYS">
+                                 <children>
+                                    <Button fx:id="botaoParticipantes" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#adicionarParticipante" prefHeight="45.0" prefWidth="150.0" style="-fx-background-color: #352929;" text="Adicionar participantes" textFill="WHITE" />
+                                    <VBox>
                                        <children>
-                                    <Button fx:id="botaoParticipantes" onAction="#adicionarParticipante" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="46.0" prefWidth="152.0" style="-fx-background-color: #352929;" text="Adicionar participantes" textFill="WHITE" HBox.hgrow="ALWAYS" />
-                                       </children></HBox>
+                                          <HBox alignment="CENTER_LEFT" spacing="40.0">
+                                             <children>
+                                                <FlowPane fx:id="secaoParticipantes" hgap="10.0" prefHeight="200.0" vgap="10.0" HBox.hgrow="ALWAYS" />
+                                             </children>
+                                          </HBox>
+                                       </children>
+                                    </VBox>
                                     <VBox VBox.vgrow="NEVER">
                                        <children>
                                           <Label text="Número de participantes esperado" />
-                                          <TextField fx:id="numParticipantesEsperado" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="174.0" VBox.vgrow="NEVER" />
+                                          <TextField fx:id="numParticipantesEsperado" maxWidth="200.0" VBox.vgrow="NEVER" />
                                        </children>
                                     </VBox>
-                           </children>
-                        </VBox>
-                        <VBox alignment="CENTER_LEFT" prefHeight="46.0" prefWidth="150.0">
-                           <children>
-                           <HBox fx:id="secaoOrganizadores" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
-                              <children>
-                                 <Button fx:id="botaoOrganizadores" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#adicionarOrganizador" prefHeight="46.0" prefWidth="154.0" style="-fx-background-color: #352929;" text="Adicionar organizadores" textFill="WHITE" VBox.vgrow="ALWAYS" />
-                              </children>
-                           </HBox>
-                           </children>
-                        </VBox>
-                        <VBox prefHeight="46.0" prefWidth="150.0" spacing="15.0">
-                           <children>
-                              <HBox fx:id="secaoColaboradores" alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
+                                 </children>
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                              </VBox>
+                              <VBox alignment="CENTER_LEFT">
                                  <children>
-                                 <Button fx:id="botaoColaboradores" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#adicionarColaborador" prefHeight="46.0" prefWidth="153.0" style="-fx-background-color: #352929;" text="Adicionar colaboradores" textFill="WHITE" VBox.vgrow="ALWAYS" />
+                                    <Button fx:id="botaoOrganizadores" disable="true" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#adicionarOrganizador" prefHeight="46.0" prefWidth="154.0" style="-fx-background-color: #352929;" text="Adicionar organizadores" textFill="WHITE" visible="false" VBox.vgrow="ALWAYS" />
+                                    <FlowPane fx:id="secaoOrganizadores" hgap="10.0" prefHeight="200.0" vgap="10.0" VBox.vgrow="ALWAYS" />
+                                 </children>
+                              </VBox>
+                              <VBox spacing="15.0">
+                                 <children>
+                                 <Button fx:id="botaoColaboradores" disable="true" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#adicionarColaborador" prefHeight="46.0" prefWidth="153.0" style="-fx-background-color: #352929;" text="Adicionar colaboradores" textFill="WHITE" visible="false" VBox.vgrow="ALWAYS" />
                                  </children>
                               </HBox>
                            </children>

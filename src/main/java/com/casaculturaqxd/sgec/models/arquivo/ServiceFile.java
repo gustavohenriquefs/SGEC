@@ -3,21 +3,20 @@ package com.casaculturaqxd.sgec.models.arquivo;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import com.casaculturaqxd.sgec.enums.ServiceType;
 import com.casaculturaqxd.sgec.service.Service;
 import com.casaculturaqxd.sgec.service.ServiceFactory;
+
 import io.github.cdimascio.dotenv.Dotenv;
 
 public class ServiceFile {
     private Integer serviceFileId;
     private String fileKey;
-    private String suffix;
-    private long fileSize;
-    private Service service;
     private String bucket;
+    private Service service;
+    private String suffix;
+    private Long fileSize;
     private Date ultimaModificacao;
     private File preview;
     private File content;
@@ -49,12 +48,36 @@ public class ServiceFile {
         this.service = ServiceFactory.getService(ServiceType.S3, "ACCESS_KEY", "SECRET_KEY");
     }
 
-    public ServiceFile(String fileKey, String bucket, Date ultimaModificacao, File content) {
+    public ServiceFile(String fileKey, String bucket, String suffix, Date ultimaModificacao, long fileSize) {
         this.fileKey = fileKey;
         this.bucket = bucket;
+        this.suffix = suffix;
         this.ultimaModificacao = ultimaModificacao;
-        this.content = content;
+        this.fileSize = fileSize;
         this.service = ServiceFactory.getService(ServiceType.S3, "ACCESS_KEY", "SECRET_KEY");
+    }
+
+    /**
+     * copia os metadados de um outro objeto com mesmo nome e bucket
+     * 
+     * @param this
+     * @param another
+     * @return o arquivo atualizado com os metadados de another
+     * @throws IllegalArgumentException caso o nome do arquivo ou do bucket seja
+     *                                  diferente
+     */
+    public ServiceFile copyMetadata(ServiceFile another) {
+        // se os dois objetos nao forem referencias a um mesmo arquivo
+        if (!(this.getFileKey() == another.getFileKey() && this.getBucket() == another.getBucket())) {
+            throw new IllegalArgumentException(
+                    "arquivo " + this.getFileKey() + "nao possui os metadados de " + another.getFileKey());
+        }
+        if (this.getFileKey() == another.getFileKey() && this.getBucket() == another.getBucket()) {
+            this.setUltimaModificacao(another.getUltimaModificacao());
+            this.setFileSize(another.getFileSize());
+            this.setSuffix(another.getSuffix());
+        }
+        return this;
     }
 
     public Integer getServiceFileId() {
@@ -99,13 +122,6 @@ public class ServiceFile {
     }
 
     public File getContent() throws IOException {
-        if (this.content == null) {
-            try {
-                this.content = service.getArquivo(bucket, fileKey);
-            } catch (Exception e) {
-                throw new IOException("falha ao carregar conteudo", e);
-            }
-        }
         return content;
     }
 
@@ -138,13 +154,8 @@ public class ServiceFile {
     }
 
     private String findFileSuffix(String fileName) {
-        Pattern pattern = Pattern.compile("\\..*");
-        Matcher matcher = pattern.matcher(fileName);
-        if (matcher.find()) {
-            String suffix = matcher.group(0);
-            return suffix;
-        }
-        return null;
+        int previewStart = fileName.lastIndexOf(".");
+        return fileName.substring(previewStart);
     }
 
     @Override

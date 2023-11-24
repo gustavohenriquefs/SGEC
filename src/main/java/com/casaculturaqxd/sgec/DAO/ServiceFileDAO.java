@@ -7,11 +7,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 import com.casaculturaqxd.sgec.service.Service;
@@ -30,7 +30,7 @@ public class ServiceFileDAO {
 
   public boolean inserirArquivo(ServiceFile arquivo) {
     try {
-      setService(arquivo);
+      setService(arquivo.getService());
       service.enviarArquivo(arquivo);
       String sql = "insert into service_file (file_key,suffix,service,bucket,ultima_modificacao)"
           + " values(?,?,?,?,?)";
@@ -61,13 +61,13 @@ public class ServiceFileDAO {
       stmt.setInt(1, arquivo.getServiceFileId());
       ResultSet resultSet = stmt.executeQuery();
       if (resultSet.next()) {
-        arquivo.setServiceFileId(resultSet.getInt("id_service_file"));
-        arquivo.setFileKey(resultSet.getString("file_key"));
-        arquivo.setSuffix(resultSet.getString("suffix"));
-        arquivo.setService(resultSet.getString("service"));
-        arquivo.setBucket(resultSet.getString("bucket"));
-        arquivo.setUltimaModificacao(resultSet.getDate("ultima_modificacao"));
+        ServiceFile arquivoRetorno = arquivo;
+        arquivoRetorno.setFileKey(resultSet.getString("file_key"));
+        arquivoRetorno.setBucket(resultSet.getString("bucket"));
+        arquivoRetorno.setService(resultSet.getString("service"));
 
+        setService(arquivo.getService());
+        arquivoRetorno.copyMetadata(service.getMetadata(arquivo.getBucket(), arquivo.getFileKey()));
       }
       return arquivo;
     } catch (Exception e) {
@@ -88,7 +88,9 @@ public class ServiceFileDAO {
         arquivoRetorno.setSuffix(resultSet.getString("suffix"));
         arquivoRetorno.setService(resultSet.getString("service"));
         arquivoRetorno.setBucket(resultSet.getString("bucket"));
-        arquivoRetorno.setUltimaModificacao(resultSet.getDate("ultima_modificacao"));
+
+        setService(arquivoRetorno.getService());
+        arquivoRetorno.copyMetadata(service.getMetadata(arquivoRetorno.getBucket(), arquivoRetorno.getFileKey()));
         return arquivoRetorno;
       } else {
         return null;
@@ -101,7 +103,7 @@ public class ServiceFileDAO {
 
   public File getContent(ServiceFile serviceFile) {
     try {
-      setService(serviceFile);
+      setService(serviceFile.getService());
       return service.getArquivo(serviceFile.getBucket(), serviceFile.getFileKey());
     } catch (Exception e) {
       logException(e);
@@ -111,7 +113,7 @@ public class ServiceFileDAO {
 
   public boolean deleteArquivo(ServiceFile arquivo) {
     try {
-      setService(arquivo);
+      setService(arquivo.getService());
       service.deletarArquivo(arquivo.getBucket(), arquivo.getFileKey());
       String sql = "delete from service_file where id_service_file=?";
       PreparedStatement stmt = connection.prepareStatement(sql);
@@ -122,6 +124,27 @@ public class ServiceFileDAO {
     } catch (Exception e) {
       logException(e);
       return false;
+    }
+  }
+
+  public ArrayList<ServiceFile> listarArquivosEvento(Evento evento, int limit) {
+    String sql = "SELECT id_service_file FROM service_file_evento INNER JOIN service_file USING(id_service_file) WHERE id_evento=? ORDER BY adicionado_em DESC LIMIT ?";
+    ArrayList<ServiceFile> listaArquivos = new ArrayList<>();
+    try {
+      PreparedStatement statement = connection.prepareStatement(sql);
+      statement.setInt(1, evento.getIdEvento());
+      statement.setInt(2, limit);
+      ResultSet resultSet = statement.executeQuery();
+
+      while (resultSet.next()) {
+        ServiceFile serviceFile = new ServiceFile(resultSet.getInt("id_service_file"));
+        listaArquivos.add(getArquivo(serviceFile));
+      }
+      statement.close();
+      return listaArquivos;
+    } catch (Exception e) {
+      logException(e);
+      return null;
     }
   }
 
@@ -218,8 +241,8 @@ public class ServiceFileDAO {
     }
   }
 
-  public void setService(ServiceFile arquivo) {
-    this.service = arquivo.getService();
+  public void setService(Service service) {
+    this.service = service;
   }
 
   private void logException(Exception exception) {

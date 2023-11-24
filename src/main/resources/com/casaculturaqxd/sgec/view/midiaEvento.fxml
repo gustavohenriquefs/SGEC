@@ -15,15 +15,15 @@
 
 <VBox id="pageMidiaEvento" fx:id="root" alignment="CENTER" styleClass="fundo" stylesheets="@../css/page/midiaEventoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.MidiaEventoController">
    <children>
-      <ScrollPane styleClass="fundo">
+      <ScrollPane fitToWidth="true" styleClass="fundo">
          <content>
-            <AnchorPane id="raiz" centerShape="false" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="1560.0">
+            <AnchorPane id="raiz" centerShape="false">
                <children>
                   <HBox id="principal" alignment="TOP_CENTER" layoutX="20.0" layoutY="50.0" styleClass="root" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="50.0">
                      <children>
-                        <AnchorPane prefHeight="930.0" prefWidth="760.0" HBox.hgrow="ALWAYS">
+                        <AnchorPane HBox.hgrow="ALWAYS">
                            <children>
-                              <VBox layoutX="202.0" layoutY="-65.0" prefHeight="60.0" prefWidth="760.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <VBox layoutX="202.0" layoutY="-65.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
                                     <Label text="Pesquisar Arquivos" />
                                     <HBox prefHeight="57.0" prefWidth="760.0" spacing="20.0">
@@ -38,7 +38,7 @@
                                  <children>
                                     <SplitPane dividerPositions="0.8" nodeOrientation="RIGHT_TO_LEFT" HBox.hgrow="ALWAYS">
                                        <items>
-                                          <ScrollPane id="divisao" hbarPolicy="ALWAYS" nodeOrientation="LEFT_TO_RIGHT" prefHeight="814.0" prefWidth="359.0" vbarPolicy="ALWAYS">
+                                          <ScrollPane id="divisao" hbarPolicy="ALWAYS" nodeOrientation="LEFT_TO_RIGHT" prefHeight="814.0" vbarPolicy="ALWAYS">
                                              <content>
                                                 <VBox>
                                                    <children>

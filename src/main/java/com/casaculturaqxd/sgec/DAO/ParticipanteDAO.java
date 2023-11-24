@@ -9,6 +9,7 @@ import java.sql.Types;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import com.casaculturaqxd.sgec.models.Participante;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 
@@ -79,16 +80,12 @@ public class ParticipanteDAO {
         participante.setIdParticipante(rs.getInt("id_participante"));
       }
       statement.close();
-
     } catch (SQLException e) {
       Logger erro = Logger.getLogger("erroSQl");
       erro.log(Level.SEVERE, "excecao levantada:", e);
-      conn.rollback();
 
       return false;
 
-    } finally {
-      conn.commit();
     }
 
     return true;
@@ -116,11 +113,7 @@ public class ParticipanteDAO {
     } catch (SQLException e) {
       Logger erro = Logger.getLogger("erroSQL");
       erro.log(Level.SEVERE, "excecao levantada:", e);
-      conn.rollback();
-
       return false;
-    } finally {
-      conn.commit();
     }
   }
 
@@ -138,11 +131,7 @@ public class ParticipanteDAO {
     } catch (SQLException e) {
       Logger erro = Logger.getLogger("erroSQl");
       erro.log(Level.SEVERE, "excecao levantada:", e);
-      conn.rollback();
-
       return false;
-    } finally {
-      conn.commit();
     }
   }
 
