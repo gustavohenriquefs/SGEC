@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox id="pageVisualizarEvento" fx:id="root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.VisualizarEventoController">
+<VBox id="pageVisualizarEvento" fx:id="root" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.VisualizarEventoController">
    <children>
       <ScrollPane fitToWidth="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
          <content>
@@ -35,6 +35,9 @@
                                  </children>
                               </HBox>
                            </children>
+                           <VBox.margin>
+                              <Insets bottom="10.0" top="10.0" />
+                           </VBox.margin>
                         </VBox>
                         <VBox VBox.vgrow="ALWAYS">
                            <children>
@@ -113,6 +116,9 @@
                                  </VBox.margin>
                               </VBox>
                            </children>
+                           <padding>
+                              <Insets bottom="10.0" top="10.0" />
+                           </padding>
                         </VBox>
                         <VBox spacing="30.0" VBox.vgrow="ALWAYS">
                            <children>
@@ -144,7 +150,10 @@
                                  <children>
                                     <VBox alignment="CENTER">
                                        <children>
-                                          <FlowPane fx:id="secaoParticipantes" prefHeight="150.0" />
+                                          <FlowPane fx:id="secaoParticipantes" prefHeight="150.0">
+                                             <VBox.margin>
+                                                <Insets bottom="10.0" top="10.0" />
+                                             </VBox.margin></FlowPane>
                                           <Button id="botaoNovoParticipante" fx:id="novoParticipante" mnemonicParsing="false" style="-fx-background-color: #2A3F25;" text="Adicionar novo participante +" textFill="WHITE" />
                                        </children>
                                     </VBox>
@@ -154,45 +163,36 @@
                                  <children>
                                     <VBox alignment="CENTER">
                                        <children>
-                                          <FlowPane fx:id="listaOrganizadores" hgap="10.0" prefHeight="150.0" vgap="10.0" visible="false" VBox.vgrow="ALWAYS">
-                                             <children>
-                                                <Label text="Organizadores">
-                                                   <font>
-                                                      <Font name="System Bold" size="20.0" />
-                                                   </font>
-                                                   <FlowPane.margin>
-                                                      <Insets left="20.0" top="10.0" />
-                                                   </FlowPane.margin>
-                                                </Label>
-                                             </children>
-                                          </FlowPane>
-                                          <Button id="botaoNovoOrganizador" fx:id="novoOrganizador" mnemonicParsing="false" style="-fx-background-color: #2A3F25;" text="Adicionar novo organizador +" textFill="WHITE" visible="false" />
+                                          <Label text="Organizadores">
+                                             <font>
+                                                <Font name="System Bold" size="20.0" />
+                                             </font>
+                                          </Label>
+                                          <FlowPane fx:id="secaoOrganizadores" hgap="10.0" prefHeight="200.0" prefWidth="200.0" vgap="10.0" />
+                                          <Button id="botaoNovoOrganizador" fx:id="novoOrganizador" mnemonicParsing="false" onAction="#adicionarOrganizador" style="-fx-background-color: #2A3F25;" text="Adicionar novo organizador +" textFill="WHITE" />
                                        </children>
                                     </VBox>
                                  </children>
                               </VBox>
                               <VBox>
                                  <children>
-                                    <VBox alignment="CENTER" VBox.vgrow="ALWAYS">
+                                    <VBox alignment="CENTER" prefWidth="1393.0" VBox.vgrow="ALWAYS">
                                        <children>
-                                          <FlowPane fx:id="listaColaboradores" hgap="10.0" prefHeight="150.0" vgap="10.0" visible="false" VBox.vgrow="ALWAYS">
-                                             <children>
-                                                <Label text="Colaboradores">
-                                                   <font>
-                                                      <Font name="System Bold" size="20.0" />
-                                                   </font>
-                                                   <FlowPane.margin>
-                                                      <Insets left="20.0" top="10.0" />
-                                                   </FlowPane.margin>
-                                                </Label>
-                                             </children>
-                                          </FlowPane>
-                                          <Button id="botaoColaboradores" fx:id="novoColaborador" mnemonicParsing="false" prefWidth="176.0" style="-fx-background-color: #2A3F25;" text="Adicionar novo colaborador +" textFill="WHITE" visible="false" />
+                                          <Label text="Colaboradores">
+                                             <font>
+                                                <Font name="System Bold" size="20.0" />
+                                             </font>
+                                          </Label>
+                                          <FlowPane fx:id="secaoColaboradores" hgap="10.0" prefHeight="200.0" prefWidth="200.0" vgap="10.0" />
+                                          <Button id="botaoColaboradores" fx:id="novoColaborador" mnemonicParsing="false" onAction="#adicionarColaborador" prefWidth="176.0" style="-fx-background-color: #2A3F25;" text="Adicionar novo colaborador +" textFill="WHITE" />
                                        </children>
                                     </VBox>
                                  </children>
                               </VBox>
                            </children>
+                           <padding>
+                              <Insets bottom="10.0" top="10.0" />
+                           </padding>
                         </VBox>
                         <VBox VBox.vgrow="ALWAYS">
                            <children>
@@ -248,8 +248,11 @@
                                  </children>
                               </VBox>
                            </children>
+                           <VBox.margin>
+                              <Insets bottom="10.0" top="10.0" />
+                           </VBox.margin>
                         </VBox>
-                        <VBox>
+                        <VBox prefHeight="233.0" prefWidth="1380.0">
                            <children>
                               <VBox VBox.vgrow="ALWAYS">
                                  <children>
@@ -290,6 +293,9 @@
                                  </children>
                               </VBox>
                            </children>
+                           <VBox.margin>
+                              <Insets bottom="10.0" top="10.0" />
+                           </VBox.margin>
                         </VBox>
                      </children>
                   </VBox>
