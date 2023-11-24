@@ -77,30 +77,37 @@ public class GrupoEventosBuilder implements Builder {
     }
 
     public GrupoEventosBuilder setImagemCapa(ServiceFile serviceFile) {
+        grupoEventos.setImagemCapa(serviceFile);
         return this;
     }
 
-    public GrupoEventosBuilder setNumAcoesEsperado(int int1) {
+    public GrupoEventosBuilder setNumAcoesEsperado(int numAcoesEsperado) {
+        grupoEventos.setNumAcoesEsperado(numAcoesEsperado);
         return this;
     }
 
-    public GrupoEventosBuilder setNumAcoesAlcancado(int int1) {
+    public GrupoEventosBuilder setNumAcoesAlcancado(int numAcoesAlcancado) {
+        grupoEventos.setNumAcoesAlcancado(numAcoesAlcancado);
         return this;
     }
 
-    public GrupoEventosBuilder setNumMunicipiosEsperado(int int1) {
+    public GrupoEventosBuilder setNumMunicipiosEsperado(int numMunicipiosEsperado) {
+        grupoEventos.setNumMunicipiosEsperado(numMunicipiosEsperado);
         return this;
     }
 
-    public GrupoEventosBuilder setNumMunicipiosAlcancado(int int1) {
+    public GrupoEventosBuilder setNumMunicipiosAlcancado(int numMunicipiosAlcancado) {
+        grupoEventos.setNumMunicipiosAlcancado(numMunicipiosAlcancado);
         return this;
     }
 
-    public GrupoEventosBuilder setNumParticipantesEsperado(int int1) {
+    public GrupoEventosBuilder setNumParticipantesEsperado(int numParticipantesEsperado) {
+        grupoEventos.setNumParticipantesEsperado(numParticipantesEsperado);
         return this;
     }
 
-    public GrupoEventosBuilder setNumParticipantesAlcancado(int int1) {
+    public GrupoEventosBuilder setNumParticipantesAlcancado(int numParticipantesAlcancado) {
+        grupoEventos.setNumParticipantesAlcancado(numParticipantesAlcancado);
         return this;
     }
 
