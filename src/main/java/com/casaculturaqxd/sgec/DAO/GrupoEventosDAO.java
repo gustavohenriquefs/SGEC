@@ -123,7 +123,7 @@ public class GrupoEventosDAO {
     }
 
     public Optional<GrupoEventos> getPreviewGrupoEventos(GrupoEventos grupoEventos) throws SQLException {
-        String sql = "SELECT * FROM GRUPO_EVENTOS WHERE id_grupo_eventos = ?";
+        String sql = "SELECT id_grupo_eventos, nome_grupo_eventos,id_service_file,data_inicial,data_final FROM GRUPO_EVENTOS WHERE id_grupo_eventos = ?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
         try {
@@ -199,9 +199,22 @@ public class GrupoEventosDAO {
         }
     }
 
+    /**
+     * busca o resultado de todos os grupos de eventos contendo a string
+     * nomeGrupoEventos no nome, com a classificacao etaria selecionada, no
+     * intervalo das datas inicial e final e que atendam a pelo menos uma das metas
+     * passadas
+     * 
+     * @param nomeGrupoEventos
+     * @param classificacaoEtaria
+     * @param dataInicio
+     * @param dataFim
+     * @param metas
+     * @return lista de grupos de eventos com atributos utilizados para preview
+     * @throws SQLException
+     */
     public ArrayList<GrupoEventos> pesquisaPreviewGrupoEventos(String nomeGrupoEventos, String classificacaoEtaria,
             Date dataInicio, Date dataFim, ArrayList<Meta> metas) throws SQLException {
-        // TODO: metas
         String sql = "SELECT id_grupo_eventos,nome_grupo_eventos,data_inicial,data_final,id_service_file FROM grupo_eventos WHERE nome_grupo_eventos ILIKE ?";
         if (classificacaoEtaria != null) {
             sql += " AND classificacao_etaria = '" + classificacaoEtaria + "' ";
@@ -240,11 +253,10 @@ public class GrupoEventosDAO {
 
     /**
      * atualiza todas as colunas, exceto as de valores alcancados que sao calculadas
-     * por triggers (num_acoes_alcancado,
-     *
-     *
-     * num_municipios_alcancado,num_participantes_alcancado,num_colaboradores_alcancado
-     * e num_organizadores_alcancado), do grupo de eventos especificado
+     * por triggers
+     * (num_acoes_alcancado,num_municipios_alcancado,num_participantes_alcancado,
+     * num_colaboradores_alcancado e num_organizadores_alcancado), do grupo de
+     * eventos especificado
      *
      * @param grupoEventos
      * @return true se alguma alteracao for realizada
@@ -300,17 +312,24 @@ public class GrupoEventosDAO {
         }
     }
 
-    public boolean deleteGrupoEventos(GrupoEventos grupoEventos) {
+    public boolean deleteGrupoEventos(GrupoEventos grupoEventos) throws SQLException {
         String sql = "DELETE FROM grupo_eventos WHERE id_grupo_eventos = ?";
+        PreparedStatement statement = connection.prepareStatement(sql);
+
         try {
-            PreparedStatement statement = connection.prepareStatement(sql);
             statement.setInt(1, grupoEventos.getIdGrupoEventos());
 
             int numRemocoes = statement.executeUpdate();
             statement.close();
             return numRemocoes > 0;
         } catch (Exception e) {
-            return false;
+            String nomeGrupoEventosCausa = "";
+            if (grupoEventos != null) {
+                nomeGrupoEventosCausa = grupoEventos.getNome() != null ? grupoEventos.getNome() : " ";
+            }
+            throw new SQLException("falha deletando grupo de eventos " + nomeGrupoEventosCausa, e);
+        } finally {
+            statement.close();
         }
     }
 
