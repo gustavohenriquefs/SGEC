@@ -73,7 +73,7 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
     @FXML
     VBox Localizacoes, cargaHoraria;
     @FXML
-    FlowPane secaoParticipantes, secaoOrganizadores, Colaboradores;
+    FlowPane secaoParticipantes, secaoOrganizadores, secaoColaboradores;
     @FXML
     FlowPane secaoArquivos;
     @FXML
