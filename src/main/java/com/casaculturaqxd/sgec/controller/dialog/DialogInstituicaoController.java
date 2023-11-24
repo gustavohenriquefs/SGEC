@@ -39,7 +39,7 @@ public class DialogInstituicaoController {
   private ImageView imagem;
 
   private Stage stage;
-  private File file;
+  private File file = null;
 
   public TextField getNomeInstituicao() {
     return nomeInstituicao;

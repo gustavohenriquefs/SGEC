@@ -47,7 +47,7 @@ public class DialogNovaInstituicao extends Dialog<Instituicao> {
             temp.setValorContribuicao("Valor das contribuições"); 
           }
 
-          if(dialogInstituicaoController.getImagem() != null){
+          if(dialogInstituicaoController.getFile() != null){
             FileChooser fileChooser = new FileChooser();
             ExtensionFilter filterImagens = new ExtensionFilter("imagem", "*.jpeg", "*.jpg", "*.png", "*.bmp");
             fileChooser.getExtensionFilters().add(filterImagens);

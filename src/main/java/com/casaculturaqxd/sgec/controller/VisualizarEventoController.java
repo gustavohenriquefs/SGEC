@@ -5,15 +5,20 @@ import java.sql.Date;
 import java.sql.Time;
 
 import java.util.ArrayList;
+import java.util.Optional;
+
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.EventoDAO;
 import com.casaculturaqxd.sgec.DAO.LocalizacaoDAO;
+import com.casaculturaqxd.sgec.controller.dialog.DialogNovaInstituicao;
 import com.casaculturaqxd.sgec.controller.preview.PreviewArquivoController;
+import com.casaculturaqxd.sgec.controller.preview.PreviewInstituicaoController;
 import com.casaculturaqxd.sgec.controller.preview.PreviewLocalizacaoController;
 import com.casaculturaqxd.sgec.controller.preview.PreviewParticipanteController;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.Indicador;
+import com.casaculturaqxd.sgec.models.Instituicao;
 import com.casaculturaqxd.sgec.models.Localizacao;
 import com.casaculturaqxd.sgec.models.Participante;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
@@ -32,6 +37,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Control;
@@ -70,7 +77,7 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
     @FXML
     VBox frameLocais;
     @FXML
-    HBox secaoMetas;
+    HBox secaoMetas, secaoOrganizadores, secaoColaboradores;
     @FXML
     TextArea descricao;
     @FXML
@@ -88,7 +95,9 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
     private String[] classificacoes = { "Livre", "10 anos", "12 anos", "14 anos", "16 anos", "18 anos" };
     // listas
     ObservableMap<Participante, FXMLLoader> participantes = FXCollections.<Participante, FXMLLoader>observableHashMap();
-
+    ObservableMap<Instituicao, FXMLLoader> organizadorObservableMap = FXCollections.<Instituicao, FXMLLoader>observableHashMap();
+    ObservableMap<Instituicao, FXMLLoader> colaboradorObservableMap = FXCollections.<Instituicao, FXMLLoader>observableHashMap();
+    
     private ObservableMap<ServiceFile, FXMLLoader> mapServiceFiles = FXCollections.observableHashMap();
     // Tabela com todos os campos de input
     ObservableList<Control> camposInput = FXCollections.observableArrayList();
@@ -115,6 +124,8 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
         addPropriedadeAlterar(camposInput);
         addListenersServiceFile(mapServiceFiles);
         addListenersParticipante(participantes);
+        addListenersColaborador(colaboradorObservableMap);
+        addListenersOrganizador(organizadorObservableMap);
         loadMenu();
 
         eventoDAO.setConnection(db.getConnection());
@@ -438,5 +449,94 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
                 }
             }
         });
+    }
+
+    public void adicionarOrganizador() throws IOException {
+        ButtonType buttonTypeVincularOrganizadora = new ButtonType("Vincular como organizadora", ButtonBar.ButtonData.OK_DONE);
+        DialogNovaInstituicao dialogNovaInstituicao = new DialogNovaInstituicao(buttonTypeVincularOrganizadora);
+        Optional<Instituicao> novaInstituicao = dialogNovaInstituicao.showAndWait();
+        if(novaInstituicao.isPresent()){
+            organizadorObservableMap.put(novaInstituicao.get(), new FXMLLoader(App.class.getResource("view/preview/previewInstituicao.fxml")));
+        }
+    }
+
+    public void adicionarColaborador() throws IOException {
+        ButtonType buttonTypeVincularColaborador = new ButtonType("Vincular como colaborador", ButtonBar.ButtonData.OK_DONE);
+        DialogNovaInstituicao dialogNovaInstituicao = new DialogNovaInstituicao(buttonTypeVincularColaborador);
+        Optional<Instituicao> novaInstituicao = dialogNovaInstituicao.showAndWait();
+        if(novaInstituicao.isPresent()){
+            colaboradorObservableMap.put(novaInstituicao.get(), new FXMLLoader(App.class.getResource("view/preview/previewInstituicao.fxml")));
+        }
+    }
+
+    public void addListenersOrganizador(ObservableMap<Instituicao, FXMLLoader> observablemap) {
+        VisualizarEventoController superController = this;
+        observablemap.addListener(new MapChangeListener<Instituicao, FXMLLoader>() {
+            @Override
+            public void onChanged(MapChangeListener.Change<? extends Instituicao, ? extends FXMLLoader> change) {
+
+                if (change.wasAdded()) {
+                    Instituicao addedKey = change.getKey();
+                    // carregar o fxml de preview e setar o participante deste para o
+                    // participante adicionado
+                    try {
+                        Parent previewInstituicao = change.getValueAdded().load();
+                        PreviewInstituicaoController controller = change.getValueAdded().getController();
+                        controller.setInstituicao(addedKey);
+                        controller.setParentController(superController);
+
+                        secaoOrganizadores.getChildren().add(previewInstituicao);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (change.wasRemoved()) {
+                    PreviewInstituicaoController removedController = change.getValueRemoved().getController();
+                    // Remover o Pane de preview ao deletar um Participante da lista
+                    secaoOrganizadores.getChildren().remove(removedController.getContainer());
+
+                }
+            }
+        });
+    }
+
+    public void addListenersColaborador(ObservableMap<Instituicao, FXMLLoader> observablemap) {
+        VisualizarEventoController superController = this;
+        observablemap.addListener(new MapChangeListener<Instituicao, FXMLLoader>() {
+            @Override
+            public void onChanged(MapChangeListener.Change<? extends Instituicao, ? extends FXMLLoader> change) {
+
+                if (change.wasAdded()) {
+                    Instituicao addedKey = change.getKey();
+                    // carregar o fxml de preview e setar o participante deste para o
+                    // participante adicionado
+                    try {
+                        Parent previewInstituicao = change.getValueAdded().load();
+                        PreviewInstituicaoController controller = change.getValueAdded().getController();
+                        controller.setInstituicao(addedKey);
+                        controller.setParentController(superController);
+
+                        secaoColaboradores.getChildren().add(previewInstituicao);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (change.wasRemoved()) {
+                    PreviewInstituicaoController removedController = change.getValueRemoved().getController();
+                    // Remover o Pane de preview ao deletar um Participante da lista
+                    secaoColaboradores.getChildren().remove(removedController.getContainer());
+
+                }
+            }
+        });
+    }
+
+    @Override
+    public void removerInstituicao(Instituicao instituicao) {
+        if(organizadorObservableMap.containsKey(instituicao)){
+            organizadorObservableMap.remove(instituicao);
+        } else {
+            colaboradorObservableMap.remove(instituicao);
+        }
     }
 }
