@@ -4,7 +4,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
+
+import org.controlsfx.control.textfield.AutoCompletionBinding;
 
 import com.casaculturaqxd.sgec.controller.ControllerEvento;
 import com.casaculturaqxd.sgec.models.Instituicao;

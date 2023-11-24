@@ -6,7 +6,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Optional;
+import java.util.ResourceBundle;
+
+import org.controlsfx.control.textfield.AutoCompletionBinding;
+import org.controlsfx.control.textfield.TextFields;
 
 import com.casaculturaqxd.sgec.DAO.InstituicaoDAO;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
@@ -40,6 +45,26 @@ public class DialogInstituicaoController {
 
   private Stage stage;
   private File file = null;
+  private Instituicao instituicao = null;
+
+  ArrayList<String> listaNomes = instituicaoDAO.listarInstituicoess();
+  AutoCompletionBinding<String> binding;
+
+  public void initialize() throws IOException {
+    binding = TextFields.bindAutoCompletion(nomeInstituicao, listaNomes);
+    binding.setOnAutoCompleted(autoCompletionEvent -> {
+      String selected = autoCompletionEvent.getCompletion();
+      instituicao = instituicaoDAO.getInstituicao(selected).get();
+      nomeInstituicao.setEditable(false);
+    });
+    nomeInstituicao.setOnMouseClicked(mousePressed -> {
+      nomeInstituicao.setEditable(true);
+    });
+  }
+
+  public Instituicao obterInstituicao(){
+    return instituicao;
+  }
 
   public TextField getNomeInstituicao() {
     return nomeInstituicao;
