@@ -11,6 +11,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
@@ -31,6 +32,7 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.TreeSet;
 import java.util.function.Consumer;
@@ -113,6 +115,19 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
         FXMLLoader carregarMenu = new FXMLLoader(App.class.getResource("view/componentes/menu.fxml"));
 
         root.getChildren().add(0, carregarMenu.load());
+    }
+
+    public void compararDatas(){
+        dataInicial.valueProperty().addListener((observable, oldValue, newValue) -> {
+            dataFinal.setDayCellFactory(picker -> new DateCell() {
+                @Override
+                public void updateItem(LocalDate date, boolean empty) {
+                    super.updateItem(date, empty);
+                    LocalDate currentDate = dataInicial.getValue();
+                    setDisable(empty || date.compareTo(currentDate) > 0 );
+                }
+            });
+        });
     }
 
     public void criarNovoEvento() throws IOException, ParseException {
