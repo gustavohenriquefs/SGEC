@@ -74,7 +74,6 @@ public class DialogInstituicaoController {
           e.printStackTrace();
         }
       } else {
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         Instituicao instituicao = new Instituicao(nomeInstituicao.getText(), contribuicoes.getText(), 
         valorContribuicao.getText(), new ServiceFile(file));
         try {
