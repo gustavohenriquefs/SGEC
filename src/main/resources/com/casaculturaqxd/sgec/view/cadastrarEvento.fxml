@@ -223,24 +223,30 @@
                               </VBox>
                               <VBox spacing="15.0">
                                  <children>
-                                 <Button fx:id="botaoColaboradores" disable="true" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#adicionarColaborador" prefHeight="46.0" prefWidth="153.0" style="-fx-background-color: #352929;" text="Adicionar colaboradores" textFill="WHITE" visible="false" VBox.vgrow="ALWAYS" />
+                                    <Button fx:id="botaoColaboradores" disable="true" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#adicionarColaborador" prefHeight="46.0" prefWidth="153.0" style="-fx-background-color: #352929;" text="Adicionar colaboradores" textFill="WHITE" visible="false" VBox.vgrow="ALWAYS" />
+                                    <FlowPane fx:id="Colaboradores" hgap="10.0" prefHeight="200.0" vgap="10.0" VBox.vgrow="ALWAYS" />
                                  </children>
-                              </HBox>
+                              </VBox>
+                              <VBox>
+                                 <children>
+                                    <Button fx:id="botaoArquivos" mnemonicParsing="false" onAction="#adicionarArquivo" prefHeight="46.0" prefWidth="152.0" style="-fx-background-color: #352929;" text="Adicionar arquivos" textFill="WHITE" />
+                                    <FlowPane fx:id="secaoArquivos" hgap="10.0" prefHeight="200.0" vgap="10.0" VBox.vgrow="ALWAYS" />
+                                 </children>
+                              </VBox>
+                              <VBox>
+                                 <children>
+                                    <HBox alignment="CENTER_RIGHT" spacing="50.0">
+                                       <children>
+                                          <Button fx:id="cancelar" alignment="CENTER" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#cancelar" prefWidth="150.0" style="-fx-background-color: #352929;" text="Cancelar" textFill="WHITE" />
+                                          <Button fx:id="criarEvento" alignment="CENTER" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#criarNovoEvento" prefWidth="150.0" style="-fx-background-color: #2A3F25;" text="Criar" textFill="WHITE" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                              </VBox>
                            </children>
                         </VBox>
-                        <FlowPane fx:id="secaoArquivos" hgap="20.0">
-                           <children>
-                              <Button fx:id="botaoArquivos" mnemonicParsing="false" onAction="#adicionarArquivo" prefHeight="46.0" prefWidth="152.0" style="-fx-background-color: #352929;" text="Adicionar arquivos" textFill="WHITE" />
-                           </children>
-                        </FlowPane>
-                        <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
-                           <children>
-                        <Button fx:id="cancelar" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#cancelar" prefHeight="26.0" prefWidth="200.0" style="-fx-background-color: #352929;" text="Cancelar" textFill="WHITE" />
-                        <Button fx:id="criarEvento" alignment="CENTER" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#criarNovoEvento" prefHeight="26.0" prefWidth="200.0" style="-fx-background-color: #2A3F25;" text="Criar" textFill="WHITE" />
-                           </children>
-                        </HBox>
-                           </children>
-                        </VBox>
+                     </children>
+                  </VBox>
                </children>
             </AnchorPane>
          </content>
