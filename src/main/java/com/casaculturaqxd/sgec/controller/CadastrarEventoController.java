@@ -345,7 +345,6 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
 
     public void addListenersOrganizador(ObservableMap<Instituicao, FXMLLoader> observablemap) {
         CadastrarEventoController superController = this;
-        System.out.println("ASDSADSADSADSADSADSAD");
         observablemap.addListener(new MapChangeListener<Instituicao, FXMLLoader>() {
             @Override
             public void onChanged(MapChangeListener.Change<? extends Instituicao, ? extends FXMLLoader> change) {
