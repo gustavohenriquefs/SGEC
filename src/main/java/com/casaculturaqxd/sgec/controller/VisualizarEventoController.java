@@ -10,7 +10,6 @@ import java.util.Optional;
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.EventoDAO;
 import com.casaculturaqxd.sgec.DAO.LocalizacaoDAO;
-import com.casaculturaqxd.sgec.DAO.ServiceFileDAO;
 import com.casaculturaqxd.sgec.controller.dialog.DialogNovaInstituicao;
 import com.casaculturaqxd.sgec.controller.preview.PreviewArquivoController;
 import com.casaculturaqxd.sgec.controller.preview.PreviewInstituicaoController;
@@ -56,8 +55,10 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.converter.IntegerStringConverter;
@@ -67,17 +68,17 @@ import javafx.util.Duration;
 public class VisualizarEventoController implements ControllerServiceFile, ControllerEvento {
     private Evento evento;
     private Stage stage;
-    private DatabasePostgres db = DatabasePostgres.getInstance("URL_TEST", "USER_NAME_TEST", "PASSWORD_TEST");
+    private DatabasePostgres db = DatabasePostgres.getInstance("URL", "USER_NAME", "PASSWORD");
     private EventoDAO eventoDAO = new EventoDAO();
     private LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO();
     @FXML
     VBox root;
     @FXML
-    FlowPane secaoParticipantes, secaoArquivos;
+    FlowPane secaoParticipantes, secaoArquivos,  secaoOrganizadores, secaoColaboradores;
     @FXML
     VBox frameLocais;
     @FXML
-    HBox secaoMetas, secaoOrganizadores, secaoColaboradores;
+    HBox secaoMetas;
     @FXML
     TextArea descricao;
     @FXML
@@ -185,8 +186,8 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
 
         numeroPublico = new Indicador("Quantidade de público", evento.getPublicoEsperado(),
                 evento.getPublicoAlcancado());
-        numeroMestres = new Indicador("Número de mestres da cultura", evento.getParticipantesEsperado(),
-                evento.getListaParticipantes().size());
+        numeroMestres = new Indicador("Número de mestres da cultura",
+                evento.getParticipantesEsperado(), evento.getListaParticipantes().size());
         numeroMunicipios = new Indicador("Número de municípios", evento.getMunicipiosEsperado(),
                 eventoDAO.getNumeroMunicipiosDiferentes(evento.getIdEvento()));
 
@@ -222,7 +223,8 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
             evento.setDescricao(descricao.getText());
             evento.setDataInicial(Date.valueOf(dataInicial.getValue()));
             evento.setDataFinal(Date.valueOf(dataFinal.getValue()));
-            evento.setClassificacaoEtaria(classificacaoEtaria.getSelectionModel().getSelectedItem());
+            evento.setClassificacaoEtaria(
+                    classificacaoEtaria.getSelectionModel().getSelectedItem());
             evento.setAcessivelEmLibras(libras.isSelected());
             evento.setCertificavel(certificavel.isSelected());
             evento.setHorario(Time.valueOf(horario.getText()));
@@ -275,24 +277,28 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
 
         TableColumn<Indicador, Integer> valorEsperado = new TableColumn<>("Valor esperado");
         valorEsperado.setCellValueFactory(new PropertyValueFactory<>("valorEsperado"));
-        valorEsperado.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
-        valorEsperado.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Indicador, Integer>>() {
-            @Override
-            public void handle(TableColumn.CellEditEvent<Indicador, Integer> t) {
-                ((Indicador) t.getTableView().getItems().get(t.getTablePosition().getRow()))
-                        .setValorEsperado(t.getNewValue());
-            }
-        });
+        valorEsperado
+                .setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+        valorEsperado
+                .setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Indicador, Integer>>() {
+                    @Override
+                    public void handle(TableColumn.CellEditEvent<Indicador, Integer> t) {
+                        ((Indicador) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+                                .setValorEsperado(t.getNewValue());
+                    }
+                });
         TableColumn<Indicador, Integer> valorAlcancado = new TableColumn<>("Valor alcançado");
         valorAlcancado.setCellValueFactory(new PropertyValueFactory<>("valorAlcancado"));
-        valorAlcancado.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
-        valorAlcancado.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Indicador, Integer>>() {
-            @Override
-            public void handle(TableColumn.CellEditEvent<Indicador, Integer> t) {
-                ((Indicador) t.getTableView().getItems().get(t.getTablePosition().getRow()))
-                        .setValorAlcancado(t.getNewValue());
-            }
-        });
+        valorAlcancado
+                .setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
+        valorAlcancado
+                .setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Indicador, Integer>>() {
+                    @Override
+                    public void handle(TableColumn.CellEditEvent<Indicador, Integer> t) {
+                        ((Indicador) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+                                .setValorAlcancado(t.getNewValue());
+                    }
+                });
 
         tabela.getColumns().add(nomeIndicador);
         tabela.getColumns().add(valorEsperado);
@@ -307,7 +313,8 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
     /**
      * <p>
      * Retorna todos os elementos que suportam interacao do usuario presentes na
-     * pagina, exceto botoes, labels e tableviews
+     * pagina, exceto
+     * botoes, labels e tableviews
      * <p>
      */
     public void addControls(Parent parent, ObservableList<Control> list) {
@@ -321,25 +328,17 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
     }
 
     public void loadArquivos() {
-        ServiceFileDAO serviceFileDAO = new ServiceFileDAO(db.getConnection());
-        for (ServiceFile arquivo : serviceFileDAO.listarArquivosEvento(evento, 5)) {
-            try {
+        if (evento.getListaArquivos() != null) {
+            for (ServiceFile arquivo : evento.getListaArquivos()) {
                 adicionarArquivo(arquivo);
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
             }
         }
     }
 
     @Override
-    public void adicionarArquivo(ServiceFile serviceFile) throws IOException {
-        for (ServiceFile existingFile : mapServiceFiles.keySet()) {
-            if (serviceFile.getFileKey().equals(existingFile.getFileKey())) {
-                throw new IOException("arquivo ja foi inserido");
-            }
-        }
-        mapServiceFiles.put(serviceFile, new FXMLLoader(App.class.getResource("view/preview/previewArquivo.fxml")));
+    public void adicionarArquivo(ServiceFile serviceFile) {
+        mapServiceFiles.put(serviceFile,
+                new FXMLLoader(App.class.getResource("view/preview/previewArquivo.fxml")));
     }
 
     @Override
@@ -361,7 +360,8 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
         ControllerServiceFile superController = this;
         observablemap.addListener(new MapChangeListener<ServiceFile, FXMLLoader>() {
             @Override
-            public void onChanged(MapChangeListener.Change<? extends ServiceFile, ? extends FXMLLoader> change) {
+            public void onChanged(
+                    MapChangeListener.Change<? extends ServiceFile, ? extends FXMLLoader> change) {
 
                 if (change.wasAdded()) {
                     ServiceFile addedKey = change.getKey();
@@ -406,7 +406,8 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
     @Override
     public void adicionarParticipante(Participante participante) {
         // TODO chamar metodo para todo participante vinculado ao evento
-        participantes.put(participante, new FXMLLoader(App.class.getResource("view/preview/previewParticipante.fxml")));
+        participantes.put(participante,
+                new FXMLLoader(App.class.getResource("view/preview/previewParticipante.fxml")));
     }
 
     @Override
@@ -423,7 +424,8 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
         VisualizarEventoController superController = this;
         observablemap.addListener(new MapChangeListener<Participante, FXMLLoader>() {
             @Override
-            public void onChanged(MapChangeListener.Change<? extends Participante, ? extends FXMLLoader> change) {
+            public void onChanged(
+                    MapChangeListener.Change<? extends Participante, ? extends FXMLLoader> change) {
 
                 if (change.wasAdded()) {
                     Participante addedKey = change.getKey();
