@@ -199,9 +199,9 @@ public class GrupoEventosDAO {
         }
     }
 
-    public ArrayList<GrupoEventos> pesquisaPreviewGrupoEventos(String nomeGrupoEventos, String cidade,
-            String classificacaoEtaria, Date dataInicio, Date dataFim, ArrayList<Meta> metas) throws SQLException {
-        // TODO: metas e localizacao
+    public ArrayList<GrupoEventos> pesquisaPreviewGrupoEventos(String nomeGrupoEventos, String classificacaoEtaria,
+            Date dataInicio, Date dataFim, ArrayList<Meta> metas) throws SQLException {
+        // TODO: metas
         String sql = "SELECT id_grupo_eventos,nome_grupo_eventos,data_inicial,data_final,id_service_file FROM grupo_eventos WHERE nome_grupo_eventos ILIKE ?";
         if (classificacaoEtaria != null) {
             sql += " AND classificacao_etaria = '" + classificacaoEtaria + "' ";
@@ -225,8 +225,10 @@ public class GrupoEventosDAO {
                         .setImagemCapa(new ServiceFile(resultSet.getInt("id_service_file")))
                         .setDataInicial(resultSet.getDate("data_inicial"))
                         .setDataFinal(resultSet.getDate("data_final"));
-
-                listaPreviewGrupoEventos.add(grupoEventosBuilder.getGrupoEventos());
+                GrupoEventos result = grupoEventosBuilder.getGrupoEventos();
+                // se alguma das metas do grupo de eventos estiver nas metas pesquisadas
+                if (listMetas(result).stream().anyMatch(meta -> metas.contains(meta)))
+                    listaPreviewGrupoEventos.add(grupoEventosBuilder.getGrupoEventos());
             }
             return listaPreviewGrupoEventos;
         } catch (Exception e) {
@@ -312,9 +314,9 @@ public class GrupoEventosDAO {
         }
     }
 
-    public ArrayList<Evento> listEventos(GrupoEventos grupoEventos) {
+    public List<Evento> listEventos(GrupoEventos grupoEventos) throws SQLException {
         EventoDAO eventoDAO = new EventoDAO(connection);
-        return null;
+        return eventoDAO.listarEventosGrupoEventos(grupoEventos);
     }
 
     public ArrayList<Meta> listMetas(GrupoEventos grupoEventos) throws SQLException {
@@ -322,14 +324,14 @@ public class GrupoEventosDAO {
         return metaDAO.listarMetasGrupoEventos(grupoEventos.getIdGrupoEventos());
     }
 
-    public boolean vincularEvento(GrupoEventos grupoEventos, Evento evento) {
+    public boolean vincularEvento(GrupoEventos grupoEventos, Evento evento) throws SQLException {
         EventoDAO eventoDAO = new EventoDAO(connection);
-        return false;
+        return eventoDAO.vincularGrupoEventos(grupoEventos.getIdGrupoEventos(), evento.getIdEvento());
     }
 
-    public boolean desvincularEvento(GrupoEventos grupoEventos, Evento evento) {
+    public boolean desvincularEvento(GrupoEventos grupoEventos, Evento evento) throws SQLException {
         EventoDAO eventoDAO = new EventoDAO(connection);
-        return false;
+        return eventoDAO.desvincularGrupoEventos(grupoEventos.getIdGrupoEventos(), evento.getIdEvento());
     }
 
     public boolean vincularAllOrganizadores(GrupoEventos grupoEventos, List<Instituicao> organizadores)
@@ -350,9 +352,10 @@ public class GrupoEventosDAO {
                 organizador.getIdInstituicao());
     }
 
-    public boolean desvincularOrganizador(GrupoEventos grupoEventos, Instituicao organizador) {
+    public boolean desvincularOrganizador(GrupoEventos grupoEventos, Instituicao organizador) throws SQLException {
         InstituicaoDAO instituicaoDAO = new InstituicaoDAO(connection);
-        return false;
+        return instituicaoDAO.desvincularOrganizadorGrupoEventos(grupoEventos.getIdGrupoEventos(),
+                organizador.getIdInstituicao());
     }
 
     public boolean vincularAllColaboradores(GrupoEventos grupoEventos, List<Instituicao> colaboradores)
@@ -373,9 +376,10 @@ public class GrupoEventosDAO {
                 colaborador.getIdInstituicao());
     }
 
-    public boolean desvincularColaborador(GrupoEventos grupoEventos, Instituicao colaborador) {
+    public boolean desvincularColaborador(GrupoEventos grupoEventos, Instituicao colaborador) throws SQLException {
         InstituicaoDAO instituicaoDAO = new InstituicaoDAO(connection);
-        return false;
+        return instituicaoDAO.desvincularColaboradorGrupoEventos(grupoEventos.getIdGrupoEventos(),
+                colaborador.getIdInstituicao());
     }
 
     public boolean vincularMeta(Meta meta, GrupoEventos grupoEventos) throws SQLException {

@@ -15,6 +15,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
+import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.GrupoEventos;
 import com.casaculturaqxd.sgec.models.Instituicao;
 import com.casaculturaqxd.sgec.models.Meta;
@@ -120,8 +121,13 @@ public class GrupoEventosDAOTest {
     }
 
     @Test
-    void testVincularEvento() {
+    void testVincularEvento() throws SQLException {
+        GrupoEventosDAO grupoEventosDAO = new GrupoEventosDAO(db.getConnection());
+        GrupoEventos grupoEventos = new GrupoEventos(idValidGrupoEventos);
+        Evento evento = new Evento();
+        evento.setIdEvento(idValidEvento);
 
+        assertTrue(grupoEventosDAO.vincularEvento(grupoEventos, evento));
     }
 
     @Test
@@ -131,11 +137,6 @@ public class GrupoEventosDAOTest {
 
     @Test
     void testDesvincularEvento() {
-
-    }
-
-    @Test
-    void testDesvincularOrganizador() {
 
     }
 
@@ -182,6 +183,16 @@ public class GrupoEventosDAOTest {
         Instituicao organizador = new Instituicao(idValidInstituicao);
 
         assertTrue(grupoEventosDAO.vincularOrganizador(grupoEventos, organizador));
+    }
+
+    @Test
+    void testDesvincularValidGrupoEventosValidOrganizador() throws SQLException {
+        GrupoEventosDAO grupoEventosDAO = new GrupoEventosDAO(db.getConnection());
+        GrupoEventos grupoEventos = new GrupoEventos(idValidGrupoEventos);
+        Instituicao organizador = new Instituicao(idValidInstituicao);
+        grupoEventosDAO.vincularOrganizador(grupoEventos, organizador);
+
+        assertTrue(grupoEventosDAO.desvincularOrganizador(grupoEventos, organizador));
     }
 
     @Test
