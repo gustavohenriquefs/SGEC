@@ -51,12 +51,29 @@ public class FieldLocalizacaoController {
       FXMLLoader loaderSuperScene = new FXMLLoader(App.class.getResource("view/cadastrarEvento.fxml"));
     }
 
+    public void destacarCamposNaoPreenchidos(){
+        if (cidade.getText() == null){
+            cidade.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
+        } else {
+            cidade.setStyle(null);
+        } if (estado.getText() == null){
+            estado.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
+        } else {
+            estado.setStyle(null);
+        } if (pais.getText() == null){
+            pais.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
+        } else {
+            pais.setStyle(null);
+        }
+    }
+
     public Localizacao getLocalizacao(){
         Localizacao novoLocal = new Localizacao();
         if(rua.getText() == null
             ||cidade.getText() == null
             || estado.getText() == null
             || pais.getText() == null){
+                destacarCamposNaoPreenchidos();
                 campoFaltando.show();
             }
             else{
