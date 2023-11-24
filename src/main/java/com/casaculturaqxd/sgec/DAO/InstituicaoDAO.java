@@ -11,6 +11,7 @@ import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.Instituicao;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 
@@ -90,6 +91,25 @@ public class InstituicaoDAO {
     }
 
     return Optional.of(product);
+  }
+
+  public ArrayList<String> listarInstituicoess() {
+    String sql = "select nome_instituicao from instituicao";
+    ArrayList<String> nomeStrings = new ArrayList<>();
+    nomeStrings.add("");
+    try {
+      PreparedStatement statement = conn.prepareStatement(sql);
+      ResultSet resultSet = statement.executeQuery();
+
+      while (resultSet.next()) {
+        nomeStrings.add(resultSet.getString("nome_instituicao"));
+      }
+      statement.close();
+    } catch (SQLException e) {
+      return null;
+    }
+
+    return nomeStrings;
   }
 
   public boolean inserirInstituicao(Instituicao instituicao) throws SQLException {
