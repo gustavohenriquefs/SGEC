@@ -44,7 +44,7 @@ public class InstituicaoDAO {
         ServiceFile imagemCapa = new ServiceFile(resultado.getInt("id_service_file"));
         if (imagemCapa.getServiceFileId() > 0) {
           // setar a capa somente se o arquivo existir
-          instituicao.setImagemCapa(serviceFileDAO.getArquivo(imagemCapa));
+          instituicao.setImagemCapa(serviceFileDAO.getArquivo(imagemCapa).get());
         }
         instituicao.setIdInstituicao(resultado.getInt("id_instituicao"));
         instituicao.setNome(resultado.getString("nome_instituicao"));
@@ -75,7 +75,7 @@ public class InstituicaoDAO {
         ServiceFile imagemCapa = new ServiceFile(resultado.getInt("id_service_file"));
         if (imagemCapa.getServiceFileId() > 0) {
           // setar a capa somente se o arquivo existir
-          product.setImagemCapa(serviceFileDAO.getArquivo(imagemCapa));
+          product.setImagemCapa(serviceFileDAO.getArquivo(imagemCapa).get());
         }
 
         product.setIdInstituicao(resultado.getInt("id_instituicao"));
@@ -178,7 +178,7 @@ public class InstituicaoDAO {
         ServiceFile imagemCapa = new ServiceFile(resultSet.getInt("id_service_file"));
         if (imagemCapa.getServiceFileId() > 0) {
           // setar a capa somente se o arquivo existir
-          organizador.setImagemCapa(serviceFileDAO.getArquivo(imagemCapa));
+          organizador.setImagemCapa(serviceFileDAO.getArquivo(imagemCapa).get());
         }
         organizador.setIdInstituicao(resultSet.getInt("id_instituicao"));
         organizador.setNome(resultSet.getString("nome_instituicao"));
@@ -211,7 +211,7 @@ public class InstituicaoDAO {
         ServiceFile imagemCapa = new ServiceFile(resultSet.getInt("id_service_file"));
         if (imagemCapa.getServiceFileId() > 0) {
           // setar a capa somente se o arquivo existir
-          colaborador.setImagemCapa(serviceFileDAO.getArquivo(imagemCapa));
+          colaborador.setImagemCapa(serviceFileDAO.getArquivo(imagemCapa).get());
         }
 
         colaborador.setIdInstituicao(resultSet.getInt("id_instituicao"));

@@ -32,6 +32,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.TreeSet;
 import java.util.function.Consumer;
 
@@ -115,7 +116,7 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
         root.getChildren().add(0, carregarMenu.load());
     }
 
-    public void criarNovoEvento() throws IOException, ParseException {
+    public void criarNovoEvento() throws IOException, ParseException, SQLException {
         if (emptyLocalizacoes()) {
             Alert erroLocalizacao = new Alert(AlertType.ERROR,
                     "Um evento deve possuir pelo menos uma localização associada");
@@ -169,13 +170,13 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
         if (eventoDAO.inserirEvento(novoEvento)) {
             // procura pelo arquivo no banco, se nao estiver realiza a insercao
             for (ServiceFile arquivo : novoEvento.getListaArquivos()) {
-                ServiceFile arquivoExistente = serviceFileDAO.getArquivo(arquivo.getFileKey());
-                if (arquivoExistente == null) {
+                Optional<ServiceFile> arquivoExistente = serviceFileDAO.getArquivo(arquivo.getFileKey());
+                if (arquivoExistente.isEmpty()) {
                     serviceFileDAO.inserirArquivo(arquivo);
                 } else {
                     int idxArquivo = novoEvento.getListaArquivos().indexOf(arquivo);
 
-                    novoEvento.getListaArquivos().set(idxArquivo, arquivoExistente);
+                    novoEvento.getListaArquivos().set(idxArquivo, arquivoExistente.get());
                 }
             }
             eventoDAO.vincularArquivos(novoEvento);
@@ -325,6 +326,9 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
                         secaoParticipantes.getChildren().add(previewParticipante);
                     } catch (IOException e) {
                         e.printStackTrace();
+                    } catch (SQLException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
                     }
                 }
                 if (change.wasRemoved()) {
@@ -367,6 +371,9 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
 
                         secaoArquivos.getChildren().add(previewParticipante);
                     } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (SQLException e) {
+                        // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
                 }

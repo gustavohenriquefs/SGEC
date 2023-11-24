@@ -48,7 +48,7 @@ public class ParticipanteDAO {
         participante.setNome(resultado.getString("nome_participante"));
         participante.setBio(resultado.getString("bio"));
         participante.setLinkMapaDaCultura(resultado.getString("link_perfil"));
-        participante.setImagemCapa(serviceFileDAO.getArquivo(resultFile));
+        participante.setImagemCapa(serviceFileDAO.getArquivo(resultFile).get());
       } else {
         return Optional.empty();
       }
