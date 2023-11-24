@@ -52,6 +52,20 @@ public class UserDAO {
     }
   }
 
+  public boolean usuarioExists(String email) throws SQLException {
+    String sql = "SELECT email FROM usuario WHERE email = ?";
+    PreparedStatement preparedStatement = connection.prepareStatement(sql);
+    try {
+      preparedStatement.setString(1, email);
+      ResultSet resultSet = preparedStatement.executeQuery();
+      return resultSet.next();
+    } catch (Exception e) {
+      throw new SQLException("falha buscando nome de usuario", e);
+    } finally {
+      preparedStatement.close();
+    }
+  }
+
   public User getUsuario(User obj) {
     String sql = "SELECT * FROM usuario WHERE id_usuario=?";
     try {
