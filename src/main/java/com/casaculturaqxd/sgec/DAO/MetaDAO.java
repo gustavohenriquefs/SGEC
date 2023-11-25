@@ -7,72 +7,80 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import com.casaculturaqxd.sgec.models.Meta;
 
-public class MetaDAO {
+public class MetaDAO extends DAO {
     private Connection connection;
 
     public MetaDAO(Connection connection) {
         this.connection = connection;
     }
 
-    public Connection getConn() {
+    public Connection getConnection() {
         return connection;
     }
 
-    public void setConnection(Connection conn) {
-        this.connection = conn;
+    public void setConnection(Connection connection) {
+        this.connection = connection;
     }
 
-    public Optional<Meta> getMeta(Meta meta) {
-        String queryGet = "SELECT * FROM meta WHERE id_meta=?";
+    public Optional<Meta> getMeta(Meta meta) throws SQLException {
+        String queryGet = "SELECT nome_meta FROM meta WHERE id_meta=?";
+        PreparedStatement statement = connection.prepareStatement(queryGet);
         try {
-            PreparedStatement statement = connection.prepareStatement(queryGet);
             statement.setInt(1, meta.getIdMeta());
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
                 meta.setNomeMeta(resultSet.getString("nome_meta"));
+                return Optional.of(meta);
             } else {
                 return Optional.empty();
             }
-        } catch (SQLException e) {
-            Logger erro = Logger.getLogger("erroSQL");
-            erro.log(Level.SEVERE, "excecao levantada:", e);
-
-            return Optional.empty();
+        } catch (Exception e) {
+            String nomeMetaCausa = "";
+            if (meta.getNomeMeta() != null) {
+                nomeMetaCausa = meta.getNomeMeta();
+            }
+            logException(e);
+            throw new SQLException("falha buscando meta " + nomeMetaCausa, e);
+        } finally {
+            statement.close();
         }
-        return Optional.of(meta);
     }
 
-    public Optional<Meta> getMetaPorNome(String nomeMeta) {
-        String queryGet = "SELECT * FROM meta WHERE nome_meta like ?";
+    public Optional<Meta> getMeta(String nomeMeta) throws SQLException {
+        String queryGet = "SELECT id_meta,nome_meta FROM meta WHERE nome_meta ILIKE ?";
         Meta meta = new Meta(nomeMeta);
+        PreparedStatement statement = connection.prepareStatement(queryGet);
         try {
-            PreparedStatement statement = connection.prepareStatement(queryGet);
             statement.setString(1, nomeMeta);
             ResultSet resultSet = statement.executeQuery();
 
             if (resultSet.next()) {
                 meta.setIdMeta(resultSet.getInt("id_meta"));
+                return Optional.of(meta);
             } else {
                 return Optional.empty();
             }
-        } catch (SQLException e) {
-            Logger erro = Logger.getLogger("erroSQL");
-            erro.log(Level.SEVERE, "excecao levantada:", e);
-
-            return Optional.empty();
+        } catch (Exception e) {
+            String nomeMetaCausa = "";
+            if (meta.getNomeMeta() != null) {
+                nomeMetaCausa = meta.getNomeMeta();
+            }
+            logException(e);
+            throw new SQLException("falha buscando meta " + nomeMetaCausa, e);
+        } finally {
+            statement.close();
         }
-        return Optional.of(meta);
     }
 
-    public boolean inserirMeta(Meta meta) {
+    public boolean inserirMeta(Meta meta) throws SQLException {
         String insertQuery = "INSERT INTO meta(nome_meta) VALUES(?)";
+        PreparedStatement statement = connection.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS);
+
         try {
-            PreparedStatement statement = connection.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, meta.getNomeMeta());
             statement.execute();
 
@@ -80,104 +88,111 @@ public class MetaDAO {
             if (resultSet.next()) {
                 meta.setIdMeta(resultSet.getInt("id_meta"));
             }
-            statement.close();
             return true;
-        } catch (SQLException e) {
-            Logger erro = Logger.getLogger("erroSQL");
-            erro.log(Level.SEVERE, "excecao levantada:", e);
-
-            return false;
+        } catch (Exception e) {
+            String nomeMetaCausa = "";
+            if (meta.getNomeMeta() != null) {
+                nomeMetaCausa = meta.getNomeMeta();
+            }
+            logException(e);
+            throw new SQLException("falha inserindo meta " + nomeMetaCausa, e);
+        } finally {
+            statement.close();
         }
-
     }
 
-    public boolean updateMeta(Meta meta) {
+    public boolean updateMeta(Meta meta) throws SQLException {
         String updateQuery = "UPDATE meta SET nome_meta=? WHERE id_meta=?";
+        PreparedStatement statement = connection.prepareStatement(updateQuery);
+
         try {
-            PreparedStatement statement = connection.prepareStatement(updateQuery);
             statement.setString(1, meta.getNomeMeta());
             statement.setInt(2, meta.getIdMeta());
 
             int numAtualizacoes = statement.executeUpdate();
-            statement.close();
             return numAtualizacoes > 0;
-        } catch (SQLException e) {
-            Logger erro = Logger.getLogger("erroSQL");
-            erro.log(Level.SEVERE, "excecao levantada:", e);
-
-            return false;
+        } catch (Exception e) {
+            String nomeMetaCausa = "";
+            if (meta.getNomeMeta() != null) {
+                nomeMetaCausa = meta.getNomeMeta();
+            }
+            logException(e);
+            throw new SQLException("falha atualizando meta " + nomeMetaCausa, e);
+        } finally {
+            statement.close();
         }
 
     }
 
-    public boolean deleteMeta(Meta meta) {
+    public boolean deleteMeta(Meta meta) throws SQLException {
         String deleteQuery = "DELETE FROM meta WHERE id_meta=?";
+        PreparedStatement statement = connection.prepareStatement(deleteQuery);
         try {
-            PreparedStatement statement = connection.prepareStatement(deleteQuery);
             statement.setInt(1, meta.getIdMeta());
 
             int numRemocoes = statement.executeUpdate();
-            statement.close();
             return numRemocoes > 0;
-        } catch (SQLException e) {
-            Logger erro = Logger.getLogger("erroSQL");
-            erro.log(Level.SEVERE, "excecao levantada:", e);
-
-            return false;
+        } catch (Exception e) {
+            String nomeMetaCausa = "";
+            if (meta.getNomeMeta() != null) {
+                nomeMetaCausa = meta.getNomeMeta();
+            }
+            logException(e);
+            throw new SQLException("falha deletando meta " + nomeMetaCausa, e);
+        } finally {
+            statement.close();
         }
 
     }
 
-    public ArrayList<Meta> listarMetas() {
+    public ArrayList<Meta> listarMetas() throws SQLException {
         return this.listarMetas(null);
     }
 
-    public ArrayList<Meta> listarMetas(String campoUsadoOrdenar) {
-        String queryListarMetas = "SELECT * FROM meta ORDER BY ";
-        queryListarMetas += campoUsadoOrdenar;
+    public ArrayList<Meta> listarMetas(String campoUsadoOrdenar) throws SQLException {
+        String queryListarMetas = "SELECT id_meta,nome_meta FROM meta ";
+        queryListarMetas += campoUsadoOrdenar != null ? "ORDER BY " + campoUsadoOrdenar : "";
+        PreparedStatement statement = connection.prepareStatement(queryListarMetas);
 
         ArrayList<Meta> listaMetas = new ArrayList<>();
         try {
-            PreparedStatement statement = connection.prepareStatement(queryListarMetas);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Meta meta = new Meta(resultSet.getInt("id_meta"), resultSet.getString("nome_meta"));
                 listaMetas.add(meta);
             }
+        } catch (Exception e) {
+            logException(e);
+            throw new SQLException("falha listando metas ordenadas por " + campoUsadoOrdenar, e);
+        } finally {
             statement.close();
-        } catch (SQLException e) {
-            Logger erro = Logger.getLogger("erroSQL");
-            erro.log(Level.SEVERE, "excecao levantada:", e);
-
-            return null;
         }
         return listaMetas;
     }
 
-    public ArrayList<Meta> listarMetasEvento(Integer idEvento) {
-        String queryListarMetas = "SELECT * FROM meta_evento INNER JOIN meta USING(id_meta) WHERE id_evento=?";
+    public ArrayList<Meta> listarMetasEvento(Integer idEvento) throws SQLException {
+        String queryListarMetas = "SELECT id_meta,nome_meta FROM meta_evento INNER JOIN meta USING(id_meta) WHERE id_evento=?";
+        PreparedStatement statement = connection.prepareStatement(queryListarMetas);
 
         ArrayList<Meta> listaMetas = new ArrayList<>();
         try {
-            PreparedStatement statement = connection.prepareStatement(queryListarMetas);
             statement.setInt(1, idEvento);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 Meta meta = new Meta(resultSet.getInt("id_meta"), resultSet.getString("nome_meta"));
                 listaMetas.add(meta);
             }
+        } catch (Exception e) {
+            logException(e);
+            throw new SQLException("erro listando metas de um evento" + idEvento, e);
+        } finally {
             statement.close();
-        } catch (SQLException e) {
-            Logger erro = Logger.getLogger("erroSQL");
-            erro.log(Level.SEVERE, "excecao levantada:", e);
-
-            return null;
         }
         return listaMetas;
     }
 
     public ArrayList<Meta> listarMetasGrupoEventos(Integer idGrupoEventos) throws SQLException {
-        String queryListarMetas = "SELECT * FROM meta_grupo_eventos INNER JOIN meta USING(id_meta) WHERE id_grupo_eventos=?";
+        String queryListarMetas = "SELECT id_meta,nome_meta FROM meta_grupo_eventos INNER JOIN meta USING(id_meta) WHERE id_grupo_eventos=?";
         PreparedStatement statement = connection.prepareStatement(queryListarMetas);
 
         ArrayList<Meta> listaMetas = new ArrayList<>();
@@ -188,7 +203,6 @@ public class MetaDAO {
                 Meta meta = new Meta(resultSet.getInt("id_meta"), resultSet.getString("nome_meta"));
                 listaMetas.add(meta);
             }
-            statement.close();
         } catch (Exception e) {
             throw new SQLException("falha listando metas do grupo de eventos", e);
         } finally {
@@ -197,10 +211,10 @@ public class MetaDAO {
         return listaMetas;
     }
 
-    public boolean vincularEvento(Integer idMeta, Integer idEvento) {
+    public boolean vincularEvento(Integer idMeta, Integer idEvento) throws SQLException {
         String queryVincularGrupo = "INSERT INTO meta_evento (id_meta,id_evento) VALUES(?,?)";
+        PreparedStatement statement = connection.prepareStatement(queryVincularGrupo);
         try {
-            PreparedStatement statement = connection.prepareStatement(queryVincularGrupo);
             statement.setInt(1, idMeta);
             statement.setInt(2, idEvento);
             int numRemocoes = statement.executeUpdate();
@@ -208,16 +222,16 @@ public class MetaDAO {
 
             return numRemocoes > 0;
 
-        } catch (SQLException e) {
-            Logger erro = Logger.getLogger("erroSQL");
-            erro.log(Level.SEVERE, "excecao levantada:", e);
-
-            return false;
+        } catch (Exception e) {
+            logException(e);
+            throw new SQLException("falha vinculando meta a evento", e);
+        } finally {
+            statement.close();
         }
     }
 
     public boolean vincularGrupoEventos(Integer idMeta, Integer idGrupoEventos) throws SQLException {
-        String queryVincularGrupo = "INSERT INTO meta_grupo_eventos VALUES(?,?)";
+        String queryVincularGrupo = "INSERT INTO meta_grupo_eventos(id_meta,id_grupo_eventos) VALUES(?,?)";
         PreparedStatement statement = connection.prepareStatement(queryVincularGrupo);
 
         try {
@@ -233,24 +247,21 @@ public class MetaDAO {
         }
     }
 
-    public boolean desvincularEvento(Integer idMeta, Integer idEvento) {
-        String queryVincularGrupo = "DELETE FROM meta_evento WHERE id_meta=? AND id_evento=?";
+    public boolean desvincularEvento(Integer idMeta, Integer idEvento) throws SQLException {
+        String queryDesvincularEventoMeta = "DELETE FROM meta_evento WHERE id_meta=? AND id_evento=?";
+        PreparedStatement statement = connection.prepareStatement(queryDesvincularEventoMeta);
         try {
-            PreparedStatement statement = connection.prepareStatement(queryVincularGrupo);
             statement.setInt(1, idMeta);
             statement.setInt(2, idEvento);
             int numRemocoes = statement.executeUpdate();
-            statement.close();
 
             return numRemocoes > 0;
-
-        } catch (SQLException e) {
-            Logger erro = Logger.getLogger("erroSQL");
-            erro.log(Level.SEVERE, "excecao levantada:", e);
-
-            return false;
+        } catch (Exception e) {
+            logException(e);
+            throw new SQLException("falha desvinculando meta do evento", e);
+        } finally {
+            statement.close();
         }
-
     }
 
     public boolean desvincularGrupoEventos(Integer idMeta, Integer idGrupoEventos) throws SQLException {
