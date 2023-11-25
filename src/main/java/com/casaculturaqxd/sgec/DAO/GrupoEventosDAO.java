@@ -93,7 +93,7 @@ public class GrupoEventosDAO {
                 GrupoEventosBuilder grupoEventosBuilder = new GrupoEventosBuilder();
                 grupoEventosBuilder.setIdGrupoEventos(resultSet.getInt("id_grupo_eventos"))
                         .setNome(resultSet.getString("nome_grupo_eventos"))
-                        .setImagemCapa(serviceFileDAO.getArquivo(resultFile))
+                        .setImagemCapa(serviceFileDAO.getArquivo(resultFile).get())
                         .setDescricao(resultSet.getString("descricao"))
                         .setClassificacaoEtaria(resultSet.getString("classificacao_etaria"))
                         .setDataInicial(resultSet.getDate("data_inicial")).setDataFinal(resultSet.getDate("data_final"))
@@ -135,7 +135,7 @@ public class GrupoEventosDAO {
                 GrupoEventosBuilder grupoEventosBuilder = new GrupoEventosBuilder();
                 grupoEventosBuilder.setIdGrupoEventos(resultSet.getInt("id_grupo_eventos"))
                         .setNome(resultSet.getString("nome_grupo_eventos"))
-                        .setImagemCapa(serviceFileDAO.getArquivo(resultFile))
+                        .setImagemCapa(serviceFileDAO.getArquivo(resultFile).get())
                         .setDataInicial(resultSet.getDate("data_inicial"))
                         .setDataFinal(resultSet.getDate("data_final"));
 

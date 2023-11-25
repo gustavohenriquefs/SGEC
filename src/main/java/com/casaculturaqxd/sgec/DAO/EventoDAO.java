@@ -102,14 +102,19 @@ public class EventoDAO {
     return true;
   }
 
-  public boolean vincularMetas(List<Meta> metas, Integer idEvento) {
+  public boolean vincularMetas(List<Meta> metas, Integer idEvento) throws SQLException {
     MetaDAO metaDAO = new MetaDAO(connection);
-    for (Meta meta : metas) {
-      boolean temp = metaDAO.vincularEvento(meta.getIdMeta(), idEvento);
-      if (temp == false) {
-        return false;
+    try {
+      for (Meta meta : metas) {
+        boolean temp = metaDAO.vincularEvento(meta.getIdMeta(), idEvento);
+        if (temp == false) {
+          return false;
+        }
       }
+    } catch (Exception e) {
+      throw new SQLException("falha vinculando conjunto de metas", e);
     }
+
     return true;
   }
 
@@ -593,7 +598,7 @@ public class EventoDAO {
     return participantes;
   }
 
-  public ArrayList<Meta> listarMetasEvento(Evento evento) {
+  public ArrayList<Meta> listarMetasEvento(Evento evento) throws SQLException {
     MetaDAO metaDAO = new MetaDAO(connection);
     return metaDAO.listarMetasEvento(evento.getIdEvento());
   }
@@ -646,7 +651,7 @@ public class EventoDAO {
     return true;
   }
 
-  private boolean desvincularMeta(Integer meta, Integer idEvento) {
+  private boolean desvincularMeta(Integer meta, Integer idEvento) throws SQLException {
     MetaDAO metaDAO = new MetaDAO(connection);
     return metaDAO.desvincularEvento(meta, idEvento);
   }

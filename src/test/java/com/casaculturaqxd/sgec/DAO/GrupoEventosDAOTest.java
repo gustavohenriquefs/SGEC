@@ -187,7 +187,7 @@ public class GrupoEventosDAOTest {
         grupoEventos.setNumParticipantesEsperado(updateInt);
         grupoEventos.setDataInicial(updateDate);
         grupoEventos.setDataFinal(updateDate);
-        grupoEventos.setImagemCapa(serviceFileDAO.getArquivo(updateServiceFile));
+        grupoEventos.setImagemCapa(serviceFileDAO.getArquivo(updateServiceFile).get());
 
         boolean result = grupoEventosDAO.updateGrupoEventos(grupoEventos);
         GrupoEventos updatedGrupoEventos = grupoEventosDAO.getGrupoEventos(grupoEventos).get();
