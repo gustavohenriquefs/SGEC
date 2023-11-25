@@ -42,10 +42,9 @@ public class FieldLocalizacaoController {
 
     public void initialize() {
         
-        this.completeLocalizacaoOnEnterLocalizacaoFd();
         
         pais.setText("Brasil");
-
+        
         cep.setTextFormatter(new TextFormatter<>(change -> {
             if(change.getText().matches("\\d+") && change.getRangeEnd() < 9){
                 if(change.getRangeEnd() == 5){
@@ -57,9 +56,10 @@ public class FieldLocalizacaoController {
                 return change;
             }
         }));
-
+        
         
         this.initAutoComplete();
+        this.completeLocalizacaoOnEnterLocalizacaoFd();
     }
 
     private void completeLocalizacaoOnEnterLocalizacaoFd() {
@@ -90,8 +90,6 @@ public class FieldLocalizacaoController {
 
         String[] nomesLocalizacoes = {"teste", "teste2"};//localizacaoDAO.getNomesLocalizacoes()
         TextFields.bindAutoCompletion(fdNomeLocal,  nomesLocalizacoes);
-        // SEMPRE OCORRE UM ERRO AO TENTAR FAZER bindAutoCompletion: class org.controlsfx.control.textfield.AutoCompletionBinding (in unnamed module @0x450d09e8) cannot access class com.sun.javafx.event.EventHandlerManager (in module javafx.base) because module javafx.base does not export com.sun.javafx.event to unnamed module @0x450d09e8
-        // Como resolver? 
     }
 
     public void remover() throws IOException{
