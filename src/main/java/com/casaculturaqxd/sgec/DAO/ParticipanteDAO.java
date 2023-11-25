@@ -13,12 +13,17 @@ import java.util.logging.Logger;
 import com.casaculturaqxd.sgec.models.Participante;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 
-public class ParticipanteDAO {
+public class ParticipanteDAO extends DAO {
   private Connection conn;
   private ServiceFileDAO serviceFileDAO;
 
   public ParticipanteDAO() {
     serviceFileDAO = new ServiceFileDAO(null);
+  }
+
+  public ParticipanteDAO(Connection connection) {
+    this.conn = connection;
+    serviceFileDAO = new ServiceFileDAO(connection);
   }
 
   public Connection getConn() {
@@ -31,7 +36,7 @@ public class ParticipanteDAO {
   }
 
   public Optional<Participante> getParticipante(Participante participante) throws SQLException {
-    String getParticipanteQuery = "SELECT * FROM participante WHERE id_participante=?";
+    String getParticipanteQuery = "SELECT id_participante,nome_participante,area_atuacao,bio,link_perfil,id_service_file FROM participante WHERE id_participante=?";
 
     try {
       PreparedStatement statement = conn.prepareStatement(getParticipanteQuery);
@@ -41,14 +46,16 @@ public class ParticipanteDAO {
       ResultSet resultado = statement.executeQuery();
 
       if (resultado.next()) {
-        ServiceFile resultFile = new ServiceFile(resultado.getInt("id_service_file"), "sgecteste");
+        ServiceFile resultFile = new ServiceFile(resultado.getInt("id_service_file"));
 
         participante.setIdParticipante(resultado.getInt("id_participante"));
         participante.setAreaDeAtuacao(resultado.getString("area_atuacao"));
         participante.setNome(resultado.getString("nome_participante"));
         participante.setBio(resultado.getString("bio"));
         participante.setLinkMapaDaCultura(resultado.getString("link_perfil"));
-        participante.setImagemCapa(serviceFileDAO.getArquivo(resultFile).get());
+        if (serviceFileDAO.getArquivo(resultFile).isPresent()) {
+          participante.setImagemCapa(serviceFileDAO.getArquivo(resultFile).get());
+        }
       } else {
         return Optional.empty();
       }
