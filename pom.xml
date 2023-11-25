@@ -125,6 +125,7 @@
                         <id>debug</id>
                         <configuration>
                             <options>
+                                <option>--add-exports=javafx.base/com.sun.javafx.event=ALL-UNNAMED</option>
                                 <option>-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=localhost:8000</option>
                             </options>
                         </configuration>
