@@ -2,6 +2,7 @@ package com.casaculturaqxd.sgec.controller;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.sql.SQLException;
 
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.UserDAO;
@@ -44,16 +45,23 @@ public class LoginController {
      * 
      * @throws IOException
      * @throws NoSuchAlgorithmException
+     * @throws SQLException
      */
-    public void authUsuario() throws IOException, NoSuchAlgorithmException {
+    public void authUsuario() throws IOException, NoSuchAlgorithmException, SQLException {
         usuario = new User(email.getText(), senha.getText());
-        if (userDAO.validar(usuario)) {
-            App.setUsuario(usuario);
-            App.setRoot("view/home");
-        } else {
+        if(!userDAO.usuarioExists(usuario.getEmail())){
             mensagemErro.setAlertType(AlertType.ERROR);
-            mensagemErro.setContentText("Usuário ou senha inválidos");
+            mensagemErro.setContentText("Usuário não existe");
             mensagemErro.show();
+        } else {
+            if (userDAO.validar(usuario)) {
+                App.setUsuario(usuario);
+                App.setRoot("view/home");
+            } else {
+                mensagemErro.setAlertType(AlertType.ERROR);
+                mensagemErro.setContentText("Usuário ou senha inválidos");
+                mensagemErro.show();
+            }
         }
     }
 

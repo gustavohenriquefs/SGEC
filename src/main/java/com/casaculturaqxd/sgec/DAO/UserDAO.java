@@ -78,11 +78,25 @@ public class UserDAO {
 
   private String encriptar(String senha) throws NoSuchAlgorithmException {
     MessageDigest digest = MessageDigest.getInstance("SHA-256");
-    byte[] asHex = digest.digest("a".getBytes(StandardCharsets.UTF_8));
+    byte[] asHex = digest.digest(senha.getBytes(StandardCharsets.UTF_8));
     BigInteger number = new BigInteger(1, asHex);
     StringBuilder hexBuilder = new StringBuilder(number.toString(16));
     System.out.println(hexBuilder.toString());
     return hexBuilder.toString();
+  }
+
+  public boolean usuarioExists(String email) throws SQLException {
+    String sql = "SELECT email FROM usuario WHERE email = ?";
+    PreparedStatement preparedStatement = connection.prepareStatement(sql);
+    try {
+      preparedStatement.setString(1, email);
+      ResultSet resultSet = preparedStatement.executeQuery();
+      return resultSet.next();
+    } catch (Exception e) {
+      throw new SQLException("falha buscando nome de usuario", e);
+    } finally {
+      preparedStatement.close();
+    }
   }
 
   public boolean validar(User obj) throws NoSuchAlgorithmException {
