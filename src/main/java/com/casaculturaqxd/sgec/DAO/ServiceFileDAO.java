@@ -70,8 +70,10 @@ public class ServiceFileDAO extends DAO {
 
         setService(arquivo.getService());
         arquivoRetorno.copyMetadata(service.getMetadata(arquivo.getBucket(), arquivo.getFileKey()));
+        return Optional.of(arquivo);
+      } else {
+        return Optional.empty();
       }
-      return Optional.of(arquivo);
     } catch (Exception e) {
       logException(e);
       throw new SQLException("erro buscando arquivo: " + arquivo.getFileKey(), e);
