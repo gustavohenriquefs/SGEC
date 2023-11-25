@@ -15,6 +15,7 @@ import java.util.TreeSet;
 import javax.swing.JOptionPane;
 
 import com.casaculturaqxd.sgec.models.Evento;
+import com.casaculturaqxd.sgec.models.GrupoEventos;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 import com.casaculturaqxd.sgec.models.Instituicao;
 import com.casaculturaqxd.sgec.models.Meta;
@@ -709,5 +710,64 @@ public class EventoDAO {
     }
 
     return eventos;
+  }
+
+  public List<Evento> listarEventosGrupoEventos(GrupoEventos grupoEventos) throws SQLException {
+    String sql = "SELECT id_evento,nome_evento,data_inicial,horario,id_service_file FROM evento WHERE id_grupo_eventos = ?";
+    PreparedStatement preparedStatement = connection.prepareStatement(sql);
+    List<Evento> listaEventos = new ArrayList<>();
+    try {
+      preparedStatement.setInt(1, grupoEventos.getIdGrupoEventos());
+      ResultSet resultSet = preparedStatement.executeQuery();
+      while (resultSet.next()) {
+        // TODO: substituir por Builder apos atualizacao
+        Evento evento = new Evento();
+        evento.setIdEvento(resultSet.getInt("id_evento"));
+        evento.setNome(resultSet.getString("nome_evento"));
+        evento.setDataInicial(resultSet.getDate("data_inicial"));
+        evento.setHorario(resultSet.getTime("horario"));
+        // TODO: setar imagem de capa apos atualizacao
+        listaEventos.add(evento);
+      }
+      return listaEventos;
+    } catch (Exception e) {
+      throw new SQLException("falha listando eventos do grupo de eventos", e);
+    } finally {
+      preparedStatement.close();
+    }
+  }
+
+  public boolean vincularGrupoEventos(int idGrupoEventos, int idEvento) throws SQLException {
+    String sql = "UPDATE evento SET id_grupo_eventos = ? WHERE id_evento = ?";
+    PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+    try {
+      preparedStatement.setInt(1, idGrupoEventos);
+
+      preparedStatement.setInt(2, idEvento);
+      int numAlteracoes = preparedStatement.executeUpdate();
+      return numAlteracoes == 1;
+    } catch (Exception e) {
+      throw new SQLException("falha adicionando grupo de eventos ao evento", e);
+    } finally {
+      preparedStatement.close();
+    }
+  }
+
+  public boolean desvincularGrupoEventos(int idGrupoEventos, int idEvento) throws SQLException {
+    String sql = "UPDATE evento SET id_grupo_eventos = NULL WHERE idGrupoEventos = ? AND id_evento = ? ";
+    PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+    try {
+      preparedStatement.setInt(1, idGrupoEventos);
+      preparedStatement.setInt(2, idEvento);
+
+      int numAlteracoes = preparedStatement.executeUpdate();
+      return numAlteracoes == 1;
+    } catch (Exception e) {
+      throw new SQLException("falha removendo grupo de eventos ao evento", e);
+    } finally {
+      preparedStatement.close();
+    }
   }
 }

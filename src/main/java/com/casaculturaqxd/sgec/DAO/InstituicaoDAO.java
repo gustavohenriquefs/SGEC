@@ -416,4 +416,68 @@ public class InstituicaoDAO {
       return false;
     }
   }
+
+  public boolean vincularOrganizadorGrupoEventos(int idGrupoEventos, int idInstituicao) throws SQLException {
+    String sql = "INSERT INTO organizador_grupo_eventos(id_grupo_eventos,id_instituicao) VALUES(?,?)";
+    PreparedStatement preparedStatement = conn.prepareStatement(sql);
+    try {
+      preparedStatement.setInt(1, idGrupoEventos);
+      preparedStatement.setInt(2, idInstituicao);
+
+      preparedStatement.execute();
+      return true;
+    } catch (Exception e) {
+      throw new SQLException("falha vinculando organizador a grupo de eventos", e);
+    } finally {
+      preparedStatement.close();
+    }
+  }
+
+  public boolean vincularColaboradorGrupoEventos(int idGrupoEventos, int idInstituicao) throws SQLException {
+    String sql = "INSERT INTO colaborador_grupo_eventos(id_grupo_eventos,id_instituicao) VALUES(?,?)";
+    PreparedStatement preparedStatement = conn.prepareStatement(sql);
+    try {
+      preparedStatement.setInt(1, idGrupoEventos);
+      preparedStatement.setInt(2, idInstituicao);
+
+      preparedStatement.execute();
+      return true;
+    } catch (Exception e) {
+      throw new SQLException("falha vinculando colaborador a grupo de eventos", e);
+    } finally {
+      preparedStatement.close();
+    }
+  }
+
+  public boolean desvincularOrganizadorGrupoEventos(int idGrupoEventos, int idInstituicao) throws SQLException {
+    String sql = "DELETE FROM organizador_grupo_eventos WHERE id_grupo_eventos =? AND id_instituicao =?";
+    PreparedStatement preparedStatement = conn.prepareStatement(sql);
+    try {
+      preparedStatement.setInt(1, idGrupoEventos);
+      preparedStatement.setInt(2, idInstituicao);
+
+      int numRemocoes = preparedStatement.executeUpdate();
+      return numRemocoes > 0;
+    } catch (Exception e) {
+      throw new SQLException("falha vinculando organizador a grupo de eventos", e);
+    } finally {
+      preparedStatement.close();
+    }
+  }
+
+  public boolean desvincularColaboradorGrupoEventos(int idGrupoEventos, int idInstituicao) throws SQLException {
+    String sql = "DELETE FROM colaborador_grupo_eventos WHERE id_grupo_eventos = ? AND id_instituicao = ?";
+    PreparedStatement preparedStatement = conn.prepareStatement(sql);
+    try {
+      preparedStatement.setInt(1, idGrupoEventos);
+      preparedStatement.setInt(2, idInstituicao);
+
+      int numRemocoes = preparedStatement.executeUpdate();
+      return numRemocoes > 0;
+    } catch (Exception e) {
+      throw new SQLException("falha vinculando organizador a grupo de eventos", e);
+    } finally {
+      preparedStatement.close();
+    }
+  }
 }
