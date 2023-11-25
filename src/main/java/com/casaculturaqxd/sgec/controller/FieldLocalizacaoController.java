@@ -1,7 +1,5 @@
 package com.casaculturaqxd.sgec.controller;
 
-
-
 import java.io.IOException;
 
 import org.controlsfx.control.textfield.TextFields;
@@ -13,10 +11,10 @@ import com.casaculturaqxd.sgec.models.Localizacao;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
-import javafx.scene.control.Alert.AlertType;
 
 
 public class FieldLocalizacaoController {
@@ -43,8 +41,9 @@ public class FieldLocalizacaoController {
     }
 
     public void initialize() {
-        // initAutoComplete();
-
+        
+        this.completeLocalizacaoOnEnterLocalizacaoFd();
+        
         pais.setText("Brasil");
 
         cep.setTextFormatter(new TextFormatter<>(change -> {
@@ -58,6 +57,30 @@ public class FieldLocalizacaoController {
                 return change;
             }
         }));
+
+        
+        this.initAutoComplete();
+    }
+
+    private void completeLocalizacaoOnEnterLocalizacaoFd() {
+        fdNomeLocal.setOnKeyReleased(event -> {
+            if(event.getCode().toString().equals("ENTER")){
+                LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO();
+                localizacaoDAO.setConnection(db.getConnection());
+
+                Localizacao localizacao = localizacaoDAO.getLocalizacaoByNome(fdNomeLocal.getText().trim());
+
+                if(localizacao != null){
+                    rua.setText(localizacao.getRua());
+                    bairro.setText(localizacao.getBairro());
+                    numero.setText(String.valueOf(localizacao.getNumeroRua()));
+                    cep.setText(localizacao.getCep());
+                    cidade.setText(localizacao.getCidade());
+                    estado.setText(localizacao.getEstado());
+                    pais.setText(localizacao.getPais());
+                }
+            }
+        });
     }
 
     private void initAutoComplete() {
@@ -65,8 +88,10 @@ public class FieldLocalizacaoController {
 
         localizacaoDAO.setConnection(db.getConnection());
 
-
-        TextFields.bindAutoCompletion(fdNomeLocal, localizacaoDAO.getListaLocais());
+        String[] nomesLocalizacoes = {"teste", "teste2"};//localizacaoDAO.getNomesLocalizacoes()
+        TextFields.bindAutoCompletion(fdNomeLocal,  nomesLocalizacoes);
+        // SEMPRE OCORRE UM ERRO AO TENTAR FAZER bindAutoCompletion: class org.controlsfx.control.textfield.AutoCompletionBinding (in unnamed module @0x450d09e8) cannot access class com.sun.javafx.event.EventHandlerManager (in module javafx.base) because module javafx.base does not export com.sun.javafx.event to unnamed module @0x450d09e8
+        // Como resolver? 
     }
 
     public void remover() throws IOException{

@@ -25,6 +25,14 @@ public class GrupoEventos {
 
     private ServiceFile imagemCapa;
 
+    public GrupoEventos() {
+
+    }
+
+    public GrupoEventos(Integer idGrupoEventos) {
+        this.idGrupoEventos = idGrupoEventos;
+    }
+
     public Integer getIdGrupoEventos() {
         return idGrupoEventos;
     }

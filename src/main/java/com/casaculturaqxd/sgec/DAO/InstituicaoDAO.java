@@ -44,7 +44,7 @@ public class InstituicaoDAO {
         ServiceFile imagemCapa = new ServiceFile(resultado.getInt("id_service_file"));
         if (imagemCapa.getServiceFileId() > 0) {
           // setar a capa somente se o arquivo existir
-          instituicao.setImagemCapa(serviceFileDAO.getArquivo(imagemCapa));
+          instituicao.setImagemCapa(serviceFileDAO.getArquivo(imagemCapa).get());
         }
         instituicao.setIdInstituicao(resultado.getInt("id_instituicao"));
         instituicao.setNome(resultado.getString("nome_instituicao"));
@@ -75,7 +75,7 @@ public class InstituicaoDAO {
         ServiceFile imagemCapa = new ServiceFile(resultado.getInt("id_service_file"));
         if (imagemCapa.getServiceFileId() > 0) {
           // setar a capa somente se o arquivo existir
-          product.setImagemCapa(serviceFileDAO.getArquivo(imagemCapa));
+          product.setImagemCapa(serviceFileDAO.getArquivo(imagemCapa).get());
         }
 
         product.setIdInstituicao(resultado.getInt("id_instituicao"));
@@ -178,7 +178,7 @@ public class InstituicaoDAO {
         ServiceFile imagemCapa = new ServiceFile(resultSet.getInt("id_service_file"));
         if (imagemCapa.getServiceFileId() > 0) {
           // setar a capa somente se o arquivo existir
-          organizador.setImagemCapa(serviceFileDAO.getArquivo(imagemCapa));
+          organizador.setImagemCapa(serviceFileDAO.getArquivo(imagemCapa).get());
         }
         organizador.setIdInstituicao(resultSet.getInt("id_instituicao"));
         organizador.setNome(resultSet.getString("nome_instituicao"));
@@ -211,7 +211,7 @@ public class InstituicaoDAO {
         ServiceFile imagemCapa = new ServiceFile(resultSet.getInt("id_service_file"));
         if (imagemCapa.getServiceFileId() > 0) {
           // setar a capa somente se o arquivo existir
-          colaborador.setImagemCapa(serviceFileDAO.getArquivo(imagemCapa));
+          colaborador.setImagemCapa(serviceFileDAO.getArquivo(imagemCapa).get());
         }
 
         colaborador.setIdInstituicao(resultSet.getInt("id_instituicao"));
@@ -414,6 +414,70 @@ public class InstituicaoDAO {
       Logger erro = Logger.getLogger("ID faltando");
       erro.log(Level.SEVERE, "excecao levantada:", e);
       return false;
+    }
+  }
+
+  public boolean vincularOrganizadorGrupoEventos(int idGrupoEventos, int idInstituicao) throws SQLException {
+    String sql = "INSERT INTO organizador_grupo_eventos(id_grupo_eventos,id_instituicao) VALUES(?,?)";
+    PreparedStatement preparedStatement = conn.prepareStatement(sql);
+    try {
+      preparedStatement.setInt(1, idGrupoEventos);
+      preparedStatement.setInt(2, idInstituicao);
+
+      preparedStatement.execute();
+      return true;
+    } catch (Exception e) {
+      throw new SQLException("falha vinculando organizador a grupo de eventos", e);
+    } finally {
+      preparedStatement.close();
+    }
+  }
+
+  public boolean vincularColaboradorGrupoEventos(int idGrupoEventos, int idInstituicao) throws SQLException {
+    String sql = "INSERT INTO colaborador_grupo_eventos(id_grupo_eventos,id_instituicao) VALUES(?,?)";
+    PreparedStatement preparedStatement = conn.prepareStatement(sql);
+    try {
+      preparedStatement.setInt(1, idGrupoEventos);
+      preparedStatement.setInt(2, idInstituicao);
+
+      preparedStatement.execute();
+      return true;
+    } catch (Exception e) {
+      throw new SQLException("falha vinculando colaborador a grupo de eventos", e);
+    } finally {
+      preparedStatement.close();
+    }
+  }
+
+  public boolean desvincularOrganizadorGrupoEventos(int idGrupoEventos, int idInstituicao) throws SQLException {
+    String sql = "DELETE FROM organizador_grupo_eventos WHERE id_grupo_eventos =? AND id_instituicao =?";
+    PreparedStatement preparedStatement = conn.prepareStatement(sql);
+    try {
+      preparedStatement.setInt(1, idGrupoEventos);
+      preparedStatement.setInt(2, idInstituicao);
+
+      int numRemocoes = preparedStatement.executeUpdate();
+      return numRemocoes > 0;
+    } catch (Exception e) {
+      throw new SQLException("falha vinculando organizador a grupo de eventos", e);
+    } finally {
+      preparedStatement.close();
+    }
+  }
+
+  public boolean desvincularColaboradorGrupoEventos(int idGrupoEventos, int idInstituicao) throws SQLException {
+    String sql = "DELETE FROM colaborador_grupo_eventos WHERE id_grupo_eventos = ? AND id_instituicao = ?";
+    PreparedStatement preparedStatement = conn.prepareStatement(sql);
+    try {
+      preparedStatement.setInt(1, idGrupoEventos);
+      preparedStatement.setInt(2, idInstituicao);
+
+      int numRemocoes = preparedStatement.executeUpdate();
+      return numRemocoes > 0;
+    } catch (Exception e) {
+      throw new SQLException("falha vinculando organizador a grupo de eventos", e);
+    } finally {
+      preparedStatement.close();
     }
   }
 }

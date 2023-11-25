@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLConnection;
+import java.sql.SQLException;
 import java.util.Optional;
 
 import com.casaculturaqxd.sgec.App;
@@ -143,15 +144,17 @@ public class PreviewArquivoController {
         return serviceFile;
     }
 
-    public void setServiceFile(ServiceFile serviceFile) {
+    public void setServiceFile(ServiceFile serviceFile) throws SQLException {
         // opcao de download apenas para arquivos ja registrados
         if (serviceFile.getServiceFileId() == null) {
             downloadItem.setVisible(false);
             downloadItem.setDisable(true);
         }
         if (isImage(serviceFile)) {
-            serviceFileDAO = new ServiceFileDAO(database.getConnection());
-            serviceFile.setContent(serviceFileDAO.getContent(serviceFile));
+            if (serviceFile.getServiceFileId() != null) {
+                serviceFileDAO = new ServiceFileDAO(database.getConnection());
+                serviceFile.setContent(serviceFileDAO.getContent(serviceFile));
+            }
             try {
                 serviceFile.setPreview(serviceFile.getContent());
             } catch (IOException e) {
@@ -159,7 +162,9 @@ public class PreviewArquivoController {
             }
         }
         this.serviceFile = serviceFile;
+
         loadContent();
+
     }
 
     public ControllerServiceFile getParentController() {
