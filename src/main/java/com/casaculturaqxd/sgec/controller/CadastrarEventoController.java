@@ -25,6 +25,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.converter.LocalTimeStringConverter;
+
 import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
@@ -33,9 +35,12 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.TreeSet;
 import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
 
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.EventoDAO;
@@ -390,10 +395,28 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
         });
     }
 
+    private TextFormatter<LocalTime> formatter() {
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("HH:mm");
+
+        // Criar um conversor para converter entre String e LocalTime
+        LocalTimeStringConverter converter = new LocalTimeStringConverter(formato, null);
+
+        // Criar um filtro para validar e formatar a entrada do usuário
+        UnaryOperator<TextFormatter.Change> filter = change -> {
+            String newText = change.getControlNewText();
+            if (newText.matches("^\\d{0,2}(:\\d{0,2})?$")) {
+                return change;
+            }
+            return null;
+        };
+
+        // Criar o TextFormatter
+        return new TextFormatter<>(converter, null, filter);
+    }
+
     public void addInputConstraints() {
         /* aplicando restrições aos inputs */
-        horas.setTextFormatter(getTimeFormatter());
-        minutos.setTextFormatter(getTimeFormatter());
+        horas.setTextFormatter(formatter());
         horasCargaHoraria.setTextFormatter(getTimeFormatter());
         publicoEsperado.setTextFormatter(getNumericalFormatter());
         publicoAlcancado.setTextFormatter(getNumericalFormatter());

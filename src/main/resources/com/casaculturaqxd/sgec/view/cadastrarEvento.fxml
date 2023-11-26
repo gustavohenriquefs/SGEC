@@ -84,12 +84,6 @@
                                                             <TextField fx:id="horas" />
                                                          </children>
                                                       </VBox>
-                                                      <VBox>
-                                                         <children>
-                                                            <Label fx:id="textoMinutos" text="Minutos" textFill="#352929" />
-                                                            <TextField fx:id="minutos" />
-                                                         </children>
-                                                      </VBox>
                                                    </children>
                                                 </HBox>
                                              </children>
