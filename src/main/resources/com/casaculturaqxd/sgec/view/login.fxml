@@ -13,8 +13,8 @@
    <children>
       <Pane fx:id="form" layoutX="195.0" layoutY="109.0" maxWidth="200.0" prefHeight="232.0" prefWidth="200.0">
          <children>
-            <PasswordField fx:id="senha" layoutX="26.0" layoutY="139.0" onKeyReleased="#keyReleasedProperty" />
-            <TextField fx:id="email" layoutX="26.0" layoutY="81.0" onKeyReleased="#keyReleasedProperty" />
+            <PasswordField fx:id="fieldSenha" layoutX="26.0" layoutY="139.0" onKeyReleased="#keyReleasedProperty" />
+            <TextField fx:id="fieldEmail" layoutX="26.0" layoutY="81.0" onKeyReleased="#keyReleasedProperty" />
             <Label layoutX="25.0" layoutY="64.0" text="E-mail" />
             <Label layoutX="25.0" layoutY="122.0" text="Senha" />
             <Button fx:id="loginButton" defaultButton="true" layoutX="77.0" layoutY="174.0" onAction="#authUsuario" prefHeight="25.0" prefWidth="47.0" text="Login" />
