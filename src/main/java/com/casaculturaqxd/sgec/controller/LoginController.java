@@ -61,7 +61,7 @@ public class LoginController {
                 App.setRoot("view/home");
             } else {
                 mensagemErro.setAlertType(AlertType.ERROR);
-                mensagemErro.setContentText("Usuário ou senha inválidos");
+                mensagemErro.setContentText("Senha inválida");
                 mensagemErro.show();
             }
         }
