@@ -108,7 +108,7 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
         carregarCampoLocalizacao();
         classificacaoEtaria.getItems().addAll(classificacoes);
         addInputConstraints();
-
+        compararDatas();
     }
 
     private void loadMenu() throws IOException {
@@ -118,12 +118,12 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
     }
 
     public void compararDatas(){
-        dataInicial.valueProperty().addListener((observable, oldValue, newValue) -> {
-            dataFinal.setDayCellFactory(picker -> new DateCell() {
+        dataFinal.valueProperty().addListener((observable, oldValue, newValue) -> {
+            dataInicial.setDayCellFactory(picker -> new DateCell() {
                 @Override
                 public void updateItem(LocalDate date, boolean empty) {
                     super.updateItem(date, empty);
-                    LocalDate currentDate = dataInicial.getValue();
+                    LocalDate currentDate = dataFinal.getValue();
                     setDisable(empty || date.compareTo(currentDate) > 0 );
                 }
             });
@@ -167,7 +167,7 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
         builderEvento.setCertificavel(certificavel.isSelected());
         if (!horasCargaHoraria.getText().isEmpty()) {
             builderEvento.setCargaHoraria(
-                    new java.sql.Time(formatterHorario.parse(horasCargaHoraria.getText() + ":00:00").getTime()));
+                new java.sql.Time(formatterHorario.parse(horasCargaHoraria.getText() + ":00:00").getTime()));
         }
         builderEvento.setAcessivelEmLibras(acessivelEmLibras.isSelected());
         if (!numMunicipiosEsperado.getText().isEmpty()) {
