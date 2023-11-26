@@ -352,12 +352,12 @@ public class EventoDAO {
     return serviceFileDAO.listarArquivosEvento(evento);
   }
 
-  private ArrayList<Instituicao> buscarColaboradoresPorEvento(int idEvento) {
+  private ArrayList<Instituicao> buscarColaboradoresPorEvento(int idEvento) throws SQLException {
     InstituicaoDAO instituicaoDAO = new InstituicaoDAO(connection);
     return instituicaoDAO.listarColaboradoresEvento(idEvento);
   }
 
-  private ArrayList<Instituicao> buscarOrganizadoresPorEvento(int idEvento) {
+  private ArrayList<Instituicao> buscarOrganizadoresPorEvento(int idEvento) throws SQLException {
     InstituicaoDAO instituicaoDAO = new InstituicaoDAO(connection);
     return instituicaoDAO.listarOrganizadoresEvento(idEvento);
   }
@@ -408,7 +408,7 @@ public class EventoDAO {
     return locais;
   }
 
-  public boolean alterarEvento(Evento evento) {
+  public boolean alterarEvento(Evento evento) throws SQLException {
     try {
       String sql = "update evento set nome_evento=?, publico_esperado=?, publico_alcancado=?, descricao=?, data_inicial=?, data_final=?, horario=?, classificacao_etaria=?::faixa_etaria, certificavel=?, carga_horaria=?, acessivel_em_libras=?, num_participantes_esperado = ?, num_municipios_esperado = ? where id_evento=?";
 
@@ -485,7 +485,7 @@ public class EventoDAO {
     return true;
   }
 
-  private boolean sincronizarColaboradores(Evento evento) {
+  private boolean sincronizarColaboradores(Evento evento) throws SQLException {
     ArrayList<Instituicao> colaboradoresEvento = this.buscarColaboradoresPorEvento(evento.getIdEvento());
 
     for (Instituicao colaborador : colaboradoresEvento) {
@@ -510,7 +510,7 @@ public class EventoDAO {
     return true;
   }
 
-  private boolean sincronizarOrganizadores(Evento evento) {
+  private boolean sincronizarOrganizadores(Evento evento) throws SQLException {
     ArrayList<Instituicao> organizadoresEvento = this.buscarOrganizadoresPorEvento(evento.getIdEvento());
 
     for (Instituicao organizador : organizadoresEvento) {

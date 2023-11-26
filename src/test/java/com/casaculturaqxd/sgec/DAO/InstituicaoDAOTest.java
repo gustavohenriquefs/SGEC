@@ -14,21 +14,17 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class InstituicaoDAOTest {
     private static DatabasePostgres db;
-    private static int idValidInstituicao = 1, idUpdatableInstituicao = 2,
-            idInvalidInstituicao = -1, idValidEvento = 1, idInvalidEvento = -1;
+    private static int idValidInstituicao = 1, idUpdatableInstituicao = 2, idInvalidInstituicao = -1, idValidEvento = 1,
+            idInvalidEvento = -1;
 
-    public InstituicaoDAOTest() {
+    public InstituicaoDAOTest() throws SQLException {
         setUpClass();
     }
 
     @BeforeAll
-    public static void setUpClass() {
+    public static void setUpClass() throws SQLException {
         db = DatabasePostgres.getInstance("URL_TEST", "USER_NAME_TEST", "PASSWORD_TEST");
-        try {
-            db.getConnection().setAutoCommit(false);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        db.getConnection().setAutoCommit(false);
     }
 
     @AfterAll
@@ -39,7 +35,6 @@ public class InstituicaoDAOTest {
     @AfterEach
     public void tearDown() throws SQLException {
         db.getConnection().rollback();
-        db.getConnection().commit();
     }
 
     @Test
@@ -49,7 +44,7 @@ public class InstituicaoDAOTest {
     }
 
     @Test
-    public void testGetValidInstituicaoById() {
+    public void testGetValidInstituicaoById() throws SQLException {
         InstituicaoDAO dao = new InstituicaoDAO(db.getConnection());
         Instituicao instituicao = new Instituicao(idValidInstituicao);
         Instituicao result = dao.getInstituicao(instituicao).get();
@@ -59,7 +54,7 @@ public class InstituicaoDAOTest {
     }
 
     @Test
-    public void testGetValidInstituicaoByNome() {
+    public void testGetValidInstituicaoByNome() throws SQLException {
         InstituicaoDAO dao = new InstituicaoDAO(db.getConnection());
         Instituicao result = dao.getInstituicao("instituicao_teste").get();
         assertAll(() -> assertNotEquals(Optional.empty(), result),
@@ -68,14 +63,14 @@ public class InstituicaoDAOTest {
     }
 
     @Test
-    public void testGetInvalidInstituicaoById() {
+    public void testGetInvalidInstituicaoById() throws SQLException {
         InstituicaoDAO dao = new InstituicaoDAO(db.getConnection());
         Instituicao instituicao = new Instituicao(idInvalidInstituicao);
         assertEquals(Optional.empty(), dao.getInstituicao(instituicao));
     }
 
     @Test
-    public void testGetInvalidInstituicaoByNome() {
+    public void testGetInvalidInstituicaoByNome() throws SQLException {
         InstituicaoDAO dao = new InstituicaoDAO(db.getConnection());
         assertEquals(Optional.empty(), dao.getInstituicao("invalid_instituicao"));
     }
@@ -90,16 +85,15 @@ public class InstituicaoDAOTest {
     }
 
     @Test
-    public void testInserirInstituicaoSemNome() throws SQLException {
+    public void testInserirInstituicaoSemNome() {
         InstituicaoDAO dao = new InstituicaoDAO(db.getConnection());
         Instituicao instituicao = new Instituicao(null);
-        assertFalse(dao.inserirInstituicao(instituicao));
+        assertThrows(SQLException.class, () -> dao.inserirInstituicao(instituicao));
     }
 
     /**
      * utilizando valor aleatorio para garantir que o valor atualizado seja
-     * diferente do valor
-     * antigo
+     * diferente do valor antigo
      */
     @Test
     public void testAtualizarValidInstituicao() throws SQLException {
@@ -141,7 +135,7 @@ public class InstituicaoDAOTest {
     }
 
     @Test
-    public void testVincularValidOrganizadorValidEvento() {
+    public void testVincularValidOrganizadorValidEvento() throws SQLException {
         InstituicaoDAO dao = new InstituicaoDAO(db.getConnection());
         Instituicao instituicao = new Instituicao();
         instituicao.setIdInstituicao(idValidInstituicao);
@@ -149,7 +143,7 @@ public class InstituicaoDAOTest {
         instituicao.setDescricaoContribuicao("descricao_teste");
         instituicao.setValorContribuicao("valor_teste");
 
-        assertTrue(dao.vincularOrganizador(instituicao, idValidEvento));
+        assertTrue(dao.vincularOrganizadorEvento(instituicao, idValidEvento));
     }
 
     /**
@@ -161,49 +155,49 @@ public class InstituicaoDAOTest {
         Instituicao instituicao = new Instituicao("nova_instituicao", "nova_contribuicao", null, null);
         dao.inserirInstituicao(instituicao);
 
-        assertTrue(dao.vincularOrganizador(instituicao, idValidEvento));
+        assertTrue(dao.vincularOrganizadorEvento(instituicao, idValidEvento));
     }
 
     @Test
-    public void testVincularOrganizadorSemDescricaoContribuicao() {
+    public void testVincularOrganizadorSemDescricaoContribuicao() throws SQLException {
         InstituicaoDAO dao = new InstituicaoDAO(db.getConnection());
         Instituicao instituicao = new Instituicao("nova_instituicao", null, "novo_valor", null);
         instituicao.setIdInstituicao(idValidInstituicao);
 
-        assertFalse(dao.vincularOrganizador(instituicao, idValidEvento));
+        assertThrows(SQLException.class, () -> dao.vincularOrganizadorEvento(instituicao, idValidEvento));
     }
 
     @Test
-    public void testVincularValidOrganizadorInvalidEvento() {
+    public void testVincularValidOrganizadorInvalidEvento() throws SQLException {
         InstituicaoDAO dao = new InstituicaoDAO(db.getConnection());
         Instituicao instituicao = new Instituicao(idValidInstituicao);
-        assertFalse(dao.vincularOrganizador(instituicao, idInvalidEvento));
+        assertThrows(SQLException.class, () -> dao.vincularOrganizadorEvento(instituicao, idInvalidEvento));
     }
 
     @Test
-    public void testVincularInvalidOrganizadorValidEvento() {
+    public void testVincularInvalidOrganizadorValidEvento() throws SQLException {
         InstituicaoDAO dao = new InstituicaoDAO(db.getConnection());
         Instituicao instituicao = new Instituicao(idInvalidInstituicao);
-        assertFalse(dao.vincularOrganizador(instituicao, idValidEvento));
+        assertThrows(SQLException.class, () -> dao.vincularOrganizadorEvento(instituicao, idValidEvento));
     }
 
     @Test
-    public void testVincularInvalidOrganizadorInvalidEvento() {
+    public void testVincularInvalidOrganizadorInvalidEvento() throws SQLException {
         InstituicaoDAO dao = new InstituicaoDAO(db.getConnection());
         Instituicao instituicao = new Instituicao(idInvalidInstituicao);
-        assertFalse(dao.vincularOrganizador(instituicao, idInvalidEvento));
+        assertThrows(SQLException.class, () -> dao.vincularOrganizadorEvento(instituicao, idInvalidEvento));
     }
 
     @Test
-    public void testDesvincularValidOrganizadorValidEvento() {
+    public void testDesvincularValidOrganizadorValidEvento() throws SQLException {
         InstituicaoDAO dao = new InstituicaoDAO(db.getConnection());
         Instituicao instituicao = new Instituicao(idValidInstituicao);
         instituicao.setDescricaoContribuicao("nova descricao");
         instituicao.setValorContribuicao("novo valor");
 
-        dao.vincularOrganizador(instituicao, idValidEvento);
+        dao.vincularOrganizadorEvento(instituicao, idValidEvento);
 
-        assertTrue(dao.desvincularOrganizador(instituicao.getIdInstituicao(), idValidEvento));
+        assertTrue(dao.desvincularOrganizadorEvento(instituicao.getIdInstituicao(), idValidEvento));
     }
 
     @Test
@@ -212,7 +206,7 @@ public class InstituicaoDAOTest {
         Instituicao instituicao = new Instituicao("nova instituicao", "nova descricao", "novo valor", null);
         dao.inserirInstituicao(instituicao);
 
-        assertTrue(dao.vincularColaborador(instituicao, idValidEvento));
+        assertTrue(dao.vincularColaboradorEvento(instituicao, idValidEvento));
     }
 
     @Test
@@ -221,7 +215,7 @@ public class InstituicaoDAOTest {
         Instituicao instituicao = new Instituicao("nova instituicao", "nova descricao", null, null);
         dao.inserirInstituicao(instituicao);
 
-        assertTrue(dao.vincularColaborador(instituicao, idValidEvento));
+        assertTrue(dao.vincularColaboradorEvento(instituicao, idValidEvento));
     }
 
     @Test
@@ -229,25 +223,26 @@ public class InstituicaoDAOTest {
         InstituicaoDAO dao = new InstituicaoDAO(db.getConnection());
         Instituicao instituicao = new Instituicao("nova instituicao", null, "novo valor", null);
         dao.inserirInstituicao(instituicao);
-        assertFalse(dao.vincularColaborador(instituicao, idValidEvento));
+        assertThrows(SQLException.class, () -> dao.vincularColaboradorEvento(instituicao, idValidEvento));
     }
 
     @Test
-    public void testDesvincularValidColaboradorValidEvento() {
+    public void testDesvincularValidColaboradorValidEvento() throws SQLException {
         InstituicaoDAO dao = new InstituicaoDAO(db.getConnection());
         Instituicao instituicao = new Instituicao(idValidInstituicao);
         instituicao.setDescricaoContribuicao("nova descricao");
         instituicao.setValorContribuicao("novo valor");
-        dao.vincularColaborador(instituicao, idValidEvento);
+        dao.vincularColaboradorEvento(instituicao, idValidEvento);
 
-        assertTrue(dao.desvincularColaborador(instituicao.getIdInstituicao(), idValidEvento));
+        assertTrue(dao.desvincularColaboradorEvento(instituicao.getIdInstituicao(), idValidEvento));
     }
 
     @Test
-    public void testListarOrganizadoresValidEvento() {
+    public void testListarOrganizadoresValidEvento() throws SQLException {
         InstituicaoDAO instituicaoDAO = new InstituicaoDAO(db.getConnection());
         Instituicao instituicao = instituicaoDAO.getInstituicao(new Instituicao(idValidInstituicao)).get();
-        instituicaoDAO.vincularOrganizador(instituicao.getIdInstituicao(), idValidEvento, "contribuicao_teste", null);
+        instituicaoDAO.vincularOrganizadorEvento(instituicao.getIdInstituicao(), idValidEvento, "contribuicao_teste",
+                null);
 
         List<Instituicao> result = instituicaoDAO.listarOrganizadoresEvento(idValidEvento);
         Instituicao inserted = result.get(0);
@@ -259,17 +254,18 @@ public class InstituicaoDAOTest {
     }
 
     @Test
-    public void testListarOrganizadoresEmptyEvento() {
+    public void testListarOrganizadoresEmptyEvento() throws SQLException {
         InstituicaoDAO instituicaoDAO = new InstituicaoDAO(db.getConnection());
         List<Instituicao> result = instituicaoDAO.listarOrganizadoresEvento(idValidEvento);
         assertTrue(result.isEmpty());
     }
 
     @Test
-    public void testListarColaboradoresValidEvento() {
+    public void testListarColaboradoresValidEvento() throws SQLException {
         InstituicaoDAO instituicaoDAO = new InstituicaoDAO(db.getConnection());
         Instituicao instituicao = instituicaoDAO.getInstituicao(new Instituicao(idValidInstituicao)).get();
-        instituicaoDAO.vincularColaborador(instituicao.getIdInstituicao(), idValidEvento, "contribuicao_teste", null);
+        instituicaoDAO.vincularColaboradorEvento(instituicao.getIdInstituicao(), idValidEvento, "contribuicao_teste",
+                null);
 
         List<Instituicao> result = instituicaoDAO.listarColaboradoresEvento(idValidEvento);
         Instituicao inserted = result.get(0);
@@ -281,52 +277,50 @@ public class InstituicaoDAOTest {
     }
 
     @Test
-    public void testListarColaboradoresEmptyEvento() {
+    public void testListarColaboradoresEmptyEvento() throws SQLException {
         InstituicaoDAO instituicaoDAO = new InstituicaoDAO(db.getConnection());
         List<Instituicao> result = instituicaoDAO.listarColaboradoresEvento(idValidEvento);
         assertTrue(result.isEmpty());
     }
 
     @Test
-    public void testAtualizarValidOrganizadorValidEvento() {
+    public void testAtualizarValidOrganizadorValidEvento() throws SQLException {
         InstituicaoDAO dao = new InstituicaoDAO(db.getConnection());
         // criar vinculo para o teste
         String previousDescricao = "nova descricao", previousValor = null;
         Instituicao instituicao = new Instituicao(idValidInstituicao);
         instituicao.setDescricaoContribuicao(previousDescricao);
         instituicao.setValorContribuicao(previousValor);
-        dao.vincularOrganizador(instituicao, idValidEvento);
+        dao.vincularOrganizadorEvento(instituicao, idValidEvento);
 
         // atualizar o model
         instituicao.setDescricaoContribuicao("updated descricao");
         instituicao.setValorContribuicao("update valor");
-        boolean sucess = dao.atualizarOrganizador(instituicao, idValidEvento);
+        boolean sucess = dao.atualizarOrganizadorEvento(instituicao, idValidEvento);
         assertAll(() -> assertTrue(sucess),
                 () -> assertNotEquals(previousDescricao,
                         dao.getInstituicao(instituicao).get().getDescricaoContribuicao()),
-                () -> assertNotEquals(previousValor,
-                        dao.getInstituicao(instituicao).get().getValorContribuicao()));
+                () -> assertNotEquals(previousValor, dao.getInstituicao(instituicao).get().getValorContribuicao()));
     }
 
     @Test
-    public void testAtualizarValidColaboradorValidEvento() {
+    public void testAtualizarValidColaboradorValidEvento() throws SQLException {
         InstituicaoDAO dao = new InstituicaoDAO(db.getConnection());
         // criar vinculo para o teste
         String previousDescricao = "nova descricao", previousValor = null;
         Instituicao instituicao = new Instituicao(idValidInstituicao);
         instituicao.setDescricaoContribuicao(previousDescricao);
         instituicao.setValorContribuicao(previousValor);
-        dao.vincularColaborador(instituicao, idValidEvento);
+        dao.vincularColaboradorEvento(instituicao, idValidEvento);
 
         // atualizar o model
         instituicao.setDescricaoContribuicao("updated descricao");
         instituicao.setValorContribuicao("update valor");
 
-        boolean sucess = dao.atualizarColaborador(instituicao, idValidEvento);
+        boolean sucess = dao.atualizarColaboradorEvento(instituicao, idValidEvento);
         assertAll(() -> assertTrue(sucess),
                 () -> assertNotEquals(previousDescricao,
                         dao.getInstituicao(instituicao).get().getDescricaoContribuicao()),
-                () -> assertNotEquals(previousValor,
-                        dao.getInstituicao(instituicao).get().getValorContribuicao()));
+                () -> assertNotEquals(previousValor, dao.getInstituicao(instituicao).get().getValorContribuicao()));
     }
 }
