@@ -148,7 +148,7 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
         });
     }
 
-    public void criarNovoEvento() throws IOException, ParseException {
+    public void criarNovoEvento() throws IOException, ParseException, SQLException {
         if (emptyLocalizacoes()) {
             Alert erroLocalizacao = new Alert(AlertType.ERROR,
                     "Um evento deve possuir pelo menos uma localização associada");
