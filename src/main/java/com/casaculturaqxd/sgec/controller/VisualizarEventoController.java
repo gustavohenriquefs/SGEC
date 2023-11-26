@@ -2,9 +2,11 @@ package com.casaculturaqxd.sgec.controller;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.util.ArrayList;
+
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.EventoDAO;
 import com.casaculturaqxd.sgec.DAO.LocalizacaoDAO;
@@ -16,10 +18,9 @@ import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.Indicador;
 import com.casaculturaqxd.sgec.models.Localizacao;
+import com.casaculturaqxd.sgec.models.Meta;
 import com.casaculturaqxd.sgec.models.Participante;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
-import com.casaculturaqxd.sgec.service.Service;
-import com.casaculturaqxd.sgec.models.Meta;
 
 import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
@@ -32,6 +33,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
@@ -44,9 +46,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.MouseEvent;
@@ -54,9 +56,8 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.util.converter.IntegerStringConverter;
-import javafx.scene.image.ImageView;
 import javafx.util.Duration;
+import javafx.util.converter.IntegerStringConverter;
 
 public class VisualizarEventoController implements ControllerServiceFile, ControllerEvento {
     private Evento evento;
@@ -153,7 +154,7 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
         root.getChildren().add(0, carregarMenu.load());
     }
 
-    private void loadContent() throws IOException {
+    private void loadContent() throws IOException, SQLException {
         loadMetas();
         classificacaoEtaria.getItems().addAll(classificacoes);
         titulo.setText(evento.getNome());
@@ -223,14 +224,21 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
         }
     }
 
-    public void setEvento(Evento evento) throws IOException {
+    public void setEvento(Evento evento) throws IOException, SQLException {
         this.evento = evento;
         loadContent();
     }
 
     public boolean salvarAlteracoes() {
-        alterarEvento();
-        return eventoDAO.alterarEvento(evento);
+        try {
+            alterarEvento();
+            return eventoDAO.alterarEvento(evento);
+        } catch (Exception e) {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setContentText("Erro atualizando evento");
+            return false;
+        }
+
     }
 
     public void alterarEvento() {
@@ -259,7 +267,7 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
         }
     }
 
-    public void goToMidiaEvento() throws IOException {
+    public void goToMidiaEvento() throws IOException, SQLException {
         FXMLLoader loadTelaMidia = new FXMLLoader(App.class.getResource("view/midiaEvento.fxml"));
         Parent nextScreen = loadTelaMidia.load();
         MidiaEventoController controllerNextScreen = loadTelaMidia.getController();
@@ -336,7 +344,7 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
         }
     }
 
-    public void loadArquivos() {
+    public void loadArquivos() throws SQLException {
         ServiceFileDAO serviceFileDAO = new ServiceFileDAO(db.getConnection());
         for (ServiceFile arquivo : serviceFileDAO.listarArquivosEvento(evento, 5)) {
             try {
@@ -360,17 +368,7 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
 
     @Override
     public void removerArquivo(ServiceFile serviceFile) {
-        Service service = serviceFile.getService();
-        try {
-            service.deletarArquivo(serviceFile.getBucket(), serviceFile.getFileKey());
-
-        } catch (IllegalArgumentException e) {
-            // caso arquivo ja nao esteja registrado
-            mapServiceFiles.remove(serviceFile);
-        } catch (Exception e) {
-            // em qualquer outro erro
-            e.printStackTrace();
-        }
+        mapServiceFiles.remove(serviceFile);
     }
 
     public void addListenersServiceFile(ObservableMap<ServiceFile, FXMLLoader> observablemap) {
@@ -391,6 +389,9 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
 
                         secaoArquivos.getChildren().add(previewParticipante);
                     } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (SQLException e) {
+                        // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
                 }
@@ -452,7 +453,7 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
                         controller.setParentController(superController);
 
                         secaoParticipantes.getChildren().add(previewParticipante);
-                    } catch (IOException e) {
+                    } catch (IOException | SQLException e) {
                         e.printStackTrace();
                     }
                 }

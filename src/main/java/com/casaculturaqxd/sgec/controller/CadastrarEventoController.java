@@ -38,6 +38,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.TreeSet;
 import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
@@ -206,13 +207,13 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
         if (eventoDAO.inserirEvento(novoEvento)) {
             // procura pelo arquivo no banco, se nao estiver realiza a insercao
             for (ServiceFile arquivo : novoEvento.getListaArquivos()) {
-                ServiceFile arquivoExistente = serviceFileDAO.getArquivo(arquivo.getFileKey());
-                if (arquivoExistente == null) {
+                Optional<ServiceFile> arquivoExistente = serviceFileDAO.getArquivo(arquivo.getFileKey());
+                if (arquivoExistente.isEmpty()) {
                     serviceFileDAO.inserirArquivo(arquivo);
                 } else {
                     int idxArquivo = novoEvento.getListaArquivos().indexOf(arquivo);
 
-                    novoEvento.getListaArquivos().set(idxArquivo, arquivoExistente);
+                    novoEvento.getListaArquivos().set(idxArquivo, arquivoExistente.get());
                 }
             }
             eventoDAO.vincularArquivos(novoEvento);
@@ -383,6 +384,9 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
                         secaoParticipantes.getChildren().add(previewParticipante);
                     } catch (IOException e) {
                         e.printStackTrace();
+                    } catch (SQLException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
                     }
                 }
                 if (change.wasRemoved()) {
@@ -443,6 +447,9 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
 
                         secaoArquivos.getChildren().add(previewParticipante);
                     } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (SQLException e) {
+                        // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
                 }

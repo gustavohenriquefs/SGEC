@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import com.casaculturaqxd.sgec.models.GrupoEventos;
 import com.casaculturaqxd.sgec.models.Instituicao;
+import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 
 public class GrupoEventosBuilder implements Builder {
     GrupoEventos grupoEventos;
@@ -72,6 +73,46 @@ public class GrupoEventosBuilder implements Builder {
     @Override
     public GrupoEventosBuilder setOrganizadores(ArrayList<Instituicao> organizadores) {
         grupoEventos.setOrganizadores(organizadores);
+        return this;
+    }
+
+    public GrupoEventosBuilder setImagemCapa(ServiceFile serviceFile) {
+        grupoEventos.setImagemCapa(serviceFile);
+        return this;
+    }
+
+    public GrupoEventosBuilder setNumAcoesEsperado(int numAcoesEsperado) {
+        grupoEventos.setNumAcoesEsperado(numAcoesEsperado);
+        return this;
+    }
+
+    public GrupoEventosBuilder setNumAcoesAlcancado(int numAcoesAlcancado) {
+        grupoEventos.setNumAcoesAlcancado(numAcoesAlcancado);
+        return this;
+    }
+
+    public GrupoEventosBuilder setNumMunicipiosEsperado(int numMunicipiosEsperado) {
+        grupoEventos.setNumMunicipiosEsperado(numMunicipiosEsperado);
+        return this;
+    }
+
+    public GrupoEventosBuilder setNumMunicipiosAlcancado(int numMunicipiosAlcancado) {
+        grupoEventos.setNumMunicipiosAlcancado(numMunicipiosAlcancado);
+        return this;
+    }
+
+    public GrupoEventosBuilder setNumParticipantesEsperado(int numParticipantesEsperado) {
+        grupoEventos.setNumParticipantesEsperado(numParticipantesEsperado);
+        return this;
+    }
+
+    public GrupoEventosBuilder setNumParticipantesAlcancado(int numParticipantesAlcancado) {
+        grupoEventos.setNumParticipantesAlcancado(numParticipantesAlcancado);
+        return this;
+    }
+
+    public GrupoEventosBuilder setIdGrupoEventos(int idGrupoEventos) {
+        grupoEventos.setIdGrupoEventos(idGrupoEventos);
         return this;
     }
 

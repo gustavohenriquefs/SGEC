@@ -66,9 +66,10 @@ public class HomeController {
       childController.setEvento(evento);
 
       secaoUltimosEventos.getChildren().add(childNode);
-    } catch (IOException e) {
+    } catch (RuntimeException | IOException e) {
       e.printStackTrace();
     }
+
   }
 
   private FXMLLoader obterFXMLPreviewEventoExistenteLoader() {
