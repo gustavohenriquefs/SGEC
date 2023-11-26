@@ -118,6 +118,7 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
     }
 
     public void compararDatas(){
+        //Impede que data posteriores á dataFinal sejam seleciondas no campo dataInicial
         dataFinal.valueProperty().addListener((observable, oldValue, newValue) -> {
             dataInicial.setDayCellFactory(picker -> new DateCell() {
                 @Override
@@ -125,6 +126,17 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
                     super.updateItem(date, empty);
                     LocalDate currentDate = dataFinal.getValue();
                     setDisable(empty || date.compareTo(currentDate) > 0 );
+                }
+            });
+        });
+        //Impede que datas anteriores à dataInicial sejam selecionadas em dataFinal
+        dataInicial.valueProperty().addListener((observable, oldValue, newValue) -> {
+            dataFinal.setDayCellFactory(picker -> new DateCell() {
+                @Override
+                public void updateItem(LocalDate date, boolean empty) {
+                    super.updateItem(date, empty);
+                    LocalDate currentDate = dataInicial.getValue();
+                    setDisable(empty || date.compareTo(currentDate) < 0);
                 }
             });
         });
