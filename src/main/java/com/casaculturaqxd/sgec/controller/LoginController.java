@@ -48,22 +48,27 @@ public class LoginController {
      * @throws NoSuchAlgorithmException
      * @throws SQLException
      */
-    public void authUsuario() throws IOException, NoSuchAlgorithmException, SQLException {
+    public void authUsuario() throws IOException, SQLException {
         usuario = new User(fieldEmail.getText(), fieldSenha.getText());
-        Alert mensagemErro = new Alert(AlertType.NONE);
-        if(!userDAO.usuarioExists(usuario.getEmail())){
-            mensagemErro.setAlertType(AlertType.ERROR);
-            mensagemErro.setContentText("Usuário não existe");
-            mensagemErro.show();
-        } else {
-            if (userDAO.validar(usuario)) {
-                App.setUsuario(usuario);
-                App.setRoot("view/home");
+        try {
+            if(!userDAO.usuarioExists(usuario.getEmail())){
+                alerta.setAlertType(AlertType.ERROR);
+                alerta.setContentText("Usuário não existe");
+                alerta.show();
             } else {
-                mensagemErro.setAlertType(AlertType.ERROR);
-                mensagemErro.setContentText("Senha inválida");
-                mensagemErro.show();
+                if (userDAO.validar(usuario)) {
+                    App.setUsuario(usuario);
+                    App.setRoot("view/home");
+                } else {
+                    alerta.setAlertType(AlertType.ERROR);
+                    alerta.setContentText("Senha inválida");
+                    alerta.show();
+                }
             }
+        } catch (SQLException e) {
+            alerta.setAlertType(AlertType.ERROR);
+            alerta.setContentText("Falha realizando validação de usuário");
+            alerta.show();
         }
     }
 
