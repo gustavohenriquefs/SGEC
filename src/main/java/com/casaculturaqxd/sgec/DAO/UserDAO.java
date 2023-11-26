@@ -112,39 +112,9 @@ public class UserDAO extends DAO {
     }
   }
 
-<<<<<<< HEAD
-  public boolean usuarioExists(String email) throws SQLException {
-    String sql = "SELECT email FROM usuario WHERE email = ?";
-    PreparedStatement preparedStatement = connection.prepareStatement(sql);
-    try {
-      preparedStatement.setString(1, email);
-      ResultSet resultSet = preparedStatement.executeQuery();
-      return resultSet.next();
-    } catch (Exception e) {
-      throw new SQLException("falha buscando nome de usuario", e);
-    } finally {
-      preparedStatement.close();
-    }
-  }
-
-  public boolean validar(User obj) throws NoSuchAlgorithmException {
-    String sql = "SELECT * FROM usuario WHERE email=? and senha=?";
-    try {
-      PreparedStatement stmt = connection.prepareStatement(sql);
-      stmt.setString(1, obj.getEmail());
-      stmt.setString(2, encriptar(obj.getSenha()));
-      ResultSet resultado = stmt.executeQuery();
-      if (resultado.next()) {
-        obj.setIdUsuario(resultado.getInt("id_usuario"));
-        obj.setNomeUsuario(resultado.getString("nome_usuario"));
-        obj.setEmail(resultado.getString("email"));
-        obj.setSenha(resultado.getString("senha"));
-        obj.setEditor(resultado.getBoolean("editor"));
-=======
   public boolean validar(User user) throws SQLException {
     String sql = "SELECT id_usuario,nome_usuario,email,senha,editor FROM usuario WHERE email=? and senha=?";
     PreparedStatement statement = connection.prepareStatement(sql);
->>>>>>> 285285cfa2ec5e334c6b770f0fd8e22658029a50
 
     try {
       statement.setString(1, user.getEmail());

@@ -49,7 +49,8 @@ public class LoginController {
      * @throws SQLException
      */
     public void authUsuario() throws IOException, NoSuchAlgorithmException, SQLException {
-        usuario = new User(email.getText(), senha.getText());
+        usuario = new User(fieldEmail.getText(), fieldSenha.getText());
+        Alert mensagemErro = new Alert(AlertType.NONE);
         if(!userDAO.usuarioExists(usuario.getEmail())){
             mensagemErro.setAlertType(AlertType.ERROR);
             mensagemErro.setContentText("Usuário não existe");
