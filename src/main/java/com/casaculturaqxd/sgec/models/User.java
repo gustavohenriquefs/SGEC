@@ -1,17 +1,20 @@
 package com.casaculturaqxd.sgec.models;
 
-
 public class User {
     private int idUsuario;
     private String nomeUsuario;
     private String email;
     private String senha;
     private boolean editor;
-    
-    public User(){
+
+    public User() {
 
     }
-    
+
+    public User(int idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+
     public User(String email, String senha) {
         this.email = email;
         this.senha = senha;
@@ -27,6 +30,7 @@ public class User {
     public String getEmail() {
         return this.email;
     }
+
     public void setEmail(String email) {
         this.email = email;
     }
@@ -34,6 +38,7 @@ public class User {
     public String getSenha() {
         return this.senha;
     }
+
     public void setSenha(String senha) {
         this.senha = senha;
     }
@@ -41,6 +46,7 @@ public class User {
     public String getNomeUsuario() {
         return this.nomeUsuario;
     }
+
     public void setNomeUsuario(String nomeUsuario) {
         this.nomeUsuario = nomeUsuario;
     }
@@ -53,7 +59,6 @@ public class User {
         this.idUsuario = idUsuario;
     }
 
-
     public boolean isEditor() {
         return editor;
     }
@@ -61,5 +66,5 @@ public class User {
     public void setEditor(boolean editor) {
         this.editor = editor;
     }
-    
+
 }
