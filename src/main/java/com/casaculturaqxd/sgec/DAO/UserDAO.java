@@ -1,3 +1,4 @@
+
 package com.casaculturaqxd.sgec.DAO;
 
 import java.math.BigInteger;
@@ -95,6 +96,20 @@ public class UserDAO extends DAO {
     BigInteger number = new BigInteger(1, asHex);
     StringBuilder hexBuilder = new StringBuilder(number.toString(16));
     return hexBuilder.toString();
+  }
+
+  public boolean usuarioExists(String email) throws SQLException {
+    String sql = "SELECT email FROM usuario WHERE email = ?";
+    PreparedStatement preparedStatement = connection.prepareStatement(sql);
+    try {
+      preparedStatement.setString(1, email);
+      ResultSet resultSet = preparedStatement.executeQuery();
+      return resultSet.next();
+    } catch (Exception e) {
+      throw new SQLException("falha buscando nome de usuario", e);
+    } finally {
+      preparedStatement.close();
+    }
   }
 
   public boolean validar(User user) throws SQLException {

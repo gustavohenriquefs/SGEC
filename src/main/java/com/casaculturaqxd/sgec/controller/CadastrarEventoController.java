@@ -11,6 +11,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
@@ -24,6 +25,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.converter.LocalTimeStringConverter;
+
 import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
@@ -31,10 +34,14 @@ import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.TreeSet;
 import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
 
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.EventoDAO;
@@ -83,7 +90,7 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
     ChoiceBox<String> classificacaoEtaria;
     private final String[] classificacoes = { "Livre", "10 anos", "12 anos", "14 anos", "16 anos", "18 anos" };
     @FXML
-    CheckBox checkMeta3;
+    CheckBox checkMeta1, checkMeta2, checkMeta3, checkMeta4;
     @FXML
     RadioButton certificavel, acessivelEmLibras;
     private ObservableMap<ServiceFile, FXMLLoader> mapServiceFiles = FXCollections.observableHashMap();
@@ -107,13 +114,38 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
         carregarCampoLocalizacao();
         classificacaoEtaria.getItems().addAll(classificacoes);
         addInputConstraints();
-
+        compararDatas();
     }
 
     private void loadMenu() throws IOException {
         FXMLLoader carregarMenu = new FXMLLoader(App.class.getResource("view/componentes/menu.fxml"));
 
         root.getChildren().add(0, carregarMenu.load());
+    }
+
+    public void compararDatas(){
+        //Impede que data posteriores á dataFinal sejam seleciondas no campo dataInicial
+        dataFinal.valueProperty().addListener((observable, oldValue, newValue) -> {
+            dataInicial.setDayCellFactory(picker -> new DateCell() {
+                @Override
+                public void updateItem(LocalDate date, boolean empty) {
+                    super.updateItem(date, empty);
+                    LocalDate currentDate = dataFinal.getValue();
+                    setDisable(empty || date.compareTo(currentDate) > 0 );
+                }
+            });
+        });
+        //Impede que datas anteriores à dataInicial sejam selecionadas em dataFinal
+        dataInicial.valueProperty().addListener((observable, oldValue, newValue) -> {
+            dataFinal.setDayCellFactory(picker -> new DateCell() {
+                @Override
+                public void updateItem(LocalDate date, boolean empty) {
+                    super.updateItem(date, empty);
+                    LocalDate currentDate = dataInicial.getValue();
+                    setDisable(empty || date.compareTo(currentDate) < 0);
+                }
+            });
+        });
     }
 
     public void criarNovoEvento() throws IOException, ParseException, SQLException {
@@ -125,6 +157,11 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
         if (!camposObrigatoriosPreenchidos()) {
             Alert erroLocalizacao = new Alert(AlertType.ERROR, "nem todos os campos obrigatorios foram preenchidos");
             erroLocalizacao.show();
+        }
+        if(Colaboradores.getChildren().isEmpty() && checkMeta4.isSelected()) {
+            Alert mensagemErro = new Alert(AlertType.ERROR, "Convocatórias precisam de pelo menos um colaborador");
+            mensagemErro .show();
+            throw new RuntimeException("Convocatorias precisam de pelo menos um colaborador");
         }
 
         builderEvento.resetar();
@@ -148,7 +185,7 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
         builderEvento.setCertificavel(certificavel.isSelected());
         if (!horasCargaHoraria.getText().isEmpty()) {
             builderEvento.setCargaHoraria(
-                    new java.sql.Time(formatterHorario.parse(horasCargaHoraria.getText() + ":00:00").getTime()));
+                new java.sql.Time(formatterHorario.parse(horasCargaHoraria.getText() + ":00:00").getTime()));
         }
         builderEvento.setAcessivelEmLibras(acessivelEmLibras.isSelected());
         if (!numMunicipiosEsperado.getText().isEmpty()) {
@@ -299,9 +336,30 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
         }
     }
 
+    public void destacarCamposNaoPreenchidos(){
+         if(classificacaoEtaria.getSelectionModel().getSelectedItem() == null) {
+                classificacaoEtaria.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
+        } else {
+            classificacaoEtaria.setStyle(null);
+        } if(titulo.getText().isEmpty()) {
+            titulo.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
+        } else {
+            titulo.setStyle(null);
+        } if(dataInicial.getValue() == null) {
+            dataInicial.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
+        } else {
+            dataInicial.setStyle(null);
+        } if(dataFinal.getValue() == null) {
+            dataFinal.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
+        } else {
+            dataFinal.setStyle(null);
+        }
+    }
+
     public boolean camposObrigatoriosPreenchidos() {
         if (classificacaoEtaria.getSelectionModel().getSelectedItem() == null || titulo.getText().isEmpty()
                 || dataInicial.getValue() == null || dataFinal.getValue() == null) {
+            destacarCamposNaoPreenchidos();
             return false;
         }
         return true;
@@ -341,10 +399,28 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
         });
     }
 
+    private TextFormatter<LocalTime> formatter() {
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("HH:mm");
+
+        // Criar um conversor para converter entre String e LocalTime
+        LocalTimeStringConverter converter = new LocalTimeStringConverter(formato, null);
+
+        // Criar um filtro para validar e formatar a entrada do usuário
+        UnaryOperator<TextFormatter.Change> filter = change -> {
+            String newText = change.getControlNewText();
+            if (newText.matches("^\\d{0,2}(:\\d{0,2})?$")) {
+                return change;
+            }
+            return null;
+        };
+
+        // Criar o TextFormatter
+        return new TextFormatter<>(converter, null, filter);
+    }
+
     public void addInputConstraints() {
         /* aplicando restrições aos inputs */
-        horas.setTextFormatter(getTimeFormatter());
-        minutos.setTextFormatter(getTimeFormatter());
+        horas.setTextFormatter(formatter());
         horasCargaHoraria.setTextFormatter(getTimeFormatter());
         publicoEsperado.setTextFormatter(getNumericalFormatter());
         publicoAlcancado.setTextFormatter(getNumericalFormatter());

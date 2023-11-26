@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import com.casaculturaqxd.sgec.App;
@@ -37,6 +38,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Control;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -119,6 +121,32 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
 
         eventoDAO.setConnection(db.getConnection());
         localizacaoDAO.setConnection(db.getConnection());
+        compararDatas();
+    }
+
+    public void compararDatas(){
+        //Impede que data posteriores á dataFinal sejam seleciondas no campo dataInicial
+        dataFinal.valueProperty().addListener((observable, oldValue, newValue) -> {
+            dataInicial.setDayCellFactory(picker -> new DateCell() {
+                @Override
+                public void updateItem(LocalDate date, boolean empty) {
+                    super.updateItem(date, empty);
+                    LocalDate currentDate = dataFinal.getValue();
+                    setDisable(empty || date.compareTo(currentDate) > 0 );
+                }
+            });
+        });
+        //Impede que datas anteriores à dataInicial sejam selecionadas em dataFinal
+        dataInicial.valueProperty().addListener((observable, oldValue, newValue) -> {
+            dataFinal.setDayCellFactory(picker -> new DateCell() {
+                @Override
+                public void updateItem(LocalDate date, boolean empty) {
+                    super.updateItem(date, empty);
+                    LocalDate currentDate = dataInicial.getValue();
+                    setDisable(empty || date.compareTo(currentDate) < 0);
+                }
+            });
+        });
     }
 
     private void loadMenu() throws IOException {
