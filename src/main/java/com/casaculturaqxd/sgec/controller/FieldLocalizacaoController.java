@@ -52,15 +52,15 @@ public class FieldLocalizacaoController {
     }
 
     public void destacarCamposNaoPreenchidos(){
-        if (cidade.getText() == null){
+        if (cidade.getText().isEmpty()){
             cidade.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
         } else {
             cidade.setStyle(null);
-        } if (estado.getText() == null){
+        } if (estado.getText().isEmpty()){
             estado.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
         } else {
             estado.setStyle(null);
-        } if (pais.getText() == null){
+        } if (pais.getText().isEmpty()){
             pais.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
         } else {
             pais.setStyle(null);
@@ -69,10 +69,10 @@ public class FieldLocalizacaoController {
 
     public Localizacao getLocalizacao(){
         Localizacao novoLocal = new Localizacao();
-        if(rua.getText() == null
-            ||cidade.getText() == null
-            || estado.getText() == null
-            || pais.getText() == null){
+        if(rua.getText().isEmpty()
+            ||cidade.getText().isEmpty()
+            || estado.getText().isEmpty()
+            || pais.getText().isEmpty()){
                 destacarCamposNaoPreenchidos();
                 campoFaltando.show();
             }
