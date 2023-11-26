@@ -202,8 +202,15 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
     }
 
     public boolean salvarAlteracoes() {
-        alterarEvento();
-        return eventoDAO.alterarEvento(evento);
+        try {
+            alterarEvento();
+            return eventoDAO.alterarEvento(evento);
+        } catch (Exception e) {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setContentText("Erro atualizando evento");
+            return false;
+        }
+
     }
 
     public void alterarEvento() {
