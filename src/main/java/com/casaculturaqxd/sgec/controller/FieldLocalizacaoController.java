@@ -74,6 +74,8 @@ public class FieldLocalizacaoController {
             || estado.getText().isEmpty()
             || pais.getText().isEmpty()){
                 destacarCamposNaoPreenchidos();
+                campoFaltando.setAlertType(AlertType.ERROR);
+                campoFaltando.setContentText("Nem todos os campos foram preenchidos");
                 campoFaltando.show();
             }
             else{
