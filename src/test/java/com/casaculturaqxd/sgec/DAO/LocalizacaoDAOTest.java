@@ -70,7 +70,7 @@ public class LocalizacaoDAOTest {
         local = new Localizacao("local_teste", "new_rua_teste", "new_cidade_teste",
                 "new_estado_teste", "new_pais_teste");
 
-        assertAll(() -> assertTrue(localizacaoDAO.inserirLocalizacao(local)),
+        assertAll(() -> assertTrue(localizacaoDAO.inserirLocalizacao(local) != null),
                 () -> assertNotEquals(0, local.getIdLocalizacao()));
     }
 
@@ -78,7 +78,7 @@ public class LocalizacaoDAOTest {
     public void testInserirLocalizacaoSemNome() {
         local = new Localizacao(null, "rua_teste", "new_cidade_teste", "new_estado_teste",
                 "new_pais_teste");
-        assertAll(() -> assertFalse(localizacaoDAO.inserirLocalizacao(local)),
+        assertAll(() -> assertFalse(localizacaoDAO.inserirLocalizacao(local) != null),
                 () -> assertEquals(0, local.getIdLocalizacao()));
     }
 
@@ -86,7 +86,7 @@ public class LocalizacaoDAOTest {
     public void testInserirLocalizacaoSemRua() {
         local = new Localizacao("local_teste", null, "new_cidade_teste", "new_estado_teste",
                 "new_pais_teste");
-        assertAll(() -> assertFalse(localizacaoDAO.inserirLocalizacao(local)),
+        assertAll(() -> assertFalse(localizacaoDAO.inserirLocalizacao(local) != null),
                 () -> assertEquals(0, local.getIdLocalizacao()));
     }
 
@@ -94,7 +94,7 @@ public class LocalizacaoDAOTest {
     public void testInserirLocalizacaoSemCidade() {
         local = new Localizacao("local_teste", "new_rua_teste", null, "new_estado_teste",
                 "new_pais_teste");
-        assertAll(() -> assertFalse(localizacaoDAO.inserirLocalizacao(local)),
+        assertAll(() -> assertFalse(localizacaoDAO.inserirLocalizacao(local) != null),
                 () -> assertEquals(0, local.getIdLocalizacao()));
     }
 
@@ -103,7 +103,7 @@ public class LocalizacaoDAOTest {
         local = new Localizacao("local_teste", "new_rua_teste", "new_cidade_teste", null,
                 "new_pais_teste");
 
-        assertAll(() -> assertFalse(localizacaoDAO.inserirLocalizacao(local)),
+        assertAll(() -> assertFalse(localizacaoDAO.inserirLocalizacao(local) != null),
                 () -> assertEquals(0, local.getIdLocalizacao()));
     }
 
@@ -112,7 +112,7 @@ public class LocalizacaoDAOTest {
         local = new Localizacao("local_teste", "new_rua_teste", "new_cidade_este",
                 "new_estado_teste", null);
 
-        assertAll(() -> assertFalse(localizacaoDAO.inserirLocalizacao(local)),
+        assertAll(() -> assertFalse(localizacaoDAO.inserirLocalizacao(local) != null),
                 () -> assertEquals(0, local.getIdLocalizacao()));
     }
 

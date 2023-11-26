@@ -194,6 +194,7 @@ public class CadastrarEventoController implements ControllerEvento, ControllerSe
         builderEvento.setListaMetas(getMetasSelecionadas());
 
         Evento novoEvento = builderEvento.getEvento();
+
         if (eventoDAO.inserirEvento(novoEvento)) {
             // procura pelo arquivo no banco, se nao estiver realiza a insercao
             for (ServiceFile arquivo : novoEvento.getListaArquivos()) {
@@ -209,6 +210,8 @@ public class CadastrarEventoController implements ControllerEvento, ControllerSe
             eventoDAO.vincularArquivos(novoEvento);
             eventoDAO.vincularMetas(novoEvento.getListaMetas(), novoEvento.getIdEvento());
             novoEvento = eventoDAO.buscarEvento(novoEvento).get();
+
+            this.eventoDAO.vincularLocais(this.localizacoes, novoEvento.getIdEvento());
 
             App.setRoot("view/home");
         }
@@ -468,10 +471,10 @@ public class CadastrarEventoController implements ControllerEvento, ControllerSe
         LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO();
         localizacaoDAO.setConnection(db.getConnection());
 
-        int id = localizacao.getIdLocalizacao();
+        int id = localizacao.getIdLocalizacao(); 
         
         if(id == 0){
-            localizacaoDAO.inserirLocalizacao(localizacao);  
+            localizacao = localizacaoDAO.inserirLocalizacao(localizacao);  
         }
 
         localizacoes.add(localizacao);

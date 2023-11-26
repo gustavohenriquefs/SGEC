@@ -3,7 +3,6 @@ package com.casaculturaqxd.sgec.builder;
 import java.sql.Time;
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.SortedSet;
 
 import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
@@ -29,11 +28,11 @@ public class EventoBuilder implements Builder {
     evento.setCertificavel(certificavel);
   }
 
-  public void setLocalizacoes(SortedSet<Integer> localizacoes) {
+  public void setLocalizacoes(ArrayList<Integer> localizacoes) {
     evento.setLocais(localizacoes);
   }
 
-  public void setParticipantes(SortedSet<Integer> participantes) {
+  public void setParticipantes(ArrayList<Integer> participantes) {
     evento.setListaParticipantes(participantes);
   }
 

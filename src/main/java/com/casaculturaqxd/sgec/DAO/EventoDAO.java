@@ -16,9 +16,8 @@ import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.GrupoEventos;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 import com.casaculturaqxd.sgec.models.Instituicao;
+import com.casaculturaqxd.sgec.models.Localizacao;
 import com.casaculturaqxd.sgec.models.Meta;
-import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
-
 public class EventoDAO {
   private Connection connection;
 
@@ -76,13 +75,13 @@ public class EventoDAO {
       return false;
     }
 
-    if (evento.getLocais() != null) {
-      boolean vinculoLocais = this.vincularLocais(evento.getLocais(), evento.getIdEvento());
+    // if (evento.getLocais() != null) {
+    //   boolean vinculoLocais = this.vincularLocais(evento.getLocais(), evento.getIdEvento());
 
-      if (vinculoLocais == false) {
-        return false;
-      }
-    }
+    //   if (vinculoLocais == false) {
+    //     return false;
+    //   }
+    // }
     /*
      * if(evento.getListaOrganizadores() != null) { boolean vinculoOrganizadores =
      * this.vincularOrganizadores(evento.getListaOrganizadores(),
@@ -122,9 +121,9 @@ public class EventoDAO {
     return serviceFileDAO.vincularAllArquivos(evento);
   }
 
-  private boolean vincularLocais(SortedSet<Integer> locais, Integer idEvento) {
-    for (Integer local : locais) {
-      if (!this.vincularLocal(local, idEvento)) {
+  public boolean vincularLocais(List<Localizacao> locais, Integer idEvento) {
+    for (Localizacao local : locais) {
+      if (!this.vincularLocal(local.getIdLocalizacao(), idEvento)) {
         return false;
       }
     }
@@ -384,10 +383,10 @@ public class EventoDAO {
     return numMunicipiosDistintos;
   }
 
-  public SortedSet<Integer> buscarLocaisPorEvento(Integer idEvento) {
+  public ArrayList<Integer> buscarLocaisPorEvento(Integer idEvento) {
     String sql = "select id_localizacao from localizacao_evento where id_evento=?";
 
-    SortedSet<Integer> locais = new TreeSet<>();
+    ArrayList<Integer> locais = new ArrayList<>();
 
     try {
       PreparedStatement stmt = connection.prepareStatement(sql);
@@ -535,7 +534,7 @@ public class EventoDAO {
   }
 
   private boolean sincronizarLocais(Evento evento) {
-    SortedSet<Integer> locaisEventoIds = this.buscarLocaisPorEvento(evento.getIdEvento());
+    ArrayList<Integer> locaisEventoIds = this.buscarLocaisPorEvento(evento.getIdEvento());
 
     for (Integer localId : locaisEventoIds) {
       if (!evento.getLocais().contains(localId)) {

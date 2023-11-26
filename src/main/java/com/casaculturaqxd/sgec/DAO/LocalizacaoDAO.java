@@ -50,7 +50,7 @@ public class LocalizacaoDAO {
     }
   }
 
-  public boolean inserirLocalizacao(Localizacao obj) {
+  public Localizacao inserirLocalizacao(Localizacao obj) {
     try {
       String sql = "insert into localizacao (nome_localizacao,rua,numero_rua,bairro,cep,cidade,estado,pais)"
           + " values(?,?,?,?,?,?,?,?)";
@@ -66,16 +66,17 @@ public class LocalizacaoDAO {
       stmt.executeUpdate();
 
       ResultSet rs = stmt.getGeneratedKeys();
+
       if (rs.next()) {
         obj.setIdLocalizacao(rs.getInt("id_localizacao"));
       }
 
       stmt.close();
-      return true;
+      return obj;
     } catch (SQLException e) {
-      Logger erro = Logger.getLogger("erroSQl");
+      Logger erro = Logger.getLogger("erroSQl"); 
       erro.log(Level.SEVERE, "excecao levantada:", e);
-      return false;
+      return null;
     }
   }
 

@@ -114,7 +114,7 @@ public class PesquisarEventoController {
         ArrayList<Localizacao> localizacaos = localizacaoDAO.pesquisarLocalizacao(nomeCidade);
         ArrayList<Evento> eventosTemp = new ArrayList<>();
         for (Evento evento : eventos) {
-            SortedSet<Integer> idsLocais = eventoDAO.buscarLocaisPorEvento(evento.getIdEvento());
+            ArrayList<Integer> idsLocais = eventoDAO.buscarLocaisPorEvento(evento.getIdEvento());
             for (Localizacao local : localizacaos) {
                 if (idsLocais.contains((Integer) local.getIdLocalizacao())) {
                     eventosTemp.add(evento);
