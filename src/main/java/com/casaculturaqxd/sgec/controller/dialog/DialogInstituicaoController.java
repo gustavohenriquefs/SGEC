@@ -47,10 +47,16 @@ public class DialogInstituicaoController {
   private File file = null;
   private Instituicao instituicao = null;
 
-  ArrayList<String> listaNomes = instituicaoDAO.listarInstituicoess();
   AutoCompletionBinding<String> binding;
 
   public void initialize() throws IOException {
+    ArrayList<String> listaNomes;
+    try {
+      listaNomes = instituicaoDAO.listarInstituicoes();
+    } catch (SQLException e) {
+      listaNomes = new ArrayList<>();
+    }
+    
     binding = TextFields.bindAutoCompletion(nomeInstituicao, listaNomes);
     binding.setOnAutoCompleted(autoCompletionEvent -> {
       String selected = autoCompletionEvent.getCompletion();
@@ -90,25 +96,16 @@ public class DialogInstituicaoController {
   public boolean cadastrarInstituicao() {
     if(nomeInstituicao.getText() != ""){
       if(file == null){
+        ServiceFile serviceFileTemp = file != null ? new ServiceFile(file) : null;
         Instituicao instituicao = new Instituicao(nomeInstituicao.getText(), contribuicoes.getText(), 
-        valorContribuicao.getText(), null);
+        valorContribuicao.getText(), serviceFileTemp);
         try {
           instituicaoDAO.inserirInstituicao(instituicao);
           return true;
         } catch (SQLException e) {
           e.printStackTrace();
         }
-      } else {
-        Instituicao instituicao = new Instituicao(nomeInstituicao.getText(), contribuicoes.getText(), 
-        valorContribuicao.getText(), new ServiceFile(file));
-        try {
-          instituicaoDAO.inserirInstituicao(instituicao);
-          return true;
-        } catch (SQLException e) {
-          e.printStackTrace();
-        }
-      }
-      
+      } 
     } 
     return false;
   }

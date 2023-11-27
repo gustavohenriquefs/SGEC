@@ -93,20 +93,21 @@ public class InstituicaoDAO {
     return Optional.of(product);
   }
 
-  public ArrayList<String> listarInstituicoess() {
+  public ArrayList<String> listarInstituicoes() throws SQLException {
     String sql = "select nome_instituicao from instituicao";
     ArrayList<String> nomeStrings = new ArrayList<>();
-    nomeStrings.add("");
+    PreparedStatement statement = conn.prepareStatement(sql);
     try {
-      PreparedStatement statement = conn.prepareStatement(sql);
       ResultSet resultSet = statement.executeQuery();
 
       while (resultSet.next()) {
         nomeStrings.add(resultSet.getString("nome_instituicao"));
       }
-      statement.close();
+      
     } catch (SQLException e) {
-      return null;
+      throw new RuntimeException(e);
+    } finally {
+      statement.close();
     }
 
     return nomeStrings;

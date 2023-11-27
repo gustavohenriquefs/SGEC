@@ -12,6 +12,10 @@ public interface ControllerEvento {
 
     public void removerParticipante(Participante participante);
 
+    public void adicionarOrganizador(Instituicao instituicao);
+
+    public void adicionarColaborador(Instituicao instituicao);
+
     // retorna o stage da tela, necessario para abrir o FileChooser
     public Stage getStage();
 

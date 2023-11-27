@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.sql.Time;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Optional;
 
 import com.casaculturaqxd.sgec.App;
@@ -115,6 +116,7 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
     private ImageView copiaCola;
     @FXML
     private Tooltip tooltipCliboard;
+    private Alert mensagem = new Alert(AlertType.NONE);
 
     public void initialize() throws IOException {
         tooltipCliboard = new Tooltip("Copiado para a área de transferência");
@@ -457,7 +459,18 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
         DialogNovaInstituicao dialogNovaInstituicao = new DialogNovaInstituicao(buttonTypeVincularOrganizadora);
         Optional<Instituicao> novaInstituicao = dialogNovaInstituicao.showAndWait();
         if(novaInstituicao.isPresent()){
-            organizadorObservableMap.put(novaInstituicao.get(), new FXMLLoader(App.class.getResource("view/preview/previewInstituicao.fxml")));
+            adicionarOrganizador(novaInstituicao.get());
+        }
+    }
+
+    public void adicionarOrganizador(Instituicao instituicao) {
+        if(!contemInstituicao(organizadorObservableMap, instituicao.getNome()) && 
+                !contemInstituicao(colaboradorObservableMap, instituicao.getNome())){
+                    organizadorObservableMap.put(instituicao, new FXMLLoader(App.class.getResource("view/preview/previewInstituicao.fxml")));
+        } else {
+            mensagem.setAlertType(AlertType.ERROR);
+            mensagem.setContentText("Não foi possivel realizar a vinculação: Instituição já foi vinculada!");
+            mensagem.show();
         }
     }
 
@@ -466,8 +479,28 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
         DialogNovaInstituicao dialogNovaInstituicao = new DialogNovaInstituicao(buttonTypeVincularColaborador);
         Optional<Instituicao> novaInstituicao = dialogNovaInstituicao.showAndWait();
         if(novaInstituicao.isPresent()){
-            colaboradorObservableMap.put(novaInstituicao.get(), new FXMLLoader(App.class.getResource("view/preview/previewInstituicao.fxml")));
+            adicionarColaborador(novaInstituicao.get());   
         }
+    }
+
+    public void adicionarColaborador(Instituicao instituicao) {
+        if(!contemInstituicao(organizadorObservableMap, instituicao.getNome()) && 
+                !contemInstituicao(colaboradorObservableMap, instituicao.getNome())){
+                    colaboradorObservableMap.put(instituicao, new FXMLLoader(App.class.getResource("view/preview/previewInstituicao.fxml")));
+        } else {
+            mensagem.setAlertType(AlertType.ERROR);
+            mensagem.setContentText("Não foi possivel realizar a vinculação: Instituição já foi vinculada!");
+            mensagem.show();
+        }
+    }
+
+    public static boolean contemInstituicao(ObservableMap<Instituicao, FXMLLoader> organizadorObservableMap, String nome) {
+        for (Instituicao instituicao : organizadorObservableMap.keySet()) {
+            if (instituicao.getNome().equals(nome)) {
+                return true; 
+            }
+        }
+        return false; 
     }
 
     public void addListenersOrganizador(ObservableMap<Instituicao, FXMLLoader> observablemap) {
@@ -533,11 +566,25 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
     }
 
     @Override
-    public void removerInstituicao(Instituicao instituicao) {
-        if(organizadorObservableMap.containsKey(instituicao)){
-            organizadorObservableMap.remove(instituicao);
+    public void removerInstituicao(Instituicao instituicao){
+        if(contemInstituicao(organizadorObservableMap, instituicao.getNome())){
+            Iterator<Instituicao> iterator = organizadorObservableMap.keySet().iterator();
+        
+            while (iterator.hasNext()) {
+                Instituicao instituicaoTemp = iterator.next();
+                if (instituicaoTemp.getNome().equals(instituicao.getNome())) {
+                    iterator.remove();
+                }
+            }
         } else {
-            colaboradorObservableMap.remove(instituicao);
+            Iterator<Instituicao> iterator = colaboradorObservableMap.keySet().iterator();
+        
+            while (iterator.hasNext()) {
+                Instituicao instituicaoTemp = iterator.next();
+                if (instituicaoTemp.getNome().equals(instituicao.getNome())) {
+                    iterator.remove();
+                }
+            }
         }
     }
 }

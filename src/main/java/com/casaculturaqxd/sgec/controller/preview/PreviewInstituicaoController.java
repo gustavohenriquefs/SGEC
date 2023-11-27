@@ -131,7 +131,6 @@ public class PreviewInstituicaoController {
     }
 
     public void remover() {
-        instituicao.setImagemCapa(null);
         parentController.removerInstituicao(getInstituicao());
     }
 

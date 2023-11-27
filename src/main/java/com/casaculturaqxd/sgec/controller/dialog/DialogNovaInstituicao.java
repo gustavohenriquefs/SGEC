@@ -13,14 +13,14 @@ import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.Instituicao;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
-import javafx.stage.FileChooser;
-import javafx.stage.FileChooser.ExtensionFilter;
 
 public class DialogNovaInstituicao extends Dialog<Instituicao> {
   DatabasePostgres db = DatabasePostgres.getInstance("URL", "USER_NAME", "PASSWORD");
@@ -28,16 +28,16 @@ public class DialogNovaInstituicao extends Dialog<Instituicao> {
   InstituicaoDAO instituicaoDAO = new InstituicaoDAO(db.getConnection());
   Instituicao instituicao = null;
   private Alert mensagem = new Alert(AlertType.NONE);
+  ButtonType buttonTypeCancelar = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+  ButtonType buttonTypeCadastrar = new ButtonType("Cadastrar nova instituição", ButtonBar.ButtonData.APPLY);
+  ButtonType okButtonType;
+  
 
   public DialogNovaInstituicao(ButtonType okButtonType) throws IOException{
     super();
-    this.setTitle("Dialog Instituição");
-    ButtonType buttonTypeCancelar = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
-    ButtonType buttonTypeCadastrar = new ButtonType("Cadastrar nova instituição", ButtonBar.ButtonData.APPLY);
-    FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/Dialog/dialogInstituicoes.fxml"));
-    this.setDialogPane(fxmlLoader.load());
-    dialogInstituicaoController = fxmlLoader.getController();
-    this.getDialogPane().getButtonTypes().addAll(buttonTypeCancelar, buttonTypeCadastrar, okButtonType);
+    this.okButtonType = okButtonType;
+    carregaDialog();
+    
     this.setResultConverter(dialogButton -> {
       instituicao = dialogInstituicaoController.obterInstituicao();
       if (dialogButton == okButtonType) {
@@ -52,16 +52,9 @@ public class DialogNovaInstituicao extends Dialog<Instituicao> {
             return null;
           }
             
-          if(!dialogInstituicaoController.getValorContribuicao().getText().isEmpty()) {
-            instituicao.setValorContribuicao(dialogInstituicaoController.getValorContribuicao().getText());
-          } else{
-            instituicao.setValorContribuicao("Valor das contribuições"); 
-          }
+          instituicao.setValorContribuicao(dialogInstituicaoController.getValorContribuicao().getText());
 
           if(dialogInstituicaoController.getFile() != null){
-            FileChooser fileChooser = new FileChooser();
-            ExtensionFilter filterImagens = new ExtensionFilter("imagem", "*.jpeg", "*.jpg", "*.png", "*.bmp");
-            fileChooser.getExtensionFilters().add(filterImagens);
             instituicao.setImagemCapa(new ServiceFile(dialogInstituicaoController.getFile()));
           }
 
@@ -73,26 +66,37 @@ public class DialogNovaInstituicao extends Dialog<Instituicao> {
           mensagem.show();
         }
         
-      } else if(dialogButton == buttonTypeCadastrar){
-          Optional<Instituicao> instituicao = dialogInstituicaoController.getInstituicao();
-          if(instituicao.isEmpty()) {
-            if(dialogInstituicaoController.cadastrarInstituicao() == false){
-              mensagem.setAlertType(AlertType.ERROR);
-              mensagem.setContentText("Não foi possivel realizar o cadastro: Nome da Instituição inválido");
-              mensagem.show();
-            }
-            mensagem.setAlertType(AlertType.INFORMATION);
-            mensagem.setContentText("Instituição cadastrada");
-            mensagem.show();
-          } else {
-            mensagem.setAlertType(AlertType.ERROR);
-            mensagem.setContentText("Não foi possivel realizar o cadastro: Instituição já existe");
-            mensagem.show();
-          }
-      }
+      } 
       return null;
   });
 
+  this.getDialogPane().lookupButton(buttonTypeCadastrar).addEventFilter(ActionEvent.ACTION, event -> {
+    Optional<Instituicao> instituicao = dialogInstituicaoController.getInstituicao();
+    if(instituicao.isEmpty()) {
+      if(dialogInstituicaoController.cadastrarInstituicao() == false){
+        mensagem.setAlertType(AlertType.ERROR);
+        mensagem.setContentText("Não foi possivel realizar o cadastro: Nome da Instituição inválido");
+        mensagem.show();
+      }
+      mensagem.setAlertType(AlertType.INFORMATION);
+      mensagem.setContentText("Instituição cadastrada");
+      mensagem.show();
+    } else {
+      mensagem.setAlertType(AlertType.ERROR);
+      mensagem.setContentText("Não foi possivel realizar o cadastro: Instituição já existe");
+      mensagem.show();
+    }
+    event.consume();
+  });
+
+  }
+
+  void carregaDialog() throws IOException {
+    this.setTitle("Dialog Instituição");
+    FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("view/Dialog/dialogInstituicoes.fxml"));
+    this.setDialogPane(fxmlLoader.load());
+    dialogInstituicaoController = fxmlLoader.getController();
+    this.getDialogPane().getButtonTypes().addAll(buttonTypeCancelar, buttonTypeCadastrar, okButtonType);
   }
 
 }

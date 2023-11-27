@@ -34,6 +34,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Optional;
 import java.util.TreeSet;
 import java.util.function.Consumer;
@@ -94,14 +95,12 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
     @FXML
     RadioButton certificavel, acessivelEmLibras;
     private ObservableMap<ServiceFile, FXMLLoader> mapServiceFiles = FXCollections.observableHashMap();
-    ObservableMap<Participante, FXMLLoader> participanteObservableMap;
     ObservableMap<Instituicao, FXMLLoader> organizadorObservableMap = FXCollections.<Instituicao, FXMLLoader>observableHashMap();
     ObservableMap<Instituicao, FXMLLoader> colaboradorObservableMap = FXCollections.<Instituicao, FXMLLoader>observableHashMap();
-    // Botoes
     @FXML
     Button botaoNovaLocalizacao;
-    // Listas
     ObservableMap<Participante, FXMLLoader> participantes = FXCollections.<Participante, FXMLLoader>observableHashMap();
+    private Alert mensagem = new Alert(AlertType.NONE);
 
     public void initialize() throws IOException {
         participanteDAO.setConnection(db.getConnection());
@@ -261,7 +260,18 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
         DialogNovaInstituicao dialogNovaInstituicao = new DialogNovaInstituicao(buttonTypeVincularOrganizadora);
         Optional<Instituicao> novaInstituicao = dialogNovaInstituicao.showAndWait();
         if(novaInstituicao.isPresent()){
-            organizadorObservableMap.put(novaInstituicao.get(), new FXMLLoader(App.class.getResource("view/preview/previewInstituicao.fxml")));
+            adicionarOrganizador(novaInstituicao.get());
+        }
+    }
+
+    public void adicionarOrganizador(Instituicao instituicao) {
+        if(!contemInstituicao(organizadorObservableMap, instituicao.getNome()) && 
+                !contemInstituicao(colaboradorObservableMap, instituicao.getNome())){
+                    organizadorObservableMap.put(instituicao, new FXMLLoader(App.class.getResource("view/preview/previewInstituicao.fxml")));
+        } else {
+            mensagem.setAlertType(AlertType.ERROR);
+            mensagem.setContentText("Não foi possivel realizar a vinculação: Instituição já foi vinculada!");
+            mensagem.show();
         }
     }
 
@@ -270,15 +280,49 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
         DialogNovaInstituicao dialogNovaInstituicao = new DialogNovaInstituicao(buttonTypeVincularColaborador);
         Optional<Instituicao> novaInstituicao = dialogNovaInstituicao.showAndWait();
         if(novaInstituicao.isPresent()){
-            colaboradorObservableMap.put(novaInstituicao.get(), new FXMLLoader(App.class.getResource("view/preview/previewInstituicao.fxml")));
+            adicionarColaborador(novaInstituicao.get());   
         }
     }
 
-    public void removerInstituicao(Instituicao instituicao){
-        if(organizadorObservableMap.containsKey(instituicao)){
-            organizadorObservableMap.remove(instituicao);
+    public void adicionarColaborador(Instituicao instituicao) {
+        if(!contemInstituicao(organizadorObservableMap, instituicao.getNome()) && 
+                !contemInstituicao(colaboradorObservableMap, instituicao.getNome())){
+                    colaboradorObservableMap.put(instituicao, new FXMLLoader(App.class.getResource("view/preview/previewInstituicao.fxml")));
         } else {
-            colaboradorObservableMap.remove(instituicao);
+            mensagem.setAlertType(AlertType.ERROR);
+            mensagem.setContentText("Não foi possivel realizar a vinculação: Instituição já foi vinculada!");
+            mensagem.show();
+        }
+    }
+
+    public static boolean contemInstituicao(ObservableMap<Instituicao, FXMLLoader> organizadorObservableMap, String nome) {
+        for (Instituicao instituicao : organizadorObservableMap.keySet()) {
+            if (instituicao.getNome().equals(nome)) {
+                return true; 
+            }
+        }
+        return false; 
+    }
+
+    public void removerInstituicao(Instituicao instituicao){
+        if(contemInstituicao(organizadorObservableMap, instituicao.getNome())){
+            Iterator<Instituicao> iterator = organizadorObservableMap.keySet().iterator();
+        
+            while (iterator.hasNext()) {
+                Instituicao instituicaoTemp = iterator.next();
+                if (instituicaoTemp.getNome().equals(instituicao.getNome())) {
+                    iterator.remove();
+                }
+            }
+        } else {
+            Iterator<Instituicao> iterator = colaboradorObservableMap.keySet().iterator();
+        
+            while (iterator.hasNext()) {
+                Instituicao instituicaoTemp = iterator.next();
+                if (instituicaoTemp.getNome().equals(instituicao.getNome())) {
+                    iterator.remove();
+                }
+            }
         }
     }
 
@@ -300,8 +344,6 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
 
     @Override
     public void adicionarArquivo(ServiceFile serviceFile) throws IOException {
-        // comparacao de arquivo duplicada e feita com o nome, ja que um mesmo conteudo
-        // pode estar em mais de um caminho
         for (ServiceFile existingFile : mapServiceFiles.keySet()) {
             if (serviceFile.getFileKey().equals(existingFile.getFileKey())) {
                 throw new IOException("arquivo ja foi inserido");
