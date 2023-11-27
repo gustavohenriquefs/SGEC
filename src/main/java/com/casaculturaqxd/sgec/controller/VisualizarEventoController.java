@@ -2,15 +2,19 @@ package com.casaculturaqxd.sgec.controller;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.sql.Time;
-
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Optional;
 
+import java.util.NoSuchElementException;
+
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.EventoDAO;
 import com.casaculturaqxd.sgec.DAO.LocalizacaoDAO;
+import com.casaculturaqxd.sgec.DAO.ServiceFileDAO;
 import com.casaculturaqxd.sgec.controller.dialog.DialogNovaInstituicao;
 import com.casaculturaqxd.sgec.controller.preview.PreviewArquivoController;
 import com.casaculturaqxd.sgec.controller.preview.PreviewInstituicaoController;
@@ -21,10 +25,9 @@ import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.Indicador;
 import com.casaculturaqxd.sgec.models.Instituicao;
 import com.casaculturaqxd.sgec.models.Localizacao;
+import com.casaculturaqxd.sgec.models.Meta;
 import com.casaculturaqxd.sgec.models.Participante;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
-import com.casaculturaqxd.sgec.service.Service;
-import com.casaculturaqxd.sgec.models.Meta;
 
 import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
@@ -37,12 +40,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Control;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -50,9 +55,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.MouseEvent;
@@ -62,9 +67,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.util.converter.IntegerStringConverter;
-import javafx.scene.image.ImageView;
 import javafx.util.Duration;
+import javafx.util.converter.IntegerStringConverter;
 
 public class VisualizarEventoController implements ControllerServiceFile, ControllerEvento {
     private Evento evento;
@@ -133,6 +137,32 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
 
         eventoDAO.setConnection(db.getConnection());
         localizacaoDAO.setConnection(db.getConnection());
+        compararDatas();
+    }
+
+    public void compararDatas(){
+        //Impede que data posteriores á dataFinal sejam seleciondas no campo dataInicial
+        dataFinal.valueProperty().addListener((observable, oldValue, newValue) -> {
+            dataInicial.setDayCellFactory(picker -> new DateCell() {
+                @Override
+                public void updateItem(LocalDate date, boolean empty) {
+                    super.updateItem(date, empty);
+                    LocalDate currentDate = dataFinal.getValue();
+                    setDisable(empty || date.compareTo(currentDate) > 0 );
+                }
+            });
+        });
+        //Impede que datas anteriores à dataInicial sejam selecionadas em dataFinal
+        dataInicial.valueProperty().addListener((observable, oldValue, newValue) -> {
+            dataFinal.setDayCellFactory(picker -> new DateCell() {
+                @Override
+                public void updateItem(LocalDate date, boolean empty) {
+                    super.updateItem(date, empty);
+                    LocalDate currentDate = dataInicial.getValue();
+                    setDisable(empty || date.compareTo(currentDate) < 0);
+                }
+            });
+        });
     }
 
     private void loadMenu() throws IOException {
@@ -140,7 +170,7 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
         root.getChildren().add(0, carregarMenu.load());
     }
 
-    private void loadContent() throws IOException {
+    private void loadContent() throws IOException, SQLException {
         loadMetas();
         classificacaoEtaria.getItems().addAll(classificacoes);
         titulo.setText(evento.getNome());
@@ -170,9 +200,12 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
 
         if (evento.getLocais() != null) {
             for (Integer idLocal : evento.getLocais()) {
-                Localizacao local = new Localizacao();
-                local.setIdLocalizacao(idLocal);
-                local = localizacaoDAO.getLocalizacao(local);
+                Localizacao local = new Localizacao(idLocal);
+                try {
+                    local = localizacaoDAO.getLocalizacao(local).get();
+                } catch (NoSuchElementException e) {
+                    throw new RuntimeException();
+                }
                 Parent previewLocal = loaderLocal.load();
                 PreviewLocalizacaoController controller = loaderLocal.getController();
                 controller.setLocalizacao(local);
@@ -210,14 +243,21 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
         }
     }
 
-    public void setEvento(Evento evento) throws IOException {
+    public void setEvento(Evento evento) throws IOException, SQLException {
         this.evento = evento;
         loadContent();
     }
 
     public boolean salvarAlteracoes() {
-        alterarEvento();
-        return eventoDAO.alterarEvento(evento);
+        try {
+            alterarEvento();
+            return eventoDAO.alterarEvento(evento);
+        } catch (Exception e) {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setContentText("Erro atualizando evento");
+            return false;
+        }
+
     }
 
     public void alterarEvento() {
@@ -247,7 +287,7 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
         }
     }
 
-    public void goToMidiaEvento() throws IOException {
+    public void goToMidiaEvento() throws IOException, SQLException {
         FXMLLoader loadTelaMidia = new FXMLLoader(App.class.getResource("view/midiaEvento.fxml"));
         Parent nextScreen = loadTelaMidia.load();
         MidiaEventoController controllerNextScreen = loadTelaMidia.getController();
@@ -329,33 +369,26 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
         }
     }
 
-    public void loadArquivos() {
-        if (evento.getListaArquivos() != null) {
-            for (ServiceFile arquivo : evento.getListaArquivos()) {
+    public void loadArquivos() throws SQLException {
+        ServiceFileDAO serviceFileDAO = new ServiceFileDAO(db.getConnection());
+        for (ServiceFile arquivo : serviceFileDAO.listarArquivosEvento(evento, 5)) {
+            try {
                 adicionarArquivo(arquivo);
+            } catch(IOException e) {
+                e.printStackTrace();
             }
         }
     }
 
     @Override
-    public void adicionarArquivo(ServiceFile serviceFile) {
+    public void adicionarArquivo(ServiceFile serviceFile) throws IOException {
         mapServiceFiles.put(serviceFile,
                 new FXMLLoader(App.class.getResource("view/preview/previewArquivo.fxml")));
     }
 
     @Override
     public void removerArquivo(ServiceFile serviceFile) {
-        Service service = serviceFile.getService();
-        try {
-            service.deletarArquivo(serviceFile.getBucket(), serviceFile.getFileKey());
-
-        } catch (IllegalArgumentException e) {
-            // caso arquivo ja nao esteja registrado
-            mapServiceFiles.remove(serviceFile);
-        } catch (Exception e) {
-            // em qualquer outro erro
-            e.printStackTrace();
-        }
+        mapServiceFiles.remove(serviceFile);
     }
 
     public void addListenersServiceFile(ObservableMap<ServiceFile, FXMLLoader> observablemap) {
@@ -377,6 +410,9 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
 
                         secaoArquivos.getChildren().add(previewParticipante);
                     } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (SQLException e) {
+                        // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
                 }
@@ -440,7 +476,7 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
                         controller.setParentController(superController);
 
                         secaoParticipantes.getChildren().add(previewParticipante);
-                    } catch (IOException e) {
+                    } catch (IOException | SQLException e) {
                         e.printStackTrace();
                     }
                 }
