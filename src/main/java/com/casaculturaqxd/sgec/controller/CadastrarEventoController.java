@@ -210,8 +210,9 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
      * campos preenchidos da tela
      * 
      * @return o novo evento a ser inserido
+     * @throws SQLException
      */
-    private Evento getTargetEvento() {
+    private Evento getTargetEvento() throws SQLException {
         builderEvento = new EventoBuilder();
         Date novaDataInicial = pickerDataInicial.getValue() != null ? Date.valueOf(pickerDataInicial.getValue()) : null;
         Date novaDataFinal = pickerDataFinal.getValue() != null ? Date.valueOf(pickerDataFinal.getValue()) : null;
@@ -229,7 +230,7 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
         builderEvento.setCertificavel(optionCertificavel.isSelected());
         builderEvento.setCargaHoraria(novaCargaHoraria);
         builderEvento.setMunicipiosEsperado(numMunicipiosEsperadoValue);
-        builderEvento.setParticipantesEsperado(numParticipanteEsperado);
+        builderEvento.setNumParticipantesEsperado(numParticipanteEsperado);
         // TODO: substituir id de locais por models
         TreeSet<Integer> idLocais = new TreeSet<>();
         for (FieldLocalizacaoController controller : controllersLocais) {
