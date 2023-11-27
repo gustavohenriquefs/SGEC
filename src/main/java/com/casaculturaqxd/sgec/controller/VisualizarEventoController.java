@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.EventoDAO;
@@ -184,9 +185,12 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
 
         if (evento.getLocais() != null) {
             for (Integer idLocal : evento.getLocais()) {
-                Localizacao local = new Localizacao();
-                local.setIdLocalizacao(idLocal);
-                local = localizacaoDAO.getLocalizacao(local);
+                Localizacao local = new Localizacao(idLocal);
+                try {
+                    local = localizacaoDAO.getLocalizacao(local).get();
+                } catch (NoSuchElementException e) {
+                    throw new RuntimeException();
+                }
                 Parent previewLocal = loaderLocal.load();
                 PreviewLocalizacaoController controller = loaderLocal.getController();
                 controller.setLocalizacao(local);
