@@ -181,22 +181,7 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
     }
 
     public void criarNovoEvento() {
-        if (emptyLocalizacoes()) {
-            Alert erroLocalizacao = new Alert(AlertType.ERROR,
-                    "Um evento deve possuir pelo menos uma localização associada");
-            erroLocalizacao.show();
-            throw new RuntimeException("nenhum local inserido");
-        }
-        if (!camposObrigatoriosPreenchidos()) {
-            Alert erroLocalizacao = new Alert(AlertType.ERROR, "nem todos os campos obrigatorios foram preenchidos");
-            erroLocalizacao.show();
-            throw new RuntimeException("campos obrigatorios nao preenchidos");
-        }
-        if (Colaboradores.getChildren().isEmpty() && checkMeta4.isSelected()) {
-            Alert mensagemErro = new Alert(AlertType.ERROR, "Convocatórias precisam de pelo menos um colaborador");
-            mensagemErro.show();
-            throw new RuntimeException("Convocatorias precisam de pelo menos um colaborador");
-        }
+        verificarInput();
 
         try {
             insertEvento(getTargetEvento());
@@ -257,6 +242,26 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
         builderEvento.setListaMetas(getMetasSelecionadas());
 
         return builderEvento.getEvento();
+    }
+
+    /**
+     * verifica se as condicoes para cadastrar um evento sao atendidas
+     */
+    private void verificarInput() {
+        if (emptyLocalizacoes()) {
+            Alert erroLocalizacao = new Alert(AlertType.ERROR,
+                    "Um evento deve possuir pelo menos uma localização associada");
+            erroLocalizacao.show();
+            throw new RuntimeException("nenhum local inserido");
+        } else if (!camposObrigatoriosPreenchidos()) {
+            Alert erroLocalizacao = new Alert(AlertType.ERROR, "nem todos os campos obrigatorios foram preenchidos");
+            erroLocalizacao.show();
+            throw new RuntimeException("campos obrigatorios nao preenchidos");
+        } else if (Colaboradores.getChildren().isEmpty() && checkMeta4.isSelected()) {
+            Alert mensagemErro = new Alert(AlertType.ERROR, "Convocatórias precisam de pelo menos um colaborador");
+            mensagemErro.show();
+            throw new RuntimeException("Convocatorias precisam de pelo menos um colaborador");
+        }
     }
 
     public void cancelar() throws IOException {
