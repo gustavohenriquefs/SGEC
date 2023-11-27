@@ -2,7 +2,6 @@ package com.casaculturaqxd.sgec.controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Time;
@@ -40,8 +39,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
@@ -75,7 +74,7 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
     @FXML
     VBox root;
     @FXML
-    VBox Localizacoes, cargaHoraria;
+    VBox paneLocalizacoes, paneCargaHoraria;
     @FXML
     FlowPane secaoParticipantes, secaoOrganizadores, Colaboradores;
     @FXML
@@ -84,19 +83,19 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
     HBox secaoMetas;
 
     @FXML
-    TextField titulo, publicoEsperado, publicoAlcancado, horas, horasCargaHoraria, numParticipantesEsperado,
-            numMunicipiosEsperado;
+    TextField fieldTitulo, fieldPublicoEsperado, fieldPublicoAlcancado, fieldHorario, fieldCargaHoraria,
+            fieldNumParticipantesEsperado, fieldNumMunicipiosEsperado;
     @FXML
-    TextArea descricao;
+    TextArea fieldDescricao;
     @FXML
-    DatePicker dataInicial, dataFinal;
+    DatePicker pickerDataInicial, pickerDataFinal;
     @FXML
-    ChoiceBox<String> classificacaoEtaria;
+    ChoiceBox<String> choiceClassificacaoEtaria;
     private final String[] classificacoes = { "Livre", "10 anos", "12 anos", "14 anos", "16 anos", "18 anos" };
     @FXML
     CheckBox checkMeta1, checkMeta2, checkMeta3, checkMeta4;
     @FXML
-    RadioButton certificavel, acessivelEmLibras;
+    RadioButton optionCertificavel, optionAcessivelEmLibras;
     private ObservableMap<ServiceFile, FXMLLoader> mapServiceFiles = FXCollections.observableHashMap();
 
     // Botoes
@@ -117,7 +116,7 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
 
         // inicia com o local obrigatorio carregado na pagina
         carregarCampoLocalizacao();
-        classificacaoEtaria.getItems().addAll(classificacoes);
+        choiceClassificacaoEtaria.getItems().addAll(classificacoes);
         addInputConstraints();
         compararDatas();
     }
@@ -131,23 +130,23 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
     public void compararDatas() {
         // Impede que data posteriores á dataFinal sejam seleciondas no campo
         // dataInicial
-        dataFinal.valueProperty().addListener((observable, oldValue, newValue) -> {
-            dataInicial.setDayCellFactory(picker -> new DateCell() {
+        pickerDataFinal.valueProperty().addListener((observable, oldValue, newValue) -> {
+            pickerDataInicial.setDayCellFactory(picker -> new DateCell() {
                 @Override
                 public void updateItem(LocalDate date, boolean empty) {
                     super.updateItem(date, empty);
-                    LocalDate currentDate = dataFinal.getValue();
+                    LocalDate currentDate = pickerDataFinal.getValue();
                     setDisable(empty || date.compareTo(currentDate) > 0);
                 }
             });
         });
         // Impede que datas anteriores à dataInicial sejam selecionadas em dataFinal
-        dataInicial.valueProperty().addListener((observable, oldValue, newValue) -> {
-            dataFinal.setDayCellFactory(picker -> new DateCell() {
+        pickerDataInicial.valueProperty().addListener((observable, oldValue, newValue) -> {
+            pickerDataFinal.setDayCellFactory(picker -> new DateCell() {
                 @Override
                 public void updateItem(LocalDate date, boolean empty) {
                     super.updateItem(date, empty);
-                    LocalDate currentDate = dataInicial.getValue();
+                    LocalDate currentDate = pickerDataInicial.getValue();
                     setDisable(empty || date.compareTo(currentDate) < 0);
                 }
             });
@@ -214,20 +213,20 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
      */
     private Evento getTargetEvento() {
         builderEvento = new EventoBuilder();
-        Date novaDataInicial = dataInicial.getValue() != null ? Date.valueOf(dataInicial.getValue()) : null;
-        Date novaDataFinal = dataFinal.getValue() != null ? Date.valueOf(dataFinal.getValue()) : null;
-        Time novaCargaHoraria = formatTimeInputField(horasCargaHoraria);
-        int novoPublicoEsperado = formatNumericInputField(publicoEsperado);
-        int novoPublicoAlcancado = formatNumericInputField(publicoAlcancado);
-        int numMunicipiosEsperadoValue = formatNumericInputField(numMunicipiosEsperado);
-        int numParticipanteEsperado = formatNumericInputField(numParticipantesEsperado);
+        Date novaDataInicial = pickerDataInicial.getValue() != null ? Date.valueOf(pickerDataInicial.getValue()) : null;
+        Date novaDataFinal = pickerDataFinal.getValue() != null ? Date.valueOf(pickerDataFinal.getValue()) : null;
+        Time novaCargaHoraria = formatTimeInputField(fieldCargaHoraria);
+        int novoPublicoEsperado = formatNumericInputField(fieldPublicoEsperado);
+        int novoPublicoAlcancado = formatNumericInputField(fieldPublicoAlcancado);
+        int numMunicipiosEsperadoValue = formatNumericInputField(fieldNumMunicipiosEsperado);
+        int numParticipanteEsperado = formatNumericInputField(fieldNumParticipantesEsperado);
 
-        builderEvento.setNome(titulo.getText()).setDescricao(descricao.getText())
-                .setClassificacaoEtaria(classificacaoEtaria.getSelectionModel().getSelectedItem())
+        builderEvento.setNome(fieldTitulo.getText()).setDescricao(fieldDescricao.getText())
+                .setClassificacaoEtaria(choiceClassificacaoEtaria.getSelectionModel().getSelectedItem())
                 .setDataInicial(novaDataInicial).setDataFinal(novaDataFinal).setPublicoEsperado(novoPublicoEsperado)
                 .setPublicoAlcancado(novoPublicoAlcancado);
-        builderEvento.setAcessivelEmLibras(acessivelEmLibras.isSelected());
-        builderEvento.setCertificavel(certificavel.isSelected());
+        builderEvento.setAcessivelEmLibras(optionAcessivelEmLibras.isSelected());
+        builderEvento.setCertificavel(optionCertificavel.isSelected());
         builderEvento.setCargaHoraria(novaCargaHoraria);
         builderEvento.setMunicipiosEsperado(numMunicipiosEsperadoValue);
         builderEvento.setParticipantesEsperado(numParticipanteEsperado);
@@ -270,12 +269,12 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
     }
 
     public void carregarCampoLocalizacao() throws IOException {
-        if (Localizacoes.getChildren().size() >= MAX_LOCALIZACOES) {
+        if (paneLocalizacoes.getChildren().size() >= MAX_LOCALIZACOES) {
             botaoNovaLocalizacao.setDisable(true);
         }
         SubSceneLoader loaderLocais = new SubSceneLoader();
         GridPane novoLocal = (GridPane) loaderLocais.getPage("fields/fieldLocalizacao");
-        Localizacoes.getChildren().add(novoLocal);
+        paneLocalizacoes.getChildren().add(novoLocal);
         FieldLocalizacaoController controller = loaderLocais.getLoader().getController();
         controllersLocais.add(controller);
     }
@@ -376,31 +375,31 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
     }
 
     public void destacarCamposNaoPreenchidos() {
-        if (classificacaoEtaria.getSelectionModel().getSelectedItem() == null) {
-            classificacaoEtaria.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
+        if (choiceClassificacaoEtaria.getSelectionModel().getSelectedItem() == null) {
+            choiceClassificacaoEtaria.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
         } else {
-            classificacaoEtaria.setStyle(null);
+            choiceClassificacaoEtaria.setStyle(null);
         }
-        if (titulo.getText().isEmpty()) {
-            titulo.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
+        if (fieldTitulo.getText().isEmpty()) {
+            fieldTitulo.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
         } else {
-            titulo.setStyle(null);
+            fieldTitulo.setStyle(null);
         }
-        if (dataInicial.getValue() == null) {
-            dataInicial.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
+        if (pickerDataInicial.getValue() == null) {
+            pickerDataInicial.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
         } else {
-            dataInicial.setStyle(null);
+            pickerDataInicial.setStyle(null);
         }
-        if (dataFinal.getValue() == null) {
-            dataFinal.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
+        if (pickerDataFinal.getValue() == null) {
+            pickerDataFinal.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
         } else {
-            dataFinal.setStyle(null);
+            pickerDataFinal.setStyle(null);
         }
     }
 
     public boolean camposObrigatoriosPreenchidos() {
-        if (classificacaoEtaria.getSelectionModel().getSelectedItem() == null || titulo.getText().isEmpty()
-                || dataInicial.getValue() == null || dataFinal.getValue() == null) {
+        if (choiceClassificacaoEtaria.getSelectionModel().getSelectedItem() == null || fieldTitulo.getText().isEmpty()
+                || pickerDataInicial.getValue() == null || pickerDataFinal.getValue() == null) {
             destacarCamposNaoPreenchidos();
             return false;
         }
@@ -462,12 +461,12 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
 
     public void addInputConstraints() {
         /* aplicando restrições aos inputs */
-        horas.setTextFormatter(formatter());
-        horasCargaHoraria.setTextFormatter(getTimeFormatter());
-        publicoEsperado.setTextFormatter(getNumericalFormatter());
-        publicoAlcancado.setTextFormatter(getNumericalFormatter());
-        numParticipantesEsperado.setTextFormatter(getNumericalFormatter());
-        numMunicipiosEsperado.setTextFormatter(getNumericalFormatter());
+        fieldHorario.setTextFormatter(formatter());
+        fieldCargaHoraria.setTextFormatter(getTimeFormatter());
+        fieldPublicoEsperado.setTextFormatter(getNumericalFormatter());
+        fieldPublicoAlcancado.setTextFormatter(getNumericalFormatter());
+        fieldNumParticipantesEsperado.setTextFormatter(getNumericalFormatter());
+        fieldNumMunicipiosEsperado.setTextFormatter(getNumericalFormatter());
 
     }
 
@@ -558,14 +557,14 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
     }
 
     private void showCargaHoraria(boolean value) {
-        cargaHoraria.setVisible(value);
+        paneCargaHoraria.setVisible(value);
     }
 
     private void showCertificavel(boolean value) {
         if (value == false) {
-            certificavel.setSelected(value);
+            optionCertificavel.setSelected(value);
         }
-        certificavel.setVisible(value);
+        optionCertificavel.setVisible(value);
     }
 
     public void onClickMeta3() {
@@ -574,7 +573,7 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
     }
 
     private boolean emptyLocalizacoes() {
-        return Localizacoes.getChildren().isEmpty();
+        return paneLocalizacoes.getChildren().isEmpty();
     }
 
     @Override
