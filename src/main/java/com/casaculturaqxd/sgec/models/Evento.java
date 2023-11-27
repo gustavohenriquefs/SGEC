@@ -9,11 +9,17 @@ import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 public class Evento {
     private Integer idEvento;
     private String nome;
+    private ServiceFile imagemCapa;
     private String descricao;
     private int publicoEsperado;
     private int publicoAlcancado;
-    private int participantesEsperado;
-    private int municipiosEsperado;
+    private int numParticipantesEsperado;
+    private int numParticipantesAlcancado;
+    private int numMunicipiosEsperado;
+    private int numMunicipiosAlcancado;
+    private int numColaboradoresEsperado;
+
+    private int numColaboradoresAlcancado;
     private Date dataInicial;
     private Date dataFinal;
     private Time horario;
@@ -23,14 +29,21 @@ public class Evento {
     private boolean acessivelEmLibras;
     private Date cadastradoEm;
 
-
-
+    private GrupoEventos grupoEventos;
     private SortedSet<Integer> locais;
     private SortedSet<Integer> listaParticipantes;
     private ArrayList<ServiceFile> listaArquivos;
     private ArrayList<Instituicao> listaOrganizadores;
     private ArrayList<Instituicao> listaColaboradores;
     private ArrayList<Meta> listaMetas;
+
+    public Evento() {
+
+    }
+
+    public Evento(int idEvento) {
+        this.idEvento = idEvento;
+    }
 
     public ArrayList<Meta> getListaMetas() {
         return listaMetas;
@@ -54,6 +67,14 @@ public class Evento {
 
     public void setDescricao(String descricao) {
         this.descricao = descricao;
+    }
+
+    public ServiceFile getImagemCapa() {
+        return imagemCapa;
+    }
+
+    public void setImagemCapa(ServiceFile imagemCapa) {
+        this.imagemCapa = imagemCapa;
     }
 
     public Date getDataInicial() {
@@ -112,20 +133,20 @@ public class Evento {
         this.publicoEsperado = publicoEsperado;
     }
 
-    public int getParticipantesEsperado() {
-        return participantesEsperado;
+    public int getNumParticipantesEsperado() {
+        return numParticipantesEsperado;
     }
 
-    public void setParticipantesEsperado(int participantesEsperado) {
-        this.participantesEsperado = participantesEsperado;
+    public void setNumParticipantesEsperado(int participantesEsperado) {
+        this.numParticipantesEsperado = participantesEsperado;
     }
 
-    public int getMunicipiosEsperado() {
-        return municipiosEsperado;
+    public int getNumMunicipiosEsperado() {
+        return numMunicipiosEsperado;
     }
 
-    public void setMunicipiosEsperado(int municipiosEsperado) {
-        this.municipiosEsperado = municipiosEsperado;
+    public void setNumMunicipiosEsperado(int municipiosEsperado) {
+        this.numMunicipiosEsperado = municipiosEsperado;
     }
 
     public int getPublicoAlcancado() {
@@ -134,6 +155,46 @@ public class Evento {
 
     public void setPublicoAlcancado(int publicoAlcancado) {
         this.publicoAlcancado = publicoAlcancado;
+    }
+
+    public int getNumParticipantesAlcancado() {
+        return numParticipantesAlcancado;
+    }
+
+    public void setNumParticipantesAlcancado(int numParticipantesAlcancado) {
+        this.numParticipantesAlcancado = numParticipantesAlcancado;
+    }
+
+    public int getNumMunicipiosAlcancado() {
+        return numMunicipiosAlcancado;
+    }
+
+    public void setNumMunicipiosAlcancado(int numMunicipiosAlcancado) {
+        this.numMunicipiosAlcancado = numMunicipiosAlcancado;
+    }
+
+    public int getNumColaboradoresEsperado() {
+        return numColaboradoresEsperado;
+    }
+
+    public void setNumColaboradoresEsperado(int numColaboradoresEsperado) {
+        this.numColaboradoresEsperado = numColaboradoresEsperado;
+    }
+
+    public int getNumColaboradoresAlcancado() {
+        return numColaboradoresAlcancado;
+    }
+
+    public void setNumColaboradoresAlcancado(int numColaboradoresAlcancado) {
+        this.numColaboradoresAlcancado = numColaboradoresAlcancado;
+    }
+
+    public GrupoEventos getGrupoEventos() {
+        return grupoEventos;
+    }
+
+    public void setGrupoEventos(GrupoEventos grupoEventos) {
+        this.grupoEventos = grupoEventos;
     }
 
     public String getClassificacaoEtaria() {
@@ -212,7 +273,7 @@ public class Evento {
     public ArrayList<ServiceFile> getListaArquivos() {
         return listaArquivos;
     }
-  
+
     public void setListaArquivos(ArrayList<ServiceFile> listaArquivos) {
         this.listaArquivos = listaArquivos;
     }
@@ -235,16 +296,14 @@ public class Evento {
 
     @Override
     public String toString() {
-        return "Evento [idEvento=" + idEvento + ", nome=" + nome + ", descricao=" + descricao
-                + ", publicoEsperado=" + publicoEsperado + ", publicoAlcancado=" + publicoAlcancado
-                + ", participantesEsperado=" + participantesEsperado + ", municipiosEsperado="
-                + municipiosEsperado + ", dataInicial=" + dataInicial + ", dataFinal=" + dataFinal
-                + ", horario=" + horario + ", cargaHoraria=" + cargaHoraria
+        return "Evento [idEvento=" + idEvento + ", nome=" + nome + ", descricao=" + descricao + ", publicoEsperado="
+                + publicoEsperado + ", publicoAlcancado=" + publicoAlcancado + ", participantesEsperado="
+                + numParticipantesEsperado + ", municipiosEsperado=" + numMunicipiosEsperado + ", dataInicial="
+                + dataInicial + ", dataFinal=" + dataFinal + ", horario=" + horario + ", cargaHoraria=" + cargaHoraria
                 + ", classificacaoEtaria=" + classificacaoEtaria + ", certificavel=" + certificavel
-                + ", acessivelEmLibras=" + acessivelEmLibras + ", locais=" + locais
-                + ", listaParticipantes=" + listaParticipantes + ", listaOrganizadores="
-                + listaOrganizadores + ", listaColaboradores=" + listaColaboradores
-                + ", listaArquivos=" + listaArquivos + "]";
+                + ", acessivelEmLibras=" + acessivelEmLibras + ", locais=" + locais + ", listaParticipantes="
+                + listaParticipantes + ", listaOrganizadores=" + listaOrganizadores + ", listaColaboradores="
+                + listaColaboradores + ", listaArquivos=" + listaArquivos + "]";
     }
 
     public Date getCadastradoEm() {
