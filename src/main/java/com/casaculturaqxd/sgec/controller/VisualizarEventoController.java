@@ -125,19 +125,20 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
         compararDatas();
     }
 
-    public void compararDatas(){
-        //Impede que data posteriores á dataFinal sejam seleciondas no campo dataInicial
+    public void compararDatas() {
+        // Impede que data posteriores á dataFinal sejam seleciondas no campo
+        // dataInicial
         dataFinal.valueProperty().addListener((observable, oldValue, newValue) -> {
             dataInicial.setDayCellFactory(picker -> new DateCell() {
                 @Override
                 public void updateItem(LocalDate date, boolean empty) {
                     super.updateItem(date, empty);
                     LocalDate currentDate = dataFinal.getValue();
-                    setDisable(empty || date.compareTo(currentDate) > 0 );
+                    setDisable(empty || date.compareTo(currentDate) > 0);
                 }
             });
         });
-        //Impede que datas anteriores à dataInicial sejam selecionadas em dataFinal
+        // Impede que datas anteriores à dataInicial sejam selecionadas em dataFinal
         dataInicial.valueProperty().addListener((observable, oldValue, newValue) -> {
             dataFinal.setDayCellFactory(picker -> new DateCell() {
                 @Override
@@ -206,9 +207,9 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
 
         numeroPublico = new Indicador("Quantidade de público", evento.getPublicoEsperado(),
                 evento.getPublicoAlcancado());
-        numeroMestres = new Indicador("Número de mestres da cultura", evento.getParticipantesEsperado(),
+        numeroMestres = new Indicador("Número de mestres da cultura", evento.getNumParticipantesEsperado(),
                 evento.getListaParticipantes().size());
-        numeroMunicipios = new Indicador("Número de municípios", evento.getMunicipiosEsperado(),
+        numeroMunicipios = new Indicador("Número de municípios", evento.getNumMunicipiosEsperado(),
                 eventoDAO.getNumeroMunicipiosDiferentes(evento.getIdEvento()));
 
         addIndicador(tabelaIndicadoresGerais, numeroPublico);
@@ -257,8 +258,8 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
             evento.setCargaHoraria(Time.valueOf(cargaHoraria.getText()));
             evento.setPublicoAlcancado(numeroPublico.getValorAlcancado());
             evento.setPublicoEsperado(numeroPublico.getValorEsperado());
-            evento.setParticipantesEsperado(numeroMestres.getValorEsperado());
-            evento.setMunicipiosEsperado(numeroMunicipios.getValorEsperado());
+            evento.setNumParticipantesEsperado(numeroMestres.getValorEsperado());
+            evento.setNumMunicipiosEsperado(numeroMunicipios.getValorEsperado());
             eventoDAO.alterarEvento(evento);
 
             Alert sucessoAtualizacao = new Alert(AlertType.INFORMATION);
