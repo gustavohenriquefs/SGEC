@@ -60,7 +60,11 @@ public class DialogInstituicaoController {
     binding = TextFields.bindAutoCompletion(nomeInstituicao, listaNomes);
     binding.setOnAutoCompleted(autoCompletionEvent -> {
       String selected = autoCompletionEvent.getCompletion();
-      instituicao = instituicaoDAO.getInstituicao(selected).get();
+      try {
+        instituicao = instituicaoDAO.getInstituicao(selected).get();
+      } catch (SQLException e) {
+        e.printStackTrace();
+      }
       nomeInstituicao.setEditable(false);
     });
     nomeInstituicao.setOnMouseClicked(mousePressed -> {
@@ -89,7 +93,12 @@ public class DialogInstituicaoController {
   }
 
   public Optional<Instituicao> getInstituicao() {
-    Optional<Instituicao> temp = instituicaoDAO.getInstituicao(nomeInstituicao.getText());
+    Optional<Instituicao> temp = null;
+    try {
+      temp = instituicaoDAO.getInstituicao(nomeInstituicao.getText());
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
     return temp;
   }
 
