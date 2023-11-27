@@ -2,6 +2,7 @@ package com.casaculturaqxd.sgec.controller;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -83,7 +84,11 @@ public class HomeController {
 
     eventoDAO.setConnection(db.getConnection());
 
-    return eventoDAO.listarUltimosEventos();
+    try {
+      return eventoDAO.listarUltimosEventos();
+    } catch (SQLException e) {
+      return new ArrayList<>();
+    }
   }
 
   private void loadMenu() throws IOException {
