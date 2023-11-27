@@ -41,11 +41,10 @@ public class FieldLocalizacaoController {
     }
 
     public void initialize() {
-        
-        
         pais.setText("Brasil");
         
         cep.setTextFormatter(new TextFormatter<>(change -> {
+            System.out.println(change.getText());
             if(change.getText().matches("\\d+") && change.getRangeEnd() < 9){
                 if(change.getRangeEnd() == 5){
                     change.setText("-"); 
@@ -65,31 +64,39 @@ public class FieldLocalizacaoController {
     private void completeLocalizacaoOnEnterLocalizacaoFd() {
         fdNomeLocal.setOnKeyReleased(event -> {
             if(event.getCode().toString().equals("ENTER")){
-                LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO();
-                localizacaoDAO.setConnection(db.getConnection());
-
-                Localizacao localizacao = localizacaoDAO.getLocalizacaoByNome(fdNomeLocal.getText().trim());
-
-                if(localizacao != null){
-                    rua.setText(localizacao.getRua());
-                    bairro.setText(localizacao.getBairro());
-                    numero.setText(String.valueOf(localizacao.getNumeroRua()));
-                    cep.setText(localizacao.getCep());
-                    cidade.setText(localizacao.getCidade());
-                    estado.setText(localizacao.getEstado());
-                    pais.setText(localizacao.getPais());
-                }
+                this.completeLocaleData(fdNomeLocal.getText());
             }
         });
+    }
+
+    private void completeLocaleData(String localName) {
+        LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO();
+        localizacaoDAO.setConnection(db.getConnection());
+
+        Localizacao localizacao = localizacaoDAO.getLocalizacaoByNome(fdNomeLocal.getText().trim());
+
+        if(localizacao != null){
+            rua.setText(localizacao.getRua());
+            bairro.setText(localizacao.getBairro());
+            numero.setText(String.valueOf(localizacao.getNumeroRua()));
+            cep.setText(localizacao.getCep());
+            cidade.setText(localizacao.getCidade());
+            estado.setText(localizacao.getEstado());
+            pais.setText(localizacao.getPais());
+        }
     }
 
     private void initAutoComplete() {
         LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO();
 
         localizacaoDAO.setConnection(db.getConnection());
-
-        String[] nomesLocalizacoes = {"teste", "teste2"};//localizacaoDAO.getNomesLocalizacoes()
-        TextFields.bindAutoCompletion(fdNomeLocal,  nomesLocalizacoes);
+        
+        TextFields.bindAutoCompletion(fdNomeLocal,  localizacaoDAO.getListaLocais())
+            .setOnAutoCompleted(
+                event -> {
+                    this.completeLocaleData(event.getCompletion());
+                }
+            );
     }
 
     public void remover() throws IOException{

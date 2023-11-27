@@ -184,17 +184,15 @@ public class CadastrarEventoController implements ControllerEvento, ControllerSe
             builderEvento.setParticipantesEsperado(Integer.parseInt(numParticipantesEsperado.getText()));
         }
         
-        for (FieldLocalizacaoController controller : controllersLocais) {
-            adicionarLocalizacao(controller.getLocalizacao());
-        }
-
+        
+        
         ArrayList<ServiceFile> listaArquivos = new ArrayList<>(mapServiceFiles.keySet());
         builderEvento.setListaArquivos(listaArquivos);
         // builderEvento.setLocalizacoes(idLocais);
         builderEvento.setListaMetas(getMetasSelecionadas());
-
+        
         Evento novoEvento = builderEvento.getEvento();
-
+        
         if (eventoDAO.inserirEvento(novoEvento)) {
             // procura pelo arquivo no banco, se nao estiver realiza a insercao
             for (ServiceFile arquivo : novoEvento.getListaArquivos()) {
@@ -203,20 +201,26 @@ public class CadastrarEventoController implements ControllerEvento, ControllerSe
                     serviceFileDAO.inserirArquivo(arquivo);
                 } else {
                     int idxArquivo = novoEvento.getListaArquivos().indexOf(arquivo);
-
+                    
                     novoEvento.getListaArquivos().set(idxArquivo, arquivoExistente.get());
                 }
             }
+            
+            for (FieldLocalizacaoController controller : controllersLocais) {
+                adicionarLocalizacao(controller.getLocalizacao());
+            }
+
             eventoDAO.vincularArquivos(novoEvento);
             eventoDAO.vincularMetas(novoEvento.getListaMetas(), novoEvento.getIdEvento());
             novoEvento = eventoDAO.buscarEvento(novoEvento).get();
-
+            
             this.eventoDAO.vincularLocais(this.localizacoes, novoEvento.getIdEvento());
+            
 
             App.setRoot("view/home");
         }
     }
-
+    
     public void cancelar() throws IOException {
         builderEvento.resetar();
         App.setRoot("view/home");

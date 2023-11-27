@@ -107,7 +107,7 @@
                   <Insets left="22.0" top="-22.0" />
                </GridPane.margin>
             </Label>
-            <TextField fx:id="pais" maxHeight="25.0" minWidth="26.0" prefHeight="25.0" prefWidth="254.0" promptText="Ex: 01001-000" GridPane.columnIndex="1">
+            <TextField fx:id="pais" maxHeight="25.0" minWidth="26.0" prefHeight="25.0" prefWidth="254.0" GridPane.columnIndex="1">
                <GridPane.margin>
                   <Insets left="21.0" top="20.0" />
                </GridPane.margin>
