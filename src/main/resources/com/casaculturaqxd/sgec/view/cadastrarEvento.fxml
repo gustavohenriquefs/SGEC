@@ -42,7 +42,7 @@
                                                       <VBox HBox.hgrow="ALWAYS">
                                                          <children>
                                                             <Label text="Título" textFill="#352929" />
-                                                            <TextField fx:id="titulo" />
+                                                            <TextField fx:id="fieldTitulo" />
                                                          </children>
                                                       </VBox>
                                                       <VBox>
@@ -69,19 +69,19 @@
                                                       <VBox>
                                                          <children>
                                                             <Label text="Data inicial" textFill="#352929" />
-                                                            <DatePicker fx:id="dataInicial" />
+                                                            <DatePicker fx:id="pickerDataInicial" />
                                                          </children>
                                                       </VBox>
                                                       <VBox>
                                                          <children>
                                                             <Label text="Data final" textFill="#352929" />
-                                                            <DatePicker fx:id="dataFinal" />
+                                                            <DatePicker fx:id="pickerDataFinal" />
                                                          </children>
                                                       </VBox>
                                                       <VBox>
                                                          <children>
                                                             <Label fx:id="textoHoras" text="Horas" textFill="#352929" />
-                                                            <TextField fx:id="horas" />
+                                                            <TextField fx:id="fieldHorario" />
                                                          </children>
                                                       </VBox>
                                                    </children>
@@ -91,7 +91,7 @@
                                           <VBox>
                                              <children>
                                                 <Label text="Descrição" textFill="#352929" />
-                                                <TextArea fx:id="descricao" />
+                                                <TextArea fx:id="fieldDescricao" />
                                              </children>
                                           </VBox>
                                           <VBox>
@@ -103,26 +103,26 @@
                                                             <VBox>
                                                                <children>
                                                                   <Label text="Classificação etária" textFill="#352929" />
-                                                                  <ChoiceBox fx:id="classificacaoEtaria" prefWidth="150.0" />
+                                                                  <ChoiceBox fx:id="choiceClassificacaoEtaria" prefWidth="150.0" />
                                                                </children>
                                                             </VBox>
                                                             <VBox>
                                                                <children>
                                                                   <Label text="Público alcançado" textFill="#352929" />
-                                                                  <TextField fx:id="publicoAlcancado" />
+                                                                  <TextField fx:id="fieldPublicoAlcancado" />
                                                                </children>
                                                             </VBox>
                                                             <VBox>
                                                                <children>
                                                                   <Label text="Público esperado" textFill="#352929" />
-                                                                  <TextField fx:id="publicoEsperado" />
+                                                                  <TextField fx:id="fieldPublicoEsperado" />
                                                                </children>
                                                             </VBox>
                                                          </children>
                                                       </HBox>
                                                       <HBox alignment="BOTTOM_CENTER" spacing="30.0">
                                                          <children>
-                                                            <VBox fx:id="cargaHoraria" alignment="CENTER" visible="false">
+                                                            <VBox fx:id="paneCargaHoraria" alignment="CENTER" visible="false">
                                                                <children>
                                                                   <Label text="Carga horária">
                                                                      <font>
@@ -135,7 +135,7 @@
                                                                         <VBox>
                                                                            <children>
                                                                               <Label fx:id="textoHoras1" text="Horas" textFill="#352929" />
-                                                                              <TextField fx:id="horasCargaHoraria" />
+                                                                              <TextField fx:id="fieldCargaHoraria" />
                                                                            </children>
                                                                         </VBox>
                                                                      </children>
@@ -144,8 +144,8 @@
                                                             </VBox>
                                                             <HBox alignment="CENTER" spacing="20.0">
                                                                <children>
-                                                                  <RadioButton fx:id="certificavel" mnemonicParsing="false" text="Certificável" textFill="#352929" visible="false" />
-                                                                  <RadioButton fx:id="acessivelEmLibras" mnemonicParsing="false" text="Acessível em libras" textFill="#352929" />
+                                                                  <RadioButton fx:id="optionCertificavel" mnemonicParsing="false" text="Certificável" textFill="#352929" visible="false" />
+                                                                  <RadioButton fx:id="optionAcessivelEmLibras" mnemonicParsing="false" text="Acessível em libras" textFill="#352929" />
                                                                </children>
                                                             </HBox>
                                                          </children>
@@ -162,7 +162,7 @@
                         </VBox>
                         <VBox spacing="60.0">
                            <children>
-                              <VBox fx:id="Localizacoes" spacing="15.0" VBox.vgrow="ALWAYS">
+                              <VBox fx:id="paneLocalizacoes" spacing="15.0" VBox.vgrow="ALWAYS">
                                  <children>
                                     <HBox alignment="CENTER_LEFT" spacing="800.0">
                                        <children>
@@ -179,7 +179,7 @@
                                           <VBox>
                                              <children>
                                                 <Label text="Número de municípios esperado" />
-                                                <TextField fx:id="numMunicipiosEsperado" />
+                                                <TextField fx:id="fieldNumMunicipiosEsperado" />
                                              </children>
                                           </VBox>
                                        </children>
@@ -201,7 +201,7 @@
                                     <VBox VBox.vgrow="NEVER">
                                        <children>
                                           <Label text="Número de participantes esperado" />
-                                          <TextField fx:id="numParticipantesEsperado" maxWidth="200.0" VBox.vgrow="NEVER" />
+                                          <TextField fx:id="fieldNumParticipantesEsperado" maxWidth="200.0" VBox.vgrow="NEVER" />
                                        </children>
                                     </VBox>
                                  </children>
