@@ -89,11 +89,11 @@ public class GrupoEventosDAO {
             ResultSet resultSet = preparedStatement.executeQuery();
             ServiceFileDAO serviceFileDAO = new ServiceFileDAO(connection);
             if (resultSet.next()) {
-                ServiceFile resultFile = new ServiceFile(resultSet.getInt("id_service_file"));
+                Optional<ServiceFile> resultFile = serviceFileDAO
+                        .getArquivo(new ServiceFile(resultSet.getInt("id_service_file")));
                 GrupoEventosBuilder grupoEventosBuilder = new GrupoEventosBuilder();
-                grupoEventosBuilder.setIdGrupoEventos(resultSet.getInt("id_grupo_eventos"))
+                grupoEventosBuilder.setId(resultSet.getInt("id_grupo_eventos"))
                         .setNome(resultSet.getString("nome_grupo_eventos"))
-                        .setImagemCapa(serviceFileDAO.getArquivo(resultFile).get())
                         .setDescricao(resultSet.getString("descricao"))
                         .setClassificacaoEtaria(resultSet.getString("classificacao_etaria"))
                         .setDataInicial(resultSet.getDate("data_inicial")).setDataFinal(resultSet.getDate("data_final"))
@@ -105,7 +105,9 @@ public class GrupoEventosDAO {
                         .setNumMunicipiosAlcancado(resultSet.getInt("num_municipios_alcancado"))
                         .setNumParticipantesEsperado(resultSet.getInt("num_participantes_esperado"))
                         .setNumParticipantesAlcancado(resultSet.getInt("num_participantes_alcancado"));
-
+                if (resultFile.isPresent()) {
+                    grupoEventosBuilder.setImagemCapa(resultFile.get());
+                }
                 return Optional.of(grupoEventosBuilder.getGrupoEventos());
             } else {
                 return Optional.empty();
@@ -131,14 +133,16 @@ public class GrupoEventosDAO {
             ResultSet resultSet = preparedStatement.executeQuery();
             ServiceFileDAO serviceFileDAO = new ServiceFileDAO(connection);
             if (resultSet.next()) {
-                ServiceFile resultFile = new ServiceFile(resultSet.getInt("id_service_file"));
+                Optional<ServiceFile> resultFile = serviceFileDAO
+                        .getArquivo(new ServiceFile(resultSet.getInt("id_service_file")));
                 GrupoEventosBuilder grupoEventosBuilder = new GrupoEventosBuilder();
-                grupoEventosBuilder.setIdGrupoEventos(resultSet.getInt("id_grupo_eventos"))
+                grupoEventosBuilder.setId(resultSet.getInt("id_grupo_eventos"))
                         .setNome(resultSet.getString("nome_grupo_eventos"))
-                        .setImagemCapa(serviceFileDAO.getArquivo(resultFile).get())
                         .setDataInicial(resultSet.getDate("data_inicial"))
                         .setDataFinal(resultSet.getDate("data_final"));
-
+                if (resultFile.isPresent()) {
+                    grupoEventosBuilder.setImagemCapa(resultFile.get());
+                }
                 return Optional.of(grupoEventosBuilder.getGrupoEventos());
             } else {
                 return Optional.empty();
@@ -183,7 +187,7 @@ public class GrupoEventosDAO {
 
             while (resultSet.next()) {
                 GrupoEventosBuilder grupoEventosBuilder = new GrupoEventosBuilder();
-                grupoEventosBuilder.setIdGrupoEventos(resultSet.getInt("id_grupo_eventos"))
+                grupoEventosBuilder.setId(resultSet.getInt("id_grupo_eventos"))
                         .setNome(resultSet.getString("nome_grupo_eventos"))
                         .setImagemCapa(new ServiceFile(resultSet.getInt("id_service_file")))
                         .setDataInicial(resultSet.getDate("data_inicial"))
@@ -233,7 +237,7 @@ public class GrupoEventosDAO {
 
             while (resultSet.next()) {
                 GrupoEventosBuilder grupoEventosBuilder = new GrupoEventosBuilder();
-                grupoEventosBuilder.setIdGrupoEventos(resultSet.getInt("id_grupo_eventos"))
+                grupoEventosBuilder.setId(resultSet.getInt("id_grupo_eventos"))
                         .setNome(resultSet.getString("nome_grupo_eventos"))
                         .setImagemCapa(new ServiceFile(resultSet.getInt("id_service_file")))
                         .setDataInicial(resultSet.getDate("data_inicial"))
