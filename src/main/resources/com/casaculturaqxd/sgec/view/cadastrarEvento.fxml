@@ -16,7 +16,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox id="pageCadastrarEvento" fx:id="root" styleClass="root" stylesheets="@../css/page/cadastrarEventoStyle.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.CadastrarEventoController">
+<VBox id="pageCadastrarEvento" fx:id="root" styleClass="root" stylesheets="@../css/page/cadastrarEventoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.CadastrarEventoController">
    <children>
       <ScrollPane id="scroll" fitToWidth="true" style="-fx-background-color: #E9E3CA;" vbarPolicy="ALWAYS" VBox.vgrow="ALWAYS">
          <content>
