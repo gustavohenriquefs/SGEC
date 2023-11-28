@@ -8,8 +8,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import com.casaculturaqxd.sgec.models.Localizacao;
 
@@ -57,6 +55,34 @@ public class LocalizacaoDAO extends DAO {
       String nomeLocalCausa = localizacao != null && localizacao.getNome() != null ? localizacao.getNome() : "";
       logException(e);
       throw new SQLException("falha buscando local " + nomeLocalCausa, e);
+    } finally {
+      statement.close();
+    }
+  }
+
+  public ArrayList<Localizacao> listarLocaisPorEvento(Integer idEvento) throws SQLException {
+    String sql = "select id_localizacao from localizacao_evento where id_evento=?";
+
+    ArrayList<Localizacao> localizacoes = new ArrayList<>();
+
+    PreparedStatement statement = connection.prepareStatement(sql);
+
+    try {
+      statement.setInt(1, idEvento);
+      ResultSet resultSet = statement.executeQuery();
+
+      while (resultSet.next()) {
+        Localizacao localizacao = new Localizacao();
+
+        localizacao.setIdLocalizacao(resultSet.getInt("id_localizacao"));
+
+        localizacoes.add(getLocalizacao(localizacao).get());
+      }
+
+      return localizacoes;
+    } catch (Exception ex) {
+      logException(ex);
+      throw new SQLException("falha listando locais por evento", ex);
     } finally {
       statement.close();
     }
@@ -214,7 +240,7 @@ public class LocalizacaoDAO extends DAO {
 
     try {
         
-        stmt.setString(1, "%" + nome + "%"); // Add '%' before and after the nome parameter
+        stmt.setString(1, "%" + nome + "%"); 
         ResultSet resultado = stmt.executeQuery();
         if (resultado.next()) {
             Localizacao localizacao = new Localizacao();
@@ -228,7 +254,7 @@ public class LocalizacaoDAO extends DAO {
             localizacao.setCidade(resultado.getString("cidade"));
             localizacao.setEstado(resultado.getString("estado"));
             localizacao.setPais(resultado.getString("pais"));
-
+            
             return Optional.of(localizacao);
         } else {
             return Optional.empty();
