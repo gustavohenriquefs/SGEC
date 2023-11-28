@@ -311,16 +311,16 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
         // adicionarParticipante(resultado)
         Dialog<Participante> participanteDialog = new ParticipanteDialog(new Participante(0));
 
-        Optional<Participante> novoParticipante = participanteDialog.showAndWait();
+        Optional<Participante> novoParticipanteOp = participanteDialog.showAndWait();
 
-        if(novoParticipante.isPresent()){
-            if(participantes.containsKey(novoParticipante.get())){
+        if(novoParticipanteOp.isPresent()) {
+            if(participantes.containsKey(novoParticipanteOp.get())) {
                 Alert alert = new Alert(AlertType.ERROR, "Participante já foi adicionado");
                 alert.showAndWait();
                 return;
             }
 
-            participantes.put(novoParticipante.get(),
+            participantes.put(novoParticipanteOp.get(),
                     new FXMLLoader(App.class.getResource("view/preview/previewParticipante.fxml")));
         }
 

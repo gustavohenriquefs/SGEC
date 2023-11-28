@@ -1,68 +1,104 @@
 package com.casaculturaqxd.sgec.controller.dialog;
 
+import java.io.IOException;
+
 import com.casaculturaqxd.sgec.models.Participante;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.util.Callback;
 
 public class ParticipanteDialog extends Dialog<Participante> {
-  private Participante participante;
 
-  private TextField nome;
-  private TextField areaDeAtuacao;
-  private TextField bio;
-  private TextField linkMapaDaCultura;
+  private Participante participante;
 
   public ParticipanteDialog(Participante participante) {
     super();
 
-    this.setTitle("Adicionar participante");
     this.participante = participante;
 
+    this.setTitle("Adicionar participante");
+
     buildUI();
-    setPropertyBindings();
     setResultConverter();
+    removeErrorStyle();
+
   }
 
-  private Pane createGridPane() {
-    VBox content = new VBox();
+  private void removeErrorStyle() {
+    // nome.textProperty().addListener((observable, oldValue, newValue) -> {
+    //   nome.setStyle("-fx-border-color: none;");
+    // });
 
-    Label labelNome = new Label("Nome"); // TODO: add auto complete
-    Label labelAreaDeAtuacao = new Label("Área de atuação");
-    Label labelBio = new Label("Bio");  
-    Label labelLinkMapaDaCultura = new Label("Link do Mapa da Cultura");
+    // areaDeAtuacao.textProperty().addListener((observable, oldValue, newValue) -> {
+    //   areaDeAtuacao.setStyle("-fx-border-color: none;");
+    // });
 
-    GridPane gridPane = new GridPane();
+    // bio.textProperty().addListener((observable, oldValue, newValue) -> {
+    //   bio.setStyle("-fx-border-color: none;");
+    // });
 
-    gridPane.setHgap(10);
-    gridPane.setVgap(5);
-    
-    gridPane.add(labelNome, 0, 0);
-    gridPane.add(nome, 1, 0);
-    gridPane.add(labelAreaDeAtuacao, 0, 1);
-    gridPane.add(areaDeAtuacao, 1, 1);
-    gridPane.add(labelBio, 0, 2);
-    gridPane.add(bio, 1, 2);
-    gridPane.add(labelLinkMapaDaCultura, 0, 3);
-    gridPane.add(linkMapaDaCultura, 1, 3);
-    
-    content.getChildren().add(gridPane);
-
-    return content;
+    // linkMapaDaCultura.textProperty().addListener((observable, oldValue, newValue) -> {
+    //   linkMapaDaCultura.setStyle("-fx-border-color: none;");
+    // });
   }
 
-  private void setPropertyBindings() {
+  private Parent createFieldParticipanteView() {
+    String path = "view/fields/fieldParticipante.fxml";
+
+    FXMLLoader fielParticipanteViewLoader = new FXMLLoader(getClass().getResource(path));
+
+    try {
+      return fielParticipanteViewLoader.load();
+    } catch (IOException e) {
+      e.printStackTrace();
+
+      return null;
+    }
+  }
+
+  private void setPropertyValues() {
   }
 
   private void setResultConverter() {
+    Callback<ButtonType, Participante> participanteResult = new Callback<ButtonType, Participante>() {
+      @Override
+      public Participante call(ButtonType param) {
+        if (param == ButtonType.OK) {
+          setPropertyValues();
+
+          return participante;
+        }
+
+        return null;
+      }
+    };
+    setResultConverter(participanteResult);
   }
 
   private void buildUI() {
-    Pane pane = createGridPane();
+    Parent pane = createFieldParticipanteView();
     getDialogPane().setContent(pane); 
+    getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+    Button btn = (Button) getDialogPane().lookupButton(ButtonType.OK);
+
+    btn.addEventFilter(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+      @Override
+      public void handle(ActionEvent event) {
+        if (!validateDialog()) {
+          event.consume();
+        }
+      }
+
+      private boolean validateDialog() {
+        return true;
+      }
+    });
   }
 }
