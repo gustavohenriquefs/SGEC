@@ -14,7 +14,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Optional;
-import java.util.TreeSet;
 import java.util.function.UnaryOperator;
 
 import com.casaculturaqxd.sgec.App;
@@ -72,7 +71,6 @@ public class CadastrarEventoController implements ControllerEvento, ControllerSe
 
     private File lastDirectoryOpen;
     
-    ArrayList<Localizacao> localizacoes = new ArrayList<Localizacao>();
     ArrayList<FieldLocalizacaoController> controllersLocais = new ArrayList<FieldLocalizacaoController>();
 
     DateFormat formatterHorario;
@@ -164,6 +162,7 @@ public class CadastrarEventoController implements ControllerEvento, ControllerSe
 
     private boolean insertEvento(Evento evento) throws SQLException {
         db.getConnection().setAutoCommit(false);
+
         try {
             eventoDAO.inserirEvento(evento);
             // procura pelo arquivo no banco, se nao estiver realiza a insercao
@@ -179,6 +178,13 @@ public class CadastrarEventoController implements ControllerEvento, ControllerSe
             }
             eventoDAO.vincularArquivos(evento);
             eventoDAO.vincularMetas(evento.getListaMetas(), evento.getIdEvento());
+
+            for(Localizacao localizacao: evento.getLocais()){
+                adicionarLocalizacao(localizacao);
+            }
+
+            eventoDAO.vincularLocais(evento.getLocais(), evento.getIdEvento());
+            
             return true;
         } catch (SQLException e) {
             db.getConnection().rollback();
@@ -241,24 +247,19 @@ public class CadastrarEventoController implements ControllerEvento, ControllerSe
         builderEvento.setMunicipiosEsperado(numMunicipiosEsperadoValue);
         builderEvento.setNumParticipantesEsperado(numParticipanteEsperado);
         // TODO: substituir id de locais por models
-        TreeSet<Integer> idLocais = new TreeSet<>();
+        ArrayList<Localizacao> locais = new ArrayList<>();
         for (FieldLocalizacaoController controller : controllersLocais) {
-            idLocais.add(controller.getLocalizacao().getIdLocalizacao());
+            locais.add(controller.getLocalizacao());
         }
-        
-        
-        
         ArrayList<ServiceFile> listaArquivos = new ArrayList<>(mapServiceFiles.keySet());
         builderEvento.setListaArquivos(listaArquivos);
-        // builderEvento.setLocalizacoes(idLocais);
+        builderEvento.setLocalizacoes(locais);
         builderEvento.setListaMetas(getMetasSelecionadas());
 
         return builderEvento.getEvento();
     }
 
-    /**
-     * verifica se as condicoes para cadastrar um evento sao atendidas
-     */
+    /** verifica se as condicoes para cadastrar um evento sao atendidas*/
     private void verificarInput() {
         if (emptyLocalizacoes()) {
             Alert erroLocalizacao = new Alert(AlertType.ERROR,
@@ -273,77 +274,6 @@ public class CadastrarEventoController implements ControllerEvento, ControllerSe
             Alert mensagemErro = new Alert(AlertType.ERROR, "Convocatórias precisam de pelo menos um colaborador");
             mensagemErro.show();
             throw new RuntimeException("Convocatorias precisam de pelo menos um colaborador");
-        }
-
-        Evento novoEvento = builderEvento.getEvento();
-        
-        if (eventoDAO.inserirEvento(novoEvento)) {
-            // procura pelo arquivo no banco, se nao estiver realiza a insercao
-            for (ServiceFile arquivo : novoEvento.getListaArquivos()) {
-                Optional<ServiceFile> arquivoExistente;
-                try {
-                    arquivoExistente = serviceFileDAO.getArquivo(arquivo.getFileKey());
-                } catch (SQLException e) {
-                    Alert erroInsercao = new Alert(AlertType.ERROR, "falha cadastrando novo evento");
-                    erroInsercao.show();
-                    return;
-                }
-                if (arquivoExistente.isEmpty()) {
-                    try {
-                        serviceFileDAO.inserirArquivo(arquivo);
-                    } catch (SQLException e) {
-                        Alert erroInsercao = new Alert(AlertType.ERROR, "falha cadastrando novo evento");
-                        erroInsercao.show();
-                        return;
-                    }
-                } else {
-                    int idxArquivo = novoEvento.getListaArquivos().indexOf(arquivo);
-                    
-                    novoEvento.getListaArquivos().set(idxArquivo, arquivoExistente.get());
-                }
-            }
-            
-            for (FieldLocalizacaoController controller : controllersLocais) {
-                adicionarLocalizacao(controller.getLocalizacao());
-            }
-
-            try {
-                eventoDAO.vincularArquivos(novoEvento);
-            } catch (SQLException e) {
-                Alert erroInsercao = new Alert(AlertType.ERROR, "falha cadastrando novo evento");
-                erroInsercao.show();
-                return;
-            }
-            
-            try {
-                eventoDAO.vincularMetas(novoEvento.getListaMetas(), novoEvento.getIdEvento());
-            } catch (SQLException e) {
-                Alert erroInsercao = new Alert(AlertType.ERROR, "falha cadastrando novo evento");
-                erroInsercao.show();
-                return;
-            }
-
-            
-            try {
-                novoEvento = eventoDAO.getEvento(novoEvento).get();
-            } catch (SQLException e) {
-                Alert erroInsercao = new Alert(AlertType.ERROR, "falha cadastrando novo evento");
-                erroInsercao.show();
-                return;
-            }
-            
-            this.eventoDAO.vincularLocais(this.localizacoes, novoEvento.getIdEvento());
-            
-
-            try {
-                App.setRoot("view/home");
-            } catch (IOException e) {
-                Alert erroInsercao = new Alert(AlertType.ERROR, "falha cadastrando novo evento");
-                erroInsercao.show();
-            }
-        } else {
-            Alert erroInsercao = new Alert(AlertType.ERROR, "falha cadastrando novo evento");
-            erroInsercao.show();
         }
     }
     
@@ -683,8 +613,6 @@ public class CadastrarEventoController implements ControllerEvento, ControllerSe
                 erroInsercao.show();
             }  
         }
-
-        localizacoes.add(localizacao);
     }
 
     @Override
@@ -703,5 +631,7 @@ public class CadastrarEventoController implements ControllerEvento, ControllerSe
                 break;
             }
         }
+
+        botaoNovaLocalizacao.setDisable(false);
     }
 }
