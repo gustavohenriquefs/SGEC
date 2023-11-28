@@ -4,12 +4,15 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.controlsfx.control.textfield.AutoCompletionBinding;
 
+import com.casaculturaqxd.sgec.DAO.InstituicaoDAO;
 import com.casaculturaqxd.sgec.controller.ControllerEvento;
+import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.Instituicao;
 import com.casaculturaqxd.sgec.models.Participante;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
@@ -20,6 +23,8 @@ import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
@@ -49,11 +54,20 @@ public class PreviewInstituicaoController {
     private ControllerEvento parentController;
     private ObservableMap<Parent, List<Node>> previousChildren = FXCollections.observableHashMap();
     private Stage stage;
+    DatabasePostgres db = DatabasePostgres.getInstance("URL", "USER_NAME", "PASSWORD");
+    InstituicaoDAO instituicaoDAO = new InstituicaoDAO(db.getConnection());
+    ArrayList<String> listaNomes;
+    private Alert mensagem = new Alert(AlertType.NONE);
 
     public void initialize() {
         // manter o botao sempre no topo da imagem
         buttonAlterarCapa.setViewOrder(-1);
         buttonRemover.setViewOrder(-1);
+        try {
+        listaNomes = instituicaoDAO.listarInstituicoes();
+        } catch (SQLException e) {
+        listaNomes = new ArrayList<>();
+        }
     }
 
     public ControllerEvento getParentController() {
@@ -107,6 +121,29 @@ public class PreviewInstituicaoController {
     }
     
 
+    private void updateFieldNome(Labeled labeled, Pane fieldParent) {
+        ObservableList<Node> oldNodes = FXCollections.observableArrayList(fieldParent.getChildren());
+        previousChildren.put(campoNome, oldNodes);
+        TextField textField = new TextField(labeled.getText());
+        textField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+                if(!listaNomes.contains(textField.getText())){
+                    labeled.setText(textField.getText());
+                    fieldParent.getChildren().setAll(previousChildren.get(campoNome));
+                } else {
+                    mensagem.setAlertType(AlertType.ERROR);
+                    mensagem.setContentText("Não foi possivel alterar nome: Instituição já cadastrada!");
+                    mensagem.show();
+                    fieldParent.getChildren().setAll(previousChildren.get(campoNome));
+                }
+                
+            } else if (event.getCode() == KeyCode.ESCAPE) {
+                fieldParent.getChildren().setAll(previousChildren.get(campoNome));
+            }
+        });
+        fieldParent.getChildren().setAll(textField);
+    }
+
     private void updateField(Labeled labeled, Pane fieldParent) {
         ObservableList<Node> oldNodes = FXCollections.observableArrayList(fieldParent.getChildren());
         previousChildren.put(campoNome, oldNodes);
@@ -114,7 +151,7 @@ public class PreviewInstituicaoController {
         textField.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 labeled.setText(textField.getText());
-                fieldParent.getChildren().setAll(previousChildren.get(campoNome));
+                fieldParent.getChildren().setAll(previousChildren.get(campoNome)); 
             } else if (event.getCode() == KeyCode.ESCAPE) {
                 fieldParent.getChildren().setAll(previousChildren.get(campoNome));
             }
@@ -135,7 +172,7 @@ public class PreviewInstituicaoController {
     }
 
     public void updateNome() {
-        updateField(nomeInstituicao, campoNome);
+        updateFieldNome(nomeInstituicao, campoNome);
     }
 
     public void updateContribuica() {

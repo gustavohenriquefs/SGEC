@@ -8,12 +8,12 @@ import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.ResourceBundle;
 
 import org.controlsfx.control.textfield.AutoCompletionBinding;
 import org.controlsfx.control.textfield.TextFields;
 
 import com.casaculturaqxd.sgec.DAO.InstituicaoDAO;
+import com.casaculturaqxd.sgec.DAO.ServiceFileDAO;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.Instituicao;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
@@ -30,7 +30,8 @@ import javafx.stage.Stage;
 public class DialogInstituicaoController {
   DatabasePostgres db = DatabasePostgres.getInstance("URL", "USER_NAME", "PASSWORD");
   InstituicaoDAO instituicaoDAO = new InstituicaoDAO(db.getConnection());
-  
+  ServiceFileDAO serviceFileDAO = new ServiceFileDAO(db.getConnection());
+
   @FXML
   private TextField nomeInstituicao;
 
@@ -65,6 +66,20 @@ public class DialogInstituicaoController {
       } catch (SQLException e) {
         e.printStackTrace();
       }
+      if(instituicao.getImagemCapa() != null){
+          InputStream fileAsStream;
+          try {
+              file = serviceFileDAO.getContent(instituicao.getImagemCapa());
+              fileAsStream = new FileInputStream(file);
+              this.imagem.setImage(new Image(fileAsStream));
+          } catch (FileNotFoundException e) {
+              e.printStackTrace();
+          } catch (NullPointerException e) {
+              e.printStackTrace();
+          } catch (SQLException e) {
+              e.printStackTrace();
+          }
+        }
       nomeInstituicao.setEditable(false);
     });
     nomeInstituicao.setOnMouseClicked(mousePressed -> {
@@ -104,16 +119,21 @@ public class DialogInstituicaoController {
 
   public boolean cadastrarInstituicao() {
     if(nomeInstituicao.getText() != ""){
-      if(file == null){
-        ServiceFile serviceFileTemp = file != null ? new ServiceFile(file) : null;
-        Instituicao instituicao = new Instituicao(nomeInstituicao.getText(), contribuicoes.getText(), 
-        valorContribuicao.getText(), serviceFileTemp);
+      ServiceFile serviceFileTemp = file != null ? new ServiceFile(file) : null;
+      if(serviceFileTemp != null){
         try {
-          instituicaoDAO.inserirInstituicao(instituicao);
-          return true;
+          serviceFileDAO.inserirArquivo(serviceFileTemp);
         } catch (SQLException e) {
           e.printStackTrace();
         }
+      }
+      Instituicao instituicao = new Instituicao(nomeInstituicao.getText(), contribuicoes.getText(), 
+      valorContribuicao.getText(), serviceFileTemp);
+      try {
+        instituicaoDAO.inserirInstituicao(instituicao);
+        return true;
+      } catch (SQLException e) {
+        e.printStackTrace();
       } 
     } 
     return false;

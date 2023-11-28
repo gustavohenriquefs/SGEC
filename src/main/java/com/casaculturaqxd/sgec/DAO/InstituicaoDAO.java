@@ -70,7 +70,6 @@ public class InstituicaoDAO extends DAO {
       statement.setString(1, nome);
 
       ResultSet resultado = statement.executeQuery();
-
       if (resultado.next()) {
         ServiceFile imagemCapa = new ServiceFile(resultado.getInt("id_service_file"));
         if (imagemCapa.getServiceFileId() > 0) {
@@ -104,8 +103,10 @@ public class InstituicaoDAO extends DAO {
         nomeStrings.add(resultSet.getString("nome_instituicao"));
       }
       
-    } catch (SQLException e) {
-      throw new RuntimeException(e);
+    } catch (Exception e) {
+      logException(e);
+      throw new SQLException(e);
+      
     } finally {
       statement.close();
     }
@@ -119,7 +120,7 @@ public class InstituicaoDAO extends DAO {
     try {
       Integer idServiceFile = null;
       if (instituicao.getImagemCapa() != null) {
-        instituicao.getImagemCapa().getServiceFileId();
+        idServiceFile = instituicao.getImagemCapa().getServiceFileId();
       }
       statement.setString(1, instituicao.getNome());
       statement.setObject(2, idServiceFile, Types.INTEGER);
