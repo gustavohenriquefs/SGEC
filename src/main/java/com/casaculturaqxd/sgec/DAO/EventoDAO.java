@@ -12,13 +12,15 @@ import java.util.Optional;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import com.casaculturaqxd.sgec.builder.EventoBuilder;
 import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.GrupoEventos;
-import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 import com.casaculturaqxd.sgec.models.Instituicao;
 import com.casaculturaqxd.sgec.models.Localizacao;
 import com.casaculturaqxd.sgec.models.Meta;
-public class EventoDAO {
+import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
+
+public class EventoDAO extends DAO {
   private Connection connection;
 
   public EventoDAO() {
@@ -59,8 +61,8 @@ public class EventoDAO {
       stmt.setBoolean(9, evento.isCertificavel());
       stmt.setTime(10, evento.getCargaHoraria());
       stmt.setBoolean(11, evento.isAcessivelEmLibras());
-      stmt.setInt(12, evento.getParticipantesEsperado());
-      stmt.setInt(13, evento.getMunicipiosEsperado());
+      stmt.setInt(12, evento.getNumParticipantesEsperado());
+      stmt.setInt(13, evento.getNumMunicipiosEsperado());
 
       stmt.executeUpdate();
 
@@ -238,46 +240,29 @@ public class EventoDAO {
     }
   }
 
-  public ArrayList<Evento> listarUltimosEventos() {
-    String sql = "select * from evento where nome_evento <> '' order by data_inicial desc limit 5";
+  public ArrayList<Evento> listarUltimosEventos() throws SQLException {
+    String sql = "select id_evento,nome_evento,data_inicial, horario, id_service_file from evento where nome_evento <> '' order by data_inicial desc limit 5";
+    PreparedStatement stmt = connection.prepareStatement(sql);
     ArrayList<Evento> eventos = new ArrayList<>();
-
     try {
-      PreparedStatement stmt = connection.prepareStatement(sql);
       ResultSet resultSet = stmt.executeQuery();
 
       while (resultSet.next()) {
-        Evento evento = new Evento();
-        evento.setIdEvento(resultSet.getInt("id_evento"));
-        evento.setNome(resultSet.getString("nome_evento"));
-        evento.setPublicoEsperado(resultSet.getInt("publico_esperado"));
-        evento.setPublicoAlcancado(resultSet.getInt("publico_alcancado"));
-        evento.setDescricao(resultSet.getString("descricao"));
-        evento.setDataInicial(resultSet.getDate("data_inicial"));
-        evento.setDataFinal(resultSet.getDate("data_final"));
-        evento.setHorario(resultSet.getTime("horario"));
-        evento.setClassificacaoEtaria(resultSet.getString("classificacao_etaria"));
-        evento.setCertificavel(resultSet.getBoolean("certificavel"));
-        evento.setCargaHoraria(resultSet.getTime("carga_horaria"));
-        evento.setAcessivelEmLibras(resultSet.getBoolean("acessivel_em_libras"));
-        evento.setParticipantesEsperado(resultSet.getInt("num_participantes_esperado"));
-        evento.setMunicipiosEsperado(resultSet.getInt("num_municipios_esperado"));
-        evento.setLocais(this.buscarLocaisPorEvento(evento.getIdEvento()));
-        evento.setListaOrganizadores(this.buscarOrganizadoresPorEvento(evento.getIdEvento()));
-        evento.setListaColaboradores(this.buscarColaboradoresPorEvento(evento.getIdEvento()));
-        evento.setListaParticipantes(this.buscarLocaisPorEvento(evento.getIdEvento()));
-        eventos.add(evento);
-      }
-      stmt.close();
-    } catch (SQLException e) {
-      return null;
-    }
+        Evento evento = new Evento(resultSet.getInt("id_evento"));
 
+        eventos.add(getPreviewEvento(evento).get());
+      }
+    } catch (SQLException e) {
+      logException(e);
+      throw new SQLException("falha pesquisando ultimos eventos", e);
+    } finally {
+      stmt.close();
+    }
     return eventos;
   }
 
   public ArrayList<Evento> pesquisarEvento(String nome, Date inicioDate, Date fimDate) {
-    String sql = "select * from evento where nome_evento ilike ? ";
+    String sql = "select id_evento,nome_evento,data_inicial, horario, id_service_file from evento where nome_evento ilike ? ";
     if (inicioDate != null)
       sql += "and data_inicial >= '" + inicioDate.toString() + "' ";
 
@@ -294,12 +279,8 @@ public class EventoDAO {
       stmt.setString(1, "%" + nome + "%");
       ResultSet resultSet = stmt.executeQuery();
       while (resultSet.next()) {
-        Evento evento = new Evento();
-        evento.setIdEvento(resultSet.getInt("id_evento"));
-        evento.setNome(resultSet.getString("nome_evento"));
-        evento.setDataFinal(resultSet.getDate("data_final"));
-        evento.setHorario(resultSet.getTime("horario"));
-        eventos.add(evento);
+        Evento evento = new Evento(resultSet.getInt("id_evento"));
+        eventos.add(getPreviewEvento(evento).get());
       }
       return eventos;
     } catch (SQLException e) {
@@ -307,15 +288,44 @@ public class EventoDAO {
     }
   }
 
-  public Optional<Evento> buscarEvento(Evento evento) {
+  public Optional<Evento> getEvento(Evento evento) throws SQLException {
+    String sql = """
+        SELECT
+        id_evento,
+        nome_evento,
+        publico_esperado,
+        publico_alcancado,
+        descricao,
+        data_inicial,
+        data_final,
+        horario,
+        classificacao_etaria,
+        certificavel,
+        carga_horaria,
+        acessivel_em_libras,
+        num_participantes_esperado,
+        num_municipios_esperado,
+        id_grupo_eventos,
+        num_municipios_alcancado,
+        num_participantes_alcancado,
+        num_colaboradores_alcancado,
+        num_colaboradores_esperado,
+        id_service_file
+        FROM evento WHERE id_evento = ?
+          """;
+    PreparedStatement stmt = connection.prepareStatement(sql);
     try {
-      String sql = "select * from evento where id_evento=?";
-      PreparedStatement stmt = connection.prepareStatement(sql);
       stmt.setInt(1, evento.getIdEvento());
       ResultSet resultSet = stmt.executeQuery();
       Evento eventoRetorno = null;
 
       if (resultSet.next()) {
+        GrupoEventosDAO grupoEventosDAO = new GrupoEventosDAO(connection);
+        ServiceFileDAO serviceFileDAO = new ServiceFileDAO(connection);
+        Optional<ServiceFile> optionalImagemCapa = serviceFileDAO
+            .getArquivo(new ServiceFile(resultSet.getInt("id_service_file")));
+        Optional<GrupoEventos> optionalGrupoEventos = grupoEventosDAO
+            .getPreviewGrupoEventos(new GrupoEventos(resultSet.getInt("id_grupo_eventos")));
         eventoRetorno = new Evento();
         eventoRetorno.setIdEvento(resultSet.getInt("id_evento"));
         eventoRetorno.setNome(resultSet.getString("nome_evento"));
@@ -329,19 +339,112 @@ public class EventoDAO {
         eventoRetorno.setCertificavel(resultSet.getBoolean("certificavel"));
         eventoRetorno.setCargaHoraria(resultSet.getTime("carga_horaria"));
         eventoRetorno.setAcessivelEmLibras(resultSet.getBoolean("acessivel_em_libras"));
-        eventoRetorno.setParticipantesEsperado(resultSet.getInt("num_participantes_esperado"));
-        eventoRetorno.setMunicipiosEsperado(resultSet.getInt("num_municipios_esperado"));
+        eventoRetorno.setNumParticipantesEsperado(resultSet.getInt("num_participantes_esperado"));
+        eventoRetorno.setNumParticipantesAlcancado(resultSet.getInt("num_participantes_alcancado"));
+        eventoRetorno.setNumMunicipiosEsperado(resultSet.getInt("num_municipios_esperado"));
+        eventoRetorno.setNumMunicipiosAlcancado(resultSet.getInt("num_municipios_alcancado"));
+        eventoRetorno.setNumColaboradoresEsperado(resultSet.getInt("num_colaboradores_esperado"));
+        eventoRetorno.setNumColaboradoresAlcancado(resultSet.getInt("num_colaboradores_alcancado"));
         eventoRetorno.setLocais(this.buscarLocaisPorEvento(eventoRetorno.getIdEvento()));
         eventoRetorno.setListaOrganizadores(this.buscarOrganizadoresPorEvento(eventoRetorno.getIdEvento()));
         eventoRetorno.setListaColaboradores(this.buscarColaboradoresPorEvento(eventoRetorno.getIdEvento()));
         eventoRetorno.setListaParticipantes(this.buscarLocaisPorEvento(eventoRetorno.getIdEvento()));
         eventoRetorno.setListaArquivos(this.buscarArquivosPorEvento(eventoRetorno));
         eventoRetorno.setListaMetas(this.listarMetasEvento(eventoRetorno));
+
+        if (optionalImagemCapa.isPresent()) {
+          eventoRetorno.setImagemCapa(optionalImagemCapa.get());
+        }
+        if (optionalGrupoEventos.isPresent()) {
+          eventoRetorno.setGrupoEventos(optionalGrupoEventos.get());
+        }
       }
-      stmt.close();
       return Optional.ofNullable(eventoRetorno);
-    } catch (SQLException e) {
-      return Optional.empty();
+    } catch (Exception e) {
+      String nomeEventoCausa = evento != null && evento.getNome() != null ? evento.getNome() : " ";
+      logException(e);
+      throw new SQLException("falha buscando evento " + nomeEventoCausa, e);
+    } finally {
+      stmt.close();
+    }
+  }
+
+  public Optional<Evento> getEvento(String nomeEvento) throws SQLException {
+    String sql = " SELECT id_evento FROM evento WHERE nome_evento ILIKE ?";
+    PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+    try {
+      preparedStatement.setString(1, nomeEvento);
+      ResultSet resultSet = preparedStatement.executeQuery();
+      if (resultSet.next()) {
+        Evento evento = new Evento(resultSet.getInt("id_evento"));
+
+        return getEvento(evento);
+      } else {
+        return Optional.empty();
+      }
+    } catch (Exception e) {
+      logException(e);
+      throw new SQLException("falha buscando evento com nome" + nomeEvento, e);
+    } finally {
+      preparedStatement.close();
+    }
+  }
+
+  public Optional<Evento> getPreviewEvento(Evento evento) throws SQLException {
+    String sql = "SELECT id_evento,nome_evento,data_inicial, horario, id_service_file FROM evento WHERE id_evento = ?";
+    PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+    try {
+      preparedStatement.setInt(1, evento.getIdEvento());
+      ResultSet resultSet = preparedStatement.executeQuery();
+      if (resultSet.next()) {
+        ServiceFileDAO serviceFileDAO = new ServiceFileDAO(connection);
+        ServiceFile imagemCapa = new ServiceFile(resultSet.getInt("id_service_file"));
+        Optional<ServiceFile> resultOptional = serviceFileDAO.getArquivo(imagemCapa);
+        if (resultOptional.isPresent()) {
+          imagemCapa = serviceFileDAO.getArquivo(imagemCapa).get();
+        } else {
+          imagemCapa = null;
+        }
+        EventoBuilder eventoBuilder = new EventoBuilder();
+
+        eventoBuilder.setHorario(resultSet.getTime("horario")).setId(resultSet.getInt("id_evento"))
+            .setNome(resultSet.getString("nome_evento")).setDataInicial(resultSet.getDate("data_inicial"))
+            .setImagemCapa(imagemCapa);
+
+        return Optional.ofNullable(eventoBuilder.getEvento());
+      } else {
+        return Optional.empty();
+      }
+    } catch (Exception e) {
+      String nomeEventoCausa = evento != null && evento.getNome() != null ? evento.getNome() : "";
+      logException(e);
+      throw new SQLException("falha buscando preview de evento " + nomeEventoCausa, e);
+    } finally {
+      preparedStatement.close();
+    }
+  }
+
+  public Optional<Evento> getPreviewEvento(String nomeEvento) throws SQLException {
+    String sql = "SELECT id_evento FROM evento WHERE nome_evento ILIKE ?";
+    PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+    try {
+      preparedStatement.setString(1, nomeEvento);
+      ResultSet resultSet = preparedStatement.executeQuery();
+      if (resultSet.next()) {
+        Evento evento = new Evento(resultSet.getInt("id_evento"));
+
+        return getPreviewEvento(evento);
+      } else {
+        return Optional.empty();
+      }
+    } catch (Exception e) {
+      logException(e);
+      throw new SQLException("falha buscando evento com nome" + nomeEvento, e);
+    } finally {
+      preparedStatement.close();
     }
   }
 
@@ -350,12 +453,12 @@ public class EventoDAO {
     return serviceFileDAO.listarArquivosEvento(evento);
   }
 
-  private ArrayList<Instituicao> buscarColaboradoresPorEvento(int idEvento) {
+  private ArrayList<Instituicao> buscarColaboradoresPorEvento(int idEvento) throws SQLException {
     InstituicaoDAO instituicaoDAO = new InstituicaoDAO(connection);
     return instituicaoDAO.listarColaboradoresEvento(idEvento);
   }
 
-  private ArrayList<Instituicao> buscarOrganizadoresPorEvento(int idEvento) {
+  private ArrayList<Instituicao> buscarOrganizadoresPorEvento(int idEvento) throws SQLException {
     InstituicaoDAO instituicaoDAO = new InstituicaoDAO(connection);
     return instituicaoDAO.listarOrganizadoresEvento(idEvento);
   }
@@ -406,7 +509,7 @@ public class EventoDAO {
     return locais;
   }
 
-  public boolean alterarEvento(Evento evento) {
+  public boolean alterarEvento(Evento evento) throws SQLException {
     try {
       String sql = "update evento set nome_evento=?, publico_esperado=?, publico_alcancado=?, descricao=?, data_inicial=?, data_final=?, horario=?, classificacao_etaria=?::faixa_etaria, certificavel=?, carga_horaria=?, acessivel_em_libras=?, num_participantes_esperado = ?, num_municipios_esperado = ? where id_evento=?";
 
@@ -423,8 +526,8 @@ public class EventoDAO {
       stmt.setBoolean(9, evento.isCertificavel());
       stmt.setTime(10, evento.getCargaHoraria());
       stmt.setBoolean(11, evento.isAcessivelEmLibras());
-      stmt.setInt(12, evento.getParticipantesEsperado());
-      stmt.setInt(13, evento.getMunicipiosEsperado());
+      stmt.setInt(12, evento.getNumParticipantesEsperado());
+      stmt.setInt(13, evento.getNumMunicipiosEsperado());
       stmt.setInt(14, evento.getIdEvento());
       stmt.execute();
       stmt.close();
@@ -483,7 +586,7 @@ public class EventoDAO {
     return true;
   }
 
-  private boolean sincronizarColaboradores(Evento evento) {
+  private boolean sincronizarColaboradores(Evento evento) throws SQLException {
     ArrayList<Instituicao> colaboradoresEvento = this.buscarColaboradoresPorEvento(evento.getIdEvento());
 
     for (Instituicao colaborador : colaboradoresEvento) {
@@ -508,7 +611,7 @@ public class EventoDAO {
     return true;
   }
 
-  private boolean sincronizarOrganizadores(Evento evento) {
+  private boolean sincronizarOrganizadores(Evento evento) throws SQLException {
     ArrayList<Instituicao> organizadoresEvento = this.buscarOrganizadoresPorEvento(evento.getIdEvento());
 
     for (Instituicao organizador : organizadoresEvento) {
@@ -697,8 +800,8 @@ public class EventoDAO {
         evento.setCertificavel(resultSet.getBoolean("certificavel"));
         evento.setCargaHoraria(resultSet.getTime("carga_horaria"));
         evento.setAcessivelEmLibras(resultSet.getBoolean("acessivel_em_libras"));
-        evento.setParticipantesEsperado(resultSet.getInt("num_participantes_esperado"));
-        evento.setMunicipiosEsperado(resultSet.getInt("num_municipios_esperado"));
+        evento.setNumParticipantesEsperado(resultSet.getInt("num_participantes_esperado"));
+        evento.setNumMunicipiosEsperado(resultSet.getInt("num_municipios_esperado"));
         evento.setCadastradoEm(resultSet.getDate("cadastrado_em"));
 
         evento.setLocais(this.buscarLocaisPorEvento(evento.getIdEvento()));

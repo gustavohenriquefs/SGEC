@@ -1,6 +1,9 @@
 package com.casaculturaqxd.sgec.controller;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.controlsfx.control.textfield.TextFields;
 
@@ -16,9 +19,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 
-
 public class FieldLocalizacaoController {
-    DatabasePostgres db = DatabasePostgres.getInstance("URL","USER_NAME","PASSWORD");
+    DatabasePostgres db = DatabasePostgres.getInstance("URL", "USER_NAME", "PASSWORD");
     @FXML
     Parent paneLocalizacoes;
     @FXML
@@ -73,7 +75,17 @@ public class FieldLocalizacaoController {
         LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO();
         localizacaoDAO.setConnection(db.getConnection());
 
-        Localizacao localizacao = localizacaoDAO.getLocalizacaoByNome(fdNomeLocal.getText().trim());
+        Localizacao localizacao;
+        try {
+            localizacao = localizacaoDAO.getLocalizacaoByNome(fdNomeLocal.getText().trim()).get();
+        } catch (SQLException e) {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Erro");
+            alert.setHeaderText("Erro ao carregar localização");
+            alert.setContentText(e.getMessage());
+            alert.show();
+            return;
+        }
 
         if(localizacao != null){
             rua.setText(localizacao.getRua());
@@ -90,8 +102,19 @@ public class FieldLocalizacaoController {
         LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO();
 
         localizacaoDAO.setConnection(db.getConnection());
+
+        List<String> locais = new ArrayList<>();
+
+        try {
+            locais = localizacaoDAO.getListaLocais();
+        } catch (SQLException e) {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Erro");
+            alert.setHeaderText("Erro ao carregar lista de locais");
+            return;
+        }
         
-        TextFields.bindAutoCompletion(fdNomeLocal,  localizacaoDAO.getListaLocais())
+        TextFields.bindAutoCompletion(fdNomeLocal,  locais)
             .setOnAutoCompleted(
                 event -> {
                     this.completeLocaleData(event.getCompletion());
@@ -107,26 +130,37 @@ public class FieldLocalizacaoController {
         this.parentController = parentController;
     }
 
-    public Localizacao getLocalizacao() {
-    // TODO: get do dao por nome
-    // evento on click
-    // TODO: Dialog de Participante
-        if(    fdNomeLocal.getText() == null  
-            || rua.getText() == null
-            || cidade.getText() == null
-            || estado.getText() == null
-            || pais.getText() == null)
-        {
-               campoFaltando.show();
-               return null;
+    public void destacarCamposNaoPreenchidos() {
+        if (cidade.getText().isEmpty()) {
+            cidade.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
+        } else {
+            cidade.setStyle(null);
         }
-            else{
-            localizacao.setNome(fdNomeLocal.getText());
-            localizacao.setRua(rua.getText());
-            localizacao.setBairro(bairro.getText());
-            
-            if(!numero.getText().isEmpty()){
-                localizacao.setNumeroRua(Integer.parseInt(numero.getText()));
+        if (estado.getText().isEmpty()) {
+            estado.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
+        } else {
+            estado.setStyle(null);
+        }
+        if (pais.getText().isEmpty()) {
+            pais.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
+        } else {
+            pais.setStyle(null);
+        }
+    }
+
+    public Localizacao getLocalizacao() {
+        Localizacao novoLocal = new Localizacao();
+        if (rua.getText().isEmpty() || cidade.getText().isEmpty() || estado.getText().isEmpty()
+                || pais.getText().isEmpty()) {
+            destacarCamposNaoPreenchidos();
+            campoFaltando.setAlertType(AlertType.ERROR);
+            campoFaltando.setContentText("Nem todos os campos foram preenchidos");
+            campoFaltando.show();
+        } else {
+            novoLocal.setRua(rua.getText());
+            novoLocal.setBairro(bairro.getText());
+            if (!numero.getText().isEmpty()) {
+                novoLocal.setNumeroRua(Integer.parseInt(numero.getText()));
             }
 
             localizacao.setCep(cep.getText());

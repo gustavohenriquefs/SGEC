@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.EventoDAO;
@@ -39,6 +41,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Control;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
@@ -122,6 +125,33 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
 
         eventoDAO.setConnection(db.getConnection());
         localizacaoDAO.setConnection(db.getConnection());
+        compararDatas();
+    }
+
+    public void compararDatas() {
+        // Impede que data posteriores á dataFinal sejam seleciondas no campo
+        // dataInicial
+        dataFinal.valueProperty().addListener((observable, oldValue, newValue) -> {
+            dataInicial.setDayCellFactory(picker -> new DateCell() {
+                @Override
+                public void updateItem(LocalDate date, boolean empty) {
+                    super.updateItem(date, empty);
+                    LocalDate currentDate = dataFinal.getValue();
+                    setDisable(empty || date.compareTo(currentDate) > 0);
+                }
+            });
+        });
+        // Impede que datas anteriores à dataInicial sejam selecionadas em dataFinal
+        dataInicial.valueProperty().addListener((observable, oldValue, newValue) -> {
+            dataFinal.setDayCellFactory(picker -> new DateCell() {
+                @Override
+                public void updateItem(LocalDate date, boolean empty) {
+                    super.updateItem(date, empty);
+                    LocalDate currentDate = dataInicial.getValue();
+                    setDisable(empty || date.compareTo(currentDate) < 0);
+                }
+            });
+        });
     }
 
     private void loadMenu() throws IOException {
@@ -159,9 +189,12 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
 
         if (evento.getLocais() != null) {
             for (Integer idLocal : evento.getLocais()) {
-                Localizacao local = new Localizacao();
-                local.setIdLocalizacao(idLocal);
-                local = localizacaoDAO.getLocalizacao(local);
+                Localizacao local = new Localizacao(idLocal);
+                try {
+                    local = localizacaoDAO.getLocalizacao(local).get();
+                } catch (NoSuchElementException e) {
+                    throw new RuntimeException();
+                }
                 Parent previewLocal = loaderLocal.load();
                 PreviewLocalizacaoController controller = loaderLocal.getController();
                 controller.setLocalizacao(local);
@@ -177,9 +210,9 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
 
         numeroPublico = new Indicador("Quantidade de público", evento.getPublicoEsperado(),
                 evento.getPublicoAlcancado());
-        numeroMestres = new Indicador("Número de mestres da cultura", evento.getParticipantesEsperado(),
+        numeroMestres = new Indicador("Número de mestres da cultura", evento.getNumParticipantesEsperado(),
                 evento.getListaParticipantes().size());
-        numeroMunicipios = new Indicador("Número de municípios", evento.getMunicipiosEsperado(),
+        numeroMunicipios = new Indicador("Número de municípios", evento.getNumMunicipiosEsperado(),
                 eventoDAO.getNumeroMunicipiosDiferentes(evento.getIdEvento()));
 
         addIndicador(tabelaIndicadoresGerais, numeroPublico);
@@ -205,8 +238,15 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
     }
 
     public boolean salvarAlteracoes() {
-        alterarEvento();
-        return eventoDAO.alterarEvento(evento);
+        try {
+            alterarEvento();
+            return eventoDAO.alterarEvento(evento);
+        } catch (Exception e) {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setContentText("Erro atualizando evento");
+            return false;
+        }
+
     }
 
     public void alterarEvento() {
@@ -221,8 +261,8 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
             evento.setCargaHoraria(Time.valueOf(cargaHoraria.getText()));
             evento.setPublicoAlcancado(numeroPublico.getValorAlcancado());
             evento.setPublicoEsperado(numeroPublico.getValorEsperado());
-            evento.setParticipantesEsperado(numeroMestres.getValorEsperado());
-            evento.setMunicipiosEsperado(numeroMunicipios.getValorEsperado());
+            evento.setNumParticipantesEsperado(numeroMestres.getValorEsperado());
+            evento.setNumMunicipiosEsperado(numeroMunicipios.getValorEsperado());
             eventoDAO.alterarEvento(evento);
 
             Alert sucessoAtualizacao = new Alert(AlertType.INFORMATION);

@@ -7,13 +7,22 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.casaculturaqxd.sgec.models.Localizacao;
 
-public class LocalizacaoDAO {
+public class LocalizacaoDAO extends DAO {
   private Connection connection;
+
+  public LocalizacaoDAO() {
+
+  }
+
+  public LocalizacaoDAO(Connection connection) {
+    this.connection = connection;
+  }
 
   public Connection getConnection() {
     return connection;
@@ -23,127 +32,139 @@ public class LocalizacaoDAO {
     this.connection = connection;
   }
 
-  public Localizacao getLocalizacao(Localizacao obj) {
-    String sql = "SELECT * FROM localizacao WHERE id_localizacao=?";
+  public Optional<Localizacao> getLocalizacao(Localizacao localizacao) throws SQLException {
+    String sql = "SELECT id_localizacao,nome_localizacao,rua,numero_rua,bairro,cep,cidade,estado,pais FROM localizacao WHERE id_localizacao=?";
+    PreparedStatement statement = connection.prepareStatement(sql);
+
     try {
-      PreparedStatement stmt = connection.prepareStatement(sql);
-      stmt.setInt(1, obj.getIdLocalizacao());
-      ResultSet resultado = stmt.executeQuery();
+      statement.setInt(1, localizacao.getIdLocalizacao());
+      ResultSet resultado = statement.executeQuery();
       if (resultado.next()) {
-        obj.setIdLocalizacao(resultado.getInt("id_localizacao"));
-        obj.setNome(resultado.getString("nome_localizacao"));
-        obj.setRua(resultado.getString("rua"));
-        obj.setNumeroRua(resultado.getInt("numero_rua"));
-        obj.setBairro(resultado.getString("bairro"));
-        obj.setCep(resultado.getString("cep"));
-        obj.setCidade(resultado.getString("cidade"));
-        obj.setEstado(resultado.getString("estado"));
-        obj.setPais(resultado.getString("pais"));
-        return obj;
+        localizacao.setIdLocalizacao(resultado.getInt("id_localizacao"));
+        localizacao.setNome(resultado.getString("nome_localizacao"));
+        localizacao.setRua(resultado.getString("rua"));
+        localizacao.setNumeroRua(resultado.getInt("numero_rua"));
+        localizacao.setBairro(resultado.getString("bairro"));
+        localizacao.setCep(resultado.getString("cep"));
+        localizacao.setCidade(resultado.getString("cidade"));
+        localizacao.setEstado(resultado.getString("estado"));
+        localizacao.setPais(resultado.getString("pais"));
+        return Optional.of(localizacao);
       } else {
-        return null;
+        return Optional.empty();
       }
-    } catch (SQLException e) {
-      Logger erro = Logger.getLogger("erroSQl");
-      erro.log(Level.SEVERE, "excecao levantada:", e);
-      return null;
+    } catch (Exception e) {
+      String nomeLocalCausa = localizacao != null && localizacao.getNome() != null ? localizacao.getNome() : "";
+      logException(e);
+      throw new SQLException("falha buscando local " + nomeLocalCausa, e);
+    } finally {
+      statement.close();
     }
   }
 
-  public Localizacao inserirLocalizacao(Localizacao obj) {
+  public boolean inserirLocalizacao(Localizacao localizacao) throws SQLException {
+    String sql = "insert into localizacao (nome_localizacao,rua,numero_rua,bairro,cep,cidade,estado,pais)"
+        + " values(?,?,?,?,?,?,?,?)";
+    PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
     try {
-      String sql = "insert into localizacao (nome_localizacao,rua,numero_rua,bairro,cep,cidade,estado,pais)"
-          + " values(?,?,?,?,?,?,?,?)";
-      PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-      stmt.setString(1, obj.getNome());
-      stmt.setString(2, obj.getRua());
-      stmt.setInt(3, obj.getNumeroRua());
-      stmt.setString(4, obj.getBairro());
-      stmt.setString(5, obj.getCep());
-      stmt.setString(6, obj.getCidade());
-      stmt.setString(7, obj.getEstado());
-      stmt.setString(8, obj.getPais());
-      stmt.executeUpdate();
 
-      ResultSet rs = stmt.getGeneratedKeys();
+      statement.setString(1, localizacao.getNome());
+      statement.setString(2, localizacao.getRua());
+      statement.setInt(3, localizacao.getNumeroRua());
+      statement.setString(4, localizacao.getBairro());
+      statement.setString(5, localizacao.getCep());
+      statement.setString(6, localizacao.getCidade());
+      statement.setString(7, localizacao.getEstado());
+      statement.setString(8, localizacao.getPais());
+      int numInsercoes = statement.executeUpdate();
 
+      ResultSet rs = statement.getGeneratedKeys();
       if (rs.next()) {
-        obj.setIdLocalizacao(rs.getInt("id_localizacao"));
+        localizacao.setIdLocalizacao(rs.getInt("id_localizacao"));
       }
 
-      stmt.close();
-      return obj;
-    } catch (SQLException e) {
-      Logger erro = Logger.getLogger("erroSQl"); 
-      erro.log(Level.SEVERE, "excecao levantada:", e);
-      return null;
+      return numInsercoes > 0;
+    } catch (Exception e) {
+      String nomeLocalCausa = localizacao != null && localizacao.getNome() != null ? localizacao.getNome() : "";
+      logException(e);
+      throw new SQLException("falha inserindo local " + nomeLocalCausa, e);
+    } finally {
+      statement.close();
     }
   }
 
-  boolean updateLocalizacao(Localizacao obj) {
+  boolean updateLocalizacao(Localizacao localizacao) throws SQLException {
     String sql = "UPDATE localizacao SET nome_localizacao=?,rua=?,numero_rua=?,bairro=?,cep=?,cidade=?,estado=?,pais=? WHERE id_localizacao=?";
-    try {
-      PreparedStatement stmt = connection.prepareStatement(sql);
-      stmt.setString(1, obj.getNome());
-      stmt.setString(2, obj.getRua());
-      stmt.setInt(3, obj.getNumeroRua());
-      stmt.setString(4, obj.getBairro());
-      stmt.setString(5, obj.getCep());
-      stmt.setString(6, obj.getCidade());
-      stmt.setString(7, obj.getEstado());
-      stmt.setString(8, obj.getPais());
-      stmt.setInt(9, obj.getIdLocalizacao());
+    PreparedStatement statement = connection.prepareStatement(sql);
 
-      int numModificacoes = stmt.executeUpdate();
-      stmt.close();
+    try {
+      statement.setString(1, localizacao.getNome());
+      statement.setString(2, localizacao.getRua());
+      statement.setInt(3, localizacao.getNumeroRua());
+      statement.setString(4, localizacao.getBairro());
+      statement.setString(5, localizacao.getCep());
+      statement.setString(6, localizacao.getCidade());
+      statement.setString(7, localizacao.getEstado());
+      statement.setString(8, localizacao.getPais());
+      statement.setInt(9, localizacao.getIdLocalizacao());
+
+      int numModificacoes = statement.executeUpdate();
+      statement.close();
       return numModificacoes > 0;
 
-    } catch (SQLException e) {
-      Logger erro = Logger.getLogger("erroSQl");
-      erro.log(Level.SEVERE, "excecao levantada:", e);
-      return false;
+    } catch (Exception e) {
+      String nomeLocalCausa = localizacao != null && localizacao.getNome() != null ? localizacao.getNome() : "";
+      logException(e);
+      throw new SQLException("falha atualizando local " + nomeLocalCausa, e);
+    } finally {
+      statement.close();
     }
   }
 
-  boolean deletarLocalizacao(Localizacao obj) {
+  boolean deletarLocalizacao(Localizacao localizacao) throws SQLException {
     String sql = "DELETE FROM localizacao WHERE id_localizacao=?";
-    try {
-      PreparedStatement stmt = connection.prepareStatement(sql);
-      stmt.setInt(1, obj.getIdLocalizacao());
+    PreparedStatement statement = connection.prepareStatement(sql);
 
-      int numRemocoes = stmt.executeUpdate();
-      stmt.close();
+    try {
+      statement.setInt(1, localizacao.getIdLocalizacao());
+
+      int numRemocoes = statement.executeUpdate();
+      statement.close();
       return numRemocoes > 0;
-    } catch (SQLException e) {
-      Logger erro = Logger.getLogger("erroSQl");
-      erro.log(Level.SEVERE, "excecao levantada:", e);
-      return false;
+    } catch (Exception e) {
+      String nomeLocalCausa = localizacao != null && localizacao.getNome() != null ? localizacao.getNome() : "";
+      logException(e);
+      throw new SQLException("falha deletando local " + nomeLocalCausa, e);
+    } finally {
+      statement.close();
     }
   }
 
-  boolean vincularEvento(int idLocalizacao, int idEvento) {
+  boolean vincularEvento(int idLocalizacao, int idEvento) throws SQLException {
+    String sql = "insert into localizacao_evento (id_localizacao,id_evento)" + " values(?,?)";
+    PreparedStatement stmt = connection.prepareStatement(sql);
     try {
-      String sql = "insert into localizacao_evento (id_localizacao,id_evento)" + " values(?,?)";
-      PreparedStatement stmt = connection.prepareStatement(sql);
+
       stmt.setInt(1, idLocalizacao);
       stmt.setInt(2, idEvento);
-      stmt.execute();
+      int numInsercoes = stmt.executeUpdate();
+      return numInsercoes > 0;
+    } catch (Exception e) {
+      logException(e);
+      throw new SQLException("falha vinculando local a evento ", e);
+    } finally {
       stmt.close();
-      return true;
-    } catch (SQLException e) {
-      Logger erro = Logger.getLogger("erroSQl");
-      erro.log(Level.SEVERE, "excecao levantada:", e);
-      return false;
     }
   }
 
-  public ArrayList<Localizacao> pesquisarLocalizacao(String nomeCidade) {
-    String sql = "select * from localizacao where cidade like ?";
-    ArrayList<Localizacao> localizacaos = new ArrayList<>();
+  public ArrayList<Localizacao> pesquisarLocalizacao(String nomeCidade) throws SQLException {
+    String sql = "select id_localizacao,nome_localizacao,rua,numero_rua,bairro,cep,cidade,estado,pais from localizacao where cidade like ?";
+    PreparedStatement statement = connection.prepareStatement(sql);
+
+    ArrayList<Localizacao> localizacoes = new ArrayList<>();
     try {
-      PreparedStatement stmt = connection.prepareStatement(sql);
-      stmt.setString(1, "%" + nomeCidade + "%");
-      ResultSet resultSet = stmt.executeQuery();
+      statement.setString(1, "%" + nomeCidade + "%");
+      ResultSet resultSet = statement.executeQuery();
 
       while (resultSet.next()) {
         Localizacao localizacao = new Localizacao();
@@ -156,58 +177,43 @@ public class LocalizacaoDAO {
         localizacao.setCidade(resultSet.getString("cidade"));
         localizacao.setCep(resultSet.getString("cep"));
         localizacao.setNome(resultSet.getString("nome_localizacao"));
-        localizacaos.add(localizacao);
+        localizacoes.add(localizacao);
       }
-      stmt.close();
-      return localizacaos;
-    } catch (SQLException e) {
-      return null;
+      return localizacoes;
+    } catch (Exception e) {
+      logException(e);
+      throw new SQLException("falha pesquisando locais por nome de cidade " + nomeCidade != null ? nomeCidade : "", e);
+    } finally {
+      statement.close();
     }
   }
 
-  public boolean verificaLocalidade(int id_evento, int id_localizacao) {
-    String sql = "select * from localizacao_evento where id_evento = ? and id_localizacao = ?";
-    try {
-      PreparedStatement stmt = connection.prepareStatement(sql);
-      stmt.setInt(1, id_evento);
-      stmt.setInt(2, id_localizacao);
-      ResultSet resultSet = stmt.executeQuery();
-      while (resultSet.next()) {
-        stmt.close();
-        return true;
-      }
-      stmt.close();
-      return false;
-    } catch (SQLException e) {
-      return false;
-    }
-  }
-
-  boolean desvincularEvento(Integer idLocalizacao, Integer idEvento) {
+  boolean desvincularEvento(Integer idLocalizacao, Integer idEvento) throws SQLException {
     String vincLocaisSql = "DELETE FROM localizacao_evento WHERE id_localizacao=? AND id_evento=?";
+    PreparedStatement stmt = connection.prepareStatement(vincLocaisSql);
 
     try {
-      PreparedStatement stmt = connection.prepareStatement(vincLocaisSql);
       stmt.setInt(1, idLocalizacao);
       stmt.setInt(2, idEvento);
 
       int numRemocoes = stmt.executeUpdate();
-      stmt.close();
       return numRemocoes > 0;
 
     } catch (SQLException e) {
-      Logger erro = Logger.getLogger("erroSQl");
-      erro.log(Level.SEVERE, "excecao levantada:", e);
-      return false;
-    }
+      logException(e);
 
+      throw new SQLException("falha desvinculando local de evento", e);
+    } finally {
+      stmt.close();
+    }
   }
 
-  public Localizacao getLocalizacaoByNome(String nome){
+  public Optional<Localizacao> getLocalizacaoByNome(String nome) throws SQLException{
     String sql = "SELECT * FROM localizacao WHERE nome_localizacao LIKE ?";
-    
+    PreparedStatement stmt = connection.prepareStatement(sql);
+
     try {
-        PreparedStatement stmt = connection.prepareStatement(sql);
+        
         stmt.setString(1, "%" + nome + "%"); // Add '%' before and after the nome parameter
         ResultSet resultado = stmt.executeQuery();
         if (resultado.next()) {
@@ -223,27 +229,38 @@ public class LocalizacaoDAO {
             localizacao.setEstado(resultado.getString("estado"));
             localizacao.setPais(resultado.getString("pais"));
 
-            return localizacao;
+            return Optional.of(localizacao);
         } else {
-            return null;
+            return Optional.empty();
         }
     } catch (Exception e) {
-        return null;
+      logException(e);
+
+      String sqlMsg = "falha buscando local por nome " + nome != null ? nome : "";
+      
+      throw new SQLException(sqlMsg, e);
+    } finally {
+        stmt.close();
     }
   }
 
-  public List<String> getListaLocais() {
+  public List<String> getListaLocais() throws SQLException {
     String sql = "SELECT nome_localizacao FROM localizacao";
     List<String> listaLocais = new ArrayList<>();
+
+    PreparedStatement stmt = connection.prepareStatement(sql);
+    
     try {
-      PreparedStatement stmt = connection.prepareStatement(sql);
       ResultSet resultado = stmt.executeQuery();
       while (resultado.next()) {
         listaLocais.add(resultado.getString("nome_localizacao"));
       }
       stmt.close();
     } catch (SQLException ex) {
-      Logger.getLogger(LocalizacaoDAO.class.getName()).log(Level.SEVERE, null, ex);
+      logException(ex);
+      throw new SQLException("falha buscando lista de locais", ex);
+    } finally {
+      stmt.close();
     }
 
     return listaLocais;

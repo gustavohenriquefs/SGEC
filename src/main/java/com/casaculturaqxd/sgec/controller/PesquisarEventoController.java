@@ -71,7 +71,9 @@ public class PesquisarEventoController {
         root.getChildren().add(0, carregarMenu.load());
     }
 
-    public void pesquisarEvento() {
+    public void pesquisarEvento() throws SQLException {
+        // TODO: tratar excecao, carregando os eventos ignorando a query de local ou
+        // encerrando o metodo com um alerta de ero
         ArrayList<Evento> eventosFinais;
         String nome = textFieldPesquisa.getText();
         String cidade = nomeLocalizacao.getText();
@@ -110,12 +112,12 @@ public class PesquisarEventoController {
         return eventoDAO.pesquisarEvento(nomeEvento, dataInicial, dataFinal);
     }
 
-    private ArrayList<Evento> filtroNomeCidade(ArrayList<Evento> eventos, String nomeCidade) {
-        ArrayList<Localizacao> localizacaos = localizacaoDAO.pesquisarLocalizacao(nomeCidade);
+    private ArrayList<Evento> filtroNomeCidade(ArrayList<Evento> eventos, String nomeCidade) throws SQLException {
+        ArrayList<Localizacao> localizacoes = localizacaoDAO.pesquisarLocalizacao(nomeCidade);
         ArrayList<Evento> eventosTemp = new ArrayList<>();
         for (Evento evento : eventos) {
             ArrayList<Integer> idsLocais = eventoDAO.buscarLocaisPorEvento(evento.getIdEvento());
-            for (Localizacao local : localizacaos) {
+            for (Localizacao local : localizacoes) {
                 if (idsLocais.contains((Integer) local.getIdLocalizacao())) {
                     eventosTemp.add(evento);
                     break;
