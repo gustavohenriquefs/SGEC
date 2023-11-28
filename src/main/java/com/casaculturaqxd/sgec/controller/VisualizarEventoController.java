@@ -334,7 +334,9 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
             if (!updateMetas(evento)) {
                 return false;
             }
-
+            if (!updateArquivos(evento)) {
+                return false;
+            }
             return true;
         } catch (SQLException e) {
             db.getConnection().rollback();
@@ -346,6 +348,31 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
 
     private boolean updateMetas(Evento evento) throws SQLException {
         return eventoDAO.atualizarMetasEvento(getMetasSelecionadas(), evento);
+    }
+
+    private boolean updateArquivos(Evento evento) throws SQLException {
+        ServiceFileDAO serviceFileDAO = new ServiceFileDAO(db.getConnection());
+        for (ServiceFile addedFile : getAddedFiles()) {
+            Optional<ServiceFile> optionalFile = serviceFileDAO.getArquivo(addedFile.getFileKey());
+            if (optionalFile.isPresent()) {
+                addedFile = optionalFile.get();
+            } else {
+                serviceFileDAO.inserirArquivo(addedFile);
+            }
+            boolean checkNovoArquivo = serviceFileDAO.vincularArquivo(addedFile.getServiceFileId(),
+                    evento.getIdEvento());
+            if (!checkNovoArquivo) {
+                return false;
+            }
+        }
+        for (ServiceFile removedFile : removedFiles) {
+            boolean checkArquivoRemovido = serviceFileDAO.desvincularArquivo(removedFile.getServiceFileId(),
+                    evento.getIdEvento());
+            if (!checkArquivoRemovido) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public void goToMidiaEvento() throws IOException, SQLException {
@@ -455,16 +482,18 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
             fileChooser.setInitialDirectory(lastDirectoryOpen);
         }
         File arquivoSelecionado = fileChooser.showOpenDialog(stage);
-        lastDirectoryOpen = arquivoSelecionado.getParentFile();
-
         try {
-            ServiceFile arquivo = new ServiceFile(arquivoSelecionado);
-            ServiceFileDAO serviceFileDAO = new ServiceFileDAO(db.getConnection());
-            if (!serviceFileDAO.arquivoJaVinculado(arquivo.getFileKey(), evento)) {
-                adicionarArquivo(arquivo);
-            } else {
-                Alert alert = new Alert(AlertType.ERROR, "Arquivo já foi adicionado");
-                alert.showAndWait();
+            if (arquivoSelecionado != null) {
+                lastDirectoryOpen = arquivoSelecionado.getParentFile();
+
+                ServiceFile arquivo = new ServiceFile(arquivoSelecionado);
+                ServiceFileDAO serviceFileDAO = new ServiceFileDAO(db.getConnection());
+                if (!serviceFileDAO.arquivoJaVinculado(arquivo.getFileKey(), evento)) {
+                    adicionarArquivo(arquivo);
+                } else {
+                    Alert alert = new Alert(AlertType.ERROR, "Arquivo já foi adicionado");
+                    alert.showAndWait();
+                }
             }
         } catch (Exception e) {
             Alert alert = new Alert(AlertType.ERROR, "Arquivo já foi adicionado");
