@@ -77,28 +77,6 @@ public class EventoDAO extends DAO {
       return false;
     }
 
-    // if (evento.getLocais() != null) {
-    //   boolean vinculoLocais = this.vincularLocais(evento.getLocais(), evento.getIdEvento());
-
-    //   if (vinculoLocais == false) {
-    //     return false;
-    //   }
-    // }
-    /*
-     * if(evento.getListaOrganizadores() != null) { boolean vinculoOrganizadores =
-     * this.vincularOrganizadores(evento.getListaOrganizadores(),
-     * evento.getIdEvento()); if(vinculoOrganizadores == false) { return false; } }
-     */
-
-    /*
-     * if(evento.getListaColaboradores() != null) { boolean vinculoColaboradores =
-     * this.vincularColaboradores(evento.getListaColaboradores(),
-     * evento.getIdEvento()); if(vinculoColaboradores == false) { return false; } }
-     * if(evento.getListaParticipantes() != null) { boolean vinculoParticipantes =
-     * this.vincularParticipantes(evento.getListaParticipantes(),
-     * evento.getIdEvento()); if(vinculoParticipantes == false) { return false; } }
-     */
-
     return true;
   }
 
@@ -123,7 +101,7 @@ public class EventoDAO extends DAO {
     return serviceFileDAO.vincularAllArquivos(evento);
   }
 
-  public boolean vincularLocais(List<Localizacao> locais, Integer idEvento) {
+  public boolean vincularLocais(List<Localizacao> locais, Integer idEvento) throws SQLException {
     for (Localizacao local : locais) {
       if (!this.vincularLocal(local.getIdLocalizacao(), idEvento)) {
         return false;
@@ -133,19 +111,12 @@ public class EventoDAO extends DAO {
     return true;
   }
 
-  private boolean vincularLocal(Integer local, Integer idEvento) {
-    String vincLocaisSql = "INSERT INTO localizacao_evento(id_localizacao, id_evento) VALUES (?, ?)";
-
-    try {
-      PreparedStatement stmt = connection.prepareStatement(vincLocaisSql);
-      stmt.setInt(1, local);
-      stmt.setInt(2, idEvento);
-      stmt.execute();
-      stmt.close();
-    } catch (SQLException e) {
+  private boolean vincularLocal(Integer idLocal, Integer idEvento) throws SQLException {
+    LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO(connection);
+    
+    if (!localizacaoDAO.vincularEvento(idLocal, idEvento)) {
       return false;
     }
-
     return true;
   }
 
@@ -348,7 +319,7 @@ public class EventoDAO extends DAO {
         eventoRetorno.setLocais(this.buscarLocaisPorEvento(eventoRetorno.getIdEvento()));
         eventoRetorno.setListaOrganizadores(this.buscarOrganizadoresPorEvento(eventoRetorno.getIdEvento()));
         eventoRetorno.setListaColaboradores(this.buscarColaboradoresPorEvento(eventoRetorno.getIdEvento()));
-        eventoRetorno.setListaParticipantes(this.buscarLocaisPorEvento(eventoRetorno.getIdEvento()));
+        eventoRetorno.setListaParticipantes(this.buscarParticipantesPorEvento(eventoRetorno.getIdEvento()));
         eventoRetorno.setListaArquivos(this.buscarArquivosPorEvento(eventoRetorno));
         eventoRetorno.setListaMetas(this.listarMetasEvento(eventoRetorno));
 
@@ -463,48 +434,10 @@ public class EventoDAO extends DAO {
     return instituicaoDAO.listarOrganizadoresEvento(idEvento);
   }
 
-  public int getNumeroMunicipiosDiferentes(Integer idEvento) {
-    String sql = "SELECT DISTINCT count(l.cidade) as num_municipios_distintos FROM localizacao_evento le LEFT JOIN localizacao l on l.id_localizacao = le.id_localizacao WHERE le.id_evento = ?";
-    int numMunicipiosDistintos = 0;
-
-    try {
-      PreparedStatement stmt = connection.prepareStatement(sql);
-
-      stmt.setInt(1, 1);
-
-      ResultSet resultSet = stmt.executeQuery();
-
-      if (resultSet.next()) {
-        numMunicipiosDistintos = resultSet.getInt("num_municipios_distintos");
-      }
-
-      stmt.close();
-    } catch (SQLException e) {
-      return 0;
-    }
-
-    return numMunicipiosDistintos;
-  }
-
-  public ArrayList<Integer> buscarLocaisPorEvento(Integer idEvento) {
-    String sql = "select id_localizacao from localizacao_evento where id_evento=?";
-
-    ArrayList<Integer> locais = new ArrayList<>();
-
-    try {
-      PreparedStatement stmt = connection.prepareStatement(sql);
-
-      stmt.setInt(1, idEvento);
-
-      ResultSet resultSet = stmt.executeQuery();
-
-      while (resultSet.next()) {
-        locais.add(resultSet.getInt("id_localizacao"));
-      }
-      stmt.close();
-    } catch (SQLException e) {
-      return null;
-    }
+  public ArrayList<Localizacao> buscarLocaisPorEvento(Integer idEvento) throws SQLException {
+    LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO(connection);
+    
+    ArrayList<Localizacao> locais = localizacaoDAO.listarLocaisPorEvento(idEvento);
 
     return locais;
   }
@@ -636,12 +569,12 @@ public class EventoDAO extends DAO {
     return true;
   }
 
-  private boolean sincronizarLocais(Evento evento) {
-    ArrayList<Integer> locaisEventoIds = this.buscarLocaisPorEvento(evento.getIdEvento());
+  private boolean sincronizarLocais(Evento evento) throws SQLException {
+    ArrayList<Localizacao> locaisEventoIds = this.buscarLocaisPorEvento(evento.getIdEvento());
 
-    for (Integer localId : locaisEventoIds) {
-      if (!evento.getLocais().contains(localId)) {
-        boolean localFoiDesvinculado = this.desvincularLocal(localId, evento.getIdEvento());
+    for (Localizacao local : locaisEventoIds) {
+      if (!evento.getLocais().contains(local)) {
+        boolean localFoiDesvinculado = this.desvincularLocal(local.getIdLocalizacao(), evento.getIdEvento());
 
         if (!localFoiDesvinculado) {
           return false;
@@ -649,8 +582,8 @@ public class EventoDAO extends DAO {
       }
     }
 
-    for (Integer localId : evento.getLocais()) {
-      boolean localFoiVinculado = this.vincularLocal(localId, evento.getIdEvento());
+    for (Localizacao localizacao : evento.getLocais()) {
+      boolean localFoiVinculado = this.vincularLocal(localizacao.getIdLocalizacao(), evento.getIdEvento());
 
       if (!localFoiVinculado) {
         return false;
@@ -807,7 +740,7 @@ public class EventoDAO extends DAO {
         evento.setLocais(this.buscarLocaisPorEvento(evento.getIdEvento()));
         evento.setListaOrganizadores(this.buscarOrganizadoresPorEvento(evento.getIdEvento()));
         evento.setListaColaboradores(this.buscarColaboradoresPorEvento(evento.getIdEvento()));
-        evento.setListaParticipantes(this.buscarLocaisPorEvento(evento.getIdEvento()));
+        evento.setListaParticipantes(this.buscarParticipantesPorEvento(evento.getIdEvento()));
         eventos.add(evento);
       }
       stmt.close();
