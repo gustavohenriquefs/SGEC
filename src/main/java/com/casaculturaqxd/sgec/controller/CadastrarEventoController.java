@@ -14,11 +14,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Optional;
-import java.util.TreeSet;
 import java.util.function.UnaryOperator;
 
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.EventoDAO;
+import com.casaculturaqxd.sgec.DAO.LocalizacaoDAO;
 import com.casaculturaqxd.sgec.DAO.ParticipanteDAO;
 import com.casaculturaqxd.sgec.DAO.ServiceFileDAO;
 import com.casaculturaqxd.sgec.builder.EventoBuilder;
@@ -26,6 +26,7 @@ import com.casaculturaqxd.sgec.controller.preview.PreviewArquivoController;
 import com.casaculturaqxd.sgec.controller.preview.PreviewParticipanteController;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.Evento;
+import com.casaculturaqxd.sgec.models.Localizacao;
 import com.casaculturaqxd.sgec.models.Meta;
 import com.casaculturaqxd.sgec.models.Participante;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
@@ -53,22 +54,25 @@ import javafx.scene.control.TextFormatter;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.converter.LocalTimeStringConverter;
 
-public class CadastrarEventoController implements ControllerServiceFile, ControllerEvento {
+
+public class CadastrarEventoController implements ControllerEvento, ControllerServiceFile {
     private final int MAX_LOCALIZACOES = 4;
     DatabasePostgres db = DatabasePostgres.getInstance("URL", "USER_NAME", "PASSWORD");
     EventoBuilder builderEvento = new EventoBuilder();
     EventoDAO eventoDAO;
     ParticipanteDAO participanteDAO = new ParticipanteDAO();
     ServiceFileDAO serviceFileDAO;
+
     private File lastDirectoryOpen;
+    
     ArrayList<FieldLocalizacaoController> controllersLocais = new ArrayList<FieldLocalizacaoController>();
+
     DateFormat formatterHorario;
     Stage stage;
     @FXML
@@ -99,6 +103,7 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
     private ObservableMap<ServiceFile, FXMLLoader> mapServiceFiles = FXCollections.observableHashMap();
 
     // Botoes
+    // Botoes
     @FXML
     Button botaoNovaLocalizacao;
     // Listas
@@ -128,6 +133,7 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
     }
 
     public void compararDatas() {
+        
         // Impede que data posteriores á dataFinal sejam seleciondas no campo
         // dataInicial
         pickerDataFinal.valueProperty().addListener((observable, oldValue, newValue) -> {
@@ -140,11 +146,12 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
                 }
             });
         });
-        // Impede que datas anteriores à dataInicial sejam selecionadas em dataFinal
+
+         // Impede que datas anteriores à dataInicial sejam selecionadas em dataFinal
         pickerDataInicial.valueProperty().addListener((observable, oldValue, newValue) -> {
             pickerDataFinal.setDayCellFactory(picker -> new DateCell() {
                 @Override
-                public void updateItem(LocalDate date, boolean empty) {
+                public void updateItem(LocalDate date, boolean empty) { 
                     super.updateItem(date, empty);
                     LocalDate currentDate = pickerDataInicial.getValue();
                     setDisable(empty || date.compareTo(currentDate) < 0);
@@ -155,6 +162,7 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
 
     private boolean insertEvento(Evento evento) throws SQLException {
         db.getConnection().setAutoCommit(false);
+
         try {
             eventoDAO.inserirEvento(evento);
             // procura pelo arquivo no banco, se nao estiver realiza a insercao
@@ -170,6 +178,13 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
             }
             eventoDAO.vincularArquivos(evento);
             eventoDAO.vincularMetas(evento.getListaMetas(), evento.getIdEvento());
+
+            for(Localizacao localizacao: evento.getLocais()){
+                adicionarLocalizacao(localizacao);
+            }
+
+            eventoDAO.vincularLocais(evento.getLocais(), evento.getIdEvento());
+            
             return true;
         } catch (SQLException e) {
             db.getConnection().rollback();
@@ -232,21 +247,19 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
         builderEvento.setMunicipiosEsperado(numMunicipiosEsperadoValue);
         builderEvento.setNumParticipantesEsperado(numParticipanteEsperado);
         // TODO: substituir id de locais por models
-        TreeSet<Integer> idLocais = new TreeSet<>();
+        ArrayList<Localizacao> locais = new ArrayList<>();
         for (FieldLocalizacaoController controller : controllersLocais) {
-            idLocais.add(controller.getLocalizacao().getIdLocalizacao());
+            locais.add(controller.getLocalizacao());
         }
         ArrayList<ServiceFile> listaArquivos = new ArrayList<>(mapServiceFiles.keySet());
         builderEvento.setListaArquivos(listaArquivos);
-        builderEvento.setLocalizacoes(idLocais);
+        builderEvento.setLocalizacoes(locais);
         builderEvento.setListaMetas(getMetasSelecionadas());
 
         return builderEvento.getEvento();
     }
 
-    /**
-     * verifica se as condicoes para cadastrar um evento sao atendidas
-     */
+    /** verifica se as condicoes para cadastrar um evento sao atendidas*/
     private void verificarInput() {
         if (emptyLocalizacoes()) {
             Alert erroLocalizacao = new Alert(AlertType.ERROR,
@@ -263,7 +276,7 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
             throw new RuntimeException("Convocatorias precisam de pelo menos um colaborador");
         }
     }
-
+    
     public void cancelar() throws IOException {
         builderEvento.resetar();
         App.setRoot("view/home");
@@ -273,10 +286,16 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
         if (paneLocalizacoes.getChildren().size() >= MAX_LOCALIZACOES) {
             botaoNovaLocalizacao.setDisable(true);
         }
-        SubSceneLoader loaderLocais = new SubSceneLoader();
-        GridPane novoLocal = (GridPane) loaderLocais.getPage("fields/fieldLocalizacao");
+
+        FXMLLoader loaderLocais = new FXMLLoader(App.class.getResource("view/fields/fieldLocalizacao.fxml"));
+        Parent novoLocal = loaderLocais.load();
+
         paneLocalizacoes.getChildren().add(novoLocal);
-        FieldLocalizacaoController controller = loaderLocais.getLoader().getController();
+
+        FieldLocalizacaoController controller = loaderLocais.getController();
+        
+        controller.setPaneLocalizacao(novoLocal);
+        controller.setParentController(this);
         controllersLocais.add(controller);
     }
 
@@ -299,9 +318,6 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
             }
         }
         return metasSelecionadas;
-    }
-
-    public void removerLocalizacao() throws IOException {
     }
 
     public void adicionarParticipante() throws SQLException {
@@ -580,5 +596,42 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
     @Override
     public Stage getStage() {
         return this.stage;
+    }
+
+    @Override
+    public void adicionarLocalizacao(Localizacao localizacao) {
+        LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO();
+        localizacaoDAO.setConnection(db.getConnection());
+
+        int id = localizacao.getIdLocalizacao(); 
+        
+        if(id == 0){
+            try {
+                localizacaoDAO.inserirLocalizacao(localizacao);
+            } catch (SQLException e) {
+                Alert erroInsercao = new Alert(AlertType.ERROR, "falha cadastrando nova localizacao");
+                erroInsercao.show();
+            }  
+        }
+    }
+
+    @Override
+    public void removerLocalizacao(Localizacao localizacao) {
+        if(controllersLocais.size() == 1){
+            Alert erroLocalizacao = new Alert(AlertType.ERROR,
+                    "Um evento deve possuir pelo menos uma localização associada");
+            erroLocalizacao.show();
+            return;
+        }
+
+        for(FieldLocalizacaoController controller: controllersLocais){
+            if(controller.getLocalizacao().equals(localizacao)){
+                controllersLocais.remove(controller);
+                paneLocalizacoes.getChildren().remove(controller.getPaneLocalizacao());
+                break;
+            }
+        }
+
+        botaoNovaLocalizacao.setDisable(false);
     }
 }

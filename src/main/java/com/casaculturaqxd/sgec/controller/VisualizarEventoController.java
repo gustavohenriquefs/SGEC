@@ -197,16 +197,16 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
         certificavel.setSelected(evento.isCertificavel());
         libras.setSelected(evento.isAcessivelEmLibras());
 
-        FXMLLoader loaderLocal = new FXMLLoader(App.class.getResource("view/preview/previewLocalizacao.fxml"));
-
         if (evento.getLocais() != null) {
-            for (Integer idLocal : evento.getLocais()) {
-                Localizacao local = new Localizacao(idLocal);
+            for (Localizacao local : evento.getLocais()) {
+                FXMLLoader loaderLocal = new FXMLLoader(App.class.getResource("view/preview/previewLocalizacao.fxml"));
+                
                 try {
                     local = localizacaoDAO.getLocalizacao(local).get();
                 } catch (NoSuchElementException e) {
                     throw new RuntimeException();
                 }
+                
                 Parent previewLocal = loaderLocal.load();
                 PreviewLocalizacaoController controller = loaderLocal.getController();
                 controller.setLocalizacao(local);
@@ -225,7 +225,7 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
         numeroMestres = new Indicador("Número de mestres da cultura", evento.getNumParticipantesEsperado(),
                 evento.getListaParticipantes().size());
         numeroMunicipios = new Indicador("Número de municípios", evento.getNumMunicipiosEsperado(),
-                eventoDAO.getNumeroMunicipiosDiferentes(evento.getIdEvento()));
+                evento.getNumMunicipiosAlcancado());
 
         addIndicador(tabelaIndicadoresGerais, numeroPublico);
         addIndicador(tabelaIndicadoresMeta1, numeroMestres);
@@ -556,5 +556,14 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
 
             return new Time(calendar.getTimeInMillis());
         }
+    }
+
+    @Override
+    public void adicionarLocalizacao(Localizacao localizacao) {
+        
+    }
+
+    @Override
+    public void removerLocalizacao(Localizacao localizacao) {
     }
 }
