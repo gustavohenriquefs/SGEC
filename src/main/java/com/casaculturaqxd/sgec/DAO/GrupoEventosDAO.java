@@ -147,6 +147,8 @@ public class GrupoEventosDAO {
             } else {
                 return Optional.empty();
             }
+        } catch (NullPointerException e) {
+            return Optional.empty();
         } catch (Exception exception) {
             String nomeGrupoEventosCausa = "";
             if (grupoEventos != null) {

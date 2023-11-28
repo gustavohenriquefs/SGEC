@@ -74,6 +74,9 @@ public class ServiceFileDAO extends DAO {
       } else {
         return Optional.empty();
       }
+    } catch (NullPointerException e) {
+      logException(e);
+      return Optional.empty();
     } catch (Exception e) {
       logException(e);
       throw new SQLException("erro buscando arquivo: " + arquivo.getFileKey(), e);
