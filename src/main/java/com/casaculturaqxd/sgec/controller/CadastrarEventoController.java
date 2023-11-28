@@ -22,6 +22,7 @@ import com.casaculturaqxd.sgec.DAO.EventoDAO;
 import com.casaculturaqxd.sgec.DAO.ParticipanteDAO;
 import com.casaculturaqxd.sgec.DAO.ServiceFileDAO;
 import com.casaculturaqxd.sgec.builder.EventoBuilder;
+import com.casaculturaqxd.sgec.controller.dialog.ParticipanteDialog;
 import com.casaculturaqxd.sgec.controller.preview.PreviewArquivoController;
 import com.casaculturaqxd.sgec.controller.preview.PreviewParticipanteController;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
@@ -46,6 +47,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -307,8 +309,21 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
     public void adicionarParticipante() throws SQLException {
         // TODO: substituir por abrir o dialog de participante e chamar
         // adicionarParticipante(resultado)
-        participantes.put(participanteDAO.getParticipante(new Participante(1)).get(),
-                new FXMLLoader(App.class.getResource("view/preview/previewParticipante.fxml")));
+        Dialog<Participante> participanteDialog = new ParticipanteDialog(new Participante(0));
+
+        Optional<Participante> novoParticipante = participanteDialog.showAndWait();
+
+        if(novoParticipante.isPresent()){
+            if(participantes.containsKey(novoParticipante.get())){
+                Alert alert = new Alert(AlertType.ERROR, "Participante já foi adicionado");
+                alert.showAndWait();
+                return;
+            }
+
+            participantes.put(novoParticipante.get(),
+                    new FXMLLoader(App.class.getResource("view/preview/previewParticipante.fxml")));
+        }
+
     }
 
     public void adicionarParticipante(Participante participante) {
