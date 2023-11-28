@@ -46,7 +46,6 @@ public class FieldLocalizacaoController {
         pais.setText("Brasil");
         
         cep.setTextFormatter(new TextFormatter<>(change -> {
-            System.out.println(change.getText());
             if(change.getText().matches("\\d+") && change.getRangeEnd() < 9){
                 if(change.getRangeEnd() == 5){
                     change.setText("-"); 
@@ -75,7 +74,6 @@ public class FieldLocalizacaoController {
         LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO();
         localizacaoDAO.setConnection(db.getConnection());
 
-        Localizacao localizacao;
         try {
             localizacao = localizacaoDAO.getLocalizacaoByNome(fdNomeLocal.getText().trim()).get();
         } catch (SQLException e) {
@@ -136,11 +134,13 @@ public class FieldLocalizacaoController {
         } else {
             cidade.setStyle(null);
         }
+
         if (estado.getText().isEmpty()) {
             estado.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
         } else {
             estado.setStyle(null);
         }
+        
         if (pais.getText().isEmpty()) {
             pais.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
         } else {
@@ -149,7 +149,6 @@ public class FieldLocalizacaoController {
     }
 
     public Localizacao getLocalizacao() {
-        Localizacao novoLocal = new Localizacao();
         if (rua.getText().isEmpty() || cidade.getText().isEmpty() || estado.getText().isEmpty()
                 || pais.getText().isEmpty()) {
             destacarCamposNaoPreenchidos();
@@ -157,10 +156,11 @@ public class FieldLocalizacaoController {
             campoFaltando.setContentText("Nem todos os campos foram preenchidos");
             campoFaltando.show();
         } else {
-            novoLocal.setRua(rua.getText());
-            novoLocal.setBairro(bairro.getText());
+            localizacao.setNome(fdNomeLocal.getText());
+            localizacao.setRua(rua.getText());
+            localizacao.setBairro(bairro.getText());
             if (!numero.getText().isEmpty()) {
-                novoLocal.setNumeroRua(Integer.parseInt(numero.getText()));
+                localizacao.setNumeroRua(Integer.parseInt(numero.getText()));
             }
 
             localizacao.setCep(cep.getText());
@@ -168,9 +168,6 @@ public class FieldLocalizacaoController {
             localizacao.setEstado(estado.getText());
             localizacao.setPais(pais.getText());
         }
-        
-        LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO();
-        localizacaoDAO.setConnection(db.getConnection());
         
         return localizacao;
     }
