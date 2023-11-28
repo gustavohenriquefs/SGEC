@@ -5,7 +5,6 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Optional;
-import java.util.SortedSet;
 
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.EventoDAO;
@@ -115,10 +114,12 @@ public class PesquisarEventoController {
     private ArrayList<Evento> filtroNomeCidade(ArrayList<Evento> eventos, String nomeCidade) throws SQLException {
         ArrayList<Localizacao> localizacoes = localizacaoDAO.pesquisarLocalizacao(nomeCidade);
         ArrayList<Evento> eventosTemp = new ArrayList<>();
+        
         for (Evento evento : eventos) {
-            ArrayList<Integer> idsLocais = eventoDAO.buscarLocaisPorEvento(evento.getIdEvento());
+            ArrayList<Localizacao> locais = eventoDAO.buscarLocaisPorEvento(evento.getIdEvento());
+
             for (Localizacao local : localizacoes) {
-                if (idsLocais.contains((Integer) local.getIdLocalizacao())) {
+                if (locais.contains(local)) {
                     eventosTemp.add(evento);
                     break;
                 }
