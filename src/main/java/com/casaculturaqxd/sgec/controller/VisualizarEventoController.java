@@ -412,7 +412,7 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
             ServiceFile arquivo = new ServiceFile(arquivoSelecionado);
             ServiceFileDAO serviceFileDAO = new ServiceFileDAO(db.getConnection());
             if (!serviceFileDAO.arquivoJaVinculado(arquivo.getFileKey(), evento)) {
-                mapServiceFiles.put(arquivo, new FXMLLoader(App.class.getResource("view/preview/previewArquivo.fxml")));
+                adicionarArquivo(arquivo);
             } else {
                 Alert alert = new Alert(AlertType.ERROR, "Arquivo já foi adicionado");
                 alert.showAndWait();
