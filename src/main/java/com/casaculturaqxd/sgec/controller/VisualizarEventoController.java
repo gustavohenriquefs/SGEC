@@ -1,12 +1,20 @@
 package com.casaculturaqxd.sgec.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.EventoDAO;
@@ -46,6 +54,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputControl;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -56,6 +65,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.util.converter.IntegerStringConverter;
@@ -66,6 +76,9 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
     private DatabasePostgres db = DatabasePostgres.getInstance("URL_TEST", "USER_NAME_TEST", "PASSWORD_TEST");
     private EventoDAO eventoDAO = new EventoDAO();
     private LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO();
+    private File lastDirectoryOpen;
+    private ArrayList<ServiceFile> removedFiles;
+    private DateFormat formatterHorario;
     @FXML
     VBox root;
     @FXML
@@ -120,6 +133,8 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
         addListenersParticipante(participantes);
         loadMenu();
 
+        formatterHorario = new SimpleDateFormat("HH:mm");
+        removedFiles = new ArrayList<>();
         eventoDAO.setConnection(db.getConnection());
         localizacaoDAO.setConnection(db.getConnection());
         compararDatas();
@@ -254,10 +269,23 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
             evento.setClassificacaoEtaria(classificacaoEtaria.getSelectionModel().getSelectedItem());
             evento.setAcessivelEmLibras(libras.isSelected());
             evento.setCertificavel(certificavel.isSelected());
-            evento.setHorario(Time.valueOf(horario.getText()));
-            evento.setCargaHoraria(Time.valueOf(cargaHoraria.getText()));
+            evento.setHorario(formatTimeInputField(horario));
+            evento.setCargaHoraria(formatTimeInputField(cargaHoraria));
             evento.setPublicoAlcancado(numeroPublico.getValorAlcancado());
             evento.setPublicoEsperado(numeroPublico.getValorEsperado());
+            ServiceFileDAO serviceFileDAO = new ServiceFileDAO(db.getConnection());
+            for (ServiceFile addedFile : getAddedFiles()) {
+                Optional<ServiceFile> optionalFile = serviceFileDAO.getArquivo(addedFile);
+                if (optionalFile.isPresent()) {
+                    addedFile = optionalFile.get();
+                } else {
+                    serviceFileDAO.inserirArquivo(addedFile);
+                }
+                serviceFileDAO.vincularArquivo(addedFile.getServiceFileId(), evento.getIdEvento());
+            }
+            for (ServiceFile removedFile : removedFiles) {
+                serviceFileDAO.desvincularArquivo(removedFile.getServiceFileId(), evento.getIdEvento());
+            }
             evento.setNumParticipantesEsperado(numeroMestres.getValorEsperado());
             evento.setNumMunicipiosEsperado(numeroMunicipios.getValorEsperado());
             eventoDAO.alterarEvento(evento);
@@ -270,6 +298,17 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
             erroAtualizacao.setContentText("Erro ao alterar evento");
             erroAtualizacao.show();
         }
+    }
+
+    public List<ServiceFile> getAddedFiles() throws SQLException {
+        ServiceFileDAO serviceFileDAO = new ServiceFileDAO(db.getConnection());
+        ArrayList<ServiceFile> oldFiles = serviceFileDAO.listarArquivosEvento(evento, 5);
+        ArrayList<ServiceFile> newFiles = new ArrayList<>(mapServiceFiles.keySet());
+
+        return newFiles.stream()
+                .filter(newFile -> oldFiles.stream()
+                        .noneMatch(oldFile -> oldFile.getServiceFileId().equals(newFile.getServiceFileId())))
+                .collect(Collectors.toList());
     }
 
     public void goToMidiaEvento() throws IOException, SQLException {
@@ -361,6 +400,29 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
         }
     }
 
+    public void adicionarArquivo() {
+        FileChooser fileChooser = new FileChooser();
+        if (lastDirectoryOpen != null) {
+            fileChooser.setInitialDirectory(lastDirectoryOpen);
+        }
+        File arquivoSelecionado = fileChooser.showOpenDialog(stage);
+        lastDirectoryOpen = arquivoSelecionado.getParentFile();
+
+        try {
+            ServiceFile arquivo = new ServiceFile(arquivoSelecionado);
+            ServiceFileDAO serviceFileDAO = new ServiceFileDAO(db.getConnection());
+            if (!serviceFileDAO.arquivoJaVinculado(arquivo.getFileKey(), evento)) {
+                adicionarArquivo(arquivo);
+            } else {
+                Alert alert = new Alert(AlertType.ERROR, "Arquivo já foi adicionado");
+                alert.showAndWait();
+            }
+        } catch (Exception e) {
+            Alert alert = new Alert(AlertType.ERROR, "Arquivo já foi adicionado");
+            alert.showAndWait();
+        }
+    }
+
     @Override
     public void adicionarArquivo(ServiceFile serviceFile) throws IOException {
         for (ServiceFile existingFile : mapServiceFiles.keySet()) {
@@ -374,6 +436,9 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
     @Override
     public void removerArquivo(ServiceFile serviceFile) {
         mapServiceFiles.remove(serviceFile);
+        if (serviceFile.getServiceFileId() != null) {
+            removedFiles.add(serviceFile);
+        }
     }
 
     public void addListenersServiceFile(ObservableMap<ServiceFile, FXMLLoader> observablemap) {
@@ -470,6 +535,27 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
                 }
             }
         });
+    }
+
+    /**
+     * formata um horario inserido em um textfield
+     * 
+     * @param inputField
+     * @return o horario definido em horas e minutos no textfield, ou o horario
+     *         zerado em caso de ParseException
+     */
+    private Time formatTimeInputField(TextInputControl inputField) {
+        try {
+            return new Time(formatterHorario.parse(inputField.getText()).getTime());
+        } catch (ParseException e) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+
+            return new Time(calendar.getTimeInMillis());
+        }
     }
 
     @Override
