@@ -9,6 +9,7 @@ import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.GrupoEventos;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 import com.casaculturaqxd.sgec.models.Instituicao;
+import com.casaculturaqxd.sgec.models.Localizacao;
 import com.casaculturaqxd.sgec.models.Meta;
 
 public class EventoBuilder implements Builder {
@@ -32,7 +33,7 @@ public class EventoBuilder implements Builder {
     return this;
   }
 
-  public EventoBuilder setLocalizacoes(SortedSet<Integer> localizacoes) {
+  public EventoBuilder setLocalizacoes(ArrayList<Localizacao> localizacoes) {
     evento.setLocais(localizacoes);
     return this;
   }

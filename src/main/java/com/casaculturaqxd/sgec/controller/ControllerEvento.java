@@ -1,5 +1,6 @@
 package com.casaculturaqxd.sgec.controller;
 
+import com.casaculturaqxd.sgec.models.Localizacao;
 import com.casaculturaqxd.sgec.models.Participante;
 import javafx.stage.Stage;
 
@@ -13,4 +14,7 @@ public interface ControllerEvento {
 
     // retorna o stage da tela, necessario para abrir o FileChooser
     public Stage getStage();
+    public void adicionarLocalizacao(Localizacao localizacao);
+
+    public void removerLocalizacao(Localizacao localizacao);
 }
