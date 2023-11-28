@@ -1,5 +1,6 @@
 package com.casaculturaqxd.sgec.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
@@ -10,7 +11,10 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.EventoDAO;
@@ -63,6 +67,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.util.converter.IntegerStringConverter;
@@ -73,7 +78,9 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
     private DatabasePostgres db = DatabasePostgres.getInstance("URL_TEST", "USER_NAME_TEST", "PASSWORD_TEST");
     private EventoDAO eventoDAO = new EventoDAO();
     private LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO();
-    DateFormat formatterHorario;
+    private File lastDirectoryOpen;
+    private ArrayList<ServiceFile> removedFiles;
+    private DateFormat formatterHorario;
     @FXML
     VBox root;
     @FXML
@@ -129,6 +136,8 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
         addListenersParticipante(participantes);
         loadMenu();
 
+        formatterHorario = new SimpleDateFormat("HH:mm");
+        removedFiles = new ArrayList<>();
         eventoDAO.setConnection(db.getConnection());
         localizacaoDAO.setConnection(db.getConnection());
         compararDatas();
@@ -296,6 +305,17 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
         }
     }
 
+    public List<ServiceFile> getAddedFiles() throws SQLException {
+        ServiceFileDAO serviceFileDAO = new ServiceFileDAO(db.getConnection());
+        ArrayList<ServiceFile> oldFiles = serviceFileDAO.listarArquivosEvento(evento, 5);
+        ArrayList<ServiceFile> newFiles = new ArrayList<>(mapServiceFiles.keySet());
+
+        return newFiles.stream()
+                .filter(newFile -> oldFiles.stream()
+                        .noneMatch(oldFile -> oldFile.getServiceFileId().equals(newFile.getServiceFileId())))
+                .collect(Collectors.toList());
+    }
+
     /**
      * Inicia uma transacao para atualizar o evento e cada entidade vinculada,
      * realiza rollback em caso de qualquer excecao SQL
@@ -429,6 +449,29 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
         }
     }
 
+    public void adicionarArquivo() {
+        FileChooser fileChooser = new FileChooser();
+        if (lastDirectoryOpen != null) {
+            fileChooser.setInitialDirectory(lastDirectoryOpen);
+        }
+        File arquivoSelecionado = fileChooser.showOpenDialog(stage);
+        lastDirectoryOpen = arquivoSelecionado.getParentFile();
+
+        try {
+            ServiceFile arquivo = new ServiceFile(arquivoSelecionado);
+            ServiceFileDAO serviceFileDAO = new ServiceFileDAO(db.getConnection());
+            if (!serviceFileDAO.arquivoJaVinculado(arquivo.getFileKey(), evento)) {
+                adicionarArquivo(arquivo);
+            } else {
+                Alert alert = new Alert(AlertType.ERROR, "Arquivo já foi adicionado");
+                alert.showAndWait();
+            }
+        } catch (Exception e) {
+            Alert alert = new Alert(AlertType.ERROR, "Arquivo já foi adicionado");
+            alert.showAndWait();
+        }
+    }
+
     @Override
     public void adicionarArquivo(ServiceFile serviceFile) throws IOException {
         for (ServiceFile existingFile : mapServiceFiles.keySet()) {
@@ -442,6 +485,9 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
     @Override
     public void removerArquivo(ServiceFile serviceFile) {
         mapServiceFiles.remove(serviceFile);
+        if (serviceFile.getServiceFileId() != null) {
+            removedFiles.add(serviceFile);
+        }
     }
 
     public void addListenersServiceFile(ObservableMap<ServiceFile, FXMLLoader> observablemap) {
