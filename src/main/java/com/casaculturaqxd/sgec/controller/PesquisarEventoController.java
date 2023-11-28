@@ -72,7 +72,7 @@ public class PesquisarEventoController {
 
     public void pesquisarEvento() throws SQLException {
         // TODO: tratar excecao, carregando os eventos ignorando a query de local ou
-        // encerrando o metodo com um alerta de ero
+        // encerrando o metodo com um alerta de erro
         ArrayList<Evento> eventosFinais;
         String nome = textFieldPesquisa.getText();
         String cidade = nomeLocalizacao.getText();
@@ -111,21 +111,25 @@ public class PesquisarEventoController {
         return eventoDAO.pesquisarEvento(nomeEvento, dataInicial, dataFinal);
     }
 
-    private ArrayList<Evento> filtroNomeCidade(ArrayList<Evento> eventos, String nomeCidade) throws SQLException {
-        ArrayList<Localizacao> localizacoes = localizacaoDAO.pesquisarLocalizacao(nomeCidade);
-        ArrayList<Evento> eventosTemp = new ArrayList<>();
+    private ArrayList<Evento> filtroNomeCidade(ArrayList<Evento> eventos, String nomeCidadeBuscada) throws SQLException {
+        ArrayList<Evento> eventosFiltrados = new ArrayList<>();
         
-        for (Evento evento : eventos) {
-            ArrayList<Localizacao> locais = eventoDAO.buscarLocaisPorEvento(evento.getIdEvento());
+        String nomeCidade = nomeCidadeBuscada.trim().toLowerCase();
 
-            for (Localizacao local : localizacoes) {
-                if (locais.contains(local)) {
-                    eventosTemp.add(evento);
+        for (Evento evento : eventos) {
+            ArrayList<Localizacao> eventoLocais = eventoDAO.buscarLocaisPorEvento(evento.getIdEvento());
+
+            for (Localizacao local: eventoLocais) {
+                String nomeCidadeEvento = local.getCidade().trim().toLowerCase();
+
+                if (nomeCidadeEvento.equals(nomeCidade)) {
+                    eventosFiltrados.add(evento);
                     break;
                 }
             }
         }
-        return eventosTemp;
+        
+       return eventosFiltrados;
     }
 
     private ArrayList<Evento> filtroLibras(ArrayList<Evento> eventos) {
