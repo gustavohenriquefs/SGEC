@@ -1,15 +1,10 @@
 package com.casaculturaqxd.sgec.controller.dialog;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Optional;
-
-import org.controlsfx.control.textfield.AutoCompletionBinding;
-import org.controlsfx.control.textfield.TextFields;
 
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.InstituicaoDAO;
-import com.casaculturaqxd.sgec.DAO.ServiceFileDAO;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.Instituicao;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
