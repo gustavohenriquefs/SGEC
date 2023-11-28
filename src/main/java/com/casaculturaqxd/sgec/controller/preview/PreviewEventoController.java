@@ -3,10 +3,10 @@ package com.casaculturaqxd.sgec.controller.preview;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.NoSuchElementException;
 
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.EventoDAO;
-import com.casaculturaqxd.sgec.controller.PesquisarEventoController;
 import com.casaculturaqxd.sgec.controller.VisualizarEventoController;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.Evento;
@@ -15,6 +15,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
@@ -32,37 +34,36 @@ public class PreviewEventoController {
     }
 
     public void setEvento(Evento evento) {
-        if (dao.buscarEvento(evento).isPresent()) {
-            this.evento = dao.buscarEvento(evento).get();
-            this.setarInformacoesEvento();
-        } else {
-            throw new IllegalArgumentException("evento nao encontrado");
-        }
+        this.evento = evento;
+        this.setarInformacoesEvento();
+
     }
 
     private void setarInformacoesEvento() {
         if (evento.getHorario() == null) {
-            this.dataHora.setText(evento.getDataFinal().toString() + "\t" + " ");
+            this.dataHora.setText(evento.getDataInicial().toString() + "\t" + " ");
             this.titulo.setText(evento.getNome());
         } else {
-            this.dataHora.setText(evento.getDataFinal().toString() + "\t" + evento.getHorario());
+            this.dataHora.setText(evento.getDataInicial().toString() + "\t" + evento.getHorario());
             this.titulo.setText(evento.getNome());
         }
     }
 
     @FXML
     public void verDetalhes(ActionEvent event) throws IOException, SQLException {
+        try {
+            URL url = App.class.getResource("view/visualizarEvento.fxml");
+            FXMLLoader loaderVisualizacao = new FXMLLoader(url);
+            Parent objVisualizacao = loaderVisualizacao.load();
 
-        URL url = App.class.getResource("view/visualizarEvento.fxml");
+            VisualizarEventoController controller = loaderVisualizacao.getController();
 
-        FXMLLoader loaderVisualizacao = new FXMLLoader(url);
+            controller.setEvento(dao.getEvento(evento).get());
+            App.setRoot(objVisualizacao);
 
-        Parent objVisualizacao = loaderVisualizacao.load();
-
-        VisualizarEventoController controller = loaderVisualizacao.getController();
-
-        controller.setEvento(this.evento);
-
-        App.setRoot(objVisualizacao);
+        } catch (NoSuchElementException e) {
+            Alert erroLoading = new Alert(AlertType.WARNING, "Falha ao carregar o evento");
+            erroLoading.show();
+        }
     }
 }

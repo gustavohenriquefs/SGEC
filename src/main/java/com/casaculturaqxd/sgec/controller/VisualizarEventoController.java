@@ -222,9 +222,9 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
 
         numeroPublico = new Indicador("Quantidade de público", evento.getPublicoEsperado(),
                 evento.getPublicoAlcancado());
-        numeroMestres = new Indicador("Número de mestres da cultura", evento.getParticipantesEsperado(),
+        numeroMestres = new Indicador("Número de mestres da cultura", evento.getNumParticipantesEsperado(),
                 evento.getListaParticipantes().size());
-        numeroMunicipios = new Indicador("Número de municípios", evento.getMunicipiosEsperado(),
+        numeroMunicipios = new Indicador("Número de municípios", evento.getNumMunicipiosEsperado(),
                 eventoDAO.getNumeroMunicipiosDiferentes(evento.getIdEvento()));
 
         addIndicador(tabelaIndicadoresGerais, numeroPublico);
@@ -273,8 +273,6 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
             evento.setCargaHoraria(formatTimeInputField(cargaHoraria));
             evento.setPublicoAlcancado(numeroPublico.getValorAlcancado());
             evento.setPublicoEsperado(numeroPublico.getValorEsperado());
-            evento.setParticipantesEsperado(numeroMestres.getValorEsperado());
-            evento.setMunicipiosEsperado(numeroMunicipios.getValorEsperado());
             ServiceFileDAO serviceFileDAO = new ServiceFileDAO(db.getConnection());
             for (ServiceFile addedFile : getAddedFiles()) {
                 Optional<ServiceFile> optionalFile = serviceFileDAO.getArquivo(addedFile);
@@ -288,6 +286,8 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
             for (ServiceFile removedFile : removedFiles) {
                 serviceFileDAO.desvincularArquivo(removedFile.getServiceFileId(), evento.getIdEvento());
             }
+            evento.setNumParticipantesEsperado(numeroMestres.getValorEsperado());
+            evento.setNumMunicipiosEsperado(numeroMunicipios.getValorEsperado());
             eventoDAO.alterarEvento(evento);
 
             Alert sucessoAtualizacao = new Alert(AlertType.INFORMATION);
