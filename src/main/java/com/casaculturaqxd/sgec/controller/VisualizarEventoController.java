@@ -356,6 +356,11 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
             if (!updateMetas(evento)) {
                 return false;
             }
+            
+            if(!updateParticipantes(evento)) {
+                throw new SQLException();
+            }
+
             if (!updateArquivos(evento)) {
                 return false;
             }
@@ -366,6 +371,19 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
         } finally {
             db.getConnection().setAutoCommit(true);
         }
+    }
+
+    private boolean updateParticipantes(Evento evento) throws SQLException {
+        return eventoDAO.atualizarParticipantesEvento(getParticipantes(), evento);
+    }
+
+    private ArrayList<Participante> getParticipantes() {
+        ArrayList<Participante> participantesResult = new ArrayList<>();
+        
+        for(PreviewParticipanteController previewParticipanteController: participantes) {
+            participantesResult.add(previewParticipanteController.getParticipante());
+        }
+        return participantesResult;
     }
 
     private boolean updateMetas(Evento evento) throws SQLException {
