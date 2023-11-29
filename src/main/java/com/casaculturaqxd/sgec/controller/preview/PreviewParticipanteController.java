@@ -101,7 +101,6 @@ public class PreviewParticipanteController {
     public void setParticipante(Participante participante) throws SQLException {
         this.participante = participante;
         loadContent();
-
     }
 
     public Participante getParticipante() {
