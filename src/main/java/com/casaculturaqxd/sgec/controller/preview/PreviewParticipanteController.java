@@ -7,8 +7,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
+import com.casaculturaqxd.sgec.DAO.ParticipanteDAO;
 import com.casaculturaqxd.sgec.DAO.ServiceFileDAO;
 import com.casaculturaqxd.sgec.controller.ControllerEvento;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
@@ -57,10 +59,32 @@ public class PreviewParticipanteController {
     private Button buttonAlterarCapa;
     private ObservableMap<Parent, List<Node>> previousChildren = FXCollections.observableHashMap();
 
-    public void initialize() {
+    private ArrayList<String> nomeParticipantes;
+
+    public void initialize() {;
         // manter o botao sempre no topo da imagem
         buttonAlterarCapa.setViewOrder(-1);
         serviceFileDAO = new ServiceFileDAO(database.getConnection());
+        initNomes();
+    }
+
+    private void initNomes() {
+        ParticipanteDAO participanteDAO = new ParticipanteDAO(database.getConnection());
+
+        try {
+            this.nomeParticipantes = participanteDAO.obterListaNomesParticipantes();
+        } catch (SQLException e) {
+            Alert alert = new Alert(AlertType.ERROR);
+
+            alert.setTitle("Erro");
+            alert.setContentText("Não foi possível obter a lista de nomes de participantes!");
+
+            alert.showAndWait();
+
+            this.nomeParticipantes = new ArrayList<>();
+
+            e.printStackTrace();
+        }
     }
 
     public ControllerEvento getParentController() {
@@ -124,7 +148,36 @@ public class PreviewParticipanteController {
     }
 
     public void updateNome() {
-        updateField(labelNomeArtista, campoNome);
+        updateFieldNome(labelNomeArtista, campoNome);
+    }
+
+    private void updateFieldNome(Labeled labeled, Pane fieldParent) {
+        ObservableList<Node> oldNodes = FXCollections.observableArrayList(fieldParent.getChildren());
+        previousChildren.put(campoNome, oldNodes);
+        TextField textField = new TextField(labeled.getText());
+
+        textField.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER) {
+
+                if(nomeJaExiste(textField.getText())){
+                    Alert alert = new Alert(AlertType.ERROR);
+                    alert.setTitle("Erro");
+                    alert.setContentText("Já existe um participante com esse nome!");
+                    alert.showAndWait();
+                    return;
+                }
+
+                labeled.setText(textField.getText());
+                fieldParent.getChildren().setAll(previousChildren.get(campoNome));
+            } else if (event.getCode() == KeyCode.ESCAPE) {
+                fieldParent.getChildren().setAll(previousChildren.get(campoNome));
+            }
+        });
+        fieldParent.getChildren().setAll(textField);
+    }
+
+    private boolean nomeJaExiste(String text) {
+        return this.nomeParticipantes.contains(text);
     }
 
     public void updateMinibio() {
