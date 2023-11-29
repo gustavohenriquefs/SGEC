@@ -4,7 +4,6 @@ import java.sql.Date;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.SortedSet;
 
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 
@@ -33,7 +32,7 @@ public class Evento {
 
     private GrupoEventos grupoEventos;
     private ArrayList<Localizacao> locais;
-    private SortedSet<Integer> listaParticipantes;
+    private ArrayList<Participante> listaParticipantes;
     private ArrayList<ServiceFile> listaArquivos;
     private ArrayList<Instituicao> listaOrganizadores;
     private ArrayList<Instituicao> listaColaboradores;
@@ -224,19 +223,19 @@ public class Evento {
         return this.locais.remove(local);
     }
 
-    public SortedSet<Integer> getListaParticipantes() {
+    public ArrayList<Participante> getListaParticipantes() {
         return listaParticipantes;
     }
 
-    public void setListaParticipantes(SortedSet<Integer> listaParticipantes) {
+    public void setListaParticipantes(ArrayList<Participante> listaParticipantes) {
         this.listaParticipantes = listaParticipantes;
     }
 
-    public void addParticipante(Integer participante) {
+    public void addParticipante(Participante participante) {
         this.listaParticipantes.add(participante);
     }
 
-    public boolean removeParticipante(Integer participante) {
+    public boolean removeParticipante(Participante participante) {
         return this.listaParticipantes.remove(participante);
     }
 

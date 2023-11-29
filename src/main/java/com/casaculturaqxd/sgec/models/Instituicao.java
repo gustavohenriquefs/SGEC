@@ -4,11 +4,9 @@ import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 
 /**
  * Instituições incluem aquelas que agem como colaboradores ou como
- * organizadores de eventos em que
- * a Casa de Saberes esteja envolvida. Uma instituição pode ser organizadora de
- * vários eventos e
- * também realizadora de outros, mas não Organizadora e Colaboradora ao mesmo
- * tempo
+ * organizadores de eventos em que a Casa de Saberes esteja envolvida. Uma
+ * instituição pode ser organizadora de vários eventos e também realizadora de
+ * outros, mas não Organizadora e Colaboradora ao mesmo tempo
  */
 public class Instituicao {
     private Integer idInstituicao;
@@ -17,8 +15,7 @@ public class Instituicao {
     private String valorContribuicao;
     private ServiceFile imagemCapa;
 
-    public Instituicao(String nome, String descricaoContribuicao, String valorContribuicao,
-            ServiceFile serviceFile) {
+    public Instituicao(String nome, String descricaoContribuicao, String valorContribuicao, ServiceFile serviceFile) {
         this.nome = nome;
         this.descricaoContribuicao = descricaoContribuicao;
         this.valorContribuicao = valorContribuicao;
@@ -77,34 +74,34 @@ public class Instituicao {
     }
 
     @Override
-    public boolean equals(Object other) {
-        if (this == other) {
-            return true;
-        }
-
-        if (!(other instanceof Instituicao)) {
-            return false;
-        }
-
-        Instituicao asInstituicao = (Instituicao) other;
-
-        return this.idInstituicao == asInstituicao.getIdInstituicao() &&
-                this.nome == asInstituicao.getNome() &&
-                this.descricaoContribuicao == asInstituicao.getDescricaoContribuicao() &&
-                this.valorContribuicao == asInstituicao.getValorContribuicao() &&
-                this.imagemCapa == asInstituicao.getImagemCapa();
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((idInstituicao == null) ? 0 : idInstituicao.hashCode());
+        result = prime * result + ((nome == null) ? 0 : nome.hashCode());
+        return result;
     }
 
     @Override
-    public int hashCode() {
-        int hash = 5;
-
-        hash = 29 * hash + (idInstituicao == null ? 0 : idInstituicao.hashCode());
-        hash = 29 * hash + (nome == null ? 0 : nome.hashCode());
-        hash = 29 * hash + (descricaoContribuicao == null ? 0 : descricaoContribuicao.hashCode());
-        hash = 29 * hash + (valorContribuicao == null ? 0 : valorContribuicao.hashCode());
-        hash = 29 * hash + (imagemCapa == null ? 0 : imagemCapa.hashCode());
-
-        return hash;
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Instituicao other = (Instituicao) obj;
+        if (idInstituicao == null) {
+            if (other.idInstituicao != null)
+                return false;
+        } else if (!idInstituicao.equals(other.idInstituicao))
+            return false;
+        if (nome == null) {
+            if (other.nome != null)
+                return false;
+        } else if (!nome.equals(other.nome))
+            return false;
+        return true;
     }
+
 }
