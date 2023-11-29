@@ -145,7 +145,7 @@
                                     <TextArea id="descricao" fx:id="descricao" style="-fx-background-color: #FFFFFF;" />
                                  </children>
                               </VBox>
-                              <VBox fx:id="frameLocais" prefHeight="45.0" />
+                              <VBox fx:id="frameLocais" prefHeight="45.0" spacing="15.0" />
                               <VBox>
                                  <children>
                                     <VBox alignment="CENTER">

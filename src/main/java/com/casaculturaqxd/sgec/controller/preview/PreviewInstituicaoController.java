@@ -8,8 +8,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import com.casaculturaqxd.sgec.DAO.InstituicaoDAO;
+import com.casaculturaqxd.sgec.DAO.ServiceFileDAO;
 import com.casaculturaqxd.sgec.controller.ControllerEvento;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.Instituicao;
@@ -38,16 +38,15 @@ import javafx.stage.Stage;
 
 public class PreviewInstituicaoController {
     @FXML
-    private Parent container; //pane raiz do fxml
+    private Parent container; // pane raiz do fxml
     @FXML
     private HBox campoNome, campoContribuicao, campoValorContribuicao;
     @FXML
-    private Label nomeInstituicao, contribuicao, valorContribuicao; 
+    private Label nomeInstituicao, contribuicao, valorContribuicao;
     @FXML
     private Button buttonAlterarCapa, buttonRemover;
     @FXML
     private ImageView imagemViewInstituicao;
-
     private Instituicao instituicao;
     private ControllerEvento parentController;
     private ObservableMap<Parent, List<Node>> previousChildren = FXCollections.observableHashMap();
@@ -62,9 +61,9 @@ public class PreviewInstituicaoController {
         buttonAlterarCapa.setViewOrder(-1);
         buttonRemover.setViewOrder(-1);
         try {
-        listaNomes = instituicaoDAO.listarInstituicoes();
+            listaNomes = instituicaoDAO.listarInstituicoes();
         } catch (SQLException e) {
-        listaNomes = new ArrayList<>();
+            listaNomes = new ArrayList<>();
         }
     }
 
@@ -95,8 +94,10 @@ public class PreviewInstituicaoController {
 
     public void loadImagem() {
         InputStream fileAsStream;
-        if(instituicao.getImagemCapa() != null){
+        if (instituicao.getImagemCapa() != null) {
             try {
+                ServiceFileDAO serviceFileDAO = new ServiceFileDAO(db.getConnection());
+                instituicao.getImagemCapa().setContent(serviceFileDAO.getContent(instituicao.getImagemCapa()));
                 fileAsStream = new FileInputStream(instituicao.getImagemCapa().getContent());
                 imagemViewInstituicao.setImage(new Image(fileAsStream));
             } catch (FileNotFoundException e) {
@@ -105,8 +106,11 @@ public class PreviewInstituicaoController {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
+            } catch (SQLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
-        } 
+        }
     }
 
     public void updateImagemCapa() {
@@ -117,7 +121,6 @@ public class PreviewInstituicaoController {
         instituicao.setImagemCapa(new ServiceFile(fileChooser.showOpenDialog(stage)));
         loadImagem();
     }
-    
 
     private void updateFieldNome(Labeled labeled, Pane fieldParent) {
         ObservableList<Node> oldNodes = FXCollections.observableArrayList(fieldParent.getChildren());
@@ -125,7 +128,7 @@ public class PreviewInstituicaoController {
         TextField textField = new TextField(labeled.getText());
         textField.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
-                if(!listaNomes.contains(textField.getText())){
+                if (!listaNomes.contains(textField.getText())) {
                     labeled.setText(textField.getText());
                     fieldParent.getChildren().setAll(previousChildren.get(campoNome));
                 } else {
@@ -134,7 +137,7 @@ public class PreviewInstituicaoController {
                     mensagem.show();
                     fieldParent.getChildren().setAll(previousChildren.get(campoNome));
                 }
-                
+
             } else if (event.getCode() == KeyCode.ESCAPE) {
                 fieldParent.getChildren().setAll(previousChildren.get(campoNome));
             }
@@ -149,7 +152,7 @@ public class PreviewInstituicaoController {
         textField.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER) {
                 labeled.setText(textField.getText());
-                fieldParent.getChildren().setAll(previousChildren.get(campoNome)); 
+                fieldParent.getChildren().setAll(previousChildren.get(campoNome));
             } else if (event.getCode() == KeyCode.ESCAPE) {
                 fieldParent.getChildren().setAll(previousChildren.get(campoNome));
             }

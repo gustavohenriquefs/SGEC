@@ -37,54 +37,54 @@ public class DialogNovaInstituicao extends Dialog<Instituicao> {
     this.setResultConverter(dialogButton -> {
       if(dialogButton == okButtonType){
         return instituicao;
-      }
+      } 
       return null;
-  });
+    });
 
-  this.getDialogPane().lookupButton(okButtonType).addEventFilter(ActionEvent.ACTION, event -> {
-    instituicao = dialogInstituicaoController.obterInstituicao();
-    if(instituicao != null){
-      if(!dialogInstituicaoController.getContribuicoes().getText().isEmpty()){
-        instituicao.setDescricaoContribuicao(dialogInstituicaoController.getContribuicoes().getText());
+    this.getDialogPane().lookupButton(okButtonType).addEventFilter(ActionEvent.ACTION, event -> {
+      instituicao = dialogInstituicaoController.obterInstituicao();
+      if(instituicao != null){
+        if(!dialogInstituicaoController.getContribuicoes().getText().isEmpty()){
+          instituicao.setDescricaoContribuicao(dialogInstituicaoController.getContribuicoes().getText());
+        } else {
+          mensagem.setAlertType(AlertType.ERROR);
+          mensagem.setContentText("Não foi possivel realizar a vinculação: A descrição não pode ser vazia");
+          mensagem.show();
+          event.consume();
+        }
+          
+        instituicao.setValorContribuicao(dialogInstituicaoController.getValorContribuicao().getText());
+
+        if(dialogInstituicaoController.getFile() != null){
+          instituicao.setImagemCapa(new ServiceFile(dialogInstituicaoController.getFile()));
+        }
       } else {
         mensagem.setAlertType(AlertType.ERROR);
-        mensagem.setContentText("Não foi possivel realizar a vinculação: A descrição não pode ser vazia");
+        mensagem.setContentText("Instituição não encontrada!");
         mensagem.show();
         event.consume();
       }
-        
-      instituicao.setValorContribuicao(dialogInstituicaoController.getValorContribuicao().getText());
+    });
 
-      if(dialogInstituicaoController.getFile() != null){
-        instituicao.setImagemCapa(new ServiceFile(dialogInstituicaoController.getFile()));
-      }
-    } 
-    else {
-      mensagem.setAlertType(AlertType.ERROR);
-      mensagem.setContentText("Instituição não encontrada!");
-      mensagem.show();
-      event.consume();
-    }
-  });
-
-  this.getDialogPane().lookupButton(buttonTypeCadastrar).addEventFilter(ActionEvent.ACTION, event -> {
-    Optional<Instituicao> instituicao = dialogInstituicaoController.getInstituicao();
-    if(instituicao.isEmpty()) {
-      if(dialogInstituicaoController.cadastrarInstituicao() == false){
+    this.getDialogPane().lookupButton(buttonTypeCadastrar).addEventFilter(ActionEvent.ACTION, event -> {
+      Optional<Instituicao> instituicao = dialogInstituicaoController.getInstituicao();
+      
+      if(instituicao.isEmpty()) {
+        if(dialogInstituicaoController.cadastrarInstituicao() == false){
+          mensagem.setAlertType(AlertType.ERROR);
+          mensagem.setContentText("Não foi possivel realizar o cadastro: Nome da Instituição inválido");
+          mensagem.show();
+        }
+        mensagem.setAlertType(AlertType.INFORMATION);
+        mensagem.setContentText("Instituição cadastrada");
+        mensagem.show();
+      } else {
         mensagem.setAlertType(AlertType.ERROR);
-        mensagem.setContentText("Não foi possivel realizar o cadastro: Nome da Instituição inválido");
+        mensagem.setContentText("Não foi possivel realizar o cadastro: Instituição já existe");
         mensagem.show();
       }
-      mensagem.setAlertType(AlertType.INFORMATION);
-      mensagem.setContentText("Instituição cadastrada");
-      mensagem.show();
-    } else {
-      mensagem.setAlertType(AlertType.ERROR);
-      mensagem.setContentText("Não foi possivel realizar o cadastro: Instituição já existe");
-      mensagem.show();
-    }
-    event.consume();
-  });
+      event.consume();
+    });
 
   }
 

@@ -56,10 +56,22 @@ public class DialogInstituicaoController {
     binding = TextFields.bindAutoCompletion(nomeInstituicao, listaNomes);
     bindingSetOnAutoCompleted();
     nomeInstituicaoSetOnMouseClicked();
-
+    instituicao = new Instituicao();
   }
 
-  public Instituicao obterInstituicao(){
+  private void updateInstituicao() {
+    instituicao.setNome(nomeInstituicao.getText());
+    instituicao.setDescricaoContribuicao(contribuicoes.getText());
+    instituicao.setValorContribuicao(valorContribuicao.getText());
+
+    if (file != null) {
+      instituicao.setImagemCapa(new ServiceFile(file));
+    }
+  }
+
+  public Instituicao obterInstituicao() {
+    this.updateInstituicao();
+    
     return instituicao;
   }
 
@@ -89,7 +101,7 @@ public class DialogInstituicaoController {
     return temp;
   }
 
-  public void carregaListaNomes(){
+  public void carregaListaNomes() {
     try {
       listaNomes = instituicaoDAO.listarInstituicoes();
     } catch (SQLException e) {
@@ -98,11 +110,11 @@ public class DialogInstituicaoController {
   }
 
   public boolean cadastrarInstituicao() {
-    if(nomeInstituicao.getText() != ""){
+    if (nomeInstituicao.getText() != "") {
       ServiceFile serviceFileTemp = file != null ? new ServiceFile(file) : null;
-      if(serviceFileTemp != null){
+      if (serviceFileTemp != null) {
         try {
-          if(serviceFileDAO.getArquivo(serviceFileTemp.getFileKey()).isEmpty()){
+          if (serviceFileDAO.getArquivo(serviceFileTemp.getFileKey()).isEmpty()) {
             serviceFileDAO.inserirArquivo(serviceFileTemp);
           } else {
             serviceFileTemp = serviceFileDAO.getArquivo(serviceFileTemp.getFileKey()).get();
@@ -111,8 +123,8 @@ public class DialogInstituicaoController {
           e.printStackTrace();
         }
       }
-      Instituicao instituicao = new Instituicao(nomeInstituicao.getText(), contribuicoes.getText(), 
-      valorContribuicao.getText(), serviceFileTemp);
+      Instituicao instituicao = new Instituicao(nomeInstituicao.getText(), contribuicoes.getText(),
+          valorContribuicao.getText(), serviceFileTemp);
       try {
         instituicaoDAO.inserirInstituicao(instituicao);
         this.carregaListaNomes();
@@ -122,12 +134,12 @@ public class DialogInstituicaoController {
         return true;
       } catch (SQLException e) {
         e.printStackTrace();
-      } 
-    } 
+      }
+    }
     return false;
   }
-  
-  public void carregarImagem(){
+
+  public void carregarImagem() {
     InputStream fileAsStream;
     FileChooser fileChooser = new FileChooser();
     fileChooser.setTitle("Alterar foto da instituição");
@@ -138,9 +150,9 @@ public class DialogInstituicaoController {
       fileAsStream = new FileInputStream(file);
       imagem.setImage(new Image(fileAsStream));
     } catch (FileNotFoundException e) {
-        e.printStackTrace();
+      e.printStackTrace();
     } catch (NullPointerException e) {
-        e.printStackTrace();
+      e.printStackTrace();
     }
   }
 
@@ -148,34 +160,33 @@ public class DialogInstituicaoController {
     return file;
   }
 
-  public void bindingSetOnAutoCompleted(){
+  public void bindingSetOnAutoCompleted() {
     binding.setOnAutoCompleted(autoCompletionEvent -> {
       String selected = autoCompletionEvent.getCompletion();
       try {
-        System.out.println(selected);
         instituicao = instituicaoDAO.getInstituicao(selected).get();
       } catch (SQLException e) {
         e.printStackTrace();
       }
-      if(instituicao.getImagemCapa() != null){
-          InputStream fileAsStream;
-          try {
-              file = serviceFileDAO.getContent(instituicao.getImagemCapa());
-              fileAsStream = new FileInputStream(file);
-              this.imagem.setImage(new Image(fileAsStream));
-          } catch (FileNotFoundException e) {
-              e.printStackTrace();
-          } catch (NullPointerException e) {
-              e.printStackTrace();
-          } catch (SQLException e) {
-              e.printStackTrace();
-          }
+      if (instituicao.getImagemCapa() != null) {
+        InputStream fileAsStream;
+        try {
+          file = serviceFileDAO.getContent(instituicao.getImagemCapa());
+          fileAsStream = new FileInputStream(file);
+          this.imagem.setImage(new Image(fileAsStream));
+        } catch (FileNotFoundException e) {
+          e.printStackTrace();
+        } catch (NullPointerException e) {
+          e.printStackTrace();
+        } catch (SQLException e) {
+          e.printStackTrace();
         }
+      }
       nomeInstituicao.setEditable(false);
     });
   }
 
-  public void nomeInstituicaoSetOnMouseClicked(){
+  public void nomeInstituicaoSetOnMouseClicked() {
     nomeInstituicao.setOnMouseClicked(mousePressed -> {
       nomeInstituicao.setEditable(true);
     });
