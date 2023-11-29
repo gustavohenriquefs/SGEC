@@ -1,50 +1,61 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox id="container" fx:id="container" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="300.0" style="-fx-background-color: #FFFEF7;" stylesheets="@../../css/preview/previewInstituicaoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox id="container" fx:id="container" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="300.0" minWidth="-Infinity" prefHeight="360.0" prefWidth="300.0" style="-fx-background-color: #FFFEF7;" stylesheets="@../../css/preview/previewInstituicaoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.preview.PreviewInstituicaoController">
    <children>
-      <AnchorPane id="principal" fx:id="principal">
+      <VBox id="principal" fx:id="principal" alignment="CENTER" prefHeight="352.0" prefWidth="281.0" spacing="8.0">
          <children>
-            <HBox layoutX="90.0" layoutY="67.0" prefHeight="100.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <HBox fx:id="campoImagem" alignment="CENTER" prefHeight="142.0" prefWidth="280.0">
                <children>
-                  <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="201.0" prefWidth="150.0">
+                  <StackPane prefHeight="142.0" prefWidth="296.0">
                      <children>
-                        <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="170.0" prefWidth="150.0">
-                           <children>
-                              <ImageView fx:id="imagem" fitHeight="174.0" fitWidth="150.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS" />
-                           </children>
-                        </HBox>
-                        <HBox prefHeight="100.0" prefWidth="200.0">
-                           <children>
-                              <Label id="nomeInstituicao" fx:id="nomeInstituicao" prefHeight="73.0" prefWidth="294.0" stylesheets="@../../css/preview/previewInstituicaoStyle.css" HBox.hgrow="ALWAYS" />
-                           </children>
-                        </HBox>
+                        <ImageView fx:id="imagemViewInstituicao" fitHeight="150.0" fitWidth="290.0" pickOnBounds="true" preserveRatio="true" />
+                        <Button fx:id="buttonAlterarCapa" mnemonicParsing="false" onAction="#updateImagemCapa" text="Alterar Foto" textFill="WHITE" />
                      </children>
-                  </VBox>
-                  <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="198.0" prefWidth="150.0">
-                     <children>
-                        <HBox prefHeight="248.0" prefWidth="150.0">
-                           <children>
-                              <Label id="descricao" fx:id="descricao" prefHeight="259.0" prefWidth="308.0" styleClass="meusLabels" />
-                           </children>
-                        </HBox>
-                        <HBox prefHeight="100.0" prefWidth="200.0">
-                           <children>
-                              <Label id="valor" fx:id="valorContribuicao" prefHeight="46.0" prefWidth="307.0" styleClass="meusLabels" />
-                           </children>
-                        </HBox>
-                     </children>
-                  </VBox>
+                  </StackPane>
                </children>
             </HBox>
+            <HBox fx:id="campoNome" maxHeight="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="25.0" prefWidth="260.0" styleClass="meusLabels">
+               <children>
+                  <Label fx:id="nomeInstituicao" prefHeight="24.0" prefWidth="285.0" text="Nome" />
+                  <ImageView fitHeight="16.0" fitWidth="16.0" onMouseClicked="#updateNome" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../imagens/edit-icon.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </HBox>
+            <HBox fx:id="campoContribuicao" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="25.0" prefWidth="302.0" styleClass="meusLabels">
+               <children>
+                  <Label fx:id="contribuicao" prefHeight="29.0" prefWidth="285.0" text="Contribuições" />
+                  <ImageView fitHeight="16.0" fitWidth="16.0" onMouseClicked="#updateContribuica" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../imagens/edit-icon.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </HBox>
+            <HBox id="meusLabels" fx:id="campoValorContribuicao" prefHeight="26.0" prefWidth="260.0">
+               <children>
+                  <Label fx:id="valorContribuicao" prefHeight="30.0" prefWidth="284.0" text="Valor contribuição" />
+                  <ImageView fitHeight="16.0" fitWidth="16.0" onMouseClicked="#updateValorContribuicao" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../imagens/edit-icon.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </HBox>
+            <Button id="buttonRemover" fx:id="buttonRemover" mnemonicParsing="false" onAction="#remover" style="-fx-background-color: #A22D2E; -fx-text-fill: #E9E3CA;" text="Remover" />
          </children>
-      </AnchorPane>
+      </VBox>
    </children>
    <effect>
       <DropShadow />
