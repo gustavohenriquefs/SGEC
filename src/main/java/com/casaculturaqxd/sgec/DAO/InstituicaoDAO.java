@@ -102,11 +102,11 @@ public class InstituicaoDAO extends DAO {
       while (resultSet.next()) {
         nomeStrings.add(resultSet.getString("nome_instituicao"));
       }
-      
+
     } catch (Exception e) {
       logException(e);
       throw new SQLException(e);
-      
+
     } finally {
       statement.close();
     }
@@ -147,7 +147,14 @@ public class InstituicaoDAO extends DAO {
     try {
       Integer idServiceFile = null;
       if (instituicao.getImagemCapa() != null) {
-        instituicao.getImagemCapa().getServiceFileId();
+        ServiceFileDAO serviceFileDAO = new ServiceFileDAO(conn);
+        Optional<ServiceFile> optionalFile = serviceFileDAO.getArquivo(instituicao.getImagemCapa().getFileKey());
+        if (optionalFile.isPresent()) {
+          instituicao.setImagemCapa(optionalFile.get());
+        } else {
+          serviceFileDAO.inserirArquivo(instituicao.getImagemCapa());
+        }
+        idServiceFile = instituicao.getImagemCapa().getServiceFileId();
       }
       statement.setString(1, instituicao.getNome());
       statement.setObject(2, idServiceFile, Types.INTEGER);
@@ -340,7 +347,7 @@ public class InstituicaoDAO extends DAO {
         + " WHERE id_instituicao = ? AND id_evento = ?";
     PreparedStatement stmt = conn.prepareStatement(sql);
     try {
-
+      atualizarInstituicao(instituicao);
       stmt.setString(1, instituicao.getDescricaoContribuicao());
       stmt.setString(2, instituicao.getValorContribuicao());
       stmt.setInt(3, instituicao.getIdInstituicao());
@@ -361,7 +368,7 @@ public class InstituicaoDAO extends DAO {
         + " WHERE id_instituicao = ? AND id_evento = ?";
     PreparedStatement stmt = conn.prepareStatement(sql);
     try {
-
+      atualizarInstituicao(instituicao);
       stmt.setString(1, instituicao.getDescricaoContribuicao());
       stmt.setString(2, instituicao.getValorContribuicao());
       stmt.setInt(3, instituicao.getIdInstituicao());
