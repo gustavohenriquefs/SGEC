@@ -333,8 +333,26 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
         Optional<Participante> novoParticipanteOp = participanteDialog.showAndWait();
 
         if(novoParticipanteOp.isPresent()) {
-            adicionarParticipante(novoParticipanteOp.get());
+            Participante novoParticipante = novoParticipanteOp.get();
+
+            if(!participanteJaEstaNaLista(novoParticipante)) {
+                adicionarParticipante(novoParticipanteOp.get());
+            } else {
+                mensagem.setAlertType(AlertType.ERROR);
+                mensagem.setContentText("Não foi possivel realizar a vinculação: Participante já foi vinculado!");
+                mensagem.show();
+            } 
         }
+    }
+
+    private boolean participanteJaEstaNaLista(Participante participanteTarget) {
+        for(Participante participante: participantes.keySet()) {
+            if(participante.getIdParticipante() == participanteTarget.getIdParticipante()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public void adicionarParticipante(Participante participante) {
