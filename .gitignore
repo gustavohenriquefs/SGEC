@@ -33,3 +33,4 @@ nbactions.xml
 
 #astah lock file
 *.asta.lock
+*.bak
