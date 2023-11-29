@@ -1,21 +1,29 @@
 package com.casaculturaqxd.sgec.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Optional;
 
+import java.util.Calendar;
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.EventoDAO;
 import com.casaculturaqxd.sgec.DAO.LocalizacaoDAO;
 import com.casaculturaqxd.sgec.DAO.ServiceFileDAO;
 import com.casaculturaqxd.sgec.controller.dialog.DialogNovaInstituicao;
+import com.casaculturaqxd.sgec.builder.EventoBuilder;
 import com.casaculturaqxd.sgec.controller.preview.PreviewArquivoController;
 import com.casaculturaqxd.sgec.controller.preview.PreviewInstituicaoController;
 import com.casaculturaqxd.sgec.controller.preview.PreviewLocalizacaoController;
@@ -54,6 +62,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputControl;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -61,11 +70,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.util.converter.IntegerStringConverter;
@@ -76,6 +84,9 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
     private DatabasePostgres db = DatabasePostgres.getInstance("URL", "USER_NAME", "PASSWORD");
     private EventoDAO eventoDAO = new EventoDAO();
     private LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO();
+    private File lastDirectoryOpen;
+    private ArrayList<ServiceFile> removedFiles;
+    private DateFormat formatterHorario;
     @FXML
     VBox root;
     @FXML
@@ -123,6 +134,7 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
     private Alert mensagem = new Alert(AlertType.NONE);
 
     public void initialize() throws IOException {
+        formatterHorario = new SimpleDateFormat("HH:mm");
         tooltipCliboard = new Tooltip("Copiado para a área de transferência");
         tooltipCliboard.setHideDelay(Duration.seconds(1));
         Tooltip.install(copiaCola, tooltipCliboard);
@@ -135,24 +147,27 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
         addListenersOrganizador(organizadorObservableMap);
         loadMenu();
 
+        formatterHorario = new SimpleDateFormat("HH:mm");
+        removedFiles = new ArrayList<>();
         eventoDAO.setConnection(db.getConnection());
         localizacaoDAO.setConnection(db.getConnection());
         compararDatas();
     }
 
-    public void compararDatas(){
-        //Impede que data posteriores á dataFinal sejam seleciondas no campo dataInicial
+    public void compararDatas() {
+        // Impede que data posteriores à dataFinal sejam seleciondas no campo
+        // dataInicial
         dataFinal.valueProperty().addListener((observable, oldValue, newValue) -> {
             dataInicial.setDayCellFactory(picker -> new DateCell() {
                 @Override
                 public void updateItem(LocalDate date, boolean empty) {
                     super.updateItem(date, empty);
                     LocalDate currentDate = dataFinal.getValue();
-                    setDisable(empty || date.compareTo(currentDate) > 0 );
+                    setDisable(empty || date.compareTo(currentDate) > 0);
                 }
             });
         });
-        //Impede que datas anteriores à dataInicial sejam selecionadas em dataFinal
+        // Impede que datas anteriores à dataInicial sejam selecionadas em dataFinal
         dataInicial.valueProperty().addListener((observable, oldValue, newValue) -> {
             dataFinal.setDayCellFactory(picker -> new DateCell() {
                 @Override
@@ -196,16 +211,16 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
         certificavel.setSelected(evento.isCertificavel());
         libras.setSelected(evento.isAcessivelEmLibras());
 
-        FXMLLoader loaderLocal = new FXMLLoader(App.class.getResource("view/preview/previewLocalizacao.fxml"));
-
         if (evento.getLocais() != null) {
-            for (Integer idLocal : evento.getLocais()) {
-                Localizacao local = new Localizacao(idLocal);
+            for (Localizacao local : evento.getLocais()) {
+                FXMLLoader loaderLocal = new FXMLLoader(App.class.getResource("view/preview/previewLocalizacao.fxml"));
+
                 try {
                     local = localizacaoDAO.getLocalizacao(local).get();
                 } catch (NoSuchElementException e) {
                     throw new RuntimeException();
                 }
+
                 Parent previewLocal = loaderLocal.load();
                 PreviewLocalizacaoController controller = loaderLocal.getController();
                 controller.setLocalizacao(local);
@@ -221,10 +236,10 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
 
         numeroPublico = new Indicador("Quantidade de público", evento.getPublicoEsperado(),
                 evento.getPublicoAlcancado());
-        numeroMestres = new Indicador("Número de mestres da cultura",
-                evento.getParticipantesEsperado(), evento.getListaParticipantes().size());
-        numeroMunicipios = new Indicador("Número de municípios", evento.getMunicipiosEsperado(),
-                eventoDAO.getNumeroMunicipiosDiferentes(evento.getIdEvento()));
+        numeroMestres = new Indicador("Número de mestres da cultura", evento.getNumParticipantesEsperado(),
+                evento.getListaParticipantes().size());
+        numeroMunicipios = new Indicador("Número de municípios", evento.getNumMunicipiosEsperado(),
+                evento.getNumMunicipiosAlcancado());
 
         addIndicador(tabelaIndicadoresGerais, numeroPublico);
         addIndicador(tabelaIndicadoresMeta1, numeroMestres);
@@ -248,43 +263,127 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
         loadContent();
     }
 
-    public boolean salvarAlteracoes() {
-        try {
-            alterarEvento();
-            return eventoDAO.alterarEvento(evento);
-        } catch (Exception e) {
+    public void salvarAlteracoes() {
+        if (alterarEvento()) {
+            Alert alert = new Alert(AlertType.CONFIRMATION, "Alterações salvas com sucesso");
+            alert.getButtonTypes().remove(ButtonType.CANCEL);
+            alert.showAndWait();
+        } else {
             Alert alert = new Alert(AlertType.ERROR);
             alert.setContentText("Erro atualizando evento");
-            return false;
+            alert.showAndWait();
         }
 
     }
 
-    public void alterarEvento() {
-        try {
-            evento.setDescricao(descricao.getText());
-            evento.setDataInicial(Date.valueOf(dataInicial.getValue()));
-            evento.setDataFinal(Date.valueOf(dataFinal.getValue()));
-            evento.setClassificacaoEtaria(
-                    classificacaoEtaria.getSelectionModel().getSelectedItem());
-            evento.setAcessivelEmLibras(libras.isSelected());
-            evento.setCertificavel(certificavel.isSelected());
-            evento.setHorario(Time.valueOf(horario.getText()));
-            evento.setCargaHoraria(Time.valueOf(cargaHoraria.getText()));
-            evento.setPublicoAlcancado(numeroPublico.getValorAlcancado());
-            evento.setPublicoEsperado(numeroPublico.getValorEsperado());
-            evento.setParticipantesEsperado(numeroMestres.getValorEsperado());
-            evento.setMunicipiosEsperado(numeroMunicipios.getValorEsperado());
-            eventoDAO.alterarEvento(evento);
+    /**
+     * constroi um novo evento utilizando os elementos atuais da view
+     * 
+     * @return evento atualizado
+     */
+    private Evento getTargetEvento() {
+        EventoBuilder eventoBuilder = new EventoBuilder();
+        Date novaDataInicial = dataInicial.getValue() != null ? Date.valueOf(dataInicial.getValue()) : null;
+        Date novaDataFinal = dataFinal.getValue() != null ? Date.valueOf(dataFinal.getValue()) : null;
+        eventoBuilder.setId(evento.getIdEvento()).setNome(titulo.getText()).setDescricao(descricao.getText())
+                .setDataInicial(novaDataInicial).setDataFinal(novaDataFinal)
+                .setClassificacaoEtaria(classificacaoEtaria.getSelectionModel().getSelectedItem())
+                .setPublicoEsperado(numeroPublico.getValorEsperado())
+                .setPublicoAlcancado(numeroPublico.getValorAlcancado());
 
-            Alert sucessoAtualizacao = new Alert(AlertType.INFORMATION);
-            sucessoAtualizacao.setContentText("Alterações salvas");
-            sucessoAtualizacao.show();
+        eventoBuilder.setAcessivelEmLibras(libras.isSelected()).setCertificavel(certificavel.isSelected())
+                .setHorario(formatTimeInputField(horario)).setCargaHoraria(formatTimeInputField(cargaHoraria))
+                .setNumParticipantesEsperado(numeroMestres.getValorEsperado())
+                .setMunicipiosEsperado(numeroMunicipios.getValorEsperado());
+
+        return eventoBuilder.getEvento();
+    }
+
+    /**
+     * Chama o metodo responsavel pela atualizacao de um evento no banco
+     * 
+     */
+    public boolean alterarEvento() {
+        // TODO: adicionar validacao de convocatorias, pelo menos um colaborador deve
+        // existir
+        try {
+            return updateEvento(getTargetEvento());
         } catch (Exception e) {
             Alert erroAtualizacao = new Alert(AlertType.ERROR);
             erroAtualizacao.setContentText("Erro ao alterar evento");
             erroAtualizacao.show();
+            return false;
         }
+    }
+
+    public List<ServiceFile> getAddedFiles() throws SQLException {
+        ServiceFileDAO serviceFileDAO = new ServiceFileDAO(db.getConnection());
+        ArrayList<ServiceFile> oldFiles = serviceFileDAO.listarArquivosEvento(evento, 5);
+        ArrayList<ServiceFile> newFiles = new ArrayList<>(mapServiceFiles.keySet());
+
+        return newFiles.stream()
+                .filter(newFile -> oldFiles.stream()
+                        .noneMatch(oldFile -> oldFile.getServiceFileId().equals(newFile.getServiceFileId())))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * Inicia uma transacao para atualizar o evento e cada entidade vinculada,
+     * realiza rollback em caso de qualquer excecao SQL
+     * 
+     * @param evento
+     * @return true se todas as alteracoes forem sucedidas
+     * @throws SQLException
+     */
+    private boolean updateEvento(Evento evento) throws SQLException {
+        db.getConnection().setAutoCommit(false);
+        try {
+            // TODO: update de colaboradores, organizadores, participantes e locais
+            if (!eventoDAO.alterarEvento(evento)) {
+                return false;
+            }
+            if (!updateMetas(evento)) {
+                return false;
+            }
+            if (!updateArquivos(evento)) {
+                return false;
+            }
+            return true;
+        } catch (SQLException e) {
+            db.getConnection().rollback();
+            return false;
+        } finally {
+            db.getConnection().setAutoCommit(true);
+        }
+    }
+
+    private boolean updateMetas(Evento evento) throws SQLException {
+        return eventoDAO.atualizarMetasEvento(getMetasSelecionadas(), evento);
+    }
+
+    private boolean updateArquivos(Evento evento) throws SQLException {
+        ServiceFileDAO serviceFileDAO = new ServiceFileDAO(db.getConnection());
+        for (ServiceFile addedFile : getAddedFiles()) {
+            Optional<ServiceFile> optionalFile = serviceFileDAO.getArquivo(addedFile.getFileKey());
+            if (optionalFile.isPresent()) {
+                addedFile = optionalFile.get();
+            } else {
+                serviceFileDAO.inserirArquivo(addedFile);
+            }
+            boolean checkNovoArquivo = serviceFileDAO.vincularArquivo(addedFile.getServiceFileId(),
+                    evento.getIdEvento());
+            if (!checkNovoArquivo) {
+                return false;
+            }
+        }
+        for (ServiceFile removedFile : removedFiles) {
+            boolean checkArquivoRemovido = serviceFileDAO.desvincularArquivo(removedFile.getServiceFileId(),
+                    evento.getIdEvento());
+            if (!checkArquivoRemovido) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public void goToMidiaEvento() throws IOException, SQLException {
@@ -294,6 +393,18 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
         controllerNextScreen.setEvento(evento);
 
         App.setRoot(nextScreen);
+    }
+
+    private ArrayList<Meta> getMetasSelecionadas() {
+        ArrayList<Meta> metasSelecionadas = new ArrayList<>();
+        for (CheckBox checkBox : checkBoxesMetas) {
+            if (checkBox.isSelected()) {
+                // id das metas e 1-based
+                Meta selectedMeta = new Meta(checkBoxesMetas.indexOf(checkBox) + 1);
+                metasSelecionadas.add(selectedMeta);
+            }
+        }
+        return metasSelecionadas;
     }
 
     /**
@@ -380,6 +491,31 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
         }
     }
 
+    public void adicionarArquivo() {
+        FileChooser fileChooser = new FileChooser();
+        if (lastDirectoryOpen != null) {
+            fileChooser.setInitialDirectory(lastDirectoryOpen);
+        }
+        File arquivoSelecionado = fileChooser.showOpenDialog(stage);
+        try {
+            if (arquivoSelecionado != null) {
+                lastDirectoryOpen = arquivoSelecionado.getParentFile();
+
+                ServiceFile arquivo = new ServiceFile(arquivoSelecionado);
+                ServiceFileDAO serviceFileDAO = new ServiceFileDAO(db.getConnection());
+                if (!serviceFileDAO.arquivoJaVinculado(arquivo.getFileKey(), evento)) {
+                    adicionarArquivo(arquivo);
+                } else {
+                    Alert alert = new Alert(AlertType.ERROR, "Arquivo já foi adicionado");
+                    alert.showAndWait();
+                }
+            }
+        } catch (Exception e) {
+            Alert alert = new Alert(AlertType.ERROR, "Arquivo já foi adicionado");
+            alert.showAndWait();
+        }
+    }
+
     @Override
     public void adicionarArquivo(ServiceFile serviceFile) throws IOException {
         mapServiceFiles.put(serviceFile,
@@ -389,6 +525,9 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
     @Override
     public void removerArquivo(ServiceFile serviceFile) {
         mapServiceFiles.remove(serviceFile);
+        if (serviceFile.getServiceFileId() != null) {
+            removedFiles.add(serviceFile);
+        }
     }
 
     public void addListenersServiceFile(ObservableMap<ServiceFile, FXMLLoader> observablemap) {
@@ -490,6 +629,36 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
         });
     }
 
+    /**
+     * formata um horario inserido em um textfield
+     * 
+     * @param inputField
+     * @return o horario definido em horas e minutos no textfield, ou o horario
+     *         zerado em caso de ParseException
+     */
+    private Time formatTimeInputField(TextInputControl inputField) {
+        try {
+            return new Time(formatterHorario.parse(inputField.getText()).getTime());
+        } catch (ParseException e) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+
+            return new Time(calendar.getTimeInMillis());
+        }
+    }
+
+    @Override
+    public void adicionarLocalizacao(Localizacao localizacao) {
+
+    }
+
+    @Override
+    public void removerLocalizacao(Localizacao localizacao) {
+    }
+
     public void adicionarOrganizador() throws IOException {
         ButtonType buttonTypeVincularOrganizadora = new ButtonType("Vincular como organizadora", ButtonBar.ButtonData.OK_DONE);
         DialogNovaInstituicao dialogNovaInstituicao = new DialogNovaInstituicao(buttonTypeVincularOrganizadora);
@@ -537,6 +706,28 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
             }
         }
         return false; 
+    }
+
+    public void removerInstituicao(Instituicao instituicao){
+        if(contemInstituicao(organizadorObservableMap, instituicao.getNome())){
+            Iterator<Instituicao> iterator = organizadorObservableMap.keySet().iterator();
+        
+            while (iterator.hasNext()) {
+                Instituicao instituicaoTemp = iterator.next();
+                if (instituicaoTemp.getNome().equals(instituicao.getNome())) {
+                    iterator.remove();
+                }
+            }
+        } else {
+            Iterator<Instituicao> iterator = colaboradorObservableMap.keySet().iterator();
+        
+            while (iterator.hasNext()) {
+                Instituicao instituicaoTemp = iterator.next();
+                if (instituicaoTemp.getNome().equals(instituicao.getNome())) {
+                    iterator.remove();
+                }
+            }
+        }
     }
 
     public void addListenersOrganizador(ObservableMap<Instituicao, FXMLLoader> observablemap) {
@@ -599,28 +790,5 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
                 }
             }
         });
-    }
-
-    @Override
-    public void removerInstituicao(Instituicao instituicao){
-        if(contemInstituicao(organizadorObservableMap, instituicao.getNome())){
-            Iterator<Instituicao> iterator = organizadorObservableMap.keySet().iterator();
-        
-            while (iterator.hasNext()) {
-                Instituicao instituicaoTemp = iterator.next();
-                if (instituicaoTemp.getNome().equals(instituicao.getNome())) {
-                    iterator.remove();
-                }
-            }
-        } else {
-            Iterator<Instituicao> iterator = colaboradorObservableMap.keySet().iterator();
-        
-            while (iterator.hasNext()) {
-                Instituicao instituicaoTemp = iterator.next();
-                if (instituicaoTemp.getNome().equals(instituicao.getNome())) {
-                    iterator.remove();
-                }
-            }
-        }
     }
 }

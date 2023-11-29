@@ -74,6 +74,10 @@ public class ServiceFileDAO extends DAO {
       } else {
         return Optional.empty();
       }
+    } catch (NullPointerException e) {
+      // id nulo retorna um optional vazio
+      logException(e);
+      return Optional.empty();
     } catch (Exception e) {
       logException(e);
       throw new SQLException("erro buscando arquivo: " + arquivo.getFileKey(), e);
@@ -184,6 +188,26 @@ public class ServiceFileDAO extends DAO {
       throw new SQLException("erro listando arquivos do evento: " + evento.getNome(), e);
     } finally {
       statement.close();
+    }
+  }
+
+  public boolean arquivoJaVinculado(String nomeArquivo, Evento evento) throws SQLException {
+    String sql = "SELECT id_service_file,id_evento,file_key FROM service_file_evento INNER JOIN service_file USING(id_service_file) WHERE file_key = ? AND id_evento = ?";
+    PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+    try {
+      preparedStatement.setString(1, nomeArquivo);
+      preparedStatement.setInt(2, evento.getIdEvento());
+
+      ResultSet resultSet = preparedStatement.executeQuery();
+      return resultSet.next();
+    } catch (Exception e) {
+      String nomeEventoCausa = evento != null && evento.getNome() != null ? evento.getNome() : "";
+      logException(e);
+      throw new SQLException(
+          "falha verificando se arquivo " + nomeArquivo + " esta vinculado ao evento " + nomeEventoCausa, e);
+    } finally {
+      preparedStatement.close();
     }
   }
 

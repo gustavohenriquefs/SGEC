@@ -286,7 +286,7 @@
                                              <children>
                                                 <HBox alignment="TOP_RIGHT" HBox.hgrow="ALWAYS">
                                                    <children>
-                                                      <Button fx:id="adicionarArquivo" alignment="CENTER" mnemonicParsing="false" style="-fx-background-color: #2A3F25;" text="Adicionar novo arquivo +" textFill="WHITE" />
+                                                      <Button alignment="CENTER" mnemonicParsing="false" onAction="#adicionarArquivo" style="-fx-background-color: #2A3F25;" text="Adicionar novo arquivo +" textFill="WHITE" />
                                                    </children>
                                                 </HBox>
                                                 <HBox alignment="TOP_RIGHT" HBox.hgrow="ALWAYS">

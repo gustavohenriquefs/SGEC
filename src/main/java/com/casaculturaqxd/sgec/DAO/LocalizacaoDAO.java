@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import com.casaculturaqxd.sgec.models.Localizacao;
@@ -54,6 +55,34 @@ public class LocalizacaoDAO extends DAO {
       String nomeLocalCausa = localizacao != null && localizacao.getNome() != null ? localizacao.getNome() : "";
       logException(e);
       throw new SQLException("falha buscando local " + nomeLocalCausa, e);
+    } finally {
+      statement.close();
+    }
+  }
+
+  public ArrayList<Localizacao> listarLocaisPorEvento(Integer idEvento) throws SQLException {
+    String sql = "select id_localizacao from localizacao_evento where id_evento=?";
+
+    ArrayList<Localizacao> localizacoes = new ArrayList<>();
+
+    PreparedStatement statement = connection.prepareStatement(sql);
+
+    try {
+      statement.setInt(1, idEvento);
+      ResultSet resultSet = statement.executeQuery();
+
+      while (resultSet.next()) {
+        Localizacao localizacao = new Localizacao();
+
+        localizacao.setIdLocalizacao(resultSet.getInt("id_localizacao"));
+
+        localizacoes.add(getLocalizacao(localizacao).get());
+      }
+
+      return localizacoes;
+    } catch (Exception ex) {
+      logException(ex);
+      throw new SQLException("falha listando locais por evento", ex);
     } finally {
       statement.close();
     }
@@ -195,12 +224,71 @@ public class LocalizacaoDAO extends DAO {
 
       int numRemocoes = stmt.executeUpdate();
       return numRemocoes > 0;
-    } catch (Exception e) {
+
+    } catch (SQLException e) {
       logException(e);
-      throw new SQLException("falha desvinculando local de evento ", e);
+
+      throw new SQLException("falha desvinculando local de evento", e);
     } finally {
       stmt.close();
     }
   }
 
+  public Optional<Localizacao> getLocalizacaoByNome(String nome) throws SQLException{
+    String sql = "SELECT * FROM localizacao WHERE nome_localizacao LIKE ?";
+    PreparedStatement stmt = connection.prepareStatement(sql);
+
+    try {
+        
+        stmt.setString(1, "%" + nome + "%"); 
+        ResultSet resultado = stmt.executeQuery();
+        if (resultado.next()) {
+            Localizacao localizacao = new Localizacao();
+
+            localizacao.setIdLocalizacao(resultado.getInt("id_localizacao"));
+            localizacao.setNome(resultado.getString("nome_localizacao"));
+            localizacao.setRua(resultado.getString("rua"));
+            localizacao.setNumeroRua(resultado.getInt("numero_rua"));
+            localizacao.setBairro(resultado.getString("bairro"));
+            localizacao.setCep(resultado.getString("cep"));
+            localizacao.setCidade(resultado.getString("cidade"));
+            localizacao.setEstado(resultado.getString("estado"));
+            localizacao.setPais(resultado.getString("pais"));
+            
+            return Optional.of(localizacao);
+        } else {
+            return Optional.empty();
+        }
+    } catch (Exception e) {
+      logException(e);
+
+      String sqlMsg = "falha buscando local por nome " + nome != null ? nome : "";
+      
+      throw new SQLException(sqlMsg, e);
+    } finally {
+        stmt.close();
+    }
+  }
+
+  public List<String> getListaLocais() throws SQLException {
+    String sql = "SELECT nome_localizacao FROM localizacao";
+    List<String> listaLocais = new ArrayList<>();
+
+    PreparedStatement stmt = connection.prepareStatement(sql);
+    
+    try {
+      ResultSet resultado = stmt.executeQuery();
+      while (resultado.next()) {
+        listaLocais.add(resultado.getString("nome_localizacao"));
+      }
+      stmt.close();
+    } catch (SQLException ex) {
+      logException(ex);
+      throw new SQLException("falha buscando lista de locais", ex);
+    } finally {
+      stmt.close();
+    }
+
+    return listaLocais;
+  }
 }

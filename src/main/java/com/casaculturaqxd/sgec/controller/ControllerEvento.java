@@ -1,6 +1,7 @@
 package com.casaculturaqxd.sgec.controller;
 
 import com.casaculturaqxd.sgec.models.Instituicao;
+import com.casaculturaqxd.sgec.models.Localizacao;
 import com.casaculturaqxd.sgec.models.Participante;
 import javafx.stage.Stage;
 
@@ -20,4 +21,8 @@ public interface ControllerEvento {
     public Stage getStage();
 
     public void removerInstituicao(Instituicao instituicao);
+    
+    public void adicionarLocalizacao(Localizacao localizacao);
+
+    public void removerLocalizacao(Localizacao localizacao);
 }

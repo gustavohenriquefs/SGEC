@@ -20,7 +20,4 @@
          </font>
       </Label>
    </children>
-   <effect>
-      <DropShadow />
-   </effect>
 </HBox>

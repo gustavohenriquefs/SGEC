@@ -111,7 +111,7 @@ public class GrupoEventosBuilder implements Builder {
         return this;
     }
 
-    public GrupoEventosBuilder setIdGrupoEventos(int idGrupoEventos) {
+    public GrupoEventosBuilder setId(int idGrupoEventos) {
         grupoEventos.setIdGrupoEventos(idGrupoEventos);
         return this;
     }

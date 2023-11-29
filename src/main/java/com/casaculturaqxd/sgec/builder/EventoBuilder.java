@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import java.util.SortedSet;
 
 import com.casaculturaqxd.sgec.models.Evento;
+import com.casaculturaqxd.sgec.models.GrupoEventos;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 import com.casaculturaqxd.sgec.models.Instituicao;
+import com.casaculturaqxd.sgec.models.Localizacao;
 import com.casaculturaqxd.sgec.models.Meta;
 
 public class EventoBuilder implements Builder {
@@ -21,32 +23,64 @@ public class EventoBuilder implements Builder {
     return evento;
   }
 
-  public void setCargaHoraria(Time cargaHoraria) {
+  public EventoBuilder setCargaHoraria(Time cargaHoraria) {
     evento.setCargaHoraria(cargaHoraria);
+    return this;
   }
 
-  public void setCertificavel(boolean certificavel) {
+  public EventoBuilder setCertificavel(boolean certificavel) {
     evento.setCertificavel(certificavel);
+    return this;
   }
 
-  public void setLocalizacoes(SortedSet<Integer> localizacoes) {
+  public EventoBuilder setLocalizacoes(ArrayList<Localizacao> localizacoes) {
     evento.setLocais(localizacoes);
+    return this;
   }
 
-  public void setParticipantes(SortedSet<Integer> participantes) {
+  public EventoBuilder setParticipantes(SortedSet<Integer> participantes) {
     evento.setListaParticipantes(participantes);
+    return this;
   }
 
-  public void setAcessivelEmLibras(boolean acessivel) {
+  public EventoBuilder setAcessivelEmLibras(boolean acessivel) {
     evento.setAcessivelEmLibras(acessivel);
+    return this;
   }
 
-  public void setMunicipiosEsperado(int municipiosEsperado) {
-    evento.setMunicipiosEsperado(municipiosEsperado);
+  public EventoBuilder setMunicipiosEsperado(int municipiosEsperado) {
+    evento.setNumMunicipiosEsperado(municipiosEsperado);
+    return this;
   }
 
-  public void setParticipantesEsperado(int participantesEsperado) {
-    evento.setParticipantesEsperado(participantesEsperado);
+  public EventoBuilder setNumMunicipiosAlcancado(int numMunicipiosAlcancado) {
+    evento.setNumMunicipiosAlcancado(numMunicipiosAlcancado);
+    return this;
+  }
+
+  public EventoBuilder setNumParticipantesEsperado(int participantesEsperado) {
+    evento.setNumParticipantesEsperado(participantesEsperado);
+    return this;
+  }
+
+  public EventoBuilder setNumParticipantesAlcancado(int numParticipantesAlcancado) {
+    evento.setNumParticipantesAlcancado(numParticipantesAlcancado);
+    return this;
+  }
+
+  public EventoBuilder setNumColaboradoresEsperado(int numColaboradoresEsperado) {
+    evento.setNumColaboradoresEsperado(numColaboradoresEsperado);
+    return this;
+  }
+
+  public EventoBuilder setNumColaboradoresAlcancado(int numColaboradoresAlcancado) {
+    evento.setNumColaboradoresAlcancado(numColaboradoresAlcancado);
+    return this;
+  }
+
+  public EventoBuilder setGrupoEventos(GrupoEventos grupoEventos) {
+    evento.setGrupoEventos(grupoEventos);
+    return this;
   }
 
   public EventoBuilder setListaArquivos(ArrayList<ServiceFile> listaArquivos) {
@@ -54,14 +88,21 @@ public class EventoBuilder implements Builder {
     return this;
   }
 
-  public void setListaMetas(ArrayList<Meta> metas) {
+  public EventoBuilder setListaMetas(ArrayList<Meta> metas) {
     evento.setListaMetas(metas);
+    return this;
 
   }
 
   @Override
   public void resetar() {
     evento = new Evento();
+  }
+
+  @Override
+  public Builder setId(int idEvento) {
+    evento.setIdEvento(idEvento);
+    return this;
   }
 
   @Override
@@ -73,6 +114,12 @@ public class EventoBuilder implements Builder {
   @Override
   public Builder setDescricao(String descricao) {
     evento.setDescricao(descricao);
+    return this;
+  }
+
+  @Override
+  public Builder setImagemCapa(ServiceFile serviceFile) {
+    evento.setImagemCapa(serviceFile);
     return this;
   }
 
@@ -108,14 +155,18 @@ public class EventoBuilder implements Builder {
 
   @Override
   public Builder setColaboradores(ArrayList<Instituicao> colaboradores) {
-    evento.setListaOrganizadores(colaboradores);
+    evento.setListaColaboradores(colaboradores);
     return this;
   }
 
   @Override
   public Builder setOrganizadores(ArrayList<Instituicao> organizadores) {
-    evento.setListaColaboradores(organizadores);
+    evento.setListaOrganizadores(organizadores);
     return this;
   }
 
+  public EventoBuilder setHorario(Time horario) {
+    evento.setHorario(horario);
+    return this;
+  }
 }

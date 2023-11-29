@@ -3,9 +3,14 @@ package com.casaculturaqxd.sgec.builder;
 import java.sql.Date;
 import java.util.ArrayList;
 import com.casaculturaqxd.sgec.models.Instituicao;
+import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 
 public interface Builder {
   void resetar();
+
+  Builder setId(int id);
+
+  Builder setImagemCapa(ServiceFile serviceFile);
 
   Builder setNome(String nome);
 
