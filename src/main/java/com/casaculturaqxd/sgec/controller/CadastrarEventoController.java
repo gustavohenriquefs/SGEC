@@ -38,9 +38,7 @@ import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ListChangeListener;
 import javafx.collections.MapChangeListener;
-import javafx.collections.ObservableList;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
@@ -109,7 +107,7 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
     CheckBox checkMeta1, checkMeta2, checkMeta3, checkMeta4;
     @FXML
     RadioButton optionCertificavel, optionAcessivelEmLibras;
-    
+
     private ObservableMap<ServiceFile, FXMLLoader> mapServiceFiles = FXCollections.observableHashMap();
     ObservableList<PreviewInstituicaoController> listaPreviewOrganizadores = FXCollections.observableArrayList();
     ObservableList<PreviewInstituicaoController> listaPreviewColaboradores = FXCollections.observableArrayList();
@@ -120,7 +118,8 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
             .<Instituicao, FXMLLoader>observableHashMap();
     @FXML
     Button botaoNovaLocalizacao;
-    ObservableList<PreviewParticipanteController> participantes = FXCollections.<PreviewParticipanteController>observableList(new ArrayList<>());
+    ObservableList<PreviewParticipanteController> participantes = FXCollections
+            .<PreviewParticipanteController>observableList(new ArrayList<>());
     private Alert mensagem = new Alert(AlertType.NONE);
 
     public void initialize() throws IOException {
@@ -216,6 +215,8 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
                 adicionarLocalizacao(localizacao);
             }
 
+            eventoDAO.vincularParticipantes(getParticipantes(), evento);
+
             if (!eventoDAO.vincularLocais(evento.getLocais(), evento.getIdEvento())) {
                 throw new SQLException();
             }
@@ -235,8 +236,8 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
 
     private ArrayList<Participante> getParticipantes() {
         ArrayList<Participante> participantesResult = new ArrayList<>();
-        
-        for(PreviewParticipanteController previewParticipanteController: participantes) {
+
+        for (PreviewParticipanteController previewParticipanteController : participantes) {
             participantesResult.add(previewParticipanteController.getParticipante());
         }
         return participantesResult;
@@ -388,24 +389,24 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
 
         Optional<Participante> novoParticipanteOp = participanteDialog.showAndWait();
 
-        if(novoParticipanteOp.isPresent()) {
+        if (novoParticipanteOp.isPresent()) {
             Participante novoParticipante = novoParticipanteOp.get();
 
-            if(!participanteJaEstaNaLista(novoParticipante)) {
+            if (!participanteJaEstaNaLista(novoParticipante)) {
                 adicionarParticipante(novoParticipanteOp.get());
             } else {
                 mensagem.setAlertType(AlertType.ERROR);
                 mensagem.setContentText("Não foi possivel realizar a vinculação: Participante já foi vinculado!");
                 mensagem.show();
-            } 
+            }
         }
     }
 
     private boolean participanteJaEstaNaLista(Participante participanteTarget) {
-        for(PreviewParticipanteController previewParticipanteController: participantes) {
+        for (PreviewParticipanteController previewParticipanteController : participantes) {
             Participante participante = previewParticipanteController.getParticipante();
 
-            if(participante.getIdParticipante() == participanteTarget.getIdParticipante()) {
+            if (participante.getIdParticipante() == participanteTarget.getIdParticipante()) {
                 return true;
             }
         }
@@ -422,7 +423,7 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
             previewParticipanteControllerOp = Optional.empty();
         }
 
-        if(previewParticipanteControllerOp.isPresent()) {
+        if (previewParticipanteControllerOp.isPresent()) {
             try {
                 previewParticipanteControllerOp.get().setParticipante(participante);
             } catch (SQLException e) {
@@ -466,18 +467,19 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
             alert.setContentText("Não foi possível adicionar o participante!");
 
             alert.showAndWait();
-            
+
             e.printStackTrace();
         }
 
         participantes.add(controller);
     }
 
-    private Optional<PreviewParticipanteController> jaExisteParticipante(Participante participante) throws SQLException {
-        for(PreviewParticipanteController previewParticipanteController: participantes) {
+    private Optional<PreviewParticipanteController> jaExisteParticipante(Participante participante)
+            throws SQLException {
+        for (PreviewParticipanteController previewParticipanteController : participantes) {
             Participante participanteTemp = previewParticipanteController.getParticipante();
 
-            if(participanteTemp.getIdParticipante() == participante.getIdParticipante()) {
+            if (participanteTemp.getIdParticipante() == participante.getIdParticipante()) {
                 return Optional.of(previewParticipanteController);
             }
         }
@@ -500,7 +502,7 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
             e.printStackTrace();
         }
 
-        if(previewOptional.isPresent()) {
+        if (previewOptional.isPresent()) {
             participantes.remove(previewOptional.get());
         }
 
@@ -679,15 +681,15 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
 
                             secaoParticipantes.getChildren().add(addedController.getContainer());
                         }
-                        
+
                     }
-                    
+
                     if (change.wasRemoved()) {
-    
-                        for(PreviewParticipanteController removedController: change.getRemoved()){
+
+                        for (PreviewParticipanteController removedController : change.getRemoved()) {
                             secaoParticipantes.getChildren().remove(removedController.getContainer());
                         }
-                        
+
                     }
                 }
 

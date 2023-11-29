@@ -42,7 +42,6 @@ import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ListChangeListener;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
@@ -116,7 +115,8 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
     @FXML
     private String[] classificacoes = { "Livre", "10 anos", "12 anos", "14 anos", "16 anos", "18 anos" };
     // listas
-    ObservableList<PreviewParticipanteController> participantes = FXCollections.<PreviewParticipanteController>observableList(new ArrayList<>());
+    ObservableList<PreviewParticipanteController> participantes = FXCollections
+            .<PreviewParticipanteController>observableList(new ArrayList<>());
     ObservableList<PreviewInstituicaoController> listaPreviewOrganizadores = FXCollections.observableArrayList();
     ObservableList<PreviewInstituicaoController> listaPreviewColaboradores = FXCollections.observableArrayList();
     private ObservableMap<ServiceFile, FXMLLoader> mapServiceFiles = FXCollections.observableHashMap();
@@ -369,8 +369,8 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
             if (!updateMetas(evento)) {
                 throw new SQLException();
             }
-            
-            if(!updateParticipantes(evento)) {
+
+            if (!updateParticipantes(evento)) {
                 throw new SQLException();
             }
 
@@ -414,8 +414,8 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
 
     private ArrayList<Participante> getParticipantes() {
         ArrayList<Participante> participantesResult = new ArrayList<>();
-        
-        for(PreviewParticipanteController previewParticipanteController: participantes) {
+
+        for (PreviewParticipanteController previewParticipanteController : participantes) {
             participantesResult.add(previewParticipanteController.getParticipante());
         }
         return participantesResult;
@@ -658,31 +658,30 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
 
         Optional<Participante> novoParticipanteOp = participanteDialog.showAndWait();
 
-        if(novoParticipanteOp.isPresent()) {
+        if (novoParticipanteOp.isPresent()) {
             Participante novoParticipante = novoParticipanteOp.get();
 
-            if(!participanteJaEstaNaLista(novoParticipante)) {
+            if (!participanteJaEstaNaLista(novoParticipante)) {
                 adicionarParticipante(novoParticipanteOp.get());
             } else {
                 mensagem.setAlertType(AlertType.ERROR);
                 mensagem.setContentText("Não foi possivel realizar a vinculação: Participante já foi vinculado!");
                 mensagem.show();
-            } 
+            }
         }
     }
 
     private boolean participanteJaEstaNaLista(Participante participanteTarget) {
-        for(PreviewParticipanteController previewParticipanteController: participantes) {
+        for (PreviewParticipanteController previewParticipanteController : participantes) {
             Participante participante = previewParticipanteController.getParticipante();
 
-            if(participante.getIdParticipante() == participanteTarget.getIdParticipante()) {
+            if (participante.getIdParticipante() == participanteTarget.getIdParticipante()) {
                 return true;
             }
         }
 
         return false;
     }
-
 
     @Override
     public void adicionarParticipante(Participante participante) {
@@ -694,7 +693,7 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
             previewParticipanteControllerOp = Optional.empty();
         }
 
-        if(previewParticipanteControllerOp.isPresent()) {
+        if (previewParticipanteControllerOp.isPresent()) {
             try {
                 previewParticipanteControllerOp.get().setParticipante(participante);
             } catch (SQLException e) {
@@ -738,18 +737,19 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
             alert.setContentText("Não foi possível adicionar o participante!");
 
             alert.showAndWait();
-            
+
             e.printStackTrace();
         }
 
         participantes.add(controller);
     }
 
-    private Optional<PreviewParticipanteController> jaExisteParticipante(Participante participante) throws SQLException {
-        for(PreviewParticipanteController previewParticipanteController: participantes) {
+    private Optional<PreviewParticipanteController> jaExisteParticipante(Participante participante)
+            throws SQLException {
+        for (PreviewParticipanteController previewParticipanteController : participantes) {
             Participante participanteTemp = previewParticipanteController.getParticipante();
 
-            if(participanteTemp.getIdParticipante() == participante.getIdParticipante()) {
+            if (participanteTemp.getIdParticipante() == participante.getIdParticipante()) {
                 return Optional.of(previewParticipanteController);
             }
         }
@@ -773,12 +773,11 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
             e.printStackTrace();
         }
 
-        if(previewOptional.isPresent()) {
+        if (previewOptional.isPresent()) {
             participantes.remove(previewOptional.get());
         }
 
     }
-
 
     @Override
     public Stage getStage() {
@@ -789,9 +788,8 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
         VisualizarEventoController superController = this;
         observableList.addListener(new ListChangeListener<PreviewParticipanteController>() {
             @Override
-            public void onChanged(
-                    ListChangeListener.Change<? extends PreviewParticipanteController> change) {
-                    
+            public void onChanged(ListChangeListener.Change<? extends PreviewParticipanteController> change) {
+
                 while (change.next()) {
                     if (change.wasAdded()) {
 
@@ -800,12 +798,12 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
 
                             secaoParticipantes.getChildren().add(addedController.getContainer());
                         }
-                        
+
                     }
-                    
+
                     if (change.wasRemoved()) {
-    
-                        for(PreviewParticipanteController removedController: change.getRemoved()){
+
+                        for (PreviewParticipanteController removedController : change.getRemoved()) {
                             secaoParticipantes.getChildren().remove(removedController.getContainer());
                         }
                     }
