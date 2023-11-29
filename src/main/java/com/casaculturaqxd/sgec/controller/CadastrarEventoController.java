@@ -123,7 +123,7 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
     public void initialize() throws IOException {
         eventoDAO = new EventoDAO(db.getConnection());
         participanteDAO.setConnection(db.getConnection());
-        serviceFileDAO = new ServiceFileDAO(eventoDAO.getConnection());
+        serviceFileDAO = new ServiceFileDAO(db.getConnection());
 
         formatterHorario = new SimpleDateFormat("HH:mm");
         addListenersServiceFile(mapServiceFiles);
@@ -791,5 +791,5 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
             } catch (NullPointerException e) {
                 e.printStackTrace();
             }
-        }
+    }
 }
