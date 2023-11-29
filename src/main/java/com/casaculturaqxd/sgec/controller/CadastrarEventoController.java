@@ -1,7 +1,10 @@
 package com.casaculturaqxd.sgec.controller;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Time;
@@ -48,6 +51,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DateCell;
@@ -61,6 +66,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.util.converter.LocalTimeStringConverter;
 
@@ -108,8 +114,11 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
     ObservableMap<Instituicao, FXMLLoader> colaboradorObservableMap = FXCollections.<Instituicao, FXMLLoader>observableHashMap();
     @FXML
     Button botaoNovaLocalizacao;
+    @FXML
+    ImageView capaEvento;
     ObservableMap<Participante, FXMLLoader> participantes = FXCollections.<Participante, FXMLLoader>observableHashMap();
     private Alert mensagem = new Alert(AlertType.NONE);
+    File file = null;
 
     public void initialize() throws IOException {
         eventoDAO = new EventoDAO(db.getConnection());
@@ -259,6 +268,20 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
         builderEvento.setListaArquivos(listaArquivos);
         builderEvento.setLocalizacoes(locais);
         builderEvento.setListaMetas(getMetasSelecionadas());
+        if(file != null){
+            ServiceFile serviceFileTemp = new ServiceFile(file);
+            try {
+                if(serviceFileDAO.getArquivo(serviceFileTemp.getFileKey()).isEmpty()){
+                  serviceFileDAO.inserirArquivo(serviceFileTemp);
+                  serviceFileTemp = serviceFileDAO.getArquivo(serviceFileTemp.getFileKey()).get();
+                } else {
+                  serviceFileTemp = serviceFileDAO.getArquivo(serviceFileTemp.getFileKey()).get();
+                }
+              } catch (SQLException e) {
+                e.printStackTrace();
+              }
+            builderEvento.setImagemCapa(serviceFileTemp);
+        } 
 
         return builderEvento.getEvento();
     }
@@ -752,4 +775,21 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
 
         botaoNovaLocalizacao.setDisable(false);
     }
+
+    public void loadImagem(){
+        InputStream fileAsStream;
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Alterar foto da instituição");
+        ExtensionFilter filterImagens = new ExtensionFilter("imagem", "*.jpeg", "*.jpg", "*.png", "*.bmp");
+        fileChooser.getExtensionFilters().add(filterImagens);
+        try {
+            file = fileChooser.showOpenDialog(stage);
+            fileAsStream = new FileInputStream(file);
+            capaEvento.setImage(new Image(fileAsStream));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+        }
 }
