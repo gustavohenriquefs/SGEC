@@ -13,7 +13,7 @@
    <content>
       <AnchorPane prefHeight="200.0" prefWidth="200.0">
          <children>
-            <VBox alignment="CENTER" layoutX="20.0" prefHeight="269.0" prefWidth="594.0" spacing="5.0" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0">
+            <VBox alignment="CENTER" layoutX="42.8" prefHeight="274.0" prefWidth="550.0" spacing="5.0" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="32.0" AnchorPane.rightAnchor="32.0">
                <children>
                   <Label text="Nome artista" />
                   <TextField fx:id="nomeArtista" maxWidth="-Infinity" prefWidth="300.0" />
@@ -21,6 +21,8 @@
                   <TextArea fx:id="minibioArtista" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="300.0" wrapText="true" />
                   <Label text="Área de atuação" />
                   <TextField fx:id="areaAtuacao" maxWidth="-Infinity" prefWidth="300.0" />
+                  <Label text="Link do perfil no Mapa da Cultura" />
+                  <TextField fx:id="linkMapaCultura" maxWidth="-Infinity" prefWidth="300.0" />
                </children>
             </VBox>
          </children>

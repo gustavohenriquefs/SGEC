@@ -51,6 +51,9 @@ public class DialogParticipanteController {
   @FXML
   private TextField areaAtuacao;
 
+  @FXML 
+  private TextField linkMapaCultura;
+
   @FXML
   private ImageView imagem;
 
@@ -108,6 +111,7 @@ public class DialogParticipanteController {
     participante.setNome(nomeArtista.getText());
     participante.setAreaDeAtuacao(areaAtuacao.getText());
     participante.setBio(minibioArtista.getText());
+    participante.setLinkMapaDaCultura(linkMapaCultura.getText());
   }
 
   public Participante getParticipante() {
@@ -167,7 +171,5 @@ public class DialogParticipanteController {
         }
     }});
   }
-
-
 
 }
