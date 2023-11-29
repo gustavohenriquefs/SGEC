@@ -46,9 +46,13 @@ public class EventoDAO extends DAO {
     }
 
     try {
-      String sql = "INSERT INTO evento (nome_evento, publico_esperado, publico_alcancado, descricao, data_inicial, data_final, horario, classificacao_etaria, certificavel, carga_horaria, acessivel_em_libras, num_participantes_esperado, num_municipios_esperado) VALUES (?, ?, ?, ?, ?, ?, ?, ?::faixa_etaria, ?, ?, ?, ?, ?) RETURNING id_evento";
+      String sql = "INSERT INTO evento (nome_evento, publico_esperado, publico_alcancado, descricao, data_inicial, data_final, horario, classificacao_etaria, certificavel, carga_horaria, acessivel_em_libras, num_participantes_esperado, num_municipios_esperado, id_service_file) VALUES (?, ?, ?, ?, ?, ?, ?, ?::faixa_etaria, ?, ?, ?, ?, ?, ?) RETURNING id_evento";
 
       PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+      Integer idServiceFile = null;
+      if (evento.getImagemCapa() != null) {
+        idServiceFile = evento.getImagemCapa().getServiceFileId();
+      }
 
       stmt.setString(1, evento.getNome());
       stmt.setInt(2, evento.getPublicoEsperado());
@@ -63,6 +67,7 @@ public class EventoDAO extends DAO {
       stmt.setBoolean(11, evento.isAcessivelEmLibras());
       stmt.setInt(12, evento.getNumParticipantesEsperado());
       stmt.setInt(13, evento.getNumMunicipiosEsperado());
+      stmt.setObject(14, idServiceFile, Types.INTEGER);
 
       stmt.executeUpdate();
 
