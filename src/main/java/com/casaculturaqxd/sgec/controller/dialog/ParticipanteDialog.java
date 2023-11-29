@@ -141,7 +141,9 @@ public class ParticipanteDialog extends Dialog<Participante> {
         Optional<ServiceFile> optionalFile = Optional.empty();
 
         try {
-          optionalFile = serviceFileDAO.getArquivo(participante.getImagemCapa().getFileKey());
+          if(participante.getImagemCapa() != null) {
+            optionalFile = serviceFileDAO.getArquivo(participante.getImagemCapa().getFileKey());
+          }
         } catch (SQLException e) {
           Alert alert = new Alert(Alert.AlertType.ERROR);
 
@@ -170,7 +172,9 @@ public class ParticipanteDialog extends Dialog<Participante> {
           }
         } else {
           try {
-            serviceFileDAO.inserirArquivo(participante.getImagemCapa());
+            if(participante.getImagemCapa() != null) {
+              serviceFileDAO.inserirArquivo(participante.getImagemCapa());
+            }
           } catch (SQLException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             
