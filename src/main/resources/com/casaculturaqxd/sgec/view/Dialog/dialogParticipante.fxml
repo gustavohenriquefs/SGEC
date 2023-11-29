@@ -7,10 +7,9 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<DialogPane id="dialogParticipantes" prefHeight="499.0" prefWidth="614.0" stylesheets="@../../css/dialog/dialogParticipanteStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<DialogPane id="dialogParticipantes" prefHeight="499.0" prefWidth="614.0" stylesheets="@../../css/dialog/dialogParticipanteStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.DialogParticipanteController">
    <content>
       <AnchorPane prefHeight="200.0" prefWidth="200.0">
          <children>
@@ -22,13 +21,6 @@
                   <TextArea fx:id="minibioArtista" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="300.0" wrapText="true" />
                   <Label text="Área de atuação" />
                   <TextField fx:id="areaAtuacao" maxWidth="-Infinity" prefWidth="300.0" />
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
-                     <children>
-                        <Button id="cancelar" fx:id="cancelar" mnemonicParsing="false" text="Cancelar" />
-                        <Button id="cadastrar" fx:id="cadastrar" mnemonicParsing="false" text="Cadastrar Novo Participante" />
-                        <Button id="vincular" fx:id="vincular" mnemonicParsing="false" text="Vincular Participante" />
-                     </children>
-                  </HBox>
                </children>
             </VBox>
          </children>
