@@ -211,14 +211,14 @@
                               </VBox>
                               <VBox alignment="CENTER_LEFT">
                                  <children>
-                                    <Button fx:id="botaoOrganizadores" disable="true" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#adicionarOrganizador" prefHeight="46.0" prefWidth="154.0" style="-fx-background-color: #352929;" text="Adicionar organizadores" textFill="WHITE" visible="false" VBox.vgrow="ALWAYS" />
+                                    <Button fx:id="botaoOrganizadores" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#adicionarOrganizador" prefHeight="46.0" prefWidth="154.0" style="-fx-background-color: #352929;" text="Adicionar organizadores" textFill="WHITE" VBox.vgrow="ALWAYS" />
                                     <FlowPane fx:id="secaoOrganizadores" hgap="10.0" prefHeight="200.0" vgap="10.0" VBox.vgrow="ALWAYS" />
                                  </children>
                               </VBox>
                               <VBox spacing="15.0">
                                  <children>
-                                    <Button fx:id="botaoColaboradores" disable="true" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#adicionarColaborador" prefHeight="46.0" prefWidth="153.0" style="-fx-background-color: #352929;" text="Adicionar colaboradores" textFill="WHITE" visible="false" VBox.vgrow="ALWAYS" />
-                                    <FlowPane fx:id="Colaboradores" hgap="10.0" prefHeight="200.0" vgap="10.0" VBox.vgrow="ALWAYS" />
+                                    <Button fx:id="botaoColaboradores" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#adicionarColaborador" prefHeight="46.0" prefWidth="153.0" style="-fx-background-color: #352929;" text="Adicionar colaboradores" textFill="WHITE" VBox.vgrow="ALWAYS" />
+                                    <FlowPane fx:id="secaoColaboradores" hgap="10.0" prefHeight="200.0" vgap="10.0" VBox.vgrow="ALWAYS" />
                                  </children>
                               </VBox>
                               <VBox>

@@ -9,6 +9,7 @@ import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.Instituicao;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 
@@ -69,7 +70,6 @@ public class InstituicaoDAO extends DAO {
       statement.setString(1, nome);
 
       ResultSet resultado = statement.executeQuery();
-
       if (resultado.next()) {
         ServiceFile imagemCapa = new ServiceFile(resultado.getInt("id_service_file"));
         if (imagemCapa.getServiceFileId() > 0) {
@@ -92,13 +92,35 @@ public class InstituicaoDAO extends DAO {
     }
   }
 
+  public ArrayList<String> listarInstituicoes() throws SQLException {
+    String sql = "select nome_instituicao from instituicao";
+    ArrayList<String> nomeStrings = new ArrayList<>();
+    PreparedStatement statement = conn.prepareStatement(sql);
+    try {
+      ResultSet resultSet = statement.executeQuery();
+
+      while (resultSet.next()) {
+        nomeStrings.add(resultSet.getString("nome_instituicao"));
+      }
+      
+    } catch (Exception e) {
+      logException(e);
+      throw new SQLException(e);
+      
+    } finally {
+      statement.close();
+    }
+
+    return nomeStrings;
+  }
+
   public boolean inserirInstituicao(Instituicao instituicao) throws SQLException {
     String inserirInstituicaoQuery = "INSERT INTO instituicao (nome_instituicao, id_service_file) VALUES (?, ?)";
     PreparedStatement statement = conn.prepareStatement(inserirInstituicaoQuery, Statement.RETURN_GENERATED_KEYS);
     try {
       Integer idServiceFile = null;
       if (instituicao.getImagemCapa() != null) {
-        instituicao.getImagemCapa().getServiceFileId();
+        idServiceFile = instituicao.getImagemCapa().getServiceFileId();
       }
       statement.setString(1, instituicao.getNome());
       statement.setObject(2, idServiceFile, Types.INTEGER);

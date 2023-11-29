@@ -4,7 +4,6 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DialogPane?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
@@ -13,7 +12,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<DialogPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="630.0" stylesheets="@../../css/dialog/dialogInstituicoesStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<DialogPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="630.0" stylesheets="@../../css/dialog/dialogInstituicoesStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.dialog.DialogInstituicaoController">
    <content>
       <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="630.0">
          <children>
@@ -22,7 +21,7 @@
                   <ImageView fx:id="imagem" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER" />
                </center>
                <bottom>
-                  <Button fx:id="adicionarImagem" mnemonicParsing="false" styleClass="adicionar" text="Adicionar Imagem +" BorderPane.alignment="CENTER" />
+                  <Button fx:id="adicionarImagem" mnemonicParsing="false" onAction="#carregarImagem" styleClass="adicionar" text="Adicionar Imagem +" BorderPane.alignment="CENTER" />
                </bottom>
             </BorderPane>
             <VBox layoutX="20.0" layoutY="248.0" prefHeight="213.0" prefWidth="620.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="0.0">
@@ -32,28 +31,12 @@
                   <Label fx:id="labelContribuicao" text="Contribuições" />
                   <TextArea fx:id="contribuicoes" maxWidth="-Infinity" prefHeight="200.0" prefWidth="400.0" wrapText="true" />
                   <Label fx:id="labelValorContribuicao" text="Valor contribuição" />
-                  <TextField fx:id="valorContribuicao" maxWidth="-Infinity" minHeight="-Infinity" prefWidth="250.0" />
+                  <TextField fx:id="valorContribuicao" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="250.0" />
                </children>
             </VBox>
-            <HBox layoutX="20.0" layoutY="478.0" prefHeight="25.0" prefWidth="590.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="0.0">
+            <HBox alignment="CENTER" layoutX="41.0" layoutY="485.0" prefHeight="80.0" prefWidth="578.0" spacing="30.0" AnchorPane.bottomAnchor="14.200000000000045" AnchorPane.leftAnchor="41.0" AnchorPane.rightAnchor="31.799999999999955">
                <children>
-                  <RadioButton fx:id="colaborador" mnemonicParsing="false" text="Colaborador">
-                     <HBox.margin>
-                        <Insets left="10.0" />
-                     </HBox.margin>
-                  </RadioButton>
-                  <RadioButton fx:id="organizador" mnemonicParsing="false" text="Organizador" />
-               </children>
-            </HBox>
-            <HBox alignment="CENTER" layoutX="35.0" layoutY="537.0" prefHeight="113.0" prefWidth="625.0" spacing="30.0" AnchorPane.bottomAnchor="-0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="0.0">
-               <children>
-                  <Button id="cancelar" fx:id="cancelar" mnemonicParsing="false" text="Cancelar" />
-                  <Button fx:id="cadastrarInstituicao" mnemonicParsing="false" styleClass="adicionar" text="Cadastrar nova instituição" />
-                  <VBox alignment="CENTER" prefHeight="118.0" prefWidth="184.0" spacing="5.0">
-                     <children>
-                        <Button fx:id="vincularColaborador" mnemonicParsing="false" styleClass="vincular" text="Vincular como colaboradora" />
-                        <Button fx:id="vincularOrganizadora" mnemonicParsing="false" styleClass="vincular" text="Vincular como organizadora" />
-                     </children>
+                  <VBox alignment="CENTER" minWidth="-Infinity" prefHeight="83.0" prefWidth="183.0" spacing="5.0">
                      <HBox.margin>
                         <Insets />
                      </HBox.margin>
