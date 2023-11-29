@@ -36,7 +36,9 @@ import com.casaculturaqxd.sgec.models.Participante;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.MapChangeListener;
+import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -73,7 +75,7 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
     ServiceFileDAO serviceFileDAO;
 
     private File lastDirectoryOpen;
-    
+
     ArrayList<FieldLocalizacaoController> controllersLocais = new ArrayList<FieldLocalizacaoController>();
 
     DateFormat formatterHorario;
@@ -104,8 +106,13 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
     @FXML
     RadioButton optionCertificavel, optionAcessivelEmLibras;
     private ObservableMap<ServiceFile, FXMLLoader> mapServiceFiles = FXCollections.observableHashMap();
-    ObservableMap<Instituicao, FXMLLoader> organizadorObservableMap = FXCollections.<Instituicao, FXMLLoader>observableHashMap();
-    ObservableMap<Instituicao, FXMLLoader> colaboradorObservableMap = FXCollections.<Instituicao, FXMLLoader>observableHashMap();
+    ObservableList<PreviewInstituicaoController> listaPreviewOrganizadores = FXCollections.observableArrayList();
+    ObservableList<PreviewInstituicaoController> listaPreviewColaboradores = FXCollections.observableArrayList();
+
+    ObservableMap<Instituicao, FXMLLoader> organizadorObservableMap = FXCollections
+            .<Instituicao, FXMLLoader>observableHashMap();
+    ObservableMap<Instituicao, FXMLLoader> colaboradorObservableMap = FXCollections
+            .<Instituicao, FXMLLoader>observableHashMap();
     @FXML
     Button botaoNovaLocalizacao;
     ObservableMap<Participante, FXMLLoader> participantes = FXCollections.<Participante, FXMLLoader>observableHashMap();
@@ -120,8 +127,8 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
         addListenersServiceFile(mapServiceFiles);
         loadMenu();
         addListenersParticipante(participantes);
-        addListenersColaborador(colaboradorObservableMap);
-        addListenersOrganizador(organizadorObservableMap);
+        addListenersColaborador(listaPreviewColaboradores);
+        addListenersOrganizador(listaPreviewOrganizadores);
 
         // inicia com o local obrigatorio carregado na pagina
         carregarCampoLocalizacao();
@@ -137,7 +144,7 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
     }
 
     public void compararDatas() {
-        
+
         // Impede que data posteriores á dataFinal sejam seleciondas no campo
         // dataInicial
         pickerDataFinal.valueProperty().addListener((observable, oldValue, newValue) -> {
@@ -151,11 +158,11 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
             });
         });
 
-         // Impede que datas anteriores à dataInicial sejam selecionadas em dataFinal
+        // Impede que datas anteriores à dataInicial sejam selecionadas em dataFinal
         pickerDataInicial.valueProperty().addListener((observable, oldValue, newValue) -> {
             pickerDataFinal.setDayCellFactory(picker -> new DateCell() {
                 @Override
-                public void updateItem(LocalDate date, boolean empty) { 
+                public void updateItem(LocalDate date, boolean empty) {
                     super.updateItem(date, empty);
                     LocalDate currentDate = pickerDataInicial.getValue();
                     setDisable(empty || date.compareTo(currentDate) < 0);
@@ -164,11 +171,22 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
         });
     }
 
+    /**
+     * Desabilita o autocommit da conexao com banco e inicia uma transacao para
+     * inserir o evento e todas as entidades vinculadas.Em caso de excecoes durante
+     * a execucao dos metodos ou retorno falso, forca o rollback
+     * 
+     * @param evento
+     * @return true se todas as insercoes forem sucedidas
+     * @throws SQLException
+     */
     private boolean insertEvento(Evento evento) throws SQLException {
         db.getConnection().setAutoCommit(false);
 
         try {
-            eventoDAO.inserirEvento(evento);
+            if (!eventoDAO.inserirEvento(evento)) {
+                throw new SQLException();
+            }
             // procura pelo arquivo no banco, se nao estiver realiza a insercao
             for (ServiceFile arquivo : evento.getListaArquivos()) {
                 Optional<ServiceFile> arquivoExistente = serviceFileDAO.getArquivo(arquivo.getFileKey());
@@ -180,15 +198,27 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
                     evento.getListaArquivos().set(idxArquivo, arquivoExistente.get());
                 }
             }
-            eventoDAO.vincularArquivos(evento);
-            eventoDAO.vincularMetas(evento.getListaMetas(), evento.getIdEvento());
-
-            for(Localizacao localizacao: evento.getLocais()){
+            if (!eventoDAO.vincularMetas(evento.getListaMetas(), evento.getIdEvento())) {
+                throw new SQLException();
+            }
+            if (!eventoDAO.vincularColaboradores(getColaboradores(), evento)) {
+                throw new SQLException();
+            }
+            if (!eventoDAO.vincularOrganizadores(getOrganizadores(), evento)) {
+                throw new SQLException();
+            }
+            for (Localizacao localizacao : evento.getLocais()) {
                 adicionarLocalizacao(localizacao);
             }
 
-            eventoDAO.vincularLocais(evento.getLocais(), evento.getIdEvento());
-            
+            if (!eventoDAO.vincularLocais(evento.getLocais(), evento.getIdEvento())) {
+                throw new SQLException();
+            }
+
+            if (!eventoDAO.vincularArquivos(evento)) {
+                throw new SQLException();
+            }
+
             return true;
         } catch (SQLException e) {
             db.getConnection().rollback();
@@ -250,7 +280,6 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
         builderEvento.setCargaHoraria(novaCargaHoraria);
         builderEvento.setMunicipiosEsperado(numMunicipiosEsperadoValue);
         builderEvento.setNumParticipantesEsperado(numParticipanteEsperado);
-        // TODO: substituir id de locais por models
         ArrayList<Localizacao> locais = new ArrayList<>();
         for (FieldLocalizacaoController controller : controllersLocais) {
             locais.add(controller.getLocalizacao());
@@ -263,7 +292,7 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
         return builderEvento.getEvento();
     }
 
-    /** verifica se as condicoes para cadastrar um evento sao atendidas*/
+    /** verifica se as condicoes para cadastrar um evento sao atendidas */
     private void verificarInput() {
         if (emptyLocalizacoes()) {
             Alert erroLocalizacao = new Alert(AlertType.ERROR,
@@ -280,7 +309,7 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
             throw new RuntimeException("Convocatorias precisam de pelo menos um colaborador");
         }
     }
-    
+
     public void cancelar() throws IOException {
         builderEvento.resetar();
         App.setRoot("view/home");
@@ -297,7 +326,7 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
         paneLocalizacoes.getChildren().add(novoLocal);
 
         FieldLocalizacaoController controller = loaderLocais.getController();
-        
+
         controller.setPaneLocalizacao(novoLocal);
         controller.setParentController(this);
         controllersLocais.add(controller);
@@ -324,6 +353,22 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
         return metasSelecionadas;
     }
 
+    public ArrayList<Instituicao> getOrganizadores() {
+        ArrayList<Instituicao> listaOrganizadores = new ArrayList<>();
+        for (PreviewInstituicaoController controller : listaPreviewOrganizadores) {
+            listaOrganizadores.add(controller.getInstituicao());
+        }
+        return new ArrayList<>(listaOrganizadores);
+    }
+
+    public ArrayList<Instituicao> getColaboradores() {
+        ArrayList<Instituicao> listaColaboradores = new ArrayList<>();
+        for (PreviewInstituicaoController controller : listaPreviewColaboradores) {
+            listaColaboradores.add(controller.getInstituicao());
+        }
+        return new ArrayList<>(listaColaboradores);
+    }
+
     public void adicionarParticipante() throws SQLException {
         // TODO: substituir por abrir o dialog de participante e chamar
         // adicionarParticipante(resultado)
@@ -342,18 +387,29 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
     }
 
     public void adicionarOrganizador() throws IOException {
-        ButtonType buttonTypeVincularOrganizadora = new ButtonType("Vincular como organizadora", ButtonBar.ButtonData.OK_DONE);
+        ButtonType buttonTypeVincularOrganizadora = new ButtonType("Vincular como organizadora",
+                ButtonBar.ButtonData.OK_DONE);
         DialogNovaInstituicao dialogNovaInstituicao = new DialogNovaInstituicao(buttonTypeVincularOrganizadora);
         Optional<Instituicao> novaInstituicao = dialogNovaInstituicao.showAndWait();
-        if(novaInstituicao.isPresent()){
+        if (novaInstituicao.isPresent()) {
             adicionarOrganizador(novaInstituicao.get());
         }
     }
 
     public void adicionarOrganizador(Instituicao instituicao) {
-        if(!contemInstituicao(organizadorObservableMap, instituicao.getNome()) && 
-                !contemInstituicao(colaboradorObservableMap, instituicao.getNome())){
-                    organizadorObservableMap.put(instituicao, new FXMLLoader(App.class.getResource("view/preview/previewInstituicao.fxml")));
+        if (!contemInstituicao(listaPreviewColaboradores, instituicao)
+                && !contemInstituicao(listaPreviewOrganizadores, instituicao)) {
+            FXMLLoader loaderInstituicao = new FXMLLoader(
+                    App.class.getResource("view/preview/previewInstituicao.fxml"));
+            try {
+                loaderInstituicao.load();
+                PreviewInstituicaoController controller = loaderInstituicao.getController();
+                controller.setInstituicao(instituicao);
+                listaPreviewOrganizadores.add(controller);
+            } catch (IOException e) {
+                Alert alert = new Alert(AlertType.WARNING, "falha carregando organizador");
+                alert.show();
+            }
         } else {
             mensagem.setAlertType(AlertType.ERROR);
             mensagem.setContentText("Não foi possivel realizar a vinculação: Instituição já foi vinculada!");
@@ -362,18 +418,29 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
     }
 
     public void adicionarColaborador() throws IOException {
-        ButtonType buttonTypeVincularColaborador = new ButtonType("Vincular como colaborador", ButtonBar.ButtonData.OK_DONE);
+        ButtonType buttonTypeVincularColaborador = new ButtonType("Vincular como colaborador",
+                ButtonBar.ButtonData.OK_DONE);
         DialogNovaInstituicao dialogNovaInstituicao = new DialogNovaInstituicao(buttonTypeVincularColaborador);
         Optional<Instituicao> novaInstituicao = dialogNovaInstituicao.showAndWait();
-        if(novaInstituicao.isPresent()){
-            adicionarColaborador(novaInstituicao.get());   
+        if (novaInstituicao.isPresent()) {
+            adicionarColaborador(novaInstituicao.get());
         }
     }
 
     public void adicionarColaborador(Instituicao instituicao) {
-        if(!contemInstituicao(organizadorObservableMap, instituicao.getNome()) && 
-                !contemInstituicao(colaboradorObservableMap, instituicao.getNome())){
-                    colaboradorObservableMap.put(instituicao, new FXMLLoader(App.class.getResource("view/preview/previewInstituicao.fxml")));
+        if (!contemInstituicao(listaPreviewOrganizadores, instituicao)
+                && !contemInstituicao(listaPreviewColaboradores, instituicao)) {
+            FXMLLoader loaderInstituicao = new FXMLLoader(
+                    App.class.getResource("view/preview/previewInstituicao.fxml"));
+            try {
+                loaderInstituicao.load();
+                PreviewInstituicaoController controller = loaderInstituicao.getController();
+                controller.setInstituicao(instituicao);
+                listaPreviewColaboradores.add(controller);
+            } catch (IOException e) {
+                Alert alert = new Alert(AlertType.WARNING, "falha carregando organizador");
+                alert.show();
+            }
         } else {
             mensagem.setAlertType(AlertType.ERROR);
             mensagem.setContentText("Não foi possivel realizar a vinculação: Instituição já foi vinculada!");
@@ -381,31 +448,30 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
         }
     }
 
-    public static boolean contemInstituicao(ObservableMap<Instituicao, FXMLLoader> organizadorObservableMap, String nome) {
-        for (Instituicao instituicao : organizadorObservableMap.keySet()) {
-            if (instituicao.getNome().equals(nome)) {
-                return true; 
+    public static boolean contemInstituicao(ObservableList<PreviewInstituicaoController> listaPreview,
+            Instituicao instituicao) {
+        for (PreviewInstituicaoController preview : listaPreview) {
+            if (preview.getInstituicao().equals(instituicao)) {
+                return true;
             }
         }
-        return false; 
+        return false;
     }
 
-    public void removerInstituicao(Instituicao instituicao){
-        if(contemInstituicao(organizadorObservableMap, instituicao.getNome())){
-            Iterator<Instituicao> iterator = organizadorObservableMap.keySet().iterator();
-        
+    public void removerInstituicao(Instituicao instituicao) {
+        if (contemInstituicao(listaPreviewOrganizadores, instituicao)) {
+            Iterator<PreviewInstituicaoController> iterator = listaPreviewOrganizadores.iterator();
+
             while (iterator.hasNext()) {
-                Instituicao instituicaoTemp = iterator.next();
-                if (instituicaoTemp.getNome().equals(instituicao.getNome())) {
+                if (iterator.next().getInstituicao().equals(instituicao)) {
                     iterator.remove();
                 }
             }
         } else {
-            Iterator<Instituicao> iterator = colaboradorObservableMap.keySet().iterator();
-        
+            Iterator<PreviewInstituicaoController> iterator = listaPreviewColaboradores.iterator();
+
             while (iterator.hasNext()) {
-                Instituicao instituicaoTemp = iterator.next();
-                if (instituicaoTemp.getNome().equals(instituicao.getNome())) {
+                if (iterator.next().getInstituicao().equals(instituicao)) {
                     iterator.remove();
                 }
             }
@@ -499,7 +565,6 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (SQLException e) {
-                        // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
                 }
@@ -513,63 +578,51 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
         });
     }
 
-    public void addListenersOrganizador(ObservableMap<Instituicao, FXMLLoader> observablemap) {
+    public void addListenersOrganizador(ObservableList<PreviewInstituicaoController> observableList) {
         CadastrarEventoController superController = this;
-        observablemap.addListener(new MapChangeListener<Instituicao, FXMLLoader>() {
+        observableList.addListener(new ListChangeListener<PreviewInstituicaoController>() {
             @Override
-            public void onChanged(MapChangeListener.Change<? extends Instituicao, ? extends FXMLLoader> change) {
+            public void onChanged(ListChangeListener.Change<? extends PreviewInstituicaoController> change) {
+                while (change.next()) {
+                    if (change.wasAdded()) {
+                        for (PreviewInstituicaoController addedController : change.getAddedSubList()) {
+                            addedController.setParentController(superController);
 
-                if (change.wasAdded()) {
-                    Instituicao addedKey = change.getKey();
-                    // carregar o fxml de preview e setar o participante deste para o
-                    // participante adicionado
-                    try {
-                        Parent previewInstituicao = change.getValueAdded().load();
-                        PreviewInstituicaoController controller = change.getValueAdded().getController();
-                        controller.setInstituicao(addedKey);
-                        controller.setParentController(superController);
-
-                        secaoOrganizadores.getChildren().add(previewInstituicao);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                            secaoOrganizadores.getChildren().add(addedController.getContainer());
+                        }
                     }
-                }
-                if (change.wasRemoved()) {
-                    PreviewInstituicaoController removedController = change.getValueRemoved().getController();
-                    // Remover o Pane de preview ao deletar um Participante da lista
-                    secaoOrganizadores.getChildren().remove(removedController.getContainer());
-
+                    if (change.wasRemoved()) {
+                        for (PreviewInstituicaoController removedController : change.getRemoved()) {
+                            // Remover o Pane de preview ao deletar um Participante da lista
+                            secaoOrganizadores.getChildren().remove(removedController.getContainer());
+                        }
+                    }
                 }
             }
         });
+
     }
 
-    public void addListenersColaborador(ObservableMap<Instituicao, FXMLLoader> observablemap) {
+    public void addListenersColaborador(ObservableList<PreviewInstituicaoController> observableList) {
         CadastrarEventoController superController = this;
-        observablemap.addListener(new MapChangeListener<Instituicao, FXMLLoader>() {
+        observableList.addListener(new ListChangeListener<PreviewInstituicaoController>() {
             @Override
-            public void onChanged(MapChangeListener.Change<? extends Instituicao, ? extends FXMLLoader> change) {
+            public void onChanged(ListChangeListener.Change<? extends PreviewInstituicaoController> change) {
+                while (change.next()) {
 
-                if (change.wasAdded()) {
-                    Instituicao addedKey = change.getKey();
-                    // carregar o fxml de preview e setar o participante deste para o
-                    // participante adicionado
-                    try {
-                        Parent previewInstituicao = change.getValueAdded().load();
-                        PreviewInstituicaoController controller = change.getValueAdded().getController();
-                        controller.setInstituicao(addedKey);
-                        controller.setParentController(superController);
+                    if (change.wasAdded()) {
+                        for (PreviewInstituicaoController addedController : change.getAddedSubList()) {
+                            addedController.setParentController(superController);
 
-                        secaoColaboradores.getChildren().add(previewInstituicao);
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                            secaoColaboradores.getChildren().add(addedController.getContainer());
+                        }
                     }
-                }
-                if (change.wasRemoved()) {
-                    PreviewInstituicaoController removedController = change.getValueRemoved().getController();
-                    // Remover o Pane de preview ao deletar um Participante da lista
-                    secaoColaboradores.getChildren().remove(removedController.getContainer());
-
+                    if (change.wasRemoved()) {
+                        for (PreviewInstituicaoController removedController : change.getRemoved()) {
+                            // Remover o Pane de preview ao deletar um Participante da lista
+                            secaoColaboradores.getChildren().remove(removedController.getContainer());
+                        }
+                    }
                 }
             }
         });
@@ -625,7 +678,6 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (SQLException e) {
-                        // TODO Auto-generated catch block
                         e.printStackTrace();
                     }
                 }
@@ -721,29 +773,29 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
         LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO();
         localizacaoDAO.setConnection(db.getConnection());
 
-        int id = localizacao.getIdLocalizacao(); 
-        
-        if(id == 0){
+        int id = localizacao.getIdLocalizacao();
+
+        if (id == 0) {
             try {
                 localizacaoDAO.inserirLocalizacao(localizacao);
             } catch (SQLException e) {
                 Alert erroInsercao = new Alert(AlertType.ERROR, "falha cadastrando nova localizacao");
                 erroInsercao.show();
-            }  
+            }
         }
     }
 
     @Override
     public void removerLocalizacao(Localizacao localizacao) {
-        if(controllersLocais.size() == 1){
+        if (controllersLocais.size() == 1) {
             Alert erroLocalizacao = new Alert(AlertType.ERROR,
                     "Um evento deve possuir pelo menos uma localização associada");
             erroLocalizacao.show();
             return;
         }
 
-        for(FieldLocalizacaoController controller: controllersLocais){
-            if(controller.getLocalizacao().equals(localizacao)){
+        for (FieldLocalizacaoController controller : controllersLocais) {
+            if (controller.getLocalizacao().equals(localizacao)) {
                 controllersLocais.remove(controller);
                 paneLocalizacoes.getChildren().remove(controller.getPaneLocalizacao());
                 break;
