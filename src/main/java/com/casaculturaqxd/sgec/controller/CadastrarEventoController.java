@@ -102,6 +102,7 @@ public class CadastrarEventoController implements ControllerEvento, ControllerSe
     CheckBox checkMeta1, checkMeta2, checkMeta3, checkMeta4;
     @FXML
     RadioButton optionCertificavel, optionAcessivelEmLibras;
+    
     private ObservableMap<ServiceFile, FXMLLoader> mapServiceFiles = FXCollections.observableHashMap();
 
     // Botoes
@@ -323,28 +324,17 @@ public class CadastrarEventoController implements ControllerEvento, ControllerSe
     }
 
     public void adicionarParticipante() throws SQLException {
-        // TODO: substituir por abrir o dialog de participante e chamar
-        // adicionarParticipante(resultado)
         Dialog<Participante> participanteDialog = new ParticipanteDialog(new Participante(0));
 
         Optional<Participante> novoParticipanteOp = participanteDialog.showAndWait();
 
         if(novoParticipanteOp.isPresent()) {
-            if(participantes.containsKey(novoParticipanteOp.get())) {
-                Alert alert = new Alert(AlertType.ERROR, "Participante já foi adicionado");
-                alert.showAndWait();
-                return;
-            }
-
-            participantes.put(novoParticipanteOp.get(),
-                    new FXMLLoader(App.class.getResource("view/preview/previewParticipante.fxml")));
+            adicionarParticipante(novoParticipanteOp.get());
         }
-
     }
 
     public void adicionarParticipante(Participante participante) {
-        // TODO remover implementacao de teste
-        participantes.put(new Participante(1, "new_participante", "new_area atuacao", "new link", null),
+        participantes.put(participante,
                 new FXMLLoader(App.class.getResource("view/preview/previewParticipante.fxml")));
     }
 
