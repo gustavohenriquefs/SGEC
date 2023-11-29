@@ -56,10 +56,22 @@ public class DialogInstituicaoController {
     binding = TextFields.bindAutoCompletion(nomeInstituicao, listaNomes);
     bindingSetOnAutoCompleted();
     nomeInstituicaoSetOnMouseClicked();
+    instituicao = new Instituicao();
+  }
 
+  private void updateInstituicao() {
+    instituicao.setNome(nomeInstituicao.getText());
+    instituicao.setDescricaoContribuicao(contribuicoes.getText());
+    instituicao.setValorContribuicao(valorContribuicao.getText());
+
+    if (file != null) {
+      instituicao.setImagemCapa(new ServiceFile(file));
+    }
   }
 
   public Instituicao obterInstituicao() {
+    this.updateInstituicao();
+    
     return instituicao;
   }
 

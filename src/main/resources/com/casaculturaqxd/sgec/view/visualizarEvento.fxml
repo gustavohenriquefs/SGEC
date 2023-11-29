@@ -150,11 +150,20 @@
                                  <children>
                                     <VBox alignment="CENTER">
                                        <children>
-                                          <FlowPane fx:id="secaoParticipantes" prefHeight="150.0">
+                                          <HBox>
+                                             <children>
+                                                <Label text="Participantes">
+                                                   <font>
+                                                      <Font name="System Bold" size="20.0" />
+                                                   </font>
+                                                </Label>
+                                             </children>
+                                          </HBox>
+                                          <FlowPane fx:id="secaoParticipantes" hgap="10.0" prefHeight="150.0" vgap="10.0">
                                              <VBox.margin>
                                                 <Insets bottom="10.0" top="10.0" />
                                              </VBox.margin></FlowPane>
-                                          <Button id="botaoNovoParticipante" fx:id="novoParticipante" mnemonicParsing="false" style="-fx-background-color: #2A3F25;" text="Adicionar novo participante +" textFill="WHITE" />
+                                          <Button id="botaoNovoParticipante" fx:id="novoParticipante" mnemonicParsing="false" onAction="#adicionarParticipante" style="-fx-background-color: #2A3F25;" text="Adicionar novo participante +" textFill="WHITE" />
                                        </children>
                                     </VBox>
                                  </children>
