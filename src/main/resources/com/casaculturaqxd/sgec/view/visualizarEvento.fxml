@@ -163,7 +163,7 @@
                                              <VBox.margin>
                                                 <Insets bottom="10.0" top="10.0" />
                                              </VBox.margin></FlowPane>
-                                          <Button id="botaoNovoParticipante" fx:id="novoParticipante" mnemonicParsing="false" style="-fx-background-color: #2A3F25;" text="Adicionar novo participante +" textFill="WHITE" />
+                                          <Button id="botaoNovoParticipante" fx:id="novoParticipante" mnemonicParsing="false" onAction="#adicionarParticipante" style="-fx-background-color: #2A3F25;" text="Adicionar novo participante +" textFill="WHITE" />
                                        </children>
                                     </VBox>
                                  </children>
