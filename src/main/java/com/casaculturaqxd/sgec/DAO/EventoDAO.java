@@ -119,16 +119,16 @@ public class EventoDAO extends DAO {
 
   private boolean vincularLocal(Integer idLocal, Integer idEvento) throws SQLException {
     LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO(connection);
-    
+
     if (!localizacaoDAO.vincularEvento(idLocal, idEvento)) {
       return false;
     }
     return true;
   }
 
-  private boolean vincularOrganizadores(SortedSet<Integer> organizadores, Integer idEvento) {
-    for (Integer organizador : organizadores) {
-      if (!this.vincularOrganizador(organizador, idEvento)) {
+  public boolean vincularOrganizadores(ArrayList<Instituicao> organizadores, Evento evento) throws SQLException {
+    for (Instituicao organizador : organizadores) {
+      if (!this.vincularOrganizador(organizador, evento)) {
         return false;
       }
     }
@@ -136,25 +136,14 @@ public class EventoDAO extends DAO {
     return true;
   }
 
-  private boolean vincularOrganizador(Integer organizador, Integer idEvento) {
-    String vincOrganizadoresSql = "INSERT INTO organizador_evento(id_evento, id_instituicao) VALUES (?, ?);";
-
-    try {
-      PreparedStatement stmt = connection.prepareStatement(vincOrganizadoresSql);
-      stmt.setInt(1, idEvento);
-      stmt.setInt(2, organizador);
-      stmt.execute();
-      stmt.close();
-    } catch (SQLException e) {
-      return false;
-    }
-
-    return true;
+  private boolean vincularOrganizador(Instituicao organizador, Evento evento) throws SQLException {
+    InstituicaoDAO instituicaoDAO = new InstituicaoDAO(connection);
+    return instituicaoDAO.vincularOrganizadorEvento(organizador, evento.getIdEvento());
   }
 
-  private boolean vincularColaboradores(SortedSet<Integer> colaboradores, Integer idEvento) {
-    for (Integer colaborador : colaboradores) {
-      if (!this.vincularColaborador(colaborador, idEvento)) {
+  public boolean vincularColaboradores(ArrayList<Instituicao> colaboradores, Evento evento) throws SQLException {
+    for (Instituicao colaborador : colaboradores) {
+      if (!this.vincularColaborador(colaborador, evento)) {
         return false;
       }
     }
@@ -162,20 +151,9 @@ public class EventoDAO extends DAO {
     return true;
   }
 
-  private boolean vincularColaborador(Integer colaborador, Integer idEvento) {
-    String vincColaboradoresSql = "INSERT INTO colaborador_evento(id_evento, id_instituicao) VALUES (?, ?);";
-
-    try {
-      PreparedStatement stmt = connection.prepareStatement(vincColaboradoresSql);
-      stmt.setInt(1, idEvento);
-      stmt.setInt(2, colaborador);
-      stmt.execute();
-      stmt.close();
-    } catch (SQLException e) {
-      return false;
-    }
-
-    return true;
+  private boolean vincularColaborador(Instituicao colaborador, Evento evento) throws SQLException {
+    InstituicaoDAO instituicaoDAO = new InstituicaoDAO(connection);
+    return instituicaoDAO.vincularColaboradorEvento(colaborador, evento.getIdEvento());
   }
 
   private boolean vincularParticipantes(SortedSet<Integer> participantes, Integer idEvento) {
@@ -442,7 +420,7 @@ public class EventoDAO extends DAO {
 
   public ArrayList<Localizacao> buscarLocaisPorEvento(Integer idEvento) throws SQLException {
     LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO(connection);
-    
+
     ArrayList<Localizacao> locais = localizacaoDAO.listarLocaisPorEvento(idEvento);
 
     return locais;
@@ -547,56 +525,6 @@ public class EventoDAO extends DAO {
     return true;
   }
 
-  private boolean sincronizarColaboradores(Evento evento) throws SQLException {
-    ArrayList<Instituicao> colaboradoresEvento = this.buscarColaboradoresPorEvento(evento.getIdEvento());
-
-    for (Instituicao colaborador : colaboradoresEvento) {
-      if (!evento.getListaColaboradores().contains(colaborador)) {
-        boolean colaboradorFoiDesvinculado = this.desvincularColaborador(colaborador.getIdInstituicao(),
-            evento.getIdEvento());
-
-        if (!colaboradorFoiDesvinculado) {
-          return false;
-        }
-      }
-    }
-
-    for (Instituicao colaborador : evento.getListaColaboradores()) {
-      boolean colaboradorFoiVinculado = this.vincularColaborador(colaborador.getIdInstituicao(), evento.getIdEvento());
-
-      if (!colaboradorFoiVinculado) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  private boolean sincronizarOrganizadores(Evento evento) throws SQLException {
-    ArrayList<Instituicao> organizadoresEvento = this.buscarOrganizadoresPorEvento(evento.getIdEvento());
-
-    for (Instituicao organizador : organizadoresEvento) {
-      if (!evento.getListaOrganizadores().contains(organizador)) {
-        boolean organizadorFoiDesvinculado = this.desvincularOrganizador(organizador.getIdInstituicao(),
-            evento.getIdEvento());
-
-        if (!organizadorFoiDesvinculado) {
-          return false;
-        }
-      }
-    }
-
-    for (Instituicao organizador : evento.getListaOrganizadores()) {
-      boolean organizadorFoiVinculado = this.vincularOrganizador(organizador.getIdInstituicao(), evento.getIdEvento());
-
-      if (!organizadorFoiVinculado) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
   private boolean sincronizarLocais(Evento evento) throws SQLException {
     ArrayList<Localizacao> locaisEventoIds = this.buscarLocaisPorEvento(evento.getIdEvento());
 
@@ -661,6 +589,82 @@ public class EventoDAO extends DAO {
   }
 
   /**
+   * adiciona os organizadores que estao na lista passada, mas nao na lista atual.
+   * Remove os organizadores que estao na lista atual, mas nao na lista passada
+   * 
+   * @param organizadores
+   * @param evento
+   * @return true se todas as alteracoes forem sucedidas
+   * @throws SQLException
+   */
+  public boolean atualizarOrganizadoresEvento(ArrayList<Instituicao> organizadores, Evento evento) throws SQLException {
+    ArrayList<Instituicao> organizadoresAtuais = buscarOrganizadoresPorEvento(evento.getIdEvento());
+    try {
+      for (Instituicao organizador : organizadores) {
+        if (!organizadoresAtuais.contains(organizador)) {
+          boolean check = vincularOrganizador(organizador, evento);
+          if (!check) {
+            return false;
+          }
+        }
+      }
+
+      for (Instituicao organizador : organizadoresAtuais) {
+        if (!organizadores.contains(organizador)) {
+          boolean check = desvincularOrganizador(organizador, evento);
+          if (!check) {
+            return false;
+          }
+        }
+      }
+      return true;
+    } catch (Exception e) {
+      String nomeEventoCausa = evento != null && evento.getNome() != null ? evento.getNome() : " ";
+      logException(e);
+      throw new SQLException("falha atualizando metas do evento " + nomeEventoCausa, e);
+    }
+  }
+
+  /**
+   * Adiciona colaboradores que estao na lista passada, mas nao na lista atual.
+   * Remove os colaboradores que estao na lista de colaboradores atual mas nao na
+   * lista passada
+   * 
+   * @param colaboradores
+   * @param evento
+   * @return true se todas as alteracoes forem sucedidas
+   * @throws SQLException
+   */
+  public boolean atualizarColaboradoresEvento(ArrayList<Instituicao> colaboradores, Evento evento) throws SQLException {
+    ArrayList<Instituicao> colaboradoresAtuais = buscarColaboradoresPorEvento(evento.getIdEvento());
+    try {
+      for (Instituicao colaborador : colaboradores) {
+        // se o colaborador nao estiver na lista atual
+        if (!colaboradoresAtuais.contains(colaborador)) {
+          boolean check = vincularColaborador(colaborador, evento);
+          if (!check) {
+            return false;
+          }
+        }
+      }
+      for (Instituicao colaborador : colaboradoresAtuais) {
+        if (!colaboradores.contains(colaborador)) {
+          boolean check = desvincularColaborador(colaborador.getIdInstituicao(), evento.getIdEvento());
+          if (!check) {
+            return false;
+          }
+        }
+      }
+
+      return true;
+    } catch (Exception e) {
+      String nomeEventoCausa = evento != null && evento.getNome() != null ? evento.getNome() : " ";
+      logException(e);
+      throw new SQLException("falha atualizando metas do evento " + nomeEventoCausa, e);
+    }
+  }
+
+  /**
    * adiciona ao evento as metas que estao na lista passada, mas nao estam
    * vinculadas atualmente. Remove metas que estao na lista de metas atual, mas
    * nao estao na lista passada
@@ -720,20 +724,9 @@ public class EventoDAO extends DAO {
     return true;
   }
 
-  private boolean desvincularOrganizador(Integer organizadorId, Integer idEvento) {
-    String vincOrganizadoresSql = "DELETE FROM organizador_evento WHERE id_instituicao=? AND id_evento=?";
-
-    try {
-      PreparedStatement stmt = connection.prepareStatement(vincOrganizadoresSql);
-      stmt.setInt(1, organizadorId);
-      stmt.setInt(2, idEvento);
-      stmt.execute();
-      stmt.close();
-    } catch (SQLException e) {
-      return false;
-    }
-
-    return true;
+  private boolean desvincularOrganizador(Instituicao organizador, Evento evento) throws SQLException {
+    InstituicaoDAO instituicaoDAO = new InstituicaoDAO(connection);
+    return instituicaoDAO.desvincularOrganizadorEvento(organizador.getIdInstituicao(), evento.getIdEvento());
   }
 
   private boolean desvincularLocal(Integer localId, Integer idEvento) {
