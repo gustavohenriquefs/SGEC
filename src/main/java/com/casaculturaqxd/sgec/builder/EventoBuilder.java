@@ -11,6 +11,7 @@ import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 import com.casaculturaqxd.sgec.models.Instituicao;
 import com.casaculturaqxd.sgec.models.Localizacao;
 import com.casaculturaqxd.sgec.models.Meta;
+import com.casaculturaqxd.sgec.models.Participante;
 
 public class EventoBuilder implements Builder {
   Evento evento;
@@ -38,7 +39,7 @@ public class EventoBuilder implements Builder {
     return this;
   }
 
-  public EventoBuilder setParticipantes(SortedSet<Integer> participantes) {
+  public EventoBuilder setParticipantes(ArrayList<Participante> participantes) {
     evento.setListaParticipantes(participantes);
     return this;
   }
