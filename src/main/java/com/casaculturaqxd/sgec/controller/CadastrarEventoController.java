@@ -23,6 +23,7 @@ import com.casaculturaqxd.sgec.DAO.LocalizacaoDAO;
 import com.casaculturaqxd.sgec.DAO.ParticipanteDAO;
 import com.casaculturaqxd.sgec.DAO.ServiceFileDAO;
 import com.casaculturaqxd.sgec.builder.EventoBuilder;
+import com.casaculturaqxd.sgec.controller.dialog.ParticipanteDialog;
 import com.casaculturaqxd.sgec.controller.dialog.DialogNovaInstituicao;
 import com.casaculturaqxd.sgec.controller.preview.PreviewArquivoController;
 import com.casaculturaqxd.sgec.controller.preview.PreviewInstituicaoController;
@@ -52,6 +53,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -103,6 +105,7 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
     CheckBox checkMeta1, checkMeta2, checkMeta3, checkMeta4;
     @FXML
     RadioButton optionCertificavel, optionAcessivelEmLibras;
+    
     private ObservableMap<ServiceFile, FXMLLoader> mapServiceFiles = FXCollections.observableHashMap();
     ObservableMap<Instituicao, FXMLLoader> organizadorObservableMap = FXCollections.<Instituicao, FXMLLoader>observableHashMap();
     ObservableMap<Instituicao, FXMLLoader> colaboradorObservableMap = FXCollections.<Instituicao, FXMLLoader>observableHashMap();
@@ -325,15 +328,35 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
     }
 
     public void adicionarParticipante() throws SQLException {
-        // TODO: substituir por abrir o dialog de participante e chamar
-        // adicionarParticipante(resultado)
-        participantes.put(participanteDAO.getParticipante(new Participante(1)).get(),
-                new FXMLLoader(App.class.getResource("view/preview/previewParticipante.fxml")));
+        Dialog<Participante> participanteDialog = new ParticipanteDialog(new Participante(0));
+
+        Optional<Participante> novoParticipanteOp = participanteDialog.showAndWait();
+
+        if(novoParticipanteOp.isPresent()) {
+            Participante novoParticipante = novoParticipanteOp.get();
+
+            if(!participanteJaEstaNaLista(novoParticipante)) {
+                adicionarParticipante(novoParticipanteOp.get());
+            } else {
+                mensagem.setAlertType(AlertType.ERROR);
+                mensagem.setContentText("Não foi possivel realizar a vinculação: Participante já foi vinculado!");
+                mensagem.show();
+            } 
+        }
+    }
+
+    private boolean participanteJaEstaNaLista(Participante participanteTarget) {
+        for(Participante participante: participantes.keySet()) {
+            if(participante.getIdParticipante() == participanteTarget.getIdParticipante()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public void adicionarParticipante(Participante participante) {
-        // TODO remover implementacao de teste
-        participantes.put(new Participante(1, "new_participante", "new_area atuacao", "new link", null),
+        participantes.put(participante,
                 new FXMLLoader(App.class.getResource("view/preview/previewParticipante.fxml")));
     }
 

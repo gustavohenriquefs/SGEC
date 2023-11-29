@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.Optional;
 
 import com.casaculturaqxd.sgec.models.Participante;
@@ -68,6 +69,43 @@ public class ParticipanteDAO extends DAO {
 
   }
 
+  public Optional<Participante> getParticipantePorNome(String nome) throws SQLException {
+    String getParticipanteQuery = "SELECT id_participante,nome_participante,area_atuacao,bio,link_perfil,id_service_file FROM participante WHERE nome_participante=?";
+    
+    PreparedStatement statement = conn.prepareStatement(getParticipanteQuery);
+    
+    try {
+
+      statement.setString(1, nome);
+
+      ResultSet resultado = statement.executeQuery();
+
+      if (resultado.next()) {
+        ServiceFile resultFile = new ServiceFile(resultado.getInt("id_service_file"));
+
+        Participante participante = new Participante(0);
+
+        participante.setIdParticipante(resultado.getInt("id_participante"));
+        participante.setAreaDeAtuacao(resultado.getString("area_atuacao"));
+        participante.setNome(resultado.getString("nome_participante"));
+        participante.setBio(resultado.getString("bio"));
+        participante.setLinkMapaDaCultura(resultado.getString("link_perfil"));
+
+        if (serviceFileDAO.getArquivo(resultFile).isPresent()) {
+          participante.setImagemCapa(serviceFileDAO.getArquivo(resultFile).get());
+        }
+        return Optional.of(participante);
+      } else {
+        return Optional.empty();
+      }
+    } catch (Exception e) {
+      logException(e);
+      throw new SQLException("erro buscando participante " + nome, e);
+    } finally {
+      statement.close();
+    }
+  }
+
   public boolean inserirParticipante(Participante participante) throws SQLException {
     String inserirParticipanteQuery = "INSERT INTO participante (nome_participante, area_atuacao, bio, link_perfil, id_service_file) VALUES (?, ?, ?, ?, ?)";
     PreparedStatement statement = conn.prepareStatement(inserirParticipanteQuery, Statement.RETURN_GENERATED_KEYS);
@@ -84,6 +122,7 @@ public class ParticipanteDAO extends DAO {
       statement.executeUpdate();
 
       ResultSet rs = statement.getGeneratedKeys();
+      
       if (rs.next()) {
         participante.setIdParticipante(rs.getInt("id_participante"));
         return true;
@@ -158,6 +197,30 @@ public class ParticipanteDAO extends DAO {
     } catch (SQLException e) {
       logException(e);
       throw new SQLException("falha vinculando participante a evento", e);
+    } finally {
+      statement.close();
+    }
+  }
+
+  public ArrayList<String> obterListaNomesParticipantes() throws SQLException {
+    String sql = "SELECT nome_participante FROM participante";
+
+    PreparedStatement statement = conn.prepareStatement(sql);
+    
+    ArrayList<String> nomesParticipantes = new ArrayList<String>();
+    
+    try {
+      ResultSet resultado = statement.executeQuery();
+
+      while (resultado.next()) {
+        nomesParticipantes.add(resultado.getString("nome_participante"));
+      }
+
+      return nomesParticipantes;
+    } catch (Exception e) {
+      logException(e);
+
+      throw new SQLException("falha obtendo lista de nomes de participantes", e);
     } finally {
       statement.close();
     }
