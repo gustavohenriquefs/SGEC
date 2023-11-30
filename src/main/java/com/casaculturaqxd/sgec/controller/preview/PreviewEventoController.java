@@ -79,7 +79,6 @@ public class PreviewEventoController {
     @FXML
     public void verDetalhes(ActionEvent event) throws IOException, SQLException {
         try {
-            System.out.println("Entre!!!!");
             URL url = App.class.getResource("view/visualizarEvento.fxml");
             FXMLLoader loaderVisualizacao = new FXMLLoader(url);
             Parent objVisualizacao = loaderVisualizacao.load();

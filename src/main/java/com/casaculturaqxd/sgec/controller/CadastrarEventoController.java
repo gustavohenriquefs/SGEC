@@ -779,7 +779,7 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
     public void loadImagem(){
         InputStream fileAsStream;
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Alterar foto da instituição");
+        fileChooser.setTitle("Alterar foto do evento");
         ExtensionFilter filterImagens = new ExtensionFilter("imagem", "*.jpeg", "*.jpg", "*.png", "*.bmp");
         fileChooser.getExtensionFilters().add(filterImagens);
         try {
