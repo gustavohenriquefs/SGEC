@@ -1,10 +1,12 @@
 package com.casaculturaqxd.sgec.controller;
 
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.UserDAO;
+import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.User;
 
 import javafx.fxml.FXML;
@@ -38,15 +40,16 @@ public class ConfiguracoesController {
     private TextField email;
 
     private User usuario;
-
-    private UserDAO userDAO;
+    private final DatabasePostgres userConnection = DatabasePostgres.getInstance("URL_TEST", "USER_NAME_TEST",
+            "PASSWORD_TEST");
+    private UserDAO userDAO = new UserDAO(userConnection.getConnection());
 
     private Alert alert;
 
     public void initialize() {
         try {
             loadMenu();
-            App.setUsuario(usuario);
+            usuario = App.getUsuario();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -58,47 +61,69 @@ public class ConfiguracoesController {
         root.getChildren().add(0, carregarMenu.load());
     }
 
+    //Permite alterar email e senha do usuário logado
     public void alterarEmailESenha() throws SQLException{
-        /*
-         * que seta o autocommit para false, chama a operação de atualizar de UserDAO e realiza rollback em caso de SQLException. 
-         * Setar autocommit para true.  Verificar se o nome e o email nos textfields não é vazio
-         */
+        userConnection.getConnection().setAutoCommit(false);
         try {
-            if(!(nome.getText().isEmpty()) && !(email.getText().isEmpty())){
-                usuario.setEmail(email.getText());
-                usuario.setSenha(novaSenha.getText());
-                userDAO.update(usuario);
+            if (!(nome.getText().isEmpty()) || !(email.getText().isEmpty())) {
+                // Atualizar apenas os campos fornecidos, mantendo a senha original
+                if (!nome.getText().isEmpty()) {
+                    usuario.setNomeUsuario(nome.getText());
+                }
+                if (!email.getText().isEmpty()) {
+                    usuario.setEmail(email.getText());
+                }
+
+                // Realizar a atualização no banco de dados
+                User novoUsuario = new User(usuario.getIdUsuario(),usuario.getNomeUsuario(), usuario.getEmail(), usuario.getSenha(), usuario.isEditor());
+                userDAO.update(novoUsuario);
+        
+                // Exibir a mensagem de confirmação
                 alert = new Alert(AlertType.CONFIRMATION, "Alterações salvas com sucesso");
                 alert.showAndWait();
-            }else{
-                alert = new Alert(AlertType.CONFIRMATION, "Nem todos os campos foram preenchidos");
+            } else {
+                // Caso nenhum campo seja fornecido, exibir uma mensagem adequada
+                alert = new Alert(AlertType.WARNING, "Nenhum dado fornecido para atualização");
                 alert.showAndWait();
             }
-        } catch (Exception e) {
-            throw new SQLException();
-        }
+        } catch (SQLException e) {
+            // Em caso de exceção, realizar rollback
+            userConnection.getConnection().rollback();
+            e.printStackTrace();  // Você pode querer tratar essa exceção de uma maneira mais apropriada
+        } finally {
+            // Certificar-se de redefinir o autocommit
+            userConnection.getConnection().setAutoCommit(true);
+        }        
     }
 
-    public void alterarSenha(){
-        /*
-         * que seta o autocommit para false, chama a operação de atualizar de UserDAO e realiza rollback em caso de SQLException. 
-         * Setar autocommit para true. Verificar se a senha antiga é válida para o usuário, 
-         * e separadamente, se a senha nova foi inserida corretamente nos campos de 'nova senha' e 'confirmar senha'
-         */
+
+    //Altera a senha checando se a nova senha é válida e a antiga é igual a senha do usuário
+    public void alterarSenha() throws SQLException, NoSuchAlgorithmException{
+        userConnection.getConnection().setAutoCommit(false);
         try {
-            if(!usuario.getSenha().isEmpty()){
+            if (senhaAntiga.getText().equals(usuario.getSenha())) {
                 if(novaSenha.getText().equals(confirmarSenha.getText())){
                     usuario.setSenha(novaSenha.getText());
-                    userDAO.update(usuario);
+                    // Realizar a atualização no banco de dados
+                    User novoUsuario = new User(usuario.getIdUsuario(),usuario.getNomeUsuario(), usuario.getEmail(), novaSenha.getText(), usuario.isEditor());
+                    userDAO.update(novoUsuario);
                     alert = new Alert(AlertType.CONFIRMATION, "Alterações salvas com sucesso");
                     alert.showAndWait();
                 }else{
-                    alert = new Alert(AlertType.CONFIRMATION, "Senha de confirmação deve ser igual ao campo de nova senha");
+                    alert = new Alert(AlertType.ERROR, "Senhas do campo de nova senha e de confirmação diferentes");
                     alert.showAndWait();
                 }
+            } else {
+                alert = new Alert(AlertType.WARNING, "Senha antiga incorreta");
+                alert.showAndWait();
             }
-        } catch (Exception e) {
-            new SQLException();
-        }
+        } catch (SQLException e) {
+            // Em caso de exceção, realizar rollback
+            userConnection.getConnection().rollback();
+            e.printStackTrace();
+        } finally {
+            // Certificar-se de redefinir o autocommit
+            userConnection.getConnection().setAutoCommit(true);
+        }        
     }
 }

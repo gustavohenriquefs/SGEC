@@ -124,7 +124,6 @@ public class UserDAO extends DAO {
         user.setIdUsuario(resultado.getInt("id_usuario"));
         user.setNomeUsuario(resultado.getString("nome_usuario"));
         user.setEmail(resultado.getString("email"));
-        user.setSenha(resultado.getString("senha"));
         user.setEditor(resultado.getBoolean("editor"));
 
         this.connection.setReadOnly(!user.isEditor());

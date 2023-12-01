@@ -27,6 +27,14 @@ public class User {
         this.editor = editor;
     }
 
+    public User(int idUsuario, String nomeUsuario, String email, String senha, boolean editor) {
+        this.idUsuario = idUsuario;
+        this.nomeUsuario = nomeUsuario;
+        this.email = email;
+        this.senha = senha;
+        this.editor = editor;
+    }
+
     public String getEmail() {
         return this.email;
     }
