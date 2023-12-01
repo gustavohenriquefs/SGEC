@@ -1,12 +1,11 @@
 package com.casaculturaqxd.sgec.models;
 
-
-public class Indicador {
+public class Indicador<T> {
     String nome;
-    Integer valorEsperado;
-    Integer valorAlcancado;
-    
-    public Indicador(String nome, Integer valorEsperado, Integer valorAlcancado) {
+    T valorEsperado;
+    T valorAlcancado;
+
+    public Indicador(String nome, T valorEsperado, T valorAlcancado) {
         this.nome = nome;
         this.valorEsperado = valorEsperado;
         this.valorAlcancado = valorAlcancado;
@@ -15,20 +14,45 @@ public class Indicador {
     public String getNome() {
         return nome;
     }
+
     public void setNome(String nome) {
         this.nome = nome;
     }
-    public Integer getValorEsperado() {
+
+    public T getValorEsperado() {
         return valorEsperado;
     }
-    public void setValorEsperado(Integer valorEsperado) {
+
+    public void setValorEsperado(T valorEsperado) {
         this.valorEsperado = valorEsperado;
     }
-    public Integer getValorAlcancado() {
+
+    @SuppressWarnings("unchecked")
+    /**
+     * metodo auxiliar especifico para valores numericos
+     * 
+     * @param valorEsperado
+     */
+    public void setValorEsperadoNumeric(Number valorEsperado) {
+        this.valorEsperado = (T) valorEsperado;
+    }
+
+    @SuppressWarnings("unchecked")
+    /**
+     * metodo auxiliar especifico para valores numericos
+     * 
+     * @param valorEsperado
+     */
+    public void setValorAlcancadoNumeric(Number valorAlcancado) {
+        this.valorAlcancado = (T) valorAlcancado;
+    }
+
+    public T getValorAlcancado() {
         return valorAlcancado;
     }
-    public void setValorAlcancado(Integer valorAlcancado) {
+
+    public void setValorAlcancado(T valorAlcancado) {
         this.valorAlcancado = valorAlcancado;
     }
-    
+
 }
