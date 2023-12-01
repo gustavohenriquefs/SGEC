@@ -40,8 +40,8 @@ public class ConfiguracoesController {
     private TextField email;
 
     private User usuario;
-    private final DatabasePostgres userConnection = DatabasePostgres.getInstance("URL_TEST", "USER_NAME_TEST",
-            "PASSWORD_TEST");
+    private final DatabasePostgres userConnection = DatabasePostgres.getInstance("URL", "USER_NAME",
+            "PASSWORD");
     private UserDAO userDAO = new UserDAO(userConnection.getConnection());
 
     private Alert alert;
