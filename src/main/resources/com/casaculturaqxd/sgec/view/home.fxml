@@ -24,33 +24,26 @@
          <content>
             <VBox id="scroll">
                <children>
-                  <GridPane fx:id="gridMetas">
-                    <columnConstraints>
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                      <RowConstraints fx:id="titulo1" minHeight="50.0" prefHeight="50.0" valignment="CENTER" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" percentHeight="0.0" prefHeight="180.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
+                  <VBox>
                      <children>
-                        <VBox>
-                           <children>
-                              <Label id="titulo1" prefHeight="74.0" prefWidth="1800.0" styleClass="labels" text=" Próximas Metas" textFill="#fffef7">
-                                 <font>
-                                    <Font size="16.0" />
-                                 </font>
-                                 <padding>
-                                    <Insets bottom="12.0" left="20.0" top="12.0" />
-                                 </padding>
-                              </Label>
-                              <FlowPane fx:id="secaoGrupoEventos" />
-                           </children>
-                        </VBox>
+                        <Label id="titulo1" prefHeight="74.0" prefWidth="1800.0" styleClass="labels" text=" Próximas Metas" textFill="#fffef7">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                           <padding>
+                              <Insets bottom="12.0" left="20.0" top="12.0" />
+                           </padding>
+                        </Label>
+                        <FlowPane fx:id="secaoGrupoEventos" hgap="20.0" prefWidth="250.0" rowValignment="TOP" vgap="10.0">
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin>
+                        </FlowPane>
                      </children>
-                     <padding>
-                        <Insets bottom="12.0" left="12.0" right="12.0" top="12.0" />
-                     </padding>
-                  </GridPane>
+                     <VBox.margin>
+                        <Insets bottom="20.0" left="12.0" right="12.0" />
+                     </VBox.margin>
+                  </VBox>
                   <VBox VBox.vgrow="ALWAYS">
                      <children>
                         <Label id="titulo1" prefHeight="68.0" prefWidth="1800.0" styleClass="labels" text="Últimos Eventos Cadastrados" textFill="#fffef7">
@@ -68,10 +61,13 @@
                         </FlowPane>
                      </children>
                      <VBox.margin>
-                        <Insets left="12.0" right="12.0" />
+                        <Insets bottom="20.0" left="12.0" right="12.0" />
                      </VBox.margin>
                   </VBox>
                </children>
+               <padding>
+                  <Insets top="10.0" />
+               </padding>
             </VBox>
          </content>
       </ScrollPane>
