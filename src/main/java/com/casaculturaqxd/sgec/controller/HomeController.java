@@ -10,6 +10,7 @@ import com.casaculturaqxd.sgec.DAO.EventoDAO;
 import com.casaculturaqxd.sgec.DAO.GrupoEventosDAO;
 import com.casaculturaqxd.sgec.controller.preview.PreviewEventoController;
 import com.casaculturaqxd.sgec.controller.preview.PreviewGrupoEventoController;
+import com.casaculturaqxd.sgec.jdbc.Database;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.GrupoEventos;
@@ -18,6 +19,7 @@ import com.casaculturaqxd.sgec.App;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.GridPane;
+import javafx.scene.Parent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
@@ -65,10 +67,8 @@ public class HomeController {
   private void initGruposEventos() {
     ArrayList<GrupoEventos> ultimosGrupoEventos = getGruposEventos();
 
-    if (ultimosGrupoEventos != null) {
-      for (GrupoEventos grupoEventos : ultimosGrupoEventos) {
-        this.adicionarGrupoEventoEmGrid(grupoEventos);
-      }
+    for (GrupoEventos grupoEventos : ultimosGrupoEventos) {
+      this.adicionarGrupoEventoEmGrid(grupoEventos);
     }
   }
 
@@ -77,7 +77,7 @@ public class HomeController {
 
       FXMLLoader childLoader = obterFXMLPreviewGrupoEventoLoader();
 
-      VBox childNode = childLoader.load();
+      Parent childNode = childLoader.load();
 
       PreviewGrupoEventoController childController = childLoader.getController();
 
@@ -130,7 +130,7 @@ public class HomeController {
   }
 
   private ArrayList<GrupoEventos> getGruposEventos() {
-    DatabasePostgres db = DatabasePostgres.getInstance("URL", "USER_NAME", "PASSWORD");
+    Database db = DatabasePostgres.getInstance("URL", "USER_NAME", "PASSWORD");
     GrupoEventosDAO grupoEventosDAO = new GrupoEventosDAO(db.getConnection());
 
     try {
