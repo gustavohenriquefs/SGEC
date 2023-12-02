@@ -1,9 +1,14 @@
 package com.casaculturaqxd.sgec.controller.preview;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.net.URL;
+import java.sql.Date;
 import java.util.Calendar;
 import java.util.ResourceBundle;
 
+import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.GrupoEventosDAO;
 import com.casaculturaqxd.sgec.jdbc.Database;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
@@ -14,11 +19,13 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class PreviewGrupoEventoController {
     
-    private int DT_LIMITE_NUM_DIAS_UTEIS = 5;
+    private final int DT_LIMITE_NUM_DIAS_UTEIS = 5;
+    private final Image IMAGEM_DEFAULT = new Image(App.class.getResourceAsStream("imagens/default_image.png"));
 
     @FXML
     private ResourceBundle resources;
@@ -64,47 +71,100 @@ public class PreviewGrupoEventoController {
     }
 
     private void loadContent() {
-        String dataRealizada = grupoEventos.getDataInicial().toString() + " até " + grupoEventos.getDataFinal().toString();
+        String dataRealizada = "";
 
-        nomeGrupoEventos.setText(grupoEventos.getNome());
-        dataRealizacao.setText(dataRealizada);
+        if(this.grupoEventos.getNome() != null) {
+            nomeGrupoEventos.setText(grupoEventos.getNome());
+        }
+
+        if(this.grupoEventos.getDataInicial() != null && this.grupoEventos.getDataFinal() != null) {
+            dataRealizada += this.grupoEventos.getDataInicial().toString() + " até " + grupoEventos.getDataFinal().toString();
+        }
         
-        setarMetasAtendidas();
-        setarDataLimite();
+        dataRealizacao.setText(dataRealizada);
+
+        setMetasAtendidas();
+        setDataLimite();
+        setImagemCapa();
     }
 
-    private void setarDataLimite() {
-        Calendar dataInicial = Calendar.getInstance();
-        dataInicial.setTime(this.grupoEventos.getDataInicial());
+    private void setImagemCapa() {
+        if(this.grupoEventos.getImagemCapa() == null) return;
+    
+        try {
+            File imageFile = this.grupoEventos.getImagemCapa().getContent();
+    
+            if(imageFile != null && imageFile.exists()) {
+                try (FileInputStream fileAsStream = new FileInputStream(imageFile)) {
+                    this.imagem.setImage(new Image(fileAsStream));
+                } catch (Exception e) {
+                    imagem.setImage(IMAGEM_DEFAULT);
+                    e.printStackTrace();
+                }
+            } else {
+                imagem.setImage(IMAGEM_DEFAULT);
+            }
+        } catch (IOException e) {
+            imagem.setImage(IMAGEM_DEFAULT);
+            e.printStackTrace();
+        }
+    }
 
-        int mes = dataInicial.get(Calendar.MONTH);
-        int ano = dataInicial.get(Calendar.YEAR);
-
-        Calendar dataLimiteCalendar = Calendar.getInstance();
-        dataLimiteCalendar.set(ano, mes + 1, 1);
-
-        String dataLimiteText = calcDiaDataLimite(dataLimiteCalendar);
-
-        this.dataLimite.setText(dataLimiteText);
+    private void setDataLimite() {
+        if(this.grupoEventos.getDataInicial() == null) return;
+    
+        Calendar initialDateCalendar = Calendar.getInstance();
+        initialDateCalendar.setTime(this.grupoEventos.getDataInicial());
+    
+        int month = initialDateCalendar.get(Calendar.MONTH);
+        int year = initialDateCalendar.get(Calendar.YEAR);
+    
+        Calendar limitDateCalendar = getLimitDateCalendar(year, month);
+    
+        String limitDateText = calcDiaDataLimite(limitDateCalendar);
+    
+        this.dataLimite.setText(limitDateText);
+    }
+    
+    private Calendar getLimitDateCalendar(int year, int month) {
+        final int NEXT_MONTH = 1;
+        final int FIRST_DAY_OF_MONTH = 1;
+    
+        Calendar limitDateCalendar = Calendar.getInstance();
+        limitDateCalendar.set(year, month + NEXT_MONTH, FIRST_DAY_OF_MONTH);
+    
+        return limitDateCalendar;
     }
 
     private String calcDiaDataLimite(Calendar dataProxMes) {
+        final int WEEKEND_SATURDAY = Calendar.SATURDAY;
+        final int WEEKEND_SUNDAY = Calendar.SUNDAY;
+        final int ONE_DAY = 1;
+        
         int qtdDiasUteisProxMes = 0;
-
+    
         while(qtdDiasUteisProxMes < DT_LIMITE_NUM_DIAS_UTEIS) {
-            if(dataProxMes.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY || dataProxMes.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
-                dataProxMes.add(Calendar.DAY_OF_MONTH, 1);
+            int dayOfWeek = dataProxMes.get(Calendar.DAY_OF_WEEK);
+            
+            if(dayOfWeek == WEEKEND_SATURDAY || dayOfWeek == WEEKEND_SUNDAY) {
+                dataProxMes.add(Calendar.DAY_OF_MONTH, ONE_DAY);
             } else {
-                qtdDiasUteisProxMes ++;
-                dataProxMes.add(Calendar.DAY_OF_MONTH, 1);
+                qtdDiasUteisProxMes++;
+                dataProxMes.add(Calendar.DAY_OF_MONTH, ONE_DAY);
             }
         }
+    
+        Date date = new Date(dataProxMes.getTimeInMillis());
+        return date.toString();
+    }
 
-        return dataProxMes.toString();
-    }  
-
-    private void setarMetasAtendidas() {
+    private void setMetasAtendidas() {
         String metasAtendidasText = "";
+
+        if(grupoEventos.getMetas() == null || grupoEventos.getMetas().size() == 0) {
+            metasAtendidas.setText("Nenhuma meta atendida");
+            return;
+        }
 
         for(Meta metas: grupoEventos.getMetas()) {
             metasAtendidasText += metas.getNomeMeta() + ", ";
