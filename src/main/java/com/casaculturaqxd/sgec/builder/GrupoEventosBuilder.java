@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import com.casaculturaqxd.sgec.models.GrupoEventos;
 import com.casaculturaqxd.sgec.models.Instituicao;
+import com.casaculturaqxd.sgec.models.Meta;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 
 public class GrupoEventosBuilder implements Builder {
@@ -73,6 +74,11 @@ public class GrupoEventosBuilder implements Builder {
     @Override
     public GrupoEventosBuilder setOrganizadores(ArrayList<Instituicao> organizadores) {
         grupoEventos.setOrganizadores(organizadores);
+        return this;
+    }
+    
+    public GrupoEventosBuilder setMetas(ArrayList<Meta> metas) {
+        grupoEventos.setMetas(metas);
         return this;
     }
 

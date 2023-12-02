@@ -7,14 +7,19 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import com.casaculturaqxd.sgec.DAO.EventoDAO;
+import com.casaculturaqxd.sgec.DAO.GrupoEventosDAO;
 import com.casaculturaqxd.sgec.controller.preview.PreviewEventoController;
+import com.casaculturaqxd.sgec.controller.preview.PreviewGrupoEventoController;
+import com.casaculturaqxd.sgec.jdbc.Database;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.Evento;
+import com.casaculturaqxd.sgec.models.GrupoEventos;
 import com.casaculturaqxd.sgec.App;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.GridPane;
+import javafx.scene.Parent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
@@ -34,6 +39,9 @@ public class HomeController {
   private GridPane gridMetas;
 
   @FXML
+  private FlowPane secaoGrupoEventos;
+
+  @FXML
   private FlowPane secaoUltimosEventos;
 
   @FXML
@@ -43,6 +51,7 @@ public class HomeController {
   public void initialize() throws IOException {
     this.loadMenu();
     this.initGridUltimosEventos();
+    this.initGruposEventos();
   }
 
   private void initGridUltimosEventos() {
@@ -53,6 +62,35 @@ public class HomeController {
         this.adicionarEventoEmGrid(evento);
       }
     }
+  }
+
+  private void initGruposEventos() {
+    ArrayList<GrupoEventos> ultimosGrupoEventos = getGruposEventos();
+
+    for (GrupoEventos grupoEventos : ultimosGrupoEventos) {
+      this.adicionarGrupoEventoEmGrid(grupoEventos);
+    }
+  }
+
+  private void adicionarGrupoEventoEmGrid(GrupoEventos grupoEventos) {
+    try {
+
+      FXMLLoader childLoader = obterFXMLPreviewGrupoEventoLoader();
+
+      Parent childNode = childLoader.load();
+
+      PreviewGrupoEventoController childController = childLoader.getController();
+
+      childController.setGrupoEventos(grupoEventos);
+
+      this.secaoGrupoEventos.getChildren().add(childNode);
+    } catch (RuntimeException | IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  private FXMLLoader obterFXMLPreviewGrupoEventoLoader() {
+    return new FXMLLoader(App.class.getResource("view/preview/previewGrupoEvento.fxml"));
   }
 
   private void adicionarEventoEmGrid(Evento evento) {
@@ -86,6 +124,17 @@ public class HomeController {
 
     try {
       return eventoDAO.listarUltimosEventos();
+    } catch (SQLException e) {
+      return new ArrayList<>();
+    }
+  }
+
+  private ArrayList<GrupoEventos> getGruposEventos() {
+    Database db = DatabasePostgres.getInstance("URL", "USER_NAME", "PASSWORD");
+    GrupoEventosDAO grupoEventosDAO = new GrupoEventosDAO(db.getConnection());
+
+    try {
+      return grupoEventosDAO.listUltimosGrupoEventos();
     } catch (SQLException e) {
       return new ArrayList<>();
     }

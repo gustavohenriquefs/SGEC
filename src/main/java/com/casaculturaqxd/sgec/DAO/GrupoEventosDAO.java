@@ -188,14 +188,28 @@ public class GrupoEventosDAO {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
+                ServiceFileDAO serviceFileDAO = new ServiceFileDAO(connection);
+                Optional<ServiceFile> optionaImagemCapa = serviceFileDAO
+                        .getArquivo(new ServiceFile(resultSet.getInt("id_service_file")));
+
+                int idGrupoEventos = resultSet.getInt("id_grupo_eventos");
+            
+                ArrayList<Meta> metas = listMetas(new GrupoEventos(idGrupoEventos));
+
                 GrupoEventosBuilder grupoEventosBuilder = new GrupoEventosBuilder();
-                grupoEventosBuilder.setId(resultSet.getInt("id_grupo_eventos"))
+                grupoEventosBuilder.setId(idGrupoEventos)
                         .setNome(resultSet.getString("nome_grupo_eventos"))
-                        .setImagemCapa(new ServiceFile(resultSet.getInt("id_service_file")))
                         .setDataInicial(resultSet.getDate("data_inicial"))
-                        .setDataFinal(resultSet.getDate("data_final"));
+                        .setDataFinal(resultSet.getDate("data_final"))
+                        .setMetas(metas);
 
                 listaPreviewGrupoEventos.add(grupoEventosBuilder.getGrupoEventos());
+
+                if(optionaImagemCapa.isPresent()) {
+                    ServiceFile imagemCapa = optionaImagemCapa.get();
+                    imagemCapa.setContent(serviceFileDAO.getContent(imagemCapa));
+                    grupoEventosBuilder.setImagemCapa(imagemCapa);
+                }
             }
             return listaPreviewGrupoEventos;
         } catch (Exception exception) {
