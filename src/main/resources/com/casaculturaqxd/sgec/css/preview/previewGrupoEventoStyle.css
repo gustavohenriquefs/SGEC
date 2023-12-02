@@ -1,38 +1,5 @@
 @import url(../colors/colorStyle.css);
 
-.root {
-    -fx-background-color: -branco;
-}
-
-.texto {
-    -fx-font-size: 20px;
-}
-
-#verdetalhes {
-    -fx-background-color: -verde;
-    -fx-text-fill: -branco;
-}
-
-#dataRealizacao {
-    -fx-background-color: -verde;
-    -fx-text-fill: -branco;
-    -fx-padding: 5px 10px 5px 10px;
-    -fx-background-radius: 20px;
-}
-#dataLimite {
-    -fx-background-color: -laranja;
-    -fx-text-fill: -branco;
-    -fx-padding: 5px 10px 5px 10px;
-    -fx-background-radius: 20px;
-}
-
-#metasAtendidas {
-    -fx-background-color: -verde;
-    -fx-text-fill: -branco;
-    -fx-padding: 5px 10px 5px 10px;
-    -fx-background-radius: 20px;
-}
-
 .botoes {
     -fx-pref-height: 22px;
     -fx-min-height: 22px;
@@ -41,4 +8,35 @@
     -fx-pref-width: 120px;
     -fx-max-width: 120px;
     -fx-font-size: 10px;
+}
+
+#root {
+    -fx-background-color: #FFFEF7;
+}
+
+#verdetalhes {
+    -fx-background-color: #2A3F25;
+    -fx-text-fill: #fff;
+}
+
+#dataRealizacao {
+    -fx-background-color: #D67C40;
+    -fx-text-fill: #fff;
+    -fx-padding: 5px 10px 5px 10px;
+    -fx-background-radius: 20px;
+    -fx-pref-width: 200px;
+}
+
+#dataLimite {
+    -fx-background-color: -laranja;
+    -fx-text-fill: -branco;
+    -fx-background-radius: 20px;
+    -fx-pref-width: 120px;
+}
+
+#metasAtendidas {
+    -fx-background-color: -verde;
+    -fx-text-fill: -branco;
+    -fx-padding: 5px 10px 5px 10px;
+    -fx-background-radius: 20px;
 }
