@@ -9,9 +9,6 @@ import java.util.Calendar;
 import java.util.ResourceBundle;
 
 import com.casaculturaqxd.sgec.App;
-import com.casaculturaqxd.sgec.DAO.GrupoEventosDAO;
-import com.casaculturaqxd.sgec.jdbc.Database;
-import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.GrupoEventos;
 import com.casaculturaqxd.sgec.models.Meta;
 import com.casaculturaqxd.sgec.service.DateFormattingService;
@@ -56,9 +53,6 @@ public class PreviewGrupoEventoController {
     @FXML
     private Text metasAtendidas;
 
-    
-    private GrupoEventosDAO dao;
-    private Database db = DatabasePostgres.getInstance("URL", "USER_NAME", "PASSWORD");
     private GrupoEventos grupoEventos;
 
     @FXML
