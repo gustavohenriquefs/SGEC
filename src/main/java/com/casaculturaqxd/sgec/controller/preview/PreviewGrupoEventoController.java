@@ -14,6 +14,7 @@ import com.casaculturaqxd.sgec.jdbc.Database;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.GrupoEventos;
 import com.casaculturaqxd.sgec.models.Meta;
+import com.casaculturaqxd.sgec.service.DateFormattingService;
 
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -21,6 +22,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.text.Text;
 
 public class PreviewGrupoEventoController {
     
@@ -52,7 +54,7 @@ public class PreviewGrupoEventoController {
     private Label dataLimite;
 
     @FXML
-    private Label metasAtendidas;
+    private Text metasAtendidas;
 
     
     private GrupoEventosDAO dao;
@@ -71,25 +73,34 @@ public class PreviewGrupoEventoController {
     }
 
     private void loadContent() {
-        String dataRealizada = "";
-
         if(this.grupoEventos.getNome() != null) {
             nomeGrupoEventos.setText(grupoEventos.getNome());
         }
-
-        if(this.grupoEventos.getDataInicial() != null && this.grupoEventos.getDataFinal() != null) {
-            dataRealizada += this.grupoEventos.getDataInicial().toString() + " até " + grupoEventos.getDataFinal().toString();
-        }
         
-        dataRealizacao.setText(dataRealizada);
-
+        setDataRealizada();
         setMetasAtendidas();
         setDataLimite();
         setImagemCapa();
     }
 
+    private void setDataRealizada() {
+        String dataRealizada = "";
+
+        if(this.grupoEventos.getDataInicial() != null && this.grupoEventos.getDataFinal() != null) {
+            Date dataInicial = this.grupoEventos.getDataInicial();
+            Date dataFinal = this.grupoEventos.getDataFinal();
+
+            dataRealizada += formatToBrazilian(dataInicial) + " até " + formatToBrazilian(dataFinal);
+        }
+        
+        dataRealizacao.setText(dataRealizada);
+    }
+
     private void setImagemCapa() {
-        if(this.grupoEventos.getImagemCapa() == null) return;
+        if(this.grupoEventos.getImagemCapa() == null) {
+            imagem.setImage(IMAGEM_DEFAULT);
+            return;
+        };
     
         try {
             File imageFile = this.grupoEventos.getImagemCapa().getContent();
@@ -155,7 +166,11 @@ public class PreviewGrupoEventoController {
         }
     
         Date date = new Date(dataProxMes.getTimeInMillis());
-        return date.toString();
+        return formatToBrazilian(date);
+    }
+
+    private String formatToBrazilian(Date date) {
+        return new DateFormattingService().formatToBrazilian(date);
     }
 
     private void setMetasAtendidas() {
