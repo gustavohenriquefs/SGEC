@@ -1,7 +1,10 @@
 package com.casaculturaqxd.sgec.builder;
 
 import java.sql.Date;
+import java.sql.Time;
 import java.util.ArrayList;
+
+import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.GrupoEventos;
 import com.casaculturaqxd.sgec.models.Instituicao;
 import com.casaculturaqxd.sgec.models.Meta;
@@ -66,6 +69,12 @@ public class GrupoEventosBuilder implements Builder {
     }
 
     @Override
+    public GrupoEventosBuilder setCargaHoraria(Time cargaHoraria) {
+        grupoEventos.setCargaHoraria(cargaHoraria);
+        return this;
+    }
+
+    @Override
     public GrupoEventosBuilder setColaboradores(ArrayList<Instituicao> colaboradores) {
         grupoEventos.setColaboradores(colaboradores);
         return this;
@@ -76,7 +85,22 @@ public class GrupoEventosBuilder implements Builder {
         grupoEventos.setOrganizadores(organizadores);
         return this;
     }
-    
+
+    public GrupoEventosBuilder setNumColaboradoresEsperado(int numColaboradoresEsperado) {
+        grupoEventos.setNumColaboradoresEsperado(numColaboradoresEsperado);
+        return this;
+    }
+
+    public GrupoEventosBuilder setNumColaboradoresAlcancado(int numColaboradoresAlcancado) {
+        grupoEventos.setNumColaboradoresAlcancado(numColaboradoresAlcancado);
+        return this;
+    }
+
+    public GrupoEventosBuilder setEventos(ArrayList<Evento> eventos) {
+        grupoEventos.setEventos(eventos);
+        return this;
+    }
+
     public GrupoEventosBuilder setMetas(ArrayList<Meta> metas) {
         grupoEventos.setMetas(metas);
         return this;
