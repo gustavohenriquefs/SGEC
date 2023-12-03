@@ -257,6 +257,52 @@ public class InstituicaoDAO extends DAO {
     }
   }
 
+  public ArrayList<Instituicao> listarOrganizadoresGrupoEventos(int idGrupoEventos) throws SQLException {
+    String sql = "SELECT id_instituicao FROM organizador_grupo_eventos WHERE id_grupo_eventos = ?";
+    PreparedStatement preparedStatement = conn.prepareStatement(sql);
+    ArrayList<Instituicao> organizadoresGrupoEventos = new ArrayList<>();
+    try {
+      preparedStatement.setInt(1, idGrupoEventos);
+      ResultSet resultSet = preparedStatement.executeQuery();
+
+      while (resultSet.next()) {
+        Instituicao organizadorGrupoEventos = new Instituicao(resultSet.getInt("id_instituicao"));
+        Optional<Instituicao> result = getInstituicao(organizadorGrupoEventos);
+        if (result.isPresent())
+          organizadoresGrupoEventos.add(result.get());
+      }
+      return organizadoresGrupoEventos;
+    } catch (Exception e) {
+      logException(e);
+      throw new SQLException("falha listando colaboradores de grupo de eventos", e);
+    } finally {
+      preparedStatement.close();
+    }
+  }
+
+  public ArrayList<Instituicao> listarColaboradoresGrupoEventos(int idGrupoEventos) throws SQLException {
+    String sql = "SELECT id_instituicao FROM colaborador_grupo_eventos WHERE id_grupo_eventos = ?";
+    PreparedStatement preparedStatement = conn.prepareStatement(sql);
+    ArrayList<Instituicao> colaboradoresGrupoEventos = new ArrayList<>();
+    try {
+      preparedStatement.setInt(1, idGrupoEventos);
+      ResultSet resultSet = preparedStatement.executeQuery();
+
+      while (resultSet.next()) {
+        Instituicao colaboradorGrupoEventos = new Instituicao(resultSet.getInt("id_instituicao"));
+        Optional<Instituicao> result = getInstituicao(colaboradorGrupoEventos);
+        if (result.isPresent())
+          colaboradoresGrupoEventos.add(result.get());
+      }
+      return colaboradoresGrupoEventos;
+    } catch (Exception e) {
+      logException(e);
+      throw new SQLException("falha listando colaboradores de grupo de eventos", e);
+    } finally {
+      preparedStatement.close();
+    }
+  }
+
   public boolean vincularOrganizadorEvento(Instituicao instituicao, Integer idEvento) throws SQLException {
     String sql = "insert into organizador_evento (id_instituicao,id_evento,descricao_contribuicao, valor_contribuicao)"
         + " values(?, ?, ?, ?)";
