@@ -1,6 +1,7 @@
 package com.casaculturaqxd.sgec.builder;
 
 import java.sql.Date;
+import java.sql.Time;
 import java.util.ArrayList;
 import com.casaculturaqxd.sgec.models.Instituicao;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
@@ -23,6 +24,8 @@ public interface Builder {
   Builder setPublicoEsperado(int publicoEsperado);
 
   Builder setPublicoAlcancado(int publicoAlcancado);
+
+  Builder setCargaHoraria(Time cargaHoraria);
 
   Builder setClassificacaoEtaria(String classificacaoEtaria);
 
