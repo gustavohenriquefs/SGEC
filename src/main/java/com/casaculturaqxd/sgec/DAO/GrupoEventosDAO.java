@@ -18,7 +18,7 @@ import com.casaculturaqxd.sgec.models.Instituicao;
 import com.casaculturaqxd.sgec.models.Meta;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 
-public class GrupoEventosDAO {
+public class GrupoEventosDAO extends DAO {
     private Connection connection;
 
     public Connection getConnection() {
@@ -359,6 +359,131 @@ public class GrupoEventosDAO {
             throw new SQLException("falha deletando grupo de eventos " + nomeGrupoEventosCausa, e);
         } finally {
             statement.close();
+        }
+    }
+
+    public boolean atualizarEventos(ArrayList<Evento> eventos, GrupoEventos grupoEventos) throws SQLException {
+        ArrayList<Evento> eventosAtuais = listEventos(grupoEventos);
+
+        try {
+            // adicionando eventos que nao estao registrados
+            for (Evento evento : eventos) {
+                if (!eventosAtuais.contains(evento)) {
+                    boolean check = vincularEvento(grupoEventos, evento);
+                    if (!check) {
+                        return false;
+                    }
+                }
+            }
+            // removendo eventos que estao na lista nova e nao na antiga
+            for (Evento evento : eventosAtuais) {
+                if (!eventos.contains(evento)) {
+                    boolean check = desvincularEvento(grupoEventos, evento);
+                    if (!check) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        } catch (Exception e) {
+            String nomeEventoCausa = grupoEventos != null && grupoEventos.getNome() != null ? grupoEventos.getNome()
+                : " ";
+            logException(e);
+            throw new SQLException("falha atualizando metas do evento " + nomeEventoCausa, e);
+        }
+
+    }
+
+    public boolean atualizarOrganizadores(ArrayList<Instituicao> organizadores, GrupoEventos grupoEventos)
+        throws SQLException {
+        ArrayList<Instituicao> organizadoresAtuais = listOrganizadores(grupoEventos);
+
+        try {
+            // adicionando organizadores nao registrados
+            for (Instituicao organizador : organizadores) {
+                if (!organizadoresAtuais.contains(organizador)) {
+                    boolean check = vincularOrganizador(grupoEventos, organizador);
+                    if (!check) {
+                        return false;
+                    }
+                }
+            }
+            // removendo organizadores fora da nova lista
+            for (Instituicao organizador : organizadoresAtuais) {
+                if (!organizadores.contains(organizador)) {
+                    boolean check = desvincularOrganizador(grupoEventos, organizador);
+                    if (!check) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        } catch (Exception e) {
+            String nomeEventoCausa = grupoEventos != null && grupoEventos.getNome() != null ? grupoEventos.getNome()
+                : " ";
+            logException(e);
+            throw new SQLException("falha atualizando metas do evento " + nomeEventoCausa, e);
+        }
+    }
+
+    public boolean atualizarColaboradores(ArrayList<Instituicao> colaboradores, GrupoEventos grupoEventos)
+        throws SQLException {
+        ArrayList<Instituicao> colaboradoresAtuais = listColaboradores(grupoEventos);
+        try {
+            // adicionando colaboradores nao registrados
+            for (Instituicao colaborador : colaboradores) {
+                if (!colaboradoresAtuais.contains(colaborador)) {
+                    boolean check = vincularColaborador(grupoEventos, colaborador);
+                    if (!check) {
+                        return false;
+                    }
+                }
+            }
+            // removendo colaboradores fora da nova lista
+            for (Instituicao colaborador : colaboradoresAtuais) {
+                if (!colaboradores.contains(colaborador)) {
+                    boolean check = desvincularColaborador(grupoEventos, colaborador);
+                    if (!check) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        } catch (Exception e) {
+            String nomeEventoCausa = grupoEventos != null && grupoEventos.getNome() != null ? grupoEventos.getNome()
+                : " ";
+            logException(e);
+            throw new SQLException("falha atualizando metas do evento " + nomeEventoCausa, e);
+        }
+    }
+
+    public boolean atualizarMetas(ArrayList<Meta> metas, GrupoEventos grupoEventos) throws SQLException {
+        ArrayList<Meta> metasAtuais = listMetas(grupoEventos);
+
+        try {
+            // adicionando metas que nao estao registradas
+            for (Meta meta : metas) {
+                if (!metasAtuais.contains(meta)) {
+                    boolean check = vincularMeta(meta, grupoEventos);
+                    if (!check) {
+                        return false;
+                    }
+                }
+            }
+            for (Meta meta : metasAtuais) {
+                if (!metas.contains(meta)) {
+                    boolean check = desvincularMeta(meta, grupoEventos);
+                    if (!check) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        } catch (Exception e) {
+            String nomeEventoCausa = grupoEventos != null && grupoEventos.getNome() != null ? grupoEventos.getNome()
+                : " ";
+            logException(e);
+            throw new SQLException("falha atualizando metas do evento " + nomeEventoCausa, e);
         }
     }
 
