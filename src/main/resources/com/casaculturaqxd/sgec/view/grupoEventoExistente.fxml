@@ -29,14 +29,14 @@
                      <children>
                         <BorderPane VBox.vgrow="ALWAYS">
                            <center>
-                              <HBox BorderPane.alignment="CENTER">
+                              <HBox alignment="CENTER" BorderPane.alignment="CENTER">
                                  <children>
                                     <ImageView fx:id="imagemCapa" fitHeight="165.0" fitWidth="1560.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS" />
                                  </children>
                               </HBox>
                            </center>
                            <bottom>
-                              <Button fx:id="adicionarCapa" mnemonicParsing="false" styleClass="botoes" text="Adicionar capa" BorderPane.alignment="CENTER" />
+                              <Button fx:id="adicionarCapa" mnemonicParsing="false" onAction="#adicionarCapa" styleClass="botoes" text="Adicionar capa" BorderPane.alignment="CENTER" />
                            </bottom>
                         </BorderPane>
                         <VBox VBox.vgrow="ALWAYS">
@@ -53,7 +53,7 @@
                                     <VBox HBox.hgrow="ALWAYS">
                                        <children>
                                           <Label text="Atende  à(s) metas:" />
-                                          <HBox spacing="20.0">
+                                          <HBox fx:id="secaoMetas" spacing="20.0">
                                              <children>
                                                 <CheckBox mnemonicParsing="false" text="Fruição" />
                                                 <CheckBox mnemonicParsing="false" text="Fortalecimento de patrimônio cultural" />
@@ -185,7 +185,7 @@
                                     </VBox>
                                     <HBox alignment="BOTTOM_RIGHT" spacing="30.0" VBox.vgrow="ALWAYS">
                                        <children>
-                                          <Button id="cancelar" fx:id="cancelar" mnemonicParsing="false" text="Cancelar" />
+                                          <Button id="cancelar" fx:id="cancelar" mnemonicParsing="false" onAction="#cancelar" text="Cancelar" />
                                           <Button fx:id="salvarAlteracoes" mnemonicParsing="false" styleClass="botoes" text="Salvar alterações" />
                                        </children>
                                     </HBox>

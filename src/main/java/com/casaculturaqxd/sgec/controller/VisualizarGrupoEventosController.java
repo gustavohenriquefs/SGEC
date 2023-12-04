@@ -3,23 +3,31 @@ package com.casaculturaqxd.sgec.controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.net.URL;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Optional;
 
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.GrupoEventosDAO;
+import com.casaculturaqxd.sgec.DAO.ServiceFileDAO;
+import com.casaculturaqxd.sgec.builder.EventoBuilder;
 import com.casaculturaqxd.sgec.controller.dialog.DialogNovaInstituicao;
 import com.casaculturaqxd.sgec.controller.preview.PreviewEventoController;
 import com.casaculturaqxd.sgec.controller.preview.PreviewInstituicaoController;
 import com.casaculturaqxd.sgec.controller.preview.PreviewParticipanteController;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
+import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.GrupoEventos;
 import com.casaculturaqxd.sgec.models.Indicador;
 import com.casaculturaqxd.sgec.models.Instituicao;
 import com.casaculturaqxd.sgec.models.Localizacao;
 import com.casaculturaqxd.sgec.models.Meta;
+import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 import com.casaculturaqxd.sgec.models.Participante;
+import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 
 import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
@@ -29,6 +37,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -49,10 +58,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DataFormat;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.util.converter.IntegerStringConverter;
@@ -69,6 +80,7 @@ public class VisualizarGrupoEventosController implements ControllerEvento{
      // listas
     ObservableList<PreviewParticipanteController> participantes = FXCollections
             .<PreviewParticipanteController>observableList(new ArrayList<>());
+    private File lastDirectoryOpen;
     
     @FXML
     private VBox root;
@@ -106,7 +118,7 @@ public class VisualizarGrupoEventosController implements ControllerEvento{
     @FXML
     FlowPane listaOrganizadores, listaColaboradores, acoesRealizadas;
     //Indicadores
-    Indicador numeroPublico, numeroMestres, numeroMunicipios, numeroAcoesRealizadas;
+    Indicador numeroPublico, numeroMestres, numeroMunicipios, numeroAcoesRealizadas, numeroColaboradores;
 
     //Colocando todos os indicadores em uma tabela
     @FXML
@@ -177,6 +189,43 @@ public class VisualizarGrupoEventosController implements ControllerEvento{
         root.getChildren().add(0, carregarMenu.load());
     }
 
+    private void loadIndicadores() {
+        numeroPublico = new Indicador("Quantidade de público", grupoEventos.getPublicoEsperado(),
+                grupoEventos.getPublicoAlcancado());
+        numeroMunicipios = new Indicador("Número de municípios", grupoEventos.getNumMunicipiosEsperado(), grupoEventos.getNumAcoesAlcancado());
+
+        addIndicador(tabelaIndicadores, numeroPublico);
+
+        numeroMestres = new Indicador("Número de mestres da cultura", grupoEventos.getNumParticipantesEsperado(),
+                grupoEventos.getNumParticipantesAlcancado());
+        numeroMunicipios = new Indicador("Número de municípios",grupoEventos.getNumMunicipiosEsperado(),
+                grupoEventos.getNumMunicipiosAlcancado());
+
+        addIndicador(tabelaIndicadores, numeroPublico);
+        addIndicador(tabelaIndicadores, numeroMestres);
+        addIndicador(tabelaIndicadores, numeroMunicipios);
+        numeroColaboradores = new Indicador("Número de colaboradores", grupoEventos.getNumColaboradoresEsperado(),
+                grupoEventos.getNumColaboradoresAlcancado());
+        for (Meta meta : grupoEventos.getMetas()) {
+            if (meta.getIdMeta() == 1) {
+                addIndicador(tabelaIndicadores, numeroMunicipios);
+            }
+            if (meta.getIdMeta() == 2) {
+                addIndicador(tabelaIndicadores, numeroMestres);
+            }
+            if (meta.getIdMeta() == 3){
+                addIndicador(tabelaIndicadores, numeroPublico);
+            }
+            if (meta.getIdMeta() == 4) {
+                addIndicador(tabelaIndicadores, numeroColaboradores);
+            }
+        }
+    }
+
+    private void addIndicador(TableView<Indicador> tabela, Indicador indicador) {
+        tabela.setItems(FXCollections.observableArrayList(indicador));
+    }
+
     public void loadContent(){
         loadImagemCapa();
         loadOrganizadores();
@@ -196,6 +245,43 @@ public class VisualizarGrupoEventosController implements ControllerEvento{
             dataFinal.setValue(grupoEventos.getDataFinal().toLocalDate());
         }
 
+    }
+
+
+    public void adicionarCapa(){
+        FileChooser fileChooser = new FileChooser();
+        if (lastDirectoryOpen != null) {
+            fileChooser.setInitialDirectory(lastDirectoryOpen);
+        }
+        File arquivoSelecionado = fileChooser.showOpenDialog(stage);
+        try {
+            if (arquivoSelecionado != null) {
+                lastDirectoryOpen = arquivoSelecionado.getParentFile();
+
+                ServiceFileDAO serviceFileDAO = new ServiceFileDAO(db.getConnection());
+                adicionarCapa(arquivoSelecionado);
+            }
+        } catch (Exception e) {
+            Alert alert = new Alert(AlertType.ERROR, "Arquivo já foi adicionado");
+            alert.showAndWait();
+        }
+    }
+
+    public void adicionarCapa(File arquivo){
+        if(arquivo != null && arquivo.exists()) {
+            try (FileInputStream fileAsStream = new FileInputStream(arquivo)) {
+                this.imagemCapa.setImage(new Image(fileAsStream));
+            } catch (Exception e) {
+                imagemCapa.setImage(null);
+                e.printStackTrace();
+            }
+        }else{
+            imagemCapa.setImage(null);
+        }
+    }
+
+    public void cancelar() throws IOException{
+        App.setRoot("view/home");
     }
 
     private void loadImagemCapa(){
@@ -280,6 +366,10 @@ public class VisualizarGrupoEventosController implements ControllerEvento{
         }
     }
 
+    public void loadAcoes(){
+
+    }
+
     public void adicionarColaborador() throws IOException {
         ButtonType buttonTypeVincularColaborador = new ButtonType("Vincular como colaborador",
                 ButtonBar.ButtonData.OK_DONE);
@@ -311,10 +401,6 @@ public class VisualizarGrupoEventosController implements ControllerEvento{
         }
     }
 
-    public void loadAcoes(){
-
-    }
-
     private void loadMetas() {
         if(grupoEventos.getMetas() == null){
             return;
@@ -331,6 +417,7 @@ public class VisualizarGrupoEventosController implements ControllerEvento{
     }
 
     private void loadTable(TableView<Indicador> tabela) {
+        loadIndicadores();
         TableColumn<Indicador, String> nomeIndicador = new TableColumn<>("Nome do indicador");
         nomeIndicador.setCellValueFactory(new PropertyValueFactory<>("nome"));
 
@@ -410,18 +497,13 @@ public class VisualizarGrupoEventosController implements ControllerEvento{
         });
     }
 
-    @FXML
-    public void salvarAlteracoes(){
-        
-    }
-
-    private void getTargetGrupoEventos(){
-
-    }
-
     public void setGrupoEventos(GrupoEventos grupoEventos) {
         this.grupoEventos = grupoEventos;
         loadContent();
+    }
+
+    public void getTargetGrupoEventos(){
+        
     }
 
     @Override

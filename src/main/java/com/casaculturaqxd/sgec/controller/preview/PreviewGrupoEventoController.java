@@ -35,7 +35,6 @@ public class PreviewGrupoEventoController {
     private final int DT_LIMITE_NUM_DIAS_UTEIS = 5;
     private final Image IMAGEM_DEFAULT = new Image(App.class.getResourceAsStream("imagens/default_image.png"));
 
-    private GrupoEventosDAO dao;
     private DatabasePostgres db = DatabasePostgres.getInstance("URL", "USER_NAME", "PASSWORD");
 
     @FXML
@@ -197,6 +196,7 @@ public class PreviewGrupoEventoController {
 
     @FXML
     public void verDetalhes(ActionEvent event) throws IOException, SQLException {
+        GrupoEventosDAO dao = new GrupoEventosDAO(db.getConnection());
         try {
             URL url = App.class.getResource("view/grupoEventoExistente.fxml");
             FXMLLoader loaderVisualizacao = new FXMLLoader(url);
