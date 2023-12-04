@@ -28,6 +28,8 @@ public class PreviewEventoController {
     Label dataHora, titulo;
     @FXML
     Button detalhes;
+    @FXML
+    private Parent container; // pane raiz do fxml
 
     public void initialize() {
         dao.setConnection(db.getConnection());
@@ -37,6 +39,14 @@ public class PreviewEventoController {
         this.evento = evento;
         this.setarInformacoesEvento();
 
+    }
+
+    public Evento getEvento(){
+        return this.evento;
+    }
+
+    public Parent getContainer(){
+        return container;
     }
 
     private void setarInformacoesEvento() {

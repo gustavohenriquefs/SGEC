@@ -186,7 +186,7 @@
                                     <HBox alignment="BOTTOM_RIGHT" spacing="30.0" VBox.vgrow="ALWAYS">
                                        <children>
                                           <Button id="cancelar" fx:id="cancelar" mnemonicParsing="false" onAction="#cancelar" text="Cancelar" />
-                                          <Button fx:id="salvarAlteracoes" mnemonicParsing="false" styleClass="botoes" text="Salvar alterações" />
+                                          <Button fx:id="salvarAlteracoes" mnemonicParsing="false" onAction="#salvarAlteracoes" styleClass="botoes" text="Salvar alterações" />
                                        </children>
                                     </HBox>
                                  </children>

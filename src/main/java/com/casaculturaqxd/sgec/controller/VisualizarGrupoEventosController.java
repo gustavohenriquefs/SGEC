@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -72,7 +73,7 @@ public class VisualizarGrupoEventosController implements ControllerEvento{
 
     private ObservableList<PreviewInstituicaoController> listaPreviewOrganizadores = FXCollections.observableArrayList();
     private ObservableList<PreviewInstituicaoController> listaPreviewColaboradores = FXCollections.observableArrayList();
-    private ObservableList<PreviewEventoController> listaPreviewEventos;
+    private ObservableList<PreviewEventoController> listaPreviewEventos = FXCollections.observableArrayList();
     private GrupoEventos grupoEventos;
     private Stage stage;
     private DatabasePostgres db = DatabasePostgres.getInstance("URL", "USER_NAME", "PASSWORD");
@@ -135,6 +136,7 @@ public class VisualizarGrupoEventosController implements ControllerEvento{
         Tooltip.install(copiaCola, tooltipCliboard);
         addListenersOrganizador(listaPreviewOrganizadores);
         addListenersColaborador(listaPreviewColaboradores);
+        addListenerEvento(listaPreviewEventos);
         copiaCola.setOnMouseClicked(event -> copyToClipboard(event));
         dao = new GrupoEventosDAO(db.getConnection());
         loadMenu();
@@ -258,7 +260,6 @@ public class VisualizarGrupoEventosController implements ControllerEvento{
             if (arquivoSelecionado != null) {
                 lastDirectoryOpen = arquivoSelecionado.getParentFile();
 
-                ServiceFileDAO serviceFileDAO = new ServiceFileDAO(db.getConnection());
                 adicionarCapa(arquivoSelecionado);
             }
         } catch (Exception e) {
@@ -338,6 +339,86 @@ public class VisualizarGrupoEventosController implements ControllerEvento{
         }
     }
 
+    public void adicionarEventoE(Evento evento){
+        if (!contemEvento(listaPreviewEventos, evento)
+                && !contemEvento(listaPreviewEventos, evento)) {
+            FXMLLoader loaderEvento = new FXMLLoader(
+                    App.class.getResource("view/preview/previewEventoExistente.fxml"));
+            try {
+                loaderEvento.load();
+                PreviewEventoController controller = loaderEvento.getController();
+                controller.setEvento(evento);
+                listaPreviewEventos.add(controller);
+            } catch (IOException e) {
+                Alert alert = new Alert(AlertType.WARNING,  "falha carregando organizador");
+                alert.show();
+            }
+        } else {
+            mensagem.setAlertType(AlertType.ERROR);
+            mensagem.setContentText("Não foi possivel realizar a vinculação: Instituição já foi vinculada!");
+            mensagem.show();
+        }
+    }
+
+    public void loadAcoes(){
+        if(grupoEventos.getEventos() == null){
+            return;
+        }
+        for (Evento evento : grupoEventos.getEventos()) {
+            adicionarEventoE(evento);
+        }
+    }
+
+    public void salvarAlteracoes() {
+        if (alterarGrupoEventos()) {
+            Alert alert = new Alert(AlertType.CONFIRMATION, "Alterações salvas com sucesso");
+            alert.getButtonTypes().remove(ButtonType.CANCEL);
+            alert.showAndWait();
+        } else {
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setContentText("Erro atualizando evento");
+            alert.showAndWait();
+        }
+
+    }
+
+    public boolean alterarGrupoEventos() {
+        // TODO: adicionar validacao de convocatorias, pelo menos um colaborador deve
+        // existir
+        try {
+            return updateGrupoEventos(getTargetGrupoEventos());
+        } catch (Exception e) {
+            Alert erroAtualizacao = new Alert(AlertType.ERROR);
+            erroAtualizacao.setContentText("Erro ao alterar evento");
+            erroAtualizacao.show();
+            return false;
+        }
+    }
+
+    private boolean updateGrupoEventos(GrupoEventos grupoEventos) throws SQLException {
+        db.getConnection().setAutoCommit(false);
+        try {
+            // TODO: update de colaboradores, organizadores, participantes e locais
+            dao.updateGrupoEventos(grupoEventos);
+            return true;
+        } catch (SQLException e) {
+            db.getConnection().rollback();
+            return false;
+        } finally {
+            db.getConnection().setAutoCommit(true);
+        }
+    }
+
+    public static boolean contemEvento(ObservableList<PreviewEventoController> listaPreview,
+            Evento evento){
+        for (PreviewEventoController previewEventoController : listaPreview) {
+            if(previewEventoController.getEvento().equals(evento)){
+                return true;
+            }
+        }
+        return false;
+            }
+
     public static boolean contemInstituicao(ObservableList<PreviewInstituicaoController> listaPreview,
             Instituicao instituicao) {
         for (PreviewInstituicaoController preview : listaPreview) {
@@ -364,10 +445,6 @@ public class VisualizarGrupoEventosController implements ControllerEvento{
         for (Instituicao instituicao : grupoEventos.getOrganizadores()) {
             adicionarOrganizador(instituicao);
         }
-    }
-
-    public void loadAcoes(){
-
     }
 
     public void adicionarColaborador() throws IOException {
@@ -502,8 +579,47 @@ public class VisualizarGrupoEventosController implements ControllerEvento{
         loadContent();
     }
 
-    public void getTargetGrupoEventos(){
+    public GrupoEventos getTargetGrupoEventos(){
+        GrupoEventos novogrupoEventos = new GrupoEventos();
+        Date novaDataInicial = dataInicial.getValue() != null ? Date.valueOf(dataInicial.getValue()) : null;
+        Date novaDataFinal = dataFinal.getValue() != null ? Date.valueOf(dataFinal.getValue()) : null;
+        novogrupoEventos.setDataInicial(novaDataInicial);
+        novogrupoEventos.setDataFinal(novaDataFinal);
+        novogrupoEventos.setColaboradores(null);
+        novogrupoEventos.setClassificacaoEtaria(classificacaoEtaria.getValue());
+        novogrupoEventos.setPublicoAlcancado(numeroPublico.getValorAlcancado());
+        novogrupoEventos.setPublicoEsperado(numeroPublico.getValorEsperado());
+        novogrupoEventos.setNome(grupoEventos.getNome());
+        novogrupoEventos.setDescricao(grupoEventos.getDescricao());
+        novogrupoEventos.setNumAcoesAlcancado(grupoEventos.getEventos().size());
+        novogrupoEventos.setIdGrupoEventos(grupoEventos.getIdGrupoEventos());
+        novogrupoEventos.setMetas(grupoEventos.getMetas());
         
+        return novogrupoEventos;
+    }
+
+    public void addListenerEvento(ObservableList<PreviewEventoController> observableList){
+        ControllerEvento Controller = this;
+        observableList.addListener(new ListChangeListener<PreviewEventoController>() {
+            @Override
+            public void onChanged(ListChangeListener.Change<? extends PreviewEventoController> change) {
+                while (change.next()) {
+                    if (change.wasAdded()) {
+                        for (PreviewEventoController addedController : change.getAddedSubList()) {
+                            addedController.setEvento(((EventoBuilder) Controller).getEvento());
+
+                            acoesRealizadas.getChildren().add(addedController.getContainer());
+                        }
+                    }
+                    if (change.wasRemoved()) {
+                        for (PreviewEventoController removedController : change.getRemoved()) {
+                            // Remover o Pane de preview ao deletar um Participante da lista
+                            acoesRealizadas.getChildren().remove(removedController);
+                        }
+                    }
+                }
+            }
+        });
     }
 
     @Override
