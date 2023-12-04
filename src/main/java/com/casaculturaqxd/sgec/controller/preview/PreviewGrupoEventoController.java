@@ -5,18 +5,25 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.util.Calendar;
+import java.util.NoSuchElementException;
 import java.util.ResourceBundle;
 
 import com.casaculturaqxd.sgec.App;
+import com.casaculturaqxd.sgec.controller.VisualizarGrupoEventosController;
 import com.casaculturaqxd.sgec.models.GrupoEventos;
 import com.casaculturaqxd.sgec.models.Meta;
 import com.casaculturaqxd.sgec.service.DateFormattingService;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
@@ -57,7 +64,7 @@ public class PreviewGrupoEventoController {
 
     @FXML
     void initialize() {
-        verDetalhes.setDisable(true);
+        verDetalhes.setDisable(false);
     }
 
     public void setGrupoEventos(GrupoEventos grupoEventos) {
@@ -183,5 +190,22 @@ public class PreviewGrupoEventoController {
 
         metasAtendidas.setText(metasAtendidasText);
     }
-    
+
+    @FXML
+    public void verDetalhes(ActionEvent event) throws IOException, SQLException {
+        try {
+            URL url = App.class.getResource("view/grupoEventoExistente.fxml");
+            FXMLLoader loaderVisualizacao = new FXMLLoader(url);
+            Parent objVisualizacao = loaderVisualizacao.load();
+
+            VisualizarGrupoEventosController controller = loaderVisualizacao.getController();
+
+            controller.setGrupoEventos(dao.getGrupoEventos(grupoEventos).get());
+            App.setRoot(objVisualizacao);
+
+        } catch (NoSuchElementException e) {
+            Alert erroLoading = new Alert(AlertType.WARNING, "Falha ao carregar o evento");
+            erroLoading.show();
+        }
+    }
 }
