@@ -10,12 +10,11 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Optional;
-
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import com.casaculturaqxd.sgec.App;
@@ -23,9 +22,9 @@ import com.casaculturaqxd.sgec.DAO.EventoDAO;
 import com.casaculturaqxd.sgec.DAO.InstituicaoDAO;
 import com.casaculturaqxd.sgec.DAO.LocalizacaoDAO;
 import com.casaculturaqxd.sgec.DAO.ServiceFileDAO;
+import com.casaculturaqxd.sgec.builder.EventoBuilder;
 import com.casaculturaqxd.sgec.controller.dialog.DialogNovaInstituicao;
 import com.casaculturaqxd.sgec.controller.dialog.ParticipanteDialog;
-import com.casaculturaqxd.sgec.builder.EventoBuilder;
 import com.casaculturaqxd.sgec.controller.preview.PreviewArquivoController;
 import com.casaculturaqxd.sgec.controller.preview.PreviewInstituicaoController;
 import com.casaculturaqxd.sgec.controller.preview.PreviewLocalizacaoController;
@@ -62,6 +61,7 @@ import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
@@ -80,7 +80,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import javafx.util.converter.IntegerStringConverter;
+import javafx.util.converter.NumberStringConverter;
 
 public class VisualizarEventoController implements ControllerServiceFile, ControllerEvento {
     private Evento evento;
@@ -93,6 +93,8 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
     private DateFormat formatterHorario;
     @FXML
     VBox root;
+    @FXML
+    ScrollPane scrollPane;
     @FXML
     FlowPane secaoParticipantes, secaoArquivos, secaoOrganizadores, secaoColaboradores;
     @FXML
@@ -123,11 +125,10 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
     // Tabela com todos os campos de input
     ObservableList<Control> camposInput = FXCollections.observableArrayList();
     // Indicadores
-    Indicador numeroPublico, numeroMestres, numeroMunicipios;
+    Indicador<Integer> numeroPublico, numeroMestres, numeroMunicipios, numeroColaboradores;
     // Tabelas de indicadores
     @FXML
-    TableView<Indicador> tabelaIndicadoresGerais, tabelaIndicadoresMeta1, tabelaIndicadoresMeta2;
-    ObservableList<TableView<Indicador>> tabelas = FXCollections.observableArrayList();
+    TableView<Indicador<?>> tabelaIndicadores;
 
     @FXML
     Button salvarAlteracoes;
@@ -195,6 +196,8 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
         loadInstituicoes();
         loadArquivos();
         loadMetas();
+        loadTable(tabelaIndicadores);
+        loadIndicadores();
         classificacaoEtaria.getItems().addAll(classificacoes);
         titulo.setText(evento.getNome());
         descricao.setText(evento.getDescricao());
@@ -237,22 +240,77 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
 
         this.loadParticipantes();
 
-        tabelas.addAll(tabelaIndicadoresGerais, tabelaIndicadoresMeta1, tabelaIndicadoresMeta2);
+    }
 
-        for (TableView<Indicador> tabela : tabelas) {
-            loadTable(tabela);
-        }
+    private void loadTable(TableView<Indicador<?>> tabela) {
+        TableColumn<Indicador<?>, String> nomeIndicadorCol = new TableColumn<>("Nome do indicador");
+        nomeIndicadorCol.setCellValueFactory(new PropertyValueFactory<>("nome"));
+        // apenas a coluna com o valor esperado eh editavel, o metodo auxiliar de
+        // indicador eh usado nesse caso especifico
+        TableColumn<Indicador<?>, Number> valorEsperadoCol = new TableColumn<>("Valor esperado");
+        valorEsperadoCol.setCellValueFactory(new PropertyValueFactory<>("valorEsperado"));
+        valorEsperadoCol.setCellFactory(TextFieldTableCell.forTableColumn(new NumberStringConverter()));
+        valorEsperadoCol.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Indicador<?>, Number>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<Indicador<?>, Number> t) {
+                ((Indicador<?>) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+                        .setValorEsperadoNumeric(t.getNewValue().intValue());
+            }
+        });
+        TableColumn<Indicador<?>, Number> valorAlcancadoCol = new TableColumn<>("Valor alcançado");
+        valorAlcancadoCol.setCellValueFactory(new PropertyValueFactory<>("valorAlcancado"));
+        valorAlcancadoCol.setCellFactory(TextFieldTableCell.forTableColumn(new NumberStringConverter()));
+        valorAlcancadoCol.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Indicador<?>, Number>>() {
+            @Override
+            public void handle(TableColumn.CellEditEvent<Indicador<?>, Number> t) {
+                if (t.getTablePosition().getRow() == 0) {
+                    ((Indicador<?>) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+                            .setValorAlcancadoNumeric(t.getNewValue().intValue());
+                } else {
+                    t.getTableView().refresh();
+                }
+            }
+        });
+        tabela.getColumns().add(nomeIndicadorCol);
+        tabela.getColumns().add(valorEsperadoCol);
+        tabela.getColumns().add(valorAlcancadoCol);
+        tabela.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
+    }
 
-        numeroPublico = new Indicador("Quantidade de público", evento.getPublicoEsperado(),
+    /**
+     * adiciona na tabela de indicadores apenas aqueles que sao utilizados em alguma
+     * meta do evento
+     */
+    private void loadIndicadores() {
+        numeroPublico = new Indicador<Integer>("Quantidade de público", evento.getPublicoEsperado(),
                 evento.getPublicoAlcancado());
-        numeroMestres = new Indicador("Número de mestres da cultura", evento.getNumParticipantesEsperado(),
-                evento.getListaParticipantes().size());
-        numeroMunicipios = new Indicador("Número de municípios", evento.getNumMunicipiosEsperado(),
+
+        addIndicador(numeroPublico);
+
+        numeroMestres = new Indicador<Integer>("Número de mestres da cultura", evento.getNumParticipantesEsperado(),
+                evento.getNumParticipantesAlcancado());
+        numeroMunicipios = new Indicador<Integer>("Número de municípios", evento.getNumMunicipiosEsperado(),
                 evento.getNumMunicipiosAlcancado());
 
-        addIndicador(tabelaIndicadoresGerais, numeroPublico);
-        addIndicador(tabelaIndicadoresMeta1, numeroMestres);
-        addIndicador(tabelaIndicadoresMeta2, numeroMunicipios);
+        numeroColaboradores = new Indicador<Integer>("Número de colaboradores", evento.getNumColaboradoresEsperado(),
+                evento.getNumColaboradoresAlcancado());
+        for (Meta meta : evento.getListaMetas()) {
+            if (meta.getIdMeta() == 1) {
+                addIndicador(numeroMunicipios);
+            }
+            if (meta.getIdMeta() == 2) {
+                addIndicador(numeroMestres);
+            }
+            if (meta.getIdMeta() == 4) {
+                addIndicador(numeroColaboradores);
+            }
+        }
+    }
+
+    private void addIndicador(Indicador<?> indicador) {
+        if (!tabelaIndicadores.getItems().contains(indicador)) {
+            tabelaIndicadores.getItems().add(indicador);
+        }
     }
 
     private void loadInstituicoes() {
@@ -318,7 +376,8 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
         eventoBuilder.setAcessivelEmLibras(libras.isSelected()).setCertificavel(certificavel.isSelected())
                 .setHorario(formatTimeInputField(horario)).setCargaHoraria(formatTimeInputField(cargaHoraria))
                 .setNumParticipantesEsperado(numeroMestres.getValorEsperado())
-                .setMunicipiosEsperado(numeroMunicipios.getValorEsperado());
+                .setMunicipiosEsperado(numeroMunicipios.getValorEsperado())
+                .setNumColaboradoresEsperado(numeroColaboradores.getValorEsperado());
 
         return eventoBuilder.getEvento();
     }
@@ -486,41 +545,6 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
             });
 
         }
-    }
-
-    private void loadTable(TableView<Indicador> tabela) {
-        TableColumn<Indicador, String> nomeIndicador = new TableColumn<>("Nome do indicador");
-        nomeIndicador.setCellValueFactory(new PropertyValueFactory<>("nome"));
-
-        TableColumn<Indicador, Integer> valorEsperado = new TableColumn<>("Valor esperado");
-        valorEsperado.setCellValueFactory(new PropertyValueFactory<>("valorEsperado"));
-        valorEsperado.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
-        valorEsperado.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Indicador, Integer>>() {
-            @Override
-            public void handle(TableColumn.CellEditEvent<Indicador, Integer> t) {
-                ((Indicador) t.getTableView().getItems().get(t.getTablePosition().getRow()))
-                        .setValorEsperado(t.getNewValue());
-            }
-        });
-        TableColumn<Indicador, Integer> valorAlcancado = new TableColumn<>("Valor alcançado");
-        valorAlcancado.setCellValueFactory(new PropertyValueFactory<>("valorAlcancado"));
-        valorAlcancado.setCellFactory(TextFieldTableCell.forTableColumn(new IntegerStringConverter()));
-        valorAlcancado.setOnEditCommit(new EventHandler<TableColumn.CellEditEvent<Indicador, Integer>>() {
-            @Override
-            public void handle(TableColumn.CellEditEvent<Indicador, Integer> t) {
-                ((Indicador) t.getTableView().getItems().get(t.getTablePosition().getRow()))
-                        .setValorAlcancado(t.getNewValue());
-            }
-        });
-
-        tabela.getColumns().add(nomeIndicador);
-        tabela.getColumns().add(valorEsperado);
-        tabela.getColumns().add(valorAlcancado);
-        tabela.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
-    }
-
-    private void addIndicador(TableView<Indicador> tabela, Indicador indicador) {
-        tabela.setItems(FXCollections.observableArrayList(indicador));
     }
 
     /**
@@ -934,7 +958,7 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
         }
     }
 
-    public void addListenersOrganizador(ObservableList<PreviewInstituicaoController> observableList) {
+    private void addListenersOrganizador(ObservableList<PreviewInstituicaoController> observableList) {
         VisualizarEventoController superController = this;
         observableList.addListener(new ListChangeListener<PreviewInstituicaoController>() {
             @Override
@@ -959,7 +983,7 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
 
     }
 
-    public void addListenersColaborador(ObservableList<PreviewInstituicaoController> observableList) {
+    private void addListenersColaborador(ObservableList<PreviewInstituicaoController> observableList) {
         VisualizarEventoController superController = this;
         observableList.addListener(new ListChangeListener<PreviewInstituicaoController>() {
             @Override
