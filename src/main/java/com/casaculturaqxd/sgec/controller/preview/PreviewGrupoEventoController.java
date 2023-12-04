@@ -11,7 +11,9 @@ import java.util.NoSuchElementException;
 import java.util.ResourceBundle;
 
 import com.casaculturaqxd.sgec.App;
+import com.casaculturaqxd.sgec.DAO.GrupoEventosDAO;
 import com.casaculturaqxd.sgec.controller.VisualizarGrupoEventosController;
+import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.GrupoEventos;
 import com.casaculturaqxd.sgec.models.Meta;
 import com.casaculturaqxd.sgec.service.DateFormattingService;
@@ -32,6 +34,9 @@ public class PreviewGrupoEventoController {
     
     private final int DT_LIMITE_NUM_DIAS_UTEIS = 5;
     private final Image IMAGEM_DEFAULT = new Image(App.class.getResourceAsStream("imagens/default_image.png"));
+
+    private GrupoEventosDAO dao;
+    private DatabasePostgres db = DatabasePostgres.getInstance("URL", "USER_NAME", "PASSWORD");
 
     @FXML
     private ResourceBundle resources;
@@ -69,7 +74,6 @@ public class PreviewGrupoEventoController {
 
     public void setGrupoEventos(GrupoEventos grupoEventos) {
         this.grupoEventos = grupoEventos;
-
         loadContent();
     }
 
