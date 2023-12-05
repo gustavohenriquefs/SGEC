@@ -28,7 +28,8 @@ public class LoginController {
 
     private User usuario;
     private UserDAO userDAO;
-    private final DatabasePostgres userConnection = DatabasePostgres.getInstance("URL", "USER_NAME", "PASSWORD");
+    private final DatabasePostgres userConnection = DatabasePostgres.getInstance("URL_TEST", "USER_NAME_TEST",
+            "PASSWORD_TEST");
 
     /**
      * Carrega a página com o botão de login desabilitado
@@ -40,8 +41,8 @@ public class LoginController {
     }
 
     /**
-     * verifica no banco de dados se as credenciais estão corretas,
-     * se sim transita para a proxima tela.
+     * verifica no banco de dados se as credenciais estão corretas, se sim transita
+     * para a proxima tela.
      * 
      * @throws IOException
      * @throws NoSuchAlgorithmException
@@ -50,7 +51,7 @@ public class LoginController {
     public void authUsuario() throws IOException, SQLException {
         usuario = new User(fieldEmail.getText(), fieldSenha.getText());
         try {
-            if(!userDAO.usuarioExists(usuario.getEmail())){
+            if (!userDAO.usuarioExists(usuario.getEmail())) {
                 alerta.setAlertType(AlertType.ERROR);
                 alerta.setContentText("Usuário não existe");
                 alerta.show();
