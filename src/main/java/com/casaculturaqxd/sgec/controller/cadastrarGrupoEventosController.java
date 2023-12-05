@@ -4,7 +4,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Optional;
@@ -14,14 +16,18 @@ import org.controlsfx.control.textfield.TextFields;
 
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.EventoDAO;
+import com.casaculturaqxd.sgec.builder.EventoBuilder;
+import com.casaculturaqxd.sgec.builder.GrupoEventosBuilder;
 import com.casaculturaqxd.sgec.controller.dialog.DialogNovaInstituicao;
 import com.casaculturaqxd.sgec.controller.preview.PreviewEventoController;
 import com.casaculturaqxd.sgec.controller.preview.PreviewInstituicaoController;
 import com.casaculturaqxd.sgec.controller.preview.PreviewParticipanteController;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.Evento;
+import com.casaculturaqxd.sgec.models.GrupoEventos;
 import com.casaculturaqxd.sgec.models.Instituicao;
 import com.casaculturaqxd.sgec.models.Localizacao;
+import com.casaculturaqxd.sgec.models.Meta;
 import com.casaculturaqxd.sgec.models.Participante;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 
@@ -30,6 +36,7 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar;
@@ -40,9 +47,11 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputControl;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -50,8 +59,11 @@ public class CadastrarGrupoEventosController implements ControllerServiceFile, C
     DatabasePostgres db = DatabasePostgres.getInstance("URL", "USER_NAME", "PASSWORD");
     EventoDAO eventoDAO = new EventoDAO(db.getConnection());
     AutoCompletionBinding<String> binding;
+    GrupoEventosBuilder builderGrupoEvento = new GrupoEventosBuilder();
     @FXML
     private VBox root;
+    @FXML
+    HBox secaoMetas;
     @FXML 
     TextField titulo, publicoEsperado, publicoAlcancado, participantesEsperado, colaboradoresEsperados, acoesDeselvolvidasEsperadas;
     @FXML
@@ -87,6 +99,80 @@ public class CadastrarGrupoEventosController implements ControllerServiceFile, C
         FXMLLoader carregarMenu =
                 new FXMLLoader(App.class.getResource("view/componentes/menu.fxml"));
         root.getChildren().add(0, carregarMenu.load());
+    }
+
+    private GrupoEventos getTargetGrupoEvento() throws SQLException {
+        builderGrupoEvento = new GrupoEventosBuilder();
+        Date novaDataInicial = dataInicial.getValue() != null ? Date.valueOf(dataInicial.getValue()) : null;
+        Date novaDataFinal = dataFinal.getValue() != null ? Date.valueOf(dataFinal.getValue()) : null;
+        int novoPublicoEsperado = formatNumericInputField(publicoEsperado);
+        int novoPublicoAlcancado = formatNumericInputField(publicoAlcancado);
+        int numParticipantesEsperado = formatNumericInputField(participantesEsperado);
+        int numColaboradoresEsperados = formatNumericInputField(colaboradoresEsperados);
+        int numAcoesDeselvolvidasEsperadas = formatNumericInputField(acoesDeselvolvidasEsperadas);
+
+        builderGrupoEvento.setNome(titulo.getText()).setDescricao(descricao.getText())
+                .setClassificacaoEtaria(classificacaoEtaria.getSelectionModel().getSelectedItem())
+                .setDataInicial(novaDataInicial).setDataFinal(novaDataFinal).setPublicoEsperado(novoPublicoEsperado)
+                .setPublicoAlcancado(novoPublicoAlcancado)
+                .setPublicoEsperado(novoPublicoEsperado)
+                .setNumParticipantesEsperado(numParticipantesEsperado)
+                .setNumColaboradoresEsperado(numColaboradoresEsperados)
+                .setNumAcoesEsperado(numAcoesDeselvolvidasEsperadas);
+        builderGrupoEvento.setMetas(getMetasSelecionadas());
+
+        ArrayList<Instituicao> colaboradores = new ArrayList<>();
+
+        for (PreviewInstituicaoController controller : listaControllersColaboradores) {
+            Instituicao instituicao = controller.getInstituicao();
+            colaboradores.add(instituicao);
+        }
+
+        ArrayList<Instituicao> organizadores = new ArrayList<>();
+
+        for (PreviewInstituicaoController controller : listaControllersOrganizadores) {
+            Instituicao instituicao = controller.getInstituicao();
+            organizadores.add(instituicao);
+        }
+
+        ArrayList<Evento> eventos = new ArrayList<>();
+
+        for (PreviewEventoController controller : listaControllersEventos) {
+            Evento evento = controller.getEvento();
+            eventos.add(evento);
+        }
+
+        builderGrupoEvento.setColaboradores(colaboradores);
+        builderGrupoEvento.setOrganizadores(organizadores);
+        builderGrupoEvento.setEventos(eventos);
+
+        return builderGrupoEvento.getGrupoEventos();
+    }
+
+    private int formatNumericInputField(TextInputControl inputField) {
+        try {
+            return Integer.parseInt(inputField.getText());
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+
+    }
+
+    public ArrayList<Meta> getMetasSelecionadas() {
+        ArrayList<CheckBox> checkBoxes = new ArrayList<>();
+        ArrayList<Meta> metasSelecionadas = new ArrayList<>();
+        for (Node node : secaoMetas.getChildren()) {
+            if (node instanceof CheckBox) {
+                checkBoxes.add((CheckBox) node);
+            }
+        }
+        for (CheckBox checkBox : checkBoxes) {
+            // ids sao 1-based
+            if (checkBox.isSelected()) {
+                metasSelecionadas.add(new Meta(checkBoxes.indexOf(checkBox) + 1));
+            }
+        }
+        return metasSelecionadas;
     }
 
     public void addListenersColaborador(ObservableList<PreviewInstituicaoController> observableList) {
