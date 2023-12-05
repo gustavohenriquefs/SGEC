@@ -10,11 +10,12 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox id="pageCadastrarGrupoEvento" fx:id="root" stylesheets="@../css/page/cadastrarGrupoEventoStyle.css" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.cadastrarGrupoEventosController">
+<VBox id="pageCadastrarGrupoEvento" fx:id="root" stylesheets="@../css/page/cadastrarGrupoEventoStyle.css" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.casaculturaqxd.sgec.controller.CadastrarGrupoEventosController">
    <ScrollPane fx:id="container" fitToWidth="true">
       <content>
          <AnchorPane id="principal" fx:id="principal" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
@@ -42,22 +43,22 @@
                                  <TextField fx:id="titulo" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="400.0" HBox.hgrow="ALWAYS" />
                               </children>
                            </HBox>
-                           <CheckBox fx:id="fruicao" mnemonicParsing="false" text="Fruição" HBox.hgrow="ALWAYS">
+                           <CheckBox fx:id="checkMeta1" mnemonicParsing="false" text="Fruição" HBox.hgrow="ALWAYS">
                               <HBox.margin>
                                  <Insets top="5.0" />
                               </HBox.margin>
                            </CheckBox>
-                           <CheckBox fx:id="fortalecimento" layoutX="410.0" layoutY="15.0" mnemonicParsing="false" text="Fortalecimento de patrimônio cultural" HBox.hgrow="ALWAYS">
+                           <CheckBox fx:id="checkMeta2" layoutX="410.0" layoutY="15.0" mnemonicParsing="false" text="Fortalecimento de patrimônio cultural" HBox.hgrow="ALWAYS">
                               <HBox.margin>
                                  <Insets top="5.0" />
                               </HBox.margin>
                            </CheckBox>
-                           <CheckBox fx:id="formacao" layoutX="470.0" layoutY="15.0" mnemonicParsing="false" text="Formação em arte e cultura" HBox.hgrow="ALWAYS">
+                           <CheckBox fx:id="checkMeta3" layoutX="470.0" layoutY="15.0" mnemonicParsing="false" text="Formação em arte e cultura" HBox.hgrow="ALWAYS">
                               <HBox.margin>
                                  <Insets top="5.0" />
                               </HBox.margin>
                            </CheckBox>
-                           <CheckBox fx:id="convocatoria" mnemonicParsing="false" text="Convocatória">
+                           <CheckBox fx:id="checkMeta4" mnemonicParsing="false" text="Convocatória">
                               <HBox.margin>
                                  <Insets top="5.0" />
                               </HBox.margin>
@@ -148,12 +149,12 @@
                                  <Insets />
                               </HBox.margin>
                               <children>
-                                 <Label text="Participantes Alcançados">
+                                 <Label text="Colaboradores Esperados">
                                     <font>
                                        <Font name="System Bold" size="12.0" />
                                     </font>
                                  </Label>
-                                 <TextField fx:id="participantesAlcancados" />
+                                 <TextField fx:id="colaboradoresEsperados" />
                               </children>
                            </VBox>
                            <VBox>
@@ -183,7 +184,11 @@
                                              <Insets left="20.0" />
                                           </VBox.margin>
                                        </Button>
+                                       <FlowPane fx:id="secaoEvento" prefHeight="200.0" prefWidth="200.0" />
                                     </children>
+                                    <HBox.margin>
+                                       <Insets bottom="10.0" top="20.0" />
+                                    </HBox.margin>
                                  </VBox>
                               </children>
                            </HBox>
@@ -191,12 +196,16 @@
                               <children>
                                  <VBox alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
                                     <children>
-                                       <Button fx:id="adicionarColaboradores" alignment="BOTTOM_RIGHT" mnemonicParsing="false" styleClass="botoes" text="Adicionar Colaboradores">
+                                       <Button fx:id="adicionarColaboradores" alignment="BOTTOM_RIGHT" mnemonicParsing="false" onAction="#adicionarColaborador" styleClass="botoes" text="Adicionar Colaboradores">
                                           <VBox.margin>
                                              <Insets left="20.0" />
                                           </VBox.margin>
                                        </Button>
+                                       <FlowPane fx:id="secaoColaboradores" prefHeight="200.0" prefWidth="200.0" />
                                     </children>
+                                    <HBox.margin>
+                                       <Insets bottom="10.0" top="20.0" />
+                                    </HBox.margin>
                                  </VBox>
                               </children>
                            </HBox>
@@ -204,11 +213,12 @@
                               <children>
                                  <VBox alignment="CENTER_LEFT" prefHeight="214.0" prefWidth="1544.0">
                                     <children>
-                                       <Button alignment="BOTTOM_LEFT" mnemonicParsing="false" styleClass="botoes" text="Adicionar Organizadores">
+                                       <Button alignment="BOTTOM_LEFT" mnemonicParsing="false" onAction="#adicionarOrganizador" styleClass="botoes" text="Adicionar Organizadores">
                                           <VBox.margin>
                                              <Insets left="20.0" />
                                           </VBox.margin>
                                        </Button>
+                                       <FlowPane fx:id="secaoOrganizadores" prefHeight="200.0" prefWidth="200.0" />
                                     </children>
                                     <HBox.margin>
                                        <Insets />
