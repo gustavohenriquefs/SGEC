@@ -46,7 +46,7 @@
                                     <Font name="System Bold" size="36.0" />
                                  </font>
                               </Label>
-                              <HBox spacing="30.0">
+                              <HBox spacing="10.0">
                                  <children>
                                     <DatePicker fx:id="dataInicial" editable="false" />
                                     <DatePicker fx:id="dataFinal" editable="false" />
@@ -65,7 +65,7 @@
                                     </VBox>
                                  </children>
                               </HBox>
-                              <HBox spacing="40.0">
+                              <HBox>
                                  <children>
                                     <ChoiceBox id="classificacaoEtaria" fx:id="classificacaoEtaria" style="-fx-opacity: 1" />
                                  </children>
@@ -112,9 +112,9 @@
                                           </Label>
                                        </children>
                                     </HBox>
-                                    <VBox fx:id="organizadores" prefHeight="200.0" prefWidth="1426.0" styleClass="listas">
+                                    <VBox fx:id="organizadores" prefHeight="200.0" styleClass="listas">
                                        <children>
-                                          <FlowPane fx:id="listaOrganizadores" hgap="10.0" prefHeight="200.0" prefWidth="200.0" vgap="10.0" />
+                                          <FlowPane fx:id="listaOrganizadores" hgap="10.0" prefHeight="200.0" vgap="10.0" />
                                        </children>
                                     </VBox>
                                     <Button fx:id="adicionarOrganizadores" mnemonicParsing="false" onAction="#adicionarOrganizador" styleClass="botoes" text="Adicionar Organizador +" />
@@ -130,7 +130,7 @@
                                     <Pane prefHeight="74.0" prefWidth="1426.0" styleClass="faixas" />
                                     <VBox fx:id="colaboradores" prefHeight="200.0" prefWidth="100.0" styleClass="listas">
                                        <children>
-                                          <FlowPane fx:id="listaColaboradores" hgap="10.0" prefHeight="200.0" prefWidth="200.0" vgap="10.0" />
+                                          <FlowPane fx:id="listaColaboradores" hgap="10.0" prefHeight="200.0" vgap="10.0" />
                                        </children>
                                     </VBox>
                                     <Button fx:id="adicionarColaboradores" mnemonicParsing="false" onAction="#adicionarColaborador" styleClass="botoes" text="Adicionar Colaboradores +" />
@@ -153,17 +153,17 @@
                                                 <Font name="System Bold" size="36.0" />
                                              </font>
                                           </Label>
-                                          <Pane prefHeight="4.0" prefWidth="160.0" styleClass="faixas" />
+                                          <Pane styleClass="faixas" />
                                        </children>
                                     </VBox>
                                     <VBox>
                                        <children>
-                                          <Label prefHeight="26.0" prefWidth="52.0" text="Gerais">
+                                          <Label text="Gerais">
                                              <font>
                                                 <Font name="System Bold" size="16.0" />
                                              </font>
                                           </Label>
-                                          <Pane prefHeight="4.0" prefWidth="160.0" styleClass="faixas" />
+                                          <Pane styleClass="faixas" />
                                           <TableView id="tabela" fx:id="tabelaIndicadores" editable="true" prefHeight="200.0" style="-fx-background-color: #FFFFFF;" />
                                        </children>
                                     </VBox>
@@ -180,12 +180,16 @@
                                                 <FlowPane fx:id="acoesRealizadas" prefHeight="100.0" HBox.hgrow="ALWAYS" />
                                              </children>
                                           </HBox>
-                                          <Button fx:id="adicionarEvento" mnemonicParsing="false" styleClass="botoes" text="Adicionar novo evento +" />
+                                          <Button fx:id="adicionarEvento" mnemonicParsing="false" onAction="#adicionarEvento" styleClass="botoes" text="Adicionar novo evento +" />
                                        </children>
                                     </VBox>
-                                    <HBox alignment="BOTTOM_RIGHT" spacing="30.0" VBox.vgrow="ALWAYS">
+                                    <HBox alignment="BOTTOM_RIGHT" VBox.vgrow="ALWAYS">
                                        <children>
-                                          <Button id="cancelar" fx:id="cancelar" mnemonicParsing="false" onAction="#cancelar" text="Cancelar" />
+                                          <HBox alignment="TOP_RIGHT" HBox.hgrow="ALWAYS">
+                                             <children>
+                                                <Button id="cancelar" fx:id="cancelar" mnemonicParsing="false" onAction="#cancelar" text="Cancelar" />
+                                             </children>
+                                          </HBox>
                                           <Button fx:id="salvarAlteracoes" mnemonicParsing="false" onAction="#salvarAlteracoes" styleClass="botoes" text="Salvar alterações" />
                                        </children>
                                     </HBox>

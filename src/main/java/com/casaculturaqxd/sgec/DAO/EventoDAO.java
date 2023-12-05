@@ -210,12 +210,12 @@ public class EventoDAO extends DAO {
   }
 
   public ArrayList<Evento> pesquisarEvento(String nome, Date inicioDate, Date fimDate) {
-    String sql = "select id_evento,nome_evento,data_inicial, horario, id_service_file from evento where nome_evento ilike ? ";
+    String sql = "select id_evento, nome_evento, inicio, fim from pesquisar_evento where nome_evento ilike ? ";
     if (inicioDate != null)
-      sql += "and data_inicial >= '" + inicioDate.toString() + "' ";
+      sql += "and inicio >= '" + inicioDate.toString() + "' ";
 
     if (fimDate != null)
-      sql += "and data_final <= '" + fimDate.toString() + "' ";
+      sql += "and fim <= '" + fimDate.toString() + "' ";
 
     if (nome == "" && inicioDate == null && fimDate == null)
       sql += "limit 30";

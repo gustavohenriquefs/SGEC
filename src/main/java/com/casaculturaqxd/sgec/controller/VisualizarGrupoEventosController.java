@@ -2,7 +2,9 @@ package com.casaculturaqxd.sgec.controller;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.sql.Date;
 import java.sql.SQLException;
@@ -11,7 +13,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Optional;
 
+import org.controlsfx.control.textfield.TextFields;
+
 import com.casaculturaqxd.sgec.App;
+import com.casaculturaqxd.sgec.DAO.EventoDAO;
 import com.casaculturaqxd.sgec.DAO.GrupoEventosDAO;
 import com.casaculturaqxd.sgec.DAO.ServiceFileDAO;
 import com.casaculturaqxd.sgec.builder.EventoBuilder;
@@ -52,6 +57,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
@@ -128,6 +134,7 @@ public class VisualizarGrupoEventosController implements ControllerEvento{
     @FXML
     private Tooltip tooltipCliboard;
     private Alert mensagem = new Alert(AlertType.NONE);
+    private File file;
 
     public void initialize() throws IOException {
         compararDatas();
@@ -585,16 +592,32 @@ public class VisualizarGrupoEventosController implements ControllerEvento{
         Date novaDataFinal = dataFinal.getValue() != null ? Date.valueOf(dataFinal.getValue()) : null;
         novogrupoEventos.setDataInicial(novaDataInicial);
         novogrupoEventos.setDataFinal(novaDataFinal);
-        novogrupoEventos.setColaboradores(null);
+        novogrupoEventos.setColaboradores(grupoEventos.getColaboradores());
         novogrupoEventos.setClassificacaoEtaria(classificacaoEtaria.getValue());
         novogrupoEventos.setPublicoAlcancado(numeroPublico.getValorAlcancado());
         novogrupoEventos.setPublicoEsperado(numeroPublico.getValorEsperado());
-        novogrupoEventos.setNome(grupoEventos.getNome());
-        novogrupoEventos.setDescricao(grupoEventos.getDescricao());
+        novogrupoEventos.setNome(tituloEvento.getText());
+        novogrupoEventos.setDescricao(descricao.getText());
         novogrupoEventos.setNumAcoesAlcancado(grupoEventos.getEventos().size());
         novogrupoEventos.setIdGrupoEventos(grupoEventos.getIdGrupoEventos());
         novogrupoEventos.setMetas(grupoEventos.getMetas());
         
+        if(grupoEventos.getImagemCapa() != null){
+            InputStream fileAsStream;
+            try {
+                ServiceFileDAO serviceFileDAO = new ServiceFileDAO(db.getConnection());
+                file = serviceFileDAO.getContent(grupoEventos.getImagemCapa());
+                fileAsStream = new FileInputStream(file);
+                this.imagemCapa.setImage(new Image(fileAsStream));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
         return novogrupoEventos;
     }
 
