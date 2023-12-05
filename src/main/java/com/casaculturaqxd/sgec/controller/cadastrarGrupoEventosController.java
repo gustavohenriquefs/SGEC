@@ -1,15 +1,25 @@
 package com.casaculturaqxd.sgec.controller;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Optional;
 
+import org.controlsfx.control.textfield.AutoCompletionBinding;
+import org.controlsfx.control.textfield.TextFields;
+
 import com.casaculturaqxd.sgec.App;
+import com.casaculturaqxd.sgec.DAO.EventoDAO;
 import com.casaculturaqxd.sgec.controller.dialog.DialogNovaInstituicao;
 import com.casaculturaqxd.sgec.controller.preview.PreviewEventoController;
 import com.casaculturaqxd.sgec.controller.preview.PreviewInstituicaoController;
 import com.casaculturaqxd.sgec.controller.preview.PreviewParticipanteController;
+import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
+import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.Instituicao;
 import com.casaculturaqxd.sgec.models.Localizacao;
 import com.casaculturaqxd.sgec.models.Participante;
@@ -30,11 +40,16 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
+import javafx.scene.image.Image;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class CadastrarGrupoEventosController implements ControllerServiceFile, ControllerEvento {
+    DatabasePostgres db = DatabasePostgres.getInstance("URL", "USER_NAME", "PASSWORD");
+    EventoDAO eventoDAO = new EventoDAO(db.getConnection());
+    AutoCompletionBinding<String> binding;
     @FXML
     private VBox root;
     @FXML 
@@ -50,12 +65,13 @@ public class CadastrarGrupoEventosController implements ControllerServiceFile, C
     TextArea descricao;
     @FXML
     FlowPane secaoEvento, secaoColaboradores, secaoOrganizadores;
+    ArrayList<String> nomeEventos;
 
     ObservableList<PreviewInstituicaoController> listaControllersOrganizadores = FXCollections.<PreviewInstituicaoController>observableList(new ArrayList<>()), 
             listaControllersColaboradores = FXCollections.<PreviewInstituicaoController>observableList(new ArrayList<>());
     ObservableList<PreviewEventoController> listaControllersEventos = FXCollections
             .<PreviewEventoController>observableList(new ArrayList<>());
-
+   
     private Alert mensagem = new Alert(AlertType.NONE);
 
     public void initialize() throws IOException {
@@ -63,6 +79,8 @@ public class CadastrarGrupoEventosController implements ControllerServiceFile, C
         classificacaoEtaria.getItems().addAll(classificacoes);
         addListenersColaborador(listaControllersColaboradores);
         addListenersOrganizador(listaControllersOrganizadores);
+        addListenersEvento(listaControllersEventos);
+        nomeEventos = obterNomesEventos();
     }
 
     private void loadMenu() throws IOException {
@@ -119,6 +137,104 @@ public class CadastrarGrupoEventosController implements ControllerServiceFile, C
             }
         });
 
+    }
+
+    public void addListenersEvento(ObservableList<PreviewEventoController> observableList) {
+        CadastrarGrupoEventosController superController = this;
+        observableList.addListener(new ListChangeListener<PreviewEventoController>() {
+            @Override
+            public void onChanged(ListChangeListener.Change<? extends PreviewEventoController> change) {
+                while (change.next()) {
+                    if (change.wasAdded()) {
+                        for (PreviewEventoController addedController : change.getAddedSubList()) {
+                            addedController.setParentController(superController);
+
+                            secaoEvento.getChildren().add(addedController.getContainer());
+                        }
+                    }
+                    if (change.wasRemoved()) {
+                        for (PreviewEventoController removedController : change.getRemoved()) {
+                            // Remover o Pane de preview ao deletar um Participante da lista
+                            secaoEvento.getChildren().remove(removedController.getContainer());
+                        }
+                    }
+                }
+            }
+        });
+
+    }
+
+    public void adicionarEventos(){
+        TextInputDialog dialog = new TextInputDialog();
+        dialog.setTitle("Adicionar Evento");
+        dialog.setHeaderText("Digite o nome do evento:");
+        dialog.setContentText("Evento:");
+        dialog.getEditor().setText("");
+        dialog.getEditor().setPromptText("Digite ou selecione um evento");
+        binding = TextFields.bindAutoCompletion(dialog.getEditor(), nomeEventos);
+
+        Optional<String> result = dialog.showAndWait();
+        result.ifPresent(nomeEvento -> {
+            Optional<Evento> evento = null;
+            try {
+                evento = eventoDAO.getEvento(nomeEvento);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            if(evento.isPresent())
+                adicionarEventos(evento.get());
+        });
+    
+    }
+
+    public void adicionarEventos(Evento evento){
+        if (!contemEvento(listaControllersEventos, evento)) {
+            FXMLLoader loaderEvento = new FXMLLoader(
+                    App.class.getResource("view/preview/previewEventoExistente.fxml"));
+            try {
+                loaderEvento.load();
+                PreviewEventoController controller = loaderEvento.getController();
+                controller.setEvento(evento);
+                listaControllersEventos.add(controller);
+            } catch (IOException e) {
+                Alert alert = new Alert(AlertType.WARNING, "falha carregando evento");
+                alert.show();
+            }
+        } else {
+            mensagem.setAlertType(AlertType.ERROR);
+            mensagem.setContentText("Não foi possivel realizar a vinculação: Evento já foi vinculada!");
+            mensagem.show();
+        }
+    }
+
+    public static boolean contemEvento(ObservableList<PreviewEventoController> listaPreview,
+    Evento evento) {
+        for (PreviewEventoController preview : listaPreview) {
+            if (preview.getEvento().equals(evento)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public ArrayList<String> obterNomesEventos(){
+        ArrayList<Evento> eventos = eventoDAO.pesquisarEvento("", null, null);
+        ArrayList<String> nomesEventos = new ArrayList<>();
+        for (Evento evento : eventos) {
+            nomesEventos.add(evento.getNome());
+        }
+        return nomesEventos;
+    }
+
+    public void removerEvento(Evento evento) {
+        if (contemEvento(listaControllersEventos, evento)) {
+            Iterator<PreviewEventoController> iterator = listaControllersEventos.iterator();
+            while (iterator.hasNext()) {
+                if (iterator.next().getEvento().equals(evento)) {
+                    iterator.remove();
+                }
+            }
+        }
     }
 
     @Override
