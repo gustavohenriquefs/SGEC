@@ -923,4 +923,10 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
 
         botaoNovaLocalizacao.setDisable(false);
     }
+
+    @Override
+    public void removerEvento(Evento evento) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'removerEvento'");
+    }
 }
