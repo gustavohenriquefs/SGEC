@@ -1,5 +1,6 @@
 package com.casaculturaqxd.sgec.controller;
 
+import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.Instituicao;
 import com.casaculturaqxd.sgec.models.Localizacao;
 import com.casaculturaqxd.sgec.models.Participante;
@@ -25,4 +26,6 @@ public interface ControllerEvento {
     public void adicionarLocalizacao(Localizacao localizacao);
 
     public void removerLocalizacao(Localizacao localizacao);
+
+    public void removerEvento(Evento evento);
 }
