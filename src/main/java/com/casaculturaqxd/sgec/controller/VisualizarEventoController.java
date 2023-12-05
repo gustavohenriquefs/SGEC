@@ -1,7 +1,10 @@
 package com.casaculturaqxd.sgec.controller;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Time;
@@ -70,6 +73,7 @@ import javafx.scene.control.TextInputControl;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
@@ -78,6 +82,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.util.converter.IntegerStringConverter;
@@ -88,6 +93,7 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
     private DatabasePostgres db = DatabasePostgres.getInstance("URL", "USER_NAME", "PASSWORD");
     private EventoDAO eventoDAO = new EventoDAO();
     private LocalizacaoDAO localizacaoDAO = new LocalizacaoDAO();
+    private ServiceFileDAO serviceFileDAO;
     private File lastDirectoryOpen;
     private ArrayList<ServiceFile> removedFiles;
     private DateFormat formatterHorario;
@@ -134,8 +140,11 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
     @FXML
     private ImageView copiaCola;
     @FXML
+    ImageView capaEvento;
+    @FXML
     private Tooltip tooltipCliboard;
     private Alert mensagem = new Alert(AlertType.NONE);
+    File file = null;
 
     public void initialize() throws IOException {
         formatterHorario = new SimpleDateFormat("HH:mm");
@@ -155,6 +164,7 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
         removedFiles = new ArrayList<>();
         eventoDAO.setConnection(db.getConnection());
         localizacaoDAO.setConnection(db.getConnection());
+        serviceFileDAO = new ServiceFileDAO(db.getConnection());
         compararDatas();
     }
 
@@ -253,6 +263,21 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
         addIndicador(tabelaIndicadoresGerais, numeroPublico);
         addIndicador(tabelaIndicadoresMeta1, numeroMestres);
         addIndicador(tabelaIndicadoresMeta2, numeroMunicipios);
+
+        if(evento.getImagemCapa() != null){
+            InputStream fileAsStream;
+            try {
+                file = serviceFileDAO.getContent(evento.getImagemCapa());
+                fileAsStream = new FileInputStream(file);
+                this.capaEvento.setImage(new Image(fileAsStream));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void loadInstituicoes() {
@@ -319,6 +344,20 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
                 .setHorario(formatTimeInputField(horario)).setCargaHoraria(formatTimeInputField(cargaHoraria))
                 .setNumParticipantesEsperado(numeroMestres.getValorEsperado())
                 .setMunicipiosEsperado(numeroMunicipios.getValorEsperado());
+        if(file != null){
+            ServiceFile serviceFileTemp = new ServiceFile(file);
+            try {
+                if(serviceFileDAO.getArquivo(serviceFileTemp.getFileKey()).isEmpty()){
+                    serviceFileDAO.inserirArquivo(serviceFileTemp);
+                    serviceFileTemp = serviceFileDAO.getArquivo(serviceFileTemp.getFileKey()).get();
+                } else {
+                    serviceFileTemp = serviceFileDAO.getArquivo(serviceFileTemp.getFileKey()).get();
+                }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            eventoBuilder.setImagemCapa(serviceFileTemp);
+        }
 
         return eventoBuilder.getEvento();
     }
@@ -982,5 +1021,22 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
                 }
             }
         });
+    }
+
+    public void loadImagem(){
+        InputStream fileAsStream;
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Alterar foto do evento");
+        ExtensionFilter filterImagens = new ExtensionFilter("imagem", "*.jpeg", "*.jpg", "*.png", "*.bmp");
+        fileChooser.getExtensionFilters().add(filterImagens);
+        try {
+            file = fileChooser.showOpenDialog(stage);
+            fileAsStream = new FileInputStream(file);
+            capaEvento.setImage(new Image(fileAsStream));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
     }
 }
