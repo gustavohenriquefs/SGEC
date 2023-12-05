@@ -16,6 +16,7 @@ import org.controlsfx.control.textfield.TextFields;
 
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.EventoDAO;
+import com.casaculturaqxd.sgec.DAO.GrupoEventosDAO;
 import com.casaculturaqxd.sgec.builder.EventoBuilder;
 import com.casaculturaqxd.sgec.builder.GrupoEventosBuilder;
 import com.casaculturaqxd.sgec.controller.dialog.DialogNovaInstituicao;
@@ -40,16 +41,15 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.control.TextInputDialog;
-import javafx.scene.image.Image;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -58,6 +58,7 @@ import javafx.stage.Stage;
 public class CadastrarGrupoEventosController implements ControllerServiceFile, ControllerEvento {
     DatabasePostgres db = DatabasePostgres.getInstance("URL", "USER_NAME", "PASSWORD");
     EventoDAO eventoDAO = new EventoDAO(db.getConnection());
+    GrupoEventosDAO grupoEventosDAO = new GrupoEventosDAO(db.getConnection());
     AutoCompletionBinding<String> binding;
     GrupoEventosBuilder builderGrupoEvento = new GrupoEventosBuilder();
     @FXML
@@ -101,6 +102,114 @@ public class CadastrarGrupoEventosController implements ControllerServiceFile, C
         root.getChildren().add(0, carregarMenu.load());
     }
 
+    public void criarNovoEvento() {
+        verificarInput();
+
+        try {
+            GrupoEventos grupoEventos = getTargetGrupoEvento();
+            insertGrupoEvento(grupoEventos);
+            Alert alertaSucesso = new Alert(AlertType.CONFIRMATION, "Evento cadastrado com sucesso");
+            ButtonType sucesso = new ButtonType("OK", ButtonData.FINISH);
+            alertaSucesso.getButtonTypes().setAll(sucesso);
+            alertaSucesso.setResultConverter(dialogButton -> {
+                if (dialogButton == sucesso) {
+                    try {
+                        App.setRoot("view/home");
+                        return dialogButton;
+                    } catch (IOException e) {
+                        return null;
+                    }
+                }
+                return null;
+            });
+            alertaSucesso.showAndWait();
+        } catch (Exception e) {
+            Alert erroInsercao = new Alert(AlertType.ERROR, "falha cadastrando novo evento");
+            erroInsercao.show();
+        }
+    }
+
+    private void verificarInput() {
+        if (!camposObrigatoriosPreenchidos()) {
+            Alert erroLocalizacao = new Alert(AlertType.ERROR, "nem todos os campos obrigatorios foram preenchidos");
+            erroLocalizacao.show();
+            throw new RuntimeException("campos obrigatorios nao preenchidos");
+        } else if (secaoColaboradores.getChildren().isEmpty() && checkMeta4.isSelected()) {
+            Alert mensagemErro = new Alert(AlertType.ERROR, "Convocatórias precisam de pelo menos um colaborador");
+            mensagemErro.show();
+            throw new RuntimeException("Convocatorias precisam de pelo menos um colaborador");
+        }
+    }
+
+    public boolean camposObrigatoriosPreenchidos() {
+        if (classificacaoEtaria.getSelectionModel().getSelectedItem() == null || titulo.getText().isEmpty()
+                || dataInicial.getValue() == null || dataFinal.getValue() == null) {
+            destacarCamposNaoPreenchidos();
+            return false;
+        }
+        return true;
+    }
+
+    public void destacarCamposNaoPreenchidos() {
+        if (classificacaoEtaria.getSelectionModel().getSelectedItem() == null) {
+            classificacaoEtaria.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
+        } else {
+            classificacaoEtaria.setStyle(null);
+        }
+        if (titulo.getText().isEmpty()) {
+            titulo.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
+        } else {
+            titulo.setStyle(null);
+        }
+        if (dataInicial.getValue() == null) {
+            dataInicial.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
+        } else {
+            dataInicial.setStyle(null);
+        }
+        if (dataFinal.getValue() == null) {
+            dataFinal.setStyle("-fx-border-color: red; -fx-border-width: 1px;");
+        } else {
+            dataFinal.setStyle(null);
+        }
+    }
+
+    private boolean insertGrupoEvento(GrupoEventos grupoEventos) throws SQLException {
+        db.getConnection().setAutoCommit(false);
+
+        try {
+            if (!grupoEventosDAO.insertGrupoEventos(grupoEventos)) {
+                throw new SQLException();
+            }
+            ArrayList<Meta> metas = grupoEventos.getMetas();
+            for (Meta meta : metas) {
+                if (!grupoEventosDAO.vincularMeta(meta, grupoEventos)) {
+                    throw new SQLException();
+                }
+            }
+            
+            if (!grupoEventosDAO.vincularAllColaboradores(grupoEventos, grupoEventos.getColaboradores())) {
+                throw new SQLException();
+            }
+            if (!grupoEventosDAO.vincularAllOrganizadores(grupoEventos, grupoEventos.getOrganizadores())) {
+                throw new SQLException();
+            }
+
+            ArrayList<Evento> eventos = grupoEventos.getEventos();
+            for (Evento evento : eventos) {
+                if (!grupoEventosDAO.vincularEvento(grupoEventos, evento)) {
+                    throw new SQLException();
+                } 
+            }
+                    
+            return true;
+        } catch (SQLException e) {
+            db.getConnection().rollback();
+            return false;
+        } finally {
+            db.getConnection().setAutoCommit(true);
+        }
+    }
+
     private GrupoEventos getTargetGrupoEvento() throws SQLException {
         builderGrupoEvento = new GrupoEventosBuilder();
         Date novaDataInicial = dataInicial.getValue() != null ? Date.valueOf(dataInicial.getValue()) : null;
@@ -120,6 +229,8 @@ public class CadastrarGrupoEventosController implements ControllerServiceFile, C
                 .setNumColaboradoresEsperado(numColaboradoresEsperados)
                 .setNumAcoesEsperado(numAcoesDeselvolvidasEsperadas);
         builderGrupoEvento.setMetas(getMetasSelecionadas());
+
+        
 
         ArrayList<Instituicao> colaboradores = new ArrayList<>();
 

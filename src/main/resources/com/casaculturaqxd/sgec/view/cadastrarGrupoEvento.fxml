@@ -38,31 +38,35 @@
                      </VBox>
                      <HBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="740.0" spacing="10.0">
                         <children>
-                           <HBox HBox.hgrow="ALWAYS">
+                           <HBox prefHeight="30.0" prefWidth="968.0" HBox.hgrow="ALWAYS">
                               <children>
-                                 <TextField fx:id="titulo" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="400.0" HBox.hgrow="ALWAYS" />
+                                 <TextField fx:id="titulo" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="729.0" HBox.hgrow="ALWAYS" />
                               </children>
                            </HBox>
-                           <CheckBox fx:id="checkMeta1" mnemonicParsing="false" text="Fruição" HBox.hgrow="ALWAYS">
-                              <HBox.margin>
-                                 <Insets top="5.0" />
-                              </HBox.margin>
-                           </CheckBox>
-                           <CheckBox fx:id="checkMeta2" layoutX="410.0" layoutY="15.0" mnemonicParsing="false" text="Fortalecimento de patrimônio cultural" HBox.hgrow="ALWAYS">
-                              <HBox.margin>
-                                 <Insets top="5.0" />
-                              </HBox.margin>
-                           </CheckBox>
-                           <CheckBox fx:id="checkMeta3" layoutX="470.0" layoutY="15.0" mnemonicParsing="false" text="Formação em arte e cultura" HBox.hgrow="ALWAYS">
-                              <HBox.margin>
-                                 <Insets top="5.0" />
-                              </HBox.margin>
-                           </CheckBox>
-                           <CheckBox fx:id="checkMeta4" mnemonicParsing="false" text="Convocatória">
-                              <HBox.margin>
-                                 <Insets top="5.0" />
-                              </HBox.margin>
-                           </CheckBox>
+                           <HBox fx:id="secaoMetas" prefHeight="30.0" prefWidth="703.0">
+                              <children>
+                                 <CheckBox fx:id="checkMeta1" mnemonicParsing="false" prefHeight="18.0" prefWidth="79.0" text="Fruição" HBox.hgrow="ALWAYS">
+                                    <HBox.margin>
+                                       <Insets top="5.0" />
+                                    </HBox.margin>
+                                 </CheckBox>
+                                 <CheckBox fx:id="checkMeta2" mnemonicParsing="false" prefHeight="18.0" prefWidth="250.0" text="Fortalecimento de patrimônio cultural" HBox.hgrow="ALWAYS">
+                                    <HBox.margin>
+                                       <Insets top="5.0" />
+                                    </HBox.margin>
+                                 </CheckBox>
+                                 <CheckBox fx:id="checkMeta3" mnemonicParsing="false" prefHeight="18.0" prefWidth="208.0" text="Formação em arte e cultura" HBox.hgrow="ALWAYS">
+                                    <HBox.margin>
+                                       <Insets top="5.0" />
+                                    </HBox.margin>
+                                 </CheckBox>
+                                 <CheckBox fx:id="checkMeta4" mnemonicParsing="false" prefHeight="18.0" prefWidth="146.0" text="Convocatória">
+                                    <HBox.margin>
+                                       <Insets top="5.0" />
+                                    </HBox.margin>
+                                 </CheckBox>
+                              </children>
+                           </HBox>
                         </children>
                      </HBox>
                      <HBox>
@@ -84,7 +88,7 @@
                                        <Font name="System Bold" size="12.0" />
                                     </font>
                                  </Label>
-                                 <DatePicker fx:id="daataFinal" />
+                                 <DatePicker fx:id="dataFinal" />
                               </children>
                            </VBox>
                         </children>
@@ -231,7 +235,7 @@
                      <HBox alignment="TOP_RIGHT" spacing="20.0">
                         <children>
                            <Button id="cancelar" fx:id="cancelar" mnemonicParsing="false" prefHeight="26.0" prefWidth="124.0" style="-fx-background-color: #352929;" text="Cancelar" textFill="#fffef7" />
-                           <Button id="criar" fx:id="criar" mnemonicParsing="false" prefHeight="26.0" prefWidth="124.0" style="-fx-background-color: #2A3F25;" text="Criar" textFill="#fffef7" />
+                           <Button id="criar" fx:id="criar" mnemonicParsing="false" onAction="#criarNovoEvento" prefHeight="26.0" prefWidth="124.0" style="-fx-background-color: #2A3F25;" text="Criar" textFill="#fffef7" />
                         </children>
                      </HBox>
                   </children>
