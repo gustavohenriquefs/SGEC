@@ -179,7 +179,7 @@
                               <children>
                                  <VBox alignment="CENTER_LEFT" prefHeight="213.0" prefWidth="1545.0">
                                     <children>
-                                       <Button fx:id="adicionarEventos" mnemonicParsing="false" styleClass="botoes" text="Adicionar Eventos" textFill="WHITE">
+                                       <Button fx:id="adicionarEventos" mnemonicParsing="false" onAction="#adicionarEventos" styleClass="botoes" text="Adicionar Eventos" textFill="WHITE">
                                           <VBox.margin>
                                              <Insets left="20.0" />
                                           </VBox.margin>
