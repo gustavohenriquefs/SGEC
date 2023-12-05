@@ -371,6 +371,7 @@ public class EventoDAO extends DAO {
         Optional<ServiceFile> resultOptional = serviceFileDAO.getArquivo(imagemCapa);
         if (resultOptional.isPresent()) {
           imagemCapa = serviceFileDAO.getArquivo(imagemCapa).get();
+          imagemCapa.setContent(serviceFileDAO.getContent(imagemCapa));
         } else {
           imagemCapa = null;
         }

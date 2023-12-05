@@ -42,7 +42,9 @@ public class InstituicaoDAO extends DAO {
         ServiceFile imagemCapa = new ServiceFile(resultado.getInt("id_service_file"));
         if (imagemCapa.getServiceFileId() > 0) {
           // setar a capa somente se o arquivo existir
-          instituicao.setImagemCapa(serviceFileDAO.getArquivo(imagemCapa).get());
+          imagemCapa = serviceFileDAO.getArquivo(imagemCapa).get();
+          imagemCapa.setContent(serviceFileDAO.getContent(imagemCapa));
+          instituicao.setImagemCapa(imagemCapa);
         }
         instituicao.setIdInstituicao(resultado.getInt("id_instituicao"));
         instituicao.setNome(resultado.getString("nome_instituicao"));
@@ -74,7 +76,9 @@ public class InstituicaoDAO extends DAO {
         ServiceFile imagemCapa = new ServiceFile(resultado.getInt("id_service_file"));
         if (imagemCapa.getServiceFileId() > 0) {
           // setar a capa somente se o arquivo existir
-          instituicao.setImagemCapa(serviceFileDAO.getArquivo(imagemCapa).get());
+          imagemCapa = serviceFileDAO.getArquivo(imagemCapa).get();
+          imagemCapa.setContent(serviceFileDAO.getContent(imagemCapa));
+          instituicao.setImagemCapa(imagemCapa);
         }
 
         instituicao.setIdInstituicao(resultado.getInt("id_instituicao"));
@@ -305,7 +309,7 @@ public class InstituicaoDAO extends DAO {
 
   public boolean vincularOrganizadorEvento(Instituicao instituicao, Integer idEvento) throws SQLException {
     String sql = "insert into organizador_evento (id_instituicao,id_evento,descricao_contribuicao, valor_contribuicao)"
-        + " values(?, ?, ?, ?)";
+      + " values(?, ?, ?, ?)";
     PreparedStatement statement = conn.prepareStatement(sql);
     try {
 
@@ -326,9 +330,9 @@ public class InstituicaoDAO extends DAO {
   }
 
   public boolean vincularOrganizadorEvento(Integer idInstituicao, Integer idEvento, String descricaoContribuicao,
-      String valorContribuicao) throws SQLException {
+    String valorContribuicao) throws SQLException {
     String sql = "insert into organizador_evento (id_instituicao,id_evento,descricao_contribuicao, valor_contribuicao)"
-        + " values(?, ?, ?, ?)";
+      + " values(?, ?, ?, ?)";
     PreparedStatement statement = conn.prepareStatement(sql);
     try {
 
@@ -348,7 +352,7 @@ public class InstituicaoDAO extends DAO {
 
   public boolean vincularColaboradorEvento(Instituicao instituicao, Integer idEvento) throws SQLException {
     String sql = "insert into colaborador_evento (id_instituicao,id_evento,descricao_contribuicao, valor_contribuicao)"
-        + " values(?, ?, ?, ?)";
+      + " values(?, ?, ?, ?)";
     PreparedStatement statement = conn.prepareStatement(sql);
     try {
 
@@ -368,9 +372,9 @@ public class InstituicaoDAO extends DAO {
   }
 
   public boolean vincularColaboradorEvento(Integer idInstituicao, Integer idEvento, String descricaoContribuicao,
-      String valorContribuicao) throws SQLException {
+    String valorContribuicao) throws SQLException {
     String sql = "insert into colaborador_evento (id_instituicao,id_evento,descricao_contribuicao, valor_contribuicao)"
-        + " values(?, ?, ?, ?)";
+      + " values(?, ?, ?, ?)";
     PreparedStatement statement = conn.prepareStatement(sql);
     try {
 
@@ -390,7 +394,7 @@ public class InstituicaoDAO extends DAO {
 
   public boolean atualizarOrganizadorEvento(Instituicao instituicao, Integer idEvento) throws SQLException {
     String sql = "UPDATE organizador_evento SET descricao_contribuicao=?, valor_contribuicao=?"
-        + " WHERE id_instituicao = ? AND id_evento = ?";
+      + " WHERE id_instituicao = ? AND id_evento = ?";
     PreparedStatement stmt = conn.prepareStatement(sql);
     try {
       atualizarInstituicao(instituicao);
@@ -411,7 +415,7 @@ public class InstituicaoDAO extends DAO {
 
   public boolean atualizarColaboradorEvento(Instituicao instituicao, Integer idEvento) throws SQLException {
     String sql = "UPDATE colaborador_evento SET descricao_contribuicao=?, valor_contribuicao=?"
-        + " WHERE id_instituicao = ? AND id_evento = ?";
+      + " WHERE id_instituicao = ? AND id_evento = ?";
     PreparedStatement stmt = conn.prepareStatement(sql);
     try {
       atualizarInstituicao(instituicao);
