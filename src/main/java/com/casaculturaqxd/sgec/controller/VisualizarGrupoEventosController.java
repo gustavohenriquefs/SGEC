@@ -79,14 +79,14 @@ public class VisualizarGrupoEventosController implements ControllerEvento{
 
     private ObservableList<PreviewInstituicaoController> listaPreviewOrganizadores = FXCollections.observableArrayList();
     private ObservableList<PreviewInstituicaoController> listaPreviewColaboradores = FXCollections.observableArrayList();
+    private ObservableList<Instituicao> listaDeOrganizadores = FXCollections.observableArrayList();
+    private ObservableList<Instituicao> listaDeColaboradores = FXCollections.observableArrayList();
     private ObservableList<PreviewEventoController> listaPreviewEventos = FXCollections.observableArrayList();
     private GrupoEventos grupoEventos;
     private Stage stage;
     private DatabasePostgres db = DatabasePostgres.getInstance("URL", "USER_NAME", "PASSWORD");
     private GrupoEventosDAO dao;
      // listas
-    ObservableList<PreviewParticipanteController> participantes = FXCollections
-            .<PreviewParticipanteController>observableList(new ArrayList<>());
     private File lastDirectoryOpen;
     
     @FXML
@@ -203,16 +203,11 @@ public class VisualizarGrupoEventosController implements ControllerEvento{
                 grupoEventos.getPublicoAlcancado());
         numeroMunicipios = new Indicador("Número de municípios", grupoEventos.getNumMunicipiosEsperado(), grupoEventos.getNumAcoesAlcancado());
 
-        addIndicador(tabelaIndicadores, numeroPublico);
-
         numeroMestres = new Indicador("Número de mestres da cultura", grupoEventos.getNumParticipantesEsperado(),
                 grupoEventos.getNumParticipantesAlcancado());
         numeroMunicipios = new Indicador("Número de municípios",grupoEventos.getNumMunicipiosEsperado(),
                 grupoEventos.getNumMunicipiosAlcancado());
 
-        addIndicador(tabelaIndicadores, numeroPublico);
-        addIndicador(tabelaIndicadores, numeroMestres);
-        addIndicador(tabelaIndicadores, numeroMunicipios);
         numeroColaboradores = new Indicador("Número de colaboradores", grupoEventos.getNumColaboradoresEsperado(),
                 grupoEventos.getNumColaboradoresAlcancado());
         for (Meta meta : grupoEventos.getMetas()) {
@@ -232,7 +227,10 @@ public class VisualizarGrupoEventosController implements ControllerEvento{
     }
 
     private void addIndicador(TableView<Indicador> tabela, Indicador indicador) {
-        tabela.setItems(FXCollections.observableArrayList(indicador));
+        // se o indicador ja nao foi carregado adiciona ele
+        if (!tabela.getItems().contains(indicador)) {
+            tabela.getItems().add(indicador);
+        }
     }
 
     public void loadContent(){
@@ -405,8 +403,11 @@ public class VisualizarGrupoEventosController implements ControllerEvento{
     private boolean updateGrupoEventos(GrupoEventos grupoEventos) throws SQLException {
         db.getConnection().setAutoCommit(false);
         try {
-            // TODO: update de colaboradores, organizadores, participantes e locais
-            dao.updateGrupoEventos(grupoEventos);
+            dao.updateGrupoEventos(grupoEventos);   
+            ArrayList<Instituicao> auxColaboradores = new ArrayList<>(listaDeColaboradores);
+            ArrayList<Instituicao> auxOrganizadores = new ArrayList<>(listaDeOrganizadores);
+            dao.atualizarColaboradores(auxColaboradores, grupoEventos);
+            dao.atualizarOrganizadores(auxOrganizadores, grupoEventos);
             return true;
         } catch (SQLException e) {
             db.getConnection().rollback();
@@ -593,6 +594,7 @@ public class VisualizarGrupoEventosController implements ControllerEvento{
         novogrupoEventos.setDataInicial(novaDataInicial);
         novogrupoEventos.setDataFinal(novaDataFinal);
         novogrupoEventos.setColaboradores(grupoEventos.getColaboradores());
+        novogrupoEventos.setOrganizadores(grupoEventos.getOrganizadores());
         novogrupoEventos.setClassificacaoEtaria(classificacaoEtaria.getValue());
         novogrupoEventos.setPublicoAlcancado(numeroPublico.getValorAlcancado());
         novogrupoEventos.setPublicoEsperado(numeroPublico.getValorEsperado());
@@ -604,7 +606,7 @@ public class VisualizarGrupoEventosController implements ControllerEvento{
         
         if(grupoEventos.getImagemCapa() != null){
             InputStream fileAsStream;
-            try {
+            try {;
                 ServiceFileDAO serviceFileDAO = new ServiceFileDAO(db.getConnection());
                 file = serviceFileDAO.getContent(grupoEventos.getImagemCapa());
                 fileAsStream = new FileInputStream(file);
@@ -643,6 +645,15 @@ public class VisualizarGrupoEventosController implements ControllerEvento{
                 }
             }
         });
+    }
+
+    public void adicionarEvento() throws SQLException{
+        EventoDAO eventoDAO = new EventoDAO(db.getConnection());
+        TextInputDialog dialogNovoEvento = new TextInputDialog();
+        ArrayList<String> sugestions = eventoDAO.listarNomesEventos();
+        TextFields.bindAutoCompletion(dialogNovoEvento.getEditor(), sugestions);
+        String nomeNovoEvento = dialogNovoEvento.showAndWait().get();
+        adicionarEventoE(eventoDAO.getEvento(nomeNovoEvento).get());
     }
 
     @Override
