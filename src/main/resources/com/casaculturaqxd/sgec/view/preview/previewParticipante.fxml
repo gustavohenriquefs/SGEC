@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
@@ -31,6 +38,9 @@
                      <font>
                         <Font size="14.0" />
                      </font>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
                   </Label>
                   <ImageView fitHeight="16.0" fitWidth="16.0" onMouseClicked="#updateNome" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -38,6 +48,12 @@
                      </image>
                   </ImageView>
                </children>
+               <opaqueInsets>
+                  <Insets left="5.0" right="5.0" />
+               </opaqueInsets>
+               <VBox.margin>
+                  <Insets left="5.0" right="5.0" />
+               </VBox.margin>
             </HBox>
             <HBox fx:id="campoAreaAtuacao" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" prefHeight="25.0" prefWidth="302.0" styleClass="meusLabels">
                <children>
@@ -52,6 +68,12 @@
                      </image>
                   </ImageView>
                </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <VBox.margin>
+                  <Insets left="5.0" right="5.0" />
+               </VBox.margin>
             </HBox>
             <HBox id="meusLabels" fx:id="campoMinibio" prefHeight="26.0" prefWidth="260.0">
                <children>
@@ -59,6 +81,9 @@
                      <font>
                         <Font size="14.0" />
                      </font>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
                   </Label>
                   <ImageView fitHeight="16.0" fitWidth="16.0" onMouseClicked="#updateMinibio" pickOnBounds="true" preserveRatio="true">
                      <image>
@@ -66,10 +91,16 @@
                      </image>
                   </ImageView>
                </children>
+               <opaqueInsets>
+                  <Insets left="5.0" right="5.0" />
+               </opaqueInsets>
+               <padding>
+                  <Insets left="5.0" right="5.0" />
+               </padding>
             </HBox>
             <HBox fx:id="campoLink" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="18.0" prefWidth="281.0">
                <children>
-                  <Hyperlink onMouseClicked="#openInBrowser" fx:id="linkMapaCultural" text="Hyperlink">
+                  <Hyperlink fx:id="linkMapaCultural" onMouseClicked="#openInBrowser" text="Hyperlink">
                      <font>
                         <Font size="14.0" />
                      </font>

@@ -789,21 +789,16 @@ public class EventoDAO extends DAO {
   }
 
   public List<Evento> listarEventosGrupoEventos(GrupoEventos grupoEventos) throws SQLException {
-    String sql = "SELECT id_evento,nome_evento,data_inicial,horario,id_service_file FROM evento WHERE id_grupo_eventos = ?";
+    String sql = "SELECT id_evento FROM evento WHERE id_grupo_eventos = ?";
     PreparedStatement preparedStatement = connection.prepareStatement(sql);
     List<Evento> listaEventos = new ArrayList<>();
     try {
       preparedStatement.setInt(1, grupoEventos.getIdGrupoEventos());
       ResultSet resultSet = preparedStatement.executeQuery();
       while (resultSet.next()) {
-        // TODO: substituir por Builder apos atualizacao
-        Evento evento = new Evento();
-        evento.setIdEvento(resultSet.getInt("id_evento"));
-        evento.setNome(resultSet.getString("nome_evento"));
-        evento.setDataInicial(resultSet.getDate("data_inicial"));
-        evento.setHorario(resultSet.getTime("horario"));
-        // TODO: setar imagem de capa apos atualizacao
-        listaEventos.add(evento);
+        Evento evento = new Evento(resultSet.getInt("id_evento"));
+
+        listaEventos.add(getPreviewEvento(evento).get());
       }
       return listaEventos;
     } catch (Exception e) {

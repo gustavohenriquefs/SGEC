@@ -18,7 +18,7 @@ import com.casaculturaqxd.sgec.models.Instituicao;
 import com.casaculturaqxd.sgec.models.Meta;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 
-public class GrupoEventosDAO {
+public class GrupoEventosDAO extends DAO {
     private Connection connection;
 
     public Connection getConnection() {
@@ -35,21 +35,22 @@ public class GrupoEventosDAO {
 
     public boolean insertGrupoEventos(GrupoEventos grupoEventos) throws SQLException {
         String sql = """
-                INSERT INTO grupo_eventos(
-                nome_grupo_eventos,
-                descricao,
-                classificacao_etaria,
-                publico_esperado,
-                publico_alcancado,
-                num_acoes_esperado,
-                num_municipios_esperado,
-                num_participantes_esperado,
-                id_service_file,
-                data_inicial,
-                data_final
-                )
-                VALUES(?, ?, ?, ?, ?, ? , ?, ?, ?, ?, ?);
-                """;
+            INSERT INTO grupo_eventos(
+            nome_grupo_eventos,
+            descricao,
+            classificacao_etaria,
+            publico_esperado,
+            publico_alcancado,
+            num_acoes_esperado,
+            num_municipios_esperado,
+            num_participantes_esperado,
+            num_colaboradores_esperado,
+            id_service_file,
+            data_inicial,
+            data_final
+            )
+            VALUES(?, ?, ?, ?, ?, ?, ? , ?, ?, ?, ?, ?);
+            """;
         PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         try {
             int idImagemCapa = 0;
@@ -64,9 +65,10 @@ public class GrupoEventosDAO {
             preparedStatement.setInt(6, grupoEventos.getNumAcoesEsperado());
             preparedStatement.setInt(7, grupoEventos.getNumMunicipiosEsperado());
             preparedStatement.setInt(8, grupoEventos.getNumParticipantesEsperado());
-            preparedStatement.setObject(9, idImagemCapa != 0 ? idImagemCapa : null, Types.INTEGER);
-            preparedStatement.setDate(10, grupoEventos.getDataInicial());
-            preparedStatement.setDate(11, grupoEventos.getDataFinal());
+            preparedStatement.setInt(9, grupoEventos.getNumColaboradoresEsperado());
+            preparedStatement.setObject(10, idImagemCapa != 0 ? idImagemCapa : null, Types.INTEGER);
+            preparedStatement.setDate(11, grupoEventos.getDataInicial());
+            preparedStatement.setDate(12, grupoEventos.getDataFinal());
 
             preparedStatement.execute();
             return true;
@@ -90,21 +92,28 @@ public class GrupoEventosDAO {
             ServiceFileDAO serviceFileDAO = new ServiceFileDAO(connection);
             if (resultSet.next()) {
                 Optional<ServiceFile> resultFile = serviceFileDAO
-                        .getArquivo(new ServiceFile(resultSet.getInt("id_service_file")));
+                    .getArquivo(new ServiceFile(resultSet.getInt("id_service_file")));
                 GrupoEventosBuilder grupoEventosBuilder = new GrupoEventosBuilder();
                 grupoEventosBuilder.setId(resultSet.getInt("id_grupo_eventos"))
-                        .setNome(resultSet.getString("nome_grupo_eventos"))
-                        .setDescricao(resultSet.getString("descricao"))
-                        .setClassificacaoEtaria(resultSet.getString("classificacao_etaria"))
-                        .setDataInicial(resultSet.getDate("data_inicial")).setDataFinal(resultSet.getDate("data_final"))
-                        .setNumAcoesEsperado(resultSet.getInt("num_acoes_esperado"))
-                        .setNumAcoesAlcancado(resultSet.getInt("num_acoes_alcancado"))
-                        .setPublicoEsperado(resultSet.getInt("publico_esperado"))
-                        .setPublicoAlcancado(resultSet.getInt("publico_alcancado"))
-                        .setNumMunicipiosEsperado(resultSet.getInt("num_municipios_esperado"))
-                        .setNumMunicipiosAlcancado(resultSet.getInt("num_municipios_alcancado"))
-                        .setNumParticipantesEsperado(resultSet.getInt("num_participantes_esperado"))
-                        .setNumParticipantesAlcancado(resultSet.getInt("num_participantes_alcancado"));
+                    .setNome(resultSet.getString("nome_grupo_eventos"))
+                    .setDescricao(resultSet.getString("descricao"))
+                    .setClassificacaoEtaria(resultSet.getString("classificacao_etaria"))
+                    .setCargaHoraria(resultSet.getTime("carga_horaria"))
+                    .setDataInicial(resultSet.getDate("data_inicial")).setDataFinal(resultSet.getDate("data_final"))
+                    .setNumAcoesEsperado(resultSet.getInt("num_acoes_esperado"))
+                    .setNumAcoesAlcancado(resultSet.getInt("num_acoes_alcancado"))
+                    .setPublicoEsperado(resultSet.getInt("publico_esperado"))
+                    .setPublicoAlcancado(resultSet.getInt("publico_alcancado"))
+                    .setNumMunicipiosEsperado(resultSet.getInt("num_municipios_esperado"))
+                    .setNumMunicipiosAlcancado(resultSet.getInt("num_municipios_alcancado"))
+                    .setNumParticipantesEsperado(resultSet.getInt("num_participantes_esperado"))
+                    .setNumParticipantesAlcancado(resultSet.getInt("num_participantes_alcancado"))
+                    .setNumColaboradoresEsperado(resultSet.getInt("num_colaboradores_esperado"))
+                    .setNumColaboradoresAlcancado(resultSet.getInt("num_colaboradores_alcancado"))
+                    .setMetas(listMetas(grupoEventos))
+                    .setColaboradores(listColaboradores(grupoEventos))
+                    .setOrganizadores(listOrganizadores(grupoEventos))
+                    .setEventos(listEventos(grupoEventos));
                 if (resultFile.isPresent()) {
                     grupoEventosBuilder.setImagemCapa(resultFile.get());
                 }
@@ -134,12 +143,12 @@ public class GrupoEventosDAO {
             ServiceFileDAO serviceFileDAO = new ServiceFileDAO(connection);
             if (resultSet.next()) {
                 Optional<ServiceFile> resultFile = serviceFileDAO
-                        .getArquivo(new ServiceFile(resultSet.getInt("id_service_file")));
+                    .getArquivo(new ServiceFile(resultSet.getInt("id_service_file")));
                 GrupoEventosBuilder grupoEventosBuilder = new GrupoEventosBuilder();
                 grupoEventosBuilder.setId(resultSet.getInt("id_grupo_eventos"))
-                        .setNome(resultSet.getString("nome_grupo_eventos"))
-                        .setDataInicial(resultSet.getDate("data_inicial"))
-                        .setDataFinal(resultSet.getDate("data_final"));
+                    .setNome(resultSet.getString("nome_grupo_eventos"))
+                    .setDataInicial(resultSet.getDate("data_inicial"))
+                    .setDataFinal(resultSet.getDate("data_final"));
                 if (resultFile.isPresent()) {
                     grupoEventosBuilder.setImagemCapa(resultFile.get());
                 }
@@ -172,7 +181,7 @@ public class GrupoEventosDAO {
     }
 
     private ArrayList<GrupoEventos> listPreviewGrupoEventos(String colunaOrdenacao, boolean ascending, int limit)
-            throws SQLException {
+        throws SQLException {
         if (colunaOrdenacao == null) {
             colunaOrdenacao = "cadastrado_em";
         }
@@ -188,14 +197,26 @@ public class GrupoEventosDAO {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
+                ServiceFileDAO serviceFileDAO = new ServiceFileDAO(connection);
+                Optional<ServiceFile> optionaImagemCapa = serviceFileDAO
+                    .getArquivo(new ServiceFile(resultSet.getInt("id_service_file")));
+
+                int idGrupoEventos = resultSet.getInt("id_grupo_eventos");
+
+                ArrayList<Meta> metas = listMetas(new GrupoEventos(idGrupoEventos));
+
                 GrupoEventosBuilder grupoEventosBuilder = new GrupoEventosBuilder();
-                grupoEventosBuilder.setId(resultSet.getInt("id_grupo_eventos"))
-                        .setNome(resultSet.getString("nome_grupo_eventos"))
-                        .setImagemCapa(new ServiceFile(resultSet.getInt("id_service_file")))
-                        .setDataInicial(resultSet.getDate("data_inicial"))
-                        .setDataFinal(resultSet.getDate("data_final"));
+                grupoEventosBuilder.setId(idGrupoEventos).setNome(resultSet.getString("nome_grupo_eventos"))
+                    .setDataInicial(resultSet.getDate("data_inicial")).setDataFinal(resultSet.getDate("data_final"))
+                    .setMetas(metas);
 
                 listaPreviewGrupoEventos.add(grupoEventosBuilder.getGrupoEventos());
+
+                if (optionaImagemCapa.isPresent()) {
+                    ServiceFile imagemCapa = optionaImagemCapa.get();
+                    imagemCapa.setContent(serviceFileDAO.getContent(imagemCapa));
+                    grupoEventosBuilder.setImagemCapa(imagemCapa);
+                }
             }
             return listaPreviewGrupoEventos;
         } catch (Exception exception) {
@@ -220,7 +241,7 @@ public class GrupoEventosDAO {
      * @throws SQLException
      */
     public ArrayList<GrupoEventos> pesquisaPreviewGrupoEventos(String nomeGrupoEventos, String classificacaoEtaria,
-            Date dataInicio, Date dataFim, ArrayList<Meta> metas) throws SQLException {
+        Date dataInicio, Date dataFim, ArrayList<Meta> metas) throws SQLException {
         String sql = "SELECT id_grupo_eventos,nome_grupo_eventos,data_inicial,data_final,id_service_file FROM grupo_eventos WHERE nome_grupo_eventos ILIKE ?";
         if (classificacaoEtaria != null) {
             sql += " AND classificacao_etaria = '" + classificacaoEtaria + "' ";
@@ -240,10 +261,10 @@ public class GrupoEventosDAO {
             while (resultSet.next()) {
                 GrupoEventosBuilder grupoEventosBuilder = new GrupoEventosBuilder();
                 grupoEventosBuilder.setId(resultSet.getInt("id_grupo_eventos"))
-                        .setNome(resultSet.getString("nome_grupo_eventos"))
-                        .setImagemCapa(new ServiceFile(resultSet.getInt("id_service_file")))
-                        .setDataInicial(resultSet.getDate("data_inicial"))
-                        .setDataFinal(resultSet.getDate("data_final"));
+                    .setNome(resultSet.getString("nome_grupo_eventos"))
+                    .setImagemCapa(new ServiceFile(resultSet.getInt("id_service_file")))
+                    .setDataInicial(resultSet.getDate("data_inicial"))
+                    .setDataFinal(resultSet.getDate("data_final"));
                 GrupoEventos result = grupoEventosBuilder.getGrupoEventos();
                 // se alguma das metas do grupo de eventos estiver nas metas pesquisadas
                 if (listMetas(result).stream().anyMatch(meta -> metas.contains(meta)))
@@ -270,22 +291,23 @@ public class GrupoEventosDAO {
      */
     public boolean updateGrupoEventos(GrupoEventos grupoEventos) throws SQLException {
         String sql = """
-                UPDATE grupo_eventos
-                SET
-                nome_grupo_eventos = ?,
-                descricao = ?,
-                classificacao_etaria = ?,
-                publico_esperado = ?,
-                publico_alcancado = ?,
-                num_acoes_esperado = ?,
-                num_municipios_esperado = ?,
-                num_participantes_esperado = ?,
-                id_service_file = ?,
-                data_inicial = ?,
-                data_final = ?
-                WHERE
-                id_grupo_eventos = ?
-                """;
+            UPDATE grupo_eventos
+            SET
+            nome_grupo_eventos = ?,
+            descricao = ?,
+            classificacao_etaria = ?,
+            publico_esperado = ?,
+            publico_alcancado = ?,
+            num_acoes_esperado = ?,
+            num_municipios_esperado = ?,
+            num_participantes_esperado = ?,
+            num_colaboradores_esperado = ?,
+            id_service_file = ?,
+            data_inicial = ?,
+            data_final = ?
+            WHERE
+            id_grupo_eventos = ?
+            """;
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         try {
             int idImagemCapa = 0;
@@ -300,11 +322,12 @@ public class GrupoEventosDAO {
             preparedStatement.setInt(6, grupoEventos.getNumAcoesEsperado());
             preparedStatement.setInt(7, grupoEventos.getNumMunicipiosEsperado());
             preparedStatement.setInt(8, grupoEventos.getNumParticipantesEsperado());
-            preparedStatement.setObject(9, idImagemCapa != 0 ? idImagemCapa : null, Types.OTHER);
-            preparedStatement.setDate(10, grupoEventos.getDataInicial());
-            preparedStatement.setDate(11, grupoEventos.getDataFinal());
+            preparedStatement.setInt(9, grupoEventos.getNumColaboradoresEsperado());
+            preparedStatement.setObject(10, idImagemCapa != 0 ? idImagemCapa : null, Types.OTHER);
+            preparedStatement.setDate(11, grupoEventos.getDataInicial());
+            preparedStatement.setDate(12, grupoEventos.getDataFinal());
 
-            preparedStatement.setInt(12, grupoEventos.getIdGrupoEventos());
+            preparedStatement.setInt(13, grupoEventos.getIdGrupoEventos());
             int numAtualizacoes = preparedStatement.executeUpdate();
             return numAtualizacoes > 0;
         } catch (Exception e) {
@@ -339,14 +362,149 @@ public class GrupoEventosDAO {
         }
     }
 
-    public List<Evento> listEventos(GrupoEventos grupoEventos) throws SQLException {
+    public boolean atualizarEventos(ArrayList<Evento> eventos, GrupoEventos grupoEventos) throws SQLException {
+        ArrayList<Evento> eventosAtuais = listEventos(grupoEventos);
+
+        try {
+            // adicionando eventos que nao estao registrados
+            for (Evento evento : eventos) {
+                if (!eventosAtuais.contains(evento)) {
+                    boolean check = vincularEvento(grupoEventos, evento);
+                    if (!check) {
+                        return false;
+                    }
+                }
+            }
+            // removendo eventos que estao na lista nova e nao na antiga
+            for (Evento evento : eventosAtuais) {
+                if (!eventos.contains(evento)) {
+                    boolean check = desvincularEvento(grupoEventos, evento);
+                    if (!check) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        } catch (Exception e) {
+            String nomeEventoCausa = grupoEventos != null && grupoEventos.getNome() != null ? grupoEventos.getNome()
+                : " ";
+            logException(e);
+            throw new SQLException("falha atualizando metas do evento " + nomeEventoCausa, e);
+        }
+
+    }
+
+    public boolean atualizarOrganizadores(ArrayList<Instituicao> organizadores, GrupoEventos grupoEventos)
+        throws SQLException {
+        ArrayList<Instituicao> organizadoresAtuais = listOrganizadores(grupoEventos);
+
+        try {
+            // adicionando organizadores nao registrados
+            for (Instituicao organizador : organizadores) {
+                if (!organizadoresAtuais.contains(organizador)) {
+                    boolean check = vincularOrganizador(grupoEventos, organizador);
+                    if (!check) {
+                        return false;
+                    }
+                }
+            }
+            // removendo organizadores fora da nova lista
+            for (Instituicao organizador : organizadoresAtuais) {
+                if (!organizadores.contains(organizador)) {
+                    boolean check = desvincularOrganizador(grupoEventos, organizador);
+                    if (!check) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        } catch (Exception e) {
+            String nomeEventoCausa = grupoEventos != null && grupoEventos.getNome() != null ? grupoEventos.getNome()
+                : " ";
+            logException(e);
+            throw new SQLException("falha atualizando metas do evento " + nomeEventoCausa, e);
+        }
+    }
+
+    public boolean atualizarColaboradores(ArrayList<Instituicao> colaboradores, GrupoEventos grupoEventos)
+        throws SQLException {
+        ArrayList<Instituicao> colaboradoresAtuais = listColaboradores(grupoEventos);
+        try {
+            // adicionando colaboradores nao registrados
+            for (Instituicao colaborador : colaboradores) {
+                if (!colaboradoresAtuais.contains(colaborador)) {
+                    boolean check = vincularColaborador(grupoEventos, colaborador);
+                    if (!check) {
+                        return false;
+                    }
+                }
+            }
+            // removendo colaboradores fora da nova lista
+            for (Instituicao colaborador : colaboradoresAtuais) {
+                if (!colaboradores.contains(colaborador)) {
+                    boolean check = desvincularColaborador(grupoEventos, colaborador);
+                    if (!check) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        } catch (Exception e) {
+            String nomeEventoCausa = grupoEventos != null && grupoEventos.getNome() != null ? grupoEventos.getNome()
+                : " ";
+            logException(e);
+            throw new SQLException("falha atualizando metas do evento " + nomeEventoCausa, e);
+        }
+    }
+
+    public boolean atualizarMetas(ArrayList<Meta> metas, GrupoEventos grupoEventos) throws SQLException {
+        ArrayList<Meta> metasAtuais = listMetas(grupoEventos);
+
+        try {
+            // adicionando metas que nao estao registradas
+            for (Meta meta : metas) {
+                if (!metasAtuais.contains(meta)) {
+                    boolean check = vincularMeta(meta, grupoEventos);
+                    if (!check) {
+                        return false;
+                    }
+                }
+            }
+            for (Meta meta : metasAtuais) {
+                if (!metas.contains(meta)) {
+                    boolean check = desvincularMeta(meta, grupoEventos);
+                    if (!check) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        } catch (Exception e) {
+            String nomeEventoCausa = grupoEventos != null && grupoEventos.getNome() != null ? grupoEventos.getNome()
+                : " ";
+            logException(e);
+            throw new SQLException("falha atualizando metas do evento " + nomeEventoCausa, e);
+        }
+    }
+
+    public ArrayList<Evento> listEventos(GrupoEventos grupoEventos) throws SQLException {
         EventoDAO eventoDAO = new EventoDAO(connection);
-        return eventoDAO.listarEventosGrupoEventos(grupoEventos);
+        return (ArrayList<Evento>) eventoDAO.listarEventosGrupoEventos(grupoEventos);
     }
 
     public ArrayList<Meta> listMetas(GrupoEventos grupoEventos) throws SQLException {
         MetaDAO metaDAO = new MetaDAO(connection);
         return metaDAO.listarMetasGrupoEventos(grupoEventos.getIdGrupoEventos());
+    }
+
+    public ArrayList<Instituicao> listOrganizadores(GrupoEventos grupoEventos) throws SQLException {
+        InstituicaoDAO instituicaoDAO = new InstituicaoDAO(connection);
+        return instituicaoDAO.listarOrganizadoresGrupoEventos(grupoEventos.getIdGrupoEventos());
+    }
+
+    public ArrayList<Instituicao> listColaboradores(GrupoEventos grupoEventos) throws SQLException {
+        InstituicaoDAO instituicaoDAO = new InstituicaoDAO(connection);
+        return instituicaoDAO.listarColaboradoresGrupoEventos(grupoEventos.getIdGrupoEventos());
     }
 
     public boolean vincularEvento(GrupoEventos grupoEventos, Evento evento) throws SQLException {
@@ -360,7 +518,7 @@ public class GrupoEventosDAO {
     }
 
     public boolean vincularAllOrganizadores(GrupoEventos grupoEventos, List<Instituicao> organizadores)
-            throws SQLException {
+        throws SQLException {
         try {
             for (Instituicao instituicao : organizadores) {
                 vincularOrganizador(grupoEventos, instituicao);
@@ -374,17 +532,17 @@ public class GrupoEventosDAO {
     public boolean vincularOrganizador(GrupoEventos grupoEventos, Instituicao organizador) throws SQLException {
         InstituicaoDAO instituicaoDAO = new InstituicaoDAO(connection);
         return instituicaoDAO.vincularOrganizadorGrupoEventos(grupoEventos.getIdGrupoEventos(),
-                organizador.getIdInstituicao());
+            organizador.getIdInstituicao());
     }
 
     public boolean desvincularOrganizador(GrupoEventos grupoEventos, Instituicao organizador) throws SQLException {
         InstituicaoDAO instituicaoDAO = new InstituicaoDAO(connection);
         return instituicaoDAO.desvincularOrganizadorGrupoEventos(grupoEventos.getIdGrupoEventos(),
-                organizador.getIdInstituicao());
+            organizador.getIdInstituicao());
     }
 
     public boolean vincularAllColaboradores(GrupoEventos grupoEventos, List<Instituicao> colaboradores)
-            throws SQLException {
+        throws SQLException {
         try {
             for (Instituicao instituicao : colaboradores) {
                 vincularColaborador(grupoEventos, instituicao);
@@ -398,13 +556,13 @@ public class GrupoEventosDAO {
     public boolean vincularColaborador(GrupoEventos grupoEventos, Instituicao colaborador) throws SQLException {
         InstituicaoDAO instituicaoDAO = new InstituicaoDAO(connection);
         return instituicaoDAO.vincularColaboradorGrupoEventos(grupoEventos.getIdGrupoEventos(),
-                colaborador.getIdInstituicao());
+            colaborador.getIdInstituicao());
     }
 
     public boolean desvincularColaborador(GrupoEventos grupoEventos, Instituicao colaborador) throws SQLException {
         InstituicaoDAO instituicaoDAO = new InstituicaoDAO(connection);
         return instituicaoDAO.desvincularColaboradorGrupoEventos(grupoEventos.getIdGrupoEventos(),
-                colaborador.getIdInstituicao());
+            colaborador.getIdInstituicao());
     }
 
     public boolean vincularMeta(Meta meta, GrupoEventos grupoEventos) throws SQLException {

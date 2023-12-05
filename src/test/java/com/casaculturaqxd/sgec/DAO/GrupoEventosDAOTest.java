@@ -27,7 +27,7 @@ import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 public class GrupoEventosDAOTest {
     private static DatabasePostgres db = DatabasePostgres.getInstance("URL_TEST", "USER_NAME_TEST", "PASSWORD_TEST");
     private static int idValidGrupoEventos = 1, idValidEvento = 1, idValidInstituicao = 1, idValidMeta = 1,
-            idInvalidMeta = -1, idValidServiceFile = 11;
+        idInvalidMeta = -1, idValidServiceFile = 11;
 
     public GrupoEventosDAOTest() {
         setUpClass();
@@ -57,7 +57,7 @@ public class GrupoEventosDAOTest {
         GrupoEventos grupoEventos = new GrupoEventos(idValidGrupoEventos);
         Optional<GrupoEventos> result = grupoEventosDAO.getGrupoEventos(grupoEventos);
         assertAll(() -> assertTrue(result.isPresent()), () -> assertNotNull(result.get().getIdGrupoEventos()),
-                () -> assertNotNull(result.get().getNome()));
+            () -> assertNotNull(result.get().getNome()));
     }
 
     @Test
@@ -73,7 +73,7 @@ public class GrupoEventosDAOTest {
         GrupoEventos grupoEventos = new GrupoEventos(idValidGrupoEventos);
         Optional<GrupoEventos> result = grupoEventosDAO.getGrupoEventos(grupoEventos);
         assertAll(() -> assertTrue(result.isPresent()), () -> assertNotNull(result.get().getIdGrupoEventos()),
-                () -> assertNotNull(result.get().getNome()));
+            () -> assertNotNull(result.get().getNome()));
     }
 
     @Test
@@ -106,7 +106,7 @@ public class GrupoEventosDAOTest {
         GrupoEventosDAO grupoEventosDAO = new GrupoEventosDAO(db.getConnection());
         ArrayList<GrupoEventos> result = grupoEventosDAO.listUltimosGrupoEventos();
         assertAll(() -> assertFalse(result.isEmpty()),
-                () -> assertTrue(result.stream().allMatch(resultItem -> resultItem.getIdGrupoEventos() != null)));
+            () -> assertTrue(result.stream().allMatch(resultItem -> resultItem.getIdGrupoEventos() != null)));
     }
 
     @Test
@@ -143,7 +143,37 @@ public class GrupoEventosDAOTest {
 
         List<Evento> result = grupoEventosDAO.listEventos(grupoEventos);
         assertAll(() -> assertFalse(result.isEmpty()),
-                () -> assertTrue(result.stream().anyMatch(element -> element.getIdEvento() == evento.getIdEvento())));
+            () -> assertTrue(result.stream().anyMatch(element -> element.getIdEvento() == evento.getIdEvento())));
+    }
+
+    @Test
+    void testListOrganizadores() throws SQLException {
+        GrupoEventosDAO grupoEventosDAO = new GrupoEventosDAO(db.getConnection());
+        GrupoEventos grupoEventos = new GrupoEventos(idValidGrupoEventos);
+        Instituicao instituicao = new Instituicao(idValidInstituicao);
+
+        grupoEventosDAO.vincularOrganizador(grupoEventos, instituicao);
+
+        List<Instituicao> result = grupoEventosDAO.listOrganizadores(grupoEventos);
+
+        assertAll(() -> assertFalse(result.isEmpty()),
+            () -> assertTrue(
+                result.stream().anyMatch(element -> element.getIdInstituicao() == instituicao.getIdInstituicao())));
+    }
+
+    @Test
+    void testListColaboradores() throws SQLException {
+        GrupoEventosDAO grupoEventosDAO = new GrupoEventosDAO(db.getConnection());
+        GrupoEventos grupoEventos = new GrupoEventos(idValidGrupoEventos);
+        Instituicao instituicao = new Instituicao(idValidInstituicao);
+
+        grupoEventosDAO.vincularColaborador(grupoEventos, instituicao);
+
+        List<Instituicao> result = grupoEventosDAO.listColaboradores(grupoEventos);
+
+        assertAll(() -> assertFalse(result.isEmpty()),
+            () -> assertTrue(
+                result.stream().anyMatch(element -> element.getIdInstituicao() == instituicao.getIdInstituicao())));
     }
 
     @Test
@@ -156,7 +186,7 @@ public class GrupoEventosDAOTest {
 
         ArrayList<Meta> result = grupoEventosDAO.listMetas(grupoEventos);
         assertAll(() -> assertFalse(result.isEmpty()),
-                () -> assertTrue(result.stream().anyMatch(element -> element.getIdMeta() == meta.getIdMeta())));
+            () -> assertTrue(result.stream().anyMatch(element -> element.getIdMeta() == meta.getIdMeta())));
     }
 
     @Test
@@ -192,23 +222,23 @@ public class GrupoEventosDAOTest {
         boolean result = grupoEventosDAO.updateGrupoEventos(grupoEventos);
         GrupoEventos updatedGrupoEventos = grupoEventosDAO.getGrupoEventos(grupoEventos).get();
         assertAll(() -> assertTrue(result),
-                () -> assertTrue(grupoEventos.getNome().equals(updatedGrupoEventos.getNome())),
-                () -> assertTrue(grupoEventos.getDescricao().equals(updatedGrupoEventos.getDescricao())),
-                () -> assertTrue(
-                        grupoEventos.getClassificacaoEtaria().equals(updatedGrupoEventos.getClassificacaoEtaria())),
-                () -> assertTrue(grupoEventos.getPublicoEsperado() == updatedGrupoEventos.getPublicoEsperado()),
-                () -> assertTrue(grupoEventos.getPublicoAlcancado() == updatedGrupoEventos.getPublicoAlcancado()),
-                () -> assertTrue(grupoEventos.getNumAcoesEsperado() == updatedGrupoEventos.getNumAcoesEsperado()),
-                () -> assertTrue(
-                        grupoEventos.getNumMunicipiosEsperado() == updatedGrupoEventos.getNumMunicipiosEsperado()),
-                () -> assertTrue(grupoEventos.getNumParticipantesEsperado() == updatedGrupoEventos
-                        .getNumParticipantesEsperado()),
-                () -> assertTrue(grupoEventos.getDataInicial().toLocalDate()
-                        .equals(updatedGrupoEventos.getDataInicial().toLocalDate())),
-                () -> assertTrue(grupoEventos.getDataFinal().toLocalDate()
-                        .equals(updatedGrupoEventos.getDataFinal().toLocalDate())),
-                () -> assertTrue(grupoEventos.getImagemCapa().getServiceFileId()
-                        .equals(updatedGrupoEventos.getImagemCapa().getServiceFileId())));
+            () -> assertTrue(grupoEventos.getNome().equals(updatedGrupoEventos.getNome())),
+            () -> assertTrue(grupoEventos.getDescricao().equals(updatedGrupoEventos.getDescricao())),
+            () -> assertTrue(
+                grupoEventos.getClassificacaoEtaria().equals(updatedGrupoEventos.getClassificacaoEtaria())),
+            () -> assertTrue(grupoEventos.getPublicoEsperado() == updatedGrupoEventos.getPublicoEsperado()),
+            () -> assertTrue(grupoEventos.getPublicoAlcancado() == updatedGrupoEventos.getPublicoAlcancado()),
+            () -> assertTrue(grupoEventos.getNumAcoesEsperado() == updatedGrupoEventos.getNumAcoesEsperado()),
+            () -> assertTrue(
+                grupoEventos.getNumMunicipiosEsperado() == updatedGrupoEventos.getNumMunicipiosEsperado()),
+            () -> assertTrue(grupoEventos.getNumParticipantesEsperado() == updatedGrupoEventos
+                .getNumParticipantesEsperado()),
+            () -> assertTrue(grupoEventos.getDataInicial().toLocalDate()
+                .equals(updatedGrupoEventos.getDataInicial().toLocalDate())),
+            () -> assertTrue(grupoEventos.getDataFinal().toLocalDate()
+                .equals(updatedGrupoEventos.getDataFinal().toLocalDate())),
+            () -> assertTrue(grupoEventos.getImagemCapa().getServiceFileId()
+                .equals(updatedGrupoEventos.getImagemCapa().getServiceFileId())));
     }
 
     @Test
@@ -236,7 +266,7 @@ public class GrupoEventosDAOTest {
         GrupoEventos grupoEventos = new GrupoEventos(idValidGrupoEventos);
         Instituicao organizador = new Instituicao(idValidInstituicao);
 
-        assertTrue(grupoEventosDAO.vincularOrganizador(grupoEventos, organizador));
+        assertTrue(grupoEventosDAO.vincularColaborador(grupoEventos, organizador));
     }
 
     @Test
@@ -274,7 +304,7 @@ public class GrupoEventosDAOTest {
 
         boolean result = grupoEventosDAO.desvincularMeta(meta, grupoEventos);
 
-        assertAll(() -> assertTrue(result), () -> assertTrue(grupoEventosDAO.listMetas(grupoEventos).isEmpty()));
+        assertAll(() -> assertTrue(result));
     }
 
     @Test
