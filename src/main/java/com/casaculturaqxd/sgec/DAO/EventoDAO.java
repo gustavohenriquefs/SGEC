@@ -189,7 +189,7 @@ public class EventoDAO extends DAO {
   }
 
   public ArrayList<Evento> listarUltimosEventos() throws SQLException {
-    String sql = "select id_evento,nome_evento,data_inicial, horario, id_service_file from evento where nome_evento <> '' order by data_inicial desc limit 5";
+    String sql = "SELECT id_evento,nome_evento,data_inicial, horario, id_service_file FROM ultimos_eventos LIMIT 5";
     PreparedStatement stmt = connection.prepareStatement(sql);
     ArrayList<Evento> eventos = new ArrayList<>();
     try {
