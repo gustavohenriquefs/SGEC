@@ -115,7 +115,9 @@ public class GrupoEventosDAO extends DAO {
                     .setOrganizadores(listOrganizadores(grupoEventos))
                     .setEventos(listEventos(grupoEventos));
                 if (resultFile.isPresent()) {
-                    grupoEventosBuilder.setImagemCapa(resultFile.get());
+                    ServiceFile imagemCapa = resultFile.get();
+                    imagemCapa.setContent(serviceFileDAO.getContent(imagemCapa));
+                    grupoEventosBuilder.setImagemCapa(imagemCapa);
                 }
                 return Optional.of(grupoEventosBuilder.getGrupoEventos());
             } else {
@@ -150,7 +152,9 @@ public class GrupoEventosDAO extends DAO {
                     .setDataInicial(resultSet.getDate("data_inicial"))
                     .setDataFinal(resultSet.getDate("data_final"));
                 if (resultFile.isPresent()) {
-                    grupoEventosBuilder.setImagemCapa(resultFile.get());
+                    ServiceFile imagemCapa = resultFile.get();
+                    imagemCapa.setContent(serviceFileDAO.getContent(imagemCapa));
+                    grupoEventosBuilder.setImagemCapa(imagemCapa);
                 }
                 return Optional.of(grupoEventosBuilder.getGrupoEventos());
             } else {
