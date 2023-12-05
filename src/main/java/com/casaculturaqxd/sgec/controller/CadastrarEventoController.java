@@ -692,31 +692,29 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
 
     public void addListenersParticipante(ObservableList<PreviewParticipanteController> observableList) {
         CadastrarEventoController superController = this;
-        observableList.addListener(new ListChangeListener<PreviewParticipanteController>() {
-            @Override
-            public void onChanged(ListChangeListener.Change<? extends PreviewParticipanteController> change) {
+        observableList.addListener((ListChangeListener<PreviewParticipanteController>) change -> {
 
-                while (change.next()) {
-                    if (change.wasAdded()) {
+            while (change.next()) {
+                if (change.wasAdded()) {
 
-                        for (PreviewParticipanteController addedController : change.getAddedSubList()) {
-                            addedController.setParentController(superController);
+                    for (PreviewParticipanteController addedController : change.getAddedSubList()) {
+                        addedController.setParentController(superController);
 
-                            secaoParticipantes.getChildren().add(addedController.getContainer());
-                        }
-
+                        secaoParticipantes.getChildren().add(addedController.getContainer());
                     }
-
-                    if (change.wasRemoved()) {
-
-                        for (PreviewParticipanteController removedController : change.getRemoved()) {
-                            secaoParticipantes.getChildren().remove(removedController.getContainer());
-                        }
 
                 }
 
+                if (change.wasRemoved()) {
+
+                    for (PreviewParticipanteController removedController : change.getRemoved()) {
+                        secaoParticipantes.getChildren().remove(removedController.getContainer());
+                    }
+
             }
-        });
+
+        }
+      });
     }
 
     public void addListenersOrganizador(ObservableList<PreviewInstituicaoController> observableList) {
