@@ -136,7 +136,7 @@ public class GrupoEventosDAO extends DAO {
     }
 
     public Optional<GrupoEventos> getPreviewGrupoEventos(GrupoEventos grupoEventos) throws SQLException {
-        String sql = "SELECT id_grupo_eventos, nome_grupo_eventos,id_service_file,data_inicial,data_final FROM GRUPO_EVENTOS WHERE id_grupo_eventos = ?";
+        String sql = "SELECT id_grupo_eventos, nome_grupo_eventos,id_service_file,data_inicial,data_final,classificacao_etaria FROM GRUPO_EVENTOS WHERE id_grupo_eventos = ?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
         try {
@@ -150,7 +150,8 @@ public class GrupoEventosDAO extends DAO {
                 grupoEventosBuilder.setId(resultSet.getInt("id_grupo_eventos"))
                     .setNome(resultSet.getString("nome_grupo_eventos"))
                     .setDataInicial(resultSet.getDate("data_inicial"))
-                    .setDataFinal(resultSet.getDate("data_final"));
+                    .setDataFinal(resultSet.getDate("data_final"))
+                    .setClassificacaoEtaria(resultSet.getString("classificacao_etaria"));
                 if (resultFile.isPresent()) {
                     ServiceFile imagemCapa = resultFile.get();
                     imagemCapa.setContent(serviceFileDAO.getContent(imagemCapa));
@@ -577,5 +578,52 @@ public class GrupoEventosDAO extends DAO {
     public boolean desvincularMeta(Meta meta, GrupoEventos grupoEventos) throws SQLException {
         MetaDAO metaDAO = new MetaDAO(connection);
         return metaDAO.desvincularGrupoEventos(meta.getIdMeta(), grupoEventos.getIdGrupoEventos());
+    }
+
+    public ArrayList<GrupoEventos> pesquisarGrupoEventos(String nome, Date inicioDate, Date fimDate){
+        String sql = "SELECT * FROM pesquisa_grupo_evento where nome ilike ? ";
+
+        if (inicioDate != null)
+            sql += "and inicio >= '" + inicioDate.toString() + "' ";
+
+        if (fimDate != null)
+            sql += "and fim <= '" + fimDate.toString() + "' ";
+
+        if (nome == "" && inicioDate == null && fimDate == null)
+            sql += "limit 30";
+
+        try {
+            ArrayList<GrupoEventos> grupoEventos = new ArrayList<>();
+
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, "%" + nome + "%");
+            ResultSet resultSet = stmt.executeQuery();
+
+            while (resultSet.next()) {
+                GrupoEventos grupoEventosTemp = new GrupoEventos(resultSet.getInt("id_grupo_eventos"));
+                grupoEventos.add(getPreviewGrupoEventos(grupoEventosTemp).get());
+            }
+            return grupoEventos;
+        } catch (SQLException e) {
+            return new ArrayList<GrupoEventos>();
+        }
+    }
+
+    public ArrayList<Integer> pesquisarGrupoMetas(int id_grupo_eventos){
+        String sql = "SELECT * FROM pesquisa_grupo_evento_meta where id_grupo_eventos = ? ";
+        try {
+            ArrayList<Integer> metaId = new ArrayList<>();
+
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setInt(1, id_grupo_eventos);
+            ResultSet resultSet = stmt.executeQuery();
+
+            while (resultSet.next()) {
+                metaId.add(resultSet.getInt("id_meta"));
+            }
+            return metaId;
+        } catch (SQLException e) {
+            return new ArrayList<Integer>();
+        }
     }
 }
