@@ -5,12 +5,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Optional;
 
 import org.controlsfx.control.textfield.TextFields;
@@ -23,7 +21,6 @@ import com.casaculturaqxd.sgec.builder.EventoBuilder;
 import com.casaculturaqxd.sgec.controller.dialog.DialogNovaInstituicao;
 import com.casaculturaqxd.sgec.controller.preview.PreviewEventoController;
 import com.casaculturaqxd.sgec.controller.preview.PreviewInstituicaoController;
-import com.casaculturaqxd.sgec.controller.preview.PreviewParticipanteController;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.GrupoEventos;
@@ -31,7 +28,6 @@ import com.casaculturaqxd.sgec.models.Indicador;
 import com.casaculturaqxd.sgec.models.Instituicao;
 import com.casaculturaqxd.sgec.models.Localizacao;
 import com.casaculturaqxd.sgec.models.Meta;
-import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 import com.casaculturaqxd.sgec.models.Participante;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 
@@ -43,7 +39,6 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -65,7 +60,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.DataFormat;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
@@ -79,9 +73,12 @@ public class VisualizarGrupoEventosController implements ControllerEvento{
 
     private ObservableList<PreviewInstituicaoController> listaPreviewOrganizadores = FXCollections.observableArrayList();
     private ObservableList<PreviewInstituicaoController> listaPreviewColaboradores = FXCollections.observableArrayList();
+    private ObservableList<PreviewEventoController> listaPreviewEventos = FXCollections.observableArrayList();
+
     private ObservableList<Instituicao> listaDeOrganizadores = FXCollections.observableArrayList();
     private ObservableList<Instituicao> listaDeColaboradores = FXCollections.observableArrayList();
-    private ObservableList<PreviewEventoController> listaPreviewEventos = FXCollections.observableArrayList();
+    private ObservableList<Evento> listaDeEventos = FXCollections.observableArrayList();
+
     private GrupoEventos grupoEventos;
     private Stage stage;
     private DatabasePostgres db = DatabasePostgres.getInstance("URL", "USER_NAME", "PASSWORD");
@@ -234,10 +231,13 @@ public class VisualizarGrupoEventosController implements ControllerEvento{
     }
 
     public void loadContent(){
+        
         loadImagemCapa();
         loadOrganizadores();
         loadColaboradores();
+        loadAcoes();
         loadMetas();
+
         classificacaoEtaria.getItems().addAll(classificacoes);
         tituloEvento.setText(grupoEventos.getNome());
         descricao.setText(grupoEventos.getDescricao());
@@ -277,6 +277,8 @@ public class VisualizarGrupoEventosController implements ControllerEvento{
         if(arquivo != null && arquivo.exists()) {
             try (FileInputStream fileAsStream = new FileInputStream(arquivo)) {
                 this.imagemCapa.setImage(new Image(fileAsStream));
+
+                this.grupoEventos.setImagemCapa(new ServiceFile(arquivo));
             } catch (Exception e) {
                 imagemCapa.setImage(null);
                 e.printStackTrace();
@@ -318,6 +320,7 @@ public class VisualizarGrupoEventosController implements ControllerEvento{
                 ButtonBar.ButtonData.OK_DONE);
         DialogNovaInstituicao dialogNovaInstituicao = new DialogNovaInstituicao(buttonTypeVincularOrganizadora);
         Optional<Instituicao> novaInstituicao = dialogNovaInstituicao.showAndWait();
+
         if (novaInstituicao.isPresent()) {
             adicionarOrganizador(novaInstituicao.get());
         }
@@ -333,6 +336,8 @@ public class VisualizarGrupoEventosController implements ControllerEvento{
                 PreviewInstituicaoController controller = loaderInstituicao.getController();
                 controller.setInstituicao(instituicao);
                 listaPreviewOrganizadores.add(controller);
+
+                listaDeOrganizadores.add(instituicao);
             } catch (IOException e) {
                 Alert alert = new Alert(AlertType.WARNING,  "falha carregando organizador");
                 alert.show();
@@ -354,6 +359,8 @@ public class VisualizarGrupoEventosController implements ControllerEvento{
                 PreviewEventoController controller = loaderEvento.getController();
                 controller.setEvento(evento);
                 listaPreviewEventos.add(controller);
+
+                listaDeEventos.add(evento);
             } catch (IOException e) {
                 Alert alert = new Alert(AlertType.WARNING,  "falha carregando organizador");
                 alert.show();
@@ -402,12 +409,23 @@ public class VisualizarGrupoEventosController implements ControllerEvento{
 
     private boolean updateGrupoEventos(GrupoEventos grupoEventos) throws SQLException {
         db.getConnection().setAutoCommit(false);
+
         try {
-            dao.updateGrupoEventos(grupoEventos);   
-            ArrayList<Instituicao> auxColaboradores = new ArrayList<>(listaDeColaboradores);
-            ArrayList<Instituicao> auxOrganizadores = new ArrayList<>(listaDeOrganizadores);
-            dao.atualizarColaboradores(auxColaboradores, grupoEventos);
-            dao.atualizarOrganizadores(auxOrganizadores, grupoEventos);
+            ArrayList<Instituicao> listaDeOrganizadores = new ArrayList<>(this.listaDeOrganizadores);
+            ArrayList<Instituicao> listaDeColaboradores = new ArrayList<>(this.listaDeColaboradores);
+            ArrayList<Evento> listaDeEventos = new ArrayList<>(this.listaDeEventos);
+
+            grupoEventos.setOrganizadores(listaDeOrganizadores);
+            grupoEventos.setColaboradores(listaDeColaboradores);
+            grupoEventos.setEventos(listaDeEventos);
+
+            dao.updateGrupoEventos(grupoEventos);
+            
+            // ArrayList<Instituicao> auxColaboradores = new ArrayList<>(listaDeColaboradores);
+            // ArrayList<Instituicao> auxOrganizadores = new ArrayList<>(listaDeOrganizadores);
+            // dao.atualizarColaboradores(auxColaboradores, grupoEventos);
+            // dao.atualizarOrganizadores(auxOrganizadores, grupoEventos);
+
             return true;
         } catch (SQLException e) {
             db.getConnection().rollback();
@@ -422,7 +440,7 @@ public class VisualizarGrupoEventosController implements ControllerEvento{
         for (PreviewEventoController previewEventoController : listaPreview) {
             if(previewEventoController.getEvento().equals(evento)){
                 return true;
-            }
+            }   
         }
         return false;
             }
@@ -474,7 +492,10 @@ public class VisualizarGrupoEventosController implements ControllerEvento{
                 loaderInstituicao.load();
                 PreviewInstituicaoController controller = loaderInstituicao.getController();
                 controller.setInstituicao(instituicao);
+                
                 listaPreviewColaboradores.add(controller);
+
+                listaDeColaboradores.add(instituicao);
             } catch (IOException e) {
                 Alert alert = new Alert(AlertType.WARNING, "falha carregando organizador");
                 alert.show();
@@ -631,15 +652,14 @@ public class VisualizarGrupoEventosController implements ControllerEvento{
                 while (change.next()) {
                     if (change.wasAdded()) {
                         for (PreviewEventoController addedController : change.getAddedSubList()) {
-                            addedController.setEvento(((EventoBuilder) Controller).getEvento());
-
+                            addedController.setParentController(Controller);
                             acoesRealizadas.getChildren().add(addedController.getContainer());
                         }
                     }
                     if (change.wasRemoved()) {
                         for (PreviewEventoController removedController : change.getRemoved()) {
                             // Remover o Pane de preview ao deletar um Participante da lista
-                            acoesRealizadas.getChildren().remove(removedController);
+                            acoesRealizadas.getChildren().remove(removedController.getContainer());
                         }
                     }
                 }
@@ -676,8 +696,7 @@ public class VisualizarGrupoEventosController implements ControllerEvento{
 
     @Override
     public void removerInstituicao(Instituicao instituicao) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'removerInstituicao'");
+        
     }
 
     @Override
