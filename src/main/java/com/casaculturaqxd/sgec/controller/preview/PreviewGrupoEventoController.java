@@ -9,6 +9,8 @@ import java.util.Calendar;
 import java.util.ResourceBundle;
 
 import com.casaculturaqxd.sgec.App;
+import com.casaculturaqxd.sgec.controller.ControllerEvento;
+import com.casaculturaqxd.sgec.controller.pesquisarGrupoEventosController;
 import com.casaculturaqxd.sgec.models.GrupoEventos;
 import com.casaculturaqxd.sgec.models.Meta;
 import com.casaculturaqxd.sgec.service.DateFormattingService;
@@ -27,7 +29,13 @@ public class PreviewGrupoEventoController {
     private final Image IMAGEM_DEFAULT = new Image(App.class.getResourceAsStream("imagens/default_image.png"));
 
     @FXML
+    private Parent container; // pane raiz do fxml
+
+    @FXML
     private ResourceBundle resources;
+
+    @FXML
+    private pesquisarGrupoEventosController parentController;
 
     @FXML
     private URL location;
@@ -40,9 +48,6 @@ public class PreviewGrupoEventoController {
 
     @FXML
     private Button verDetalhes;
-
-    @FXML
-    private Parent root;
 
     @FXML
     private ImageView imagem;
@@ -88,6 +93,22 @@ public class PreviewGrupoEventoController {
         }
         
         dataRealizacao.setText(dataRealizada);
+    }
+
+    public void setParentController(pesquisarGrupoEventosController superController) {
+      this.parentController = superController;
+    }
+
+    public pesquisarGrupoEventosController getParentController() {
+      return parentController;
+    }
+
+    public void setContainer(Parent container) {
+      this.container = container;
+    }
+
+    public Parent getContainer() {
+      return container;
     }
 
     private void setImagemCapa() {

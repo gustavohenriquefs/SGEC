@@ -90,7 +90,7 @@
                         </VBox>
                         <VBox alignment="TOP_CENTER" spacing="10.0" VBox.vgrow="ALWAYS">
                            <children>
-                              <Label text="Exibir resultados para">
+                              <Label fx:id="exibirResultados" text="Exibir resultados para" visible="false">
                                  <font>
                                     <Font name="System Bold Italic" size="20.0" />
                                  </font>
@@ -136,11 +136,11 @@
                         </VBox>
                         <VBox VBox.vgrow="ALWAYS">
                            <children>
-                              <AnchorPane prefHeight="300.0" VBox.vgrow="ALWAYS">
+                              <AnchorPane prefHeight="500.0" VBox.vgrow="ALWAYS">
                                  <children>
-                                    <ScrollPane fx:id="campoResultados" hbarPolicy="ALWAYS" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <ScrollPane fx:id="campoResultados" hbarPolicy="ALWAYS" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" vbarPolicy="ALWAYS" visible="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <content>
-                                          <FlowPane fx:id="secaoResultados" />
+                                          <FlowPane fx:id="secaoResultados" alignment="CENTER" columnHalignment="CENTER" hgap="30.0" prefHeight="286.0" prefWidth="1424.0" vgap="30.0" visible="false" />
                                        </content>
                                     </ScrollPane>
                                  </children>

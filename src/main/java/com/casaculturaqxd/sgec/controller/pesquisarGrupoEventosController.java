@@ -10,18 +10,27 @@ import java.util.Optional;
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.GrupoEventosDAO;
 import com.casaculturaqxd.sgec.DAO.MetaDAO;
+import com.casaculturaqxd.sgec.controller.preview.PreviewGrupoEventoController;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.GrupoEventos;
 import com.casaculturaqxd.sgec.models.Meta;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 
 public class pesquisarGrupoEventosController {
@@ -38,11 +47,22 @@ public class pesquisarGrupoEventosController {
     TextField nomeGrupoEventos;
     @FXML
     ChoiceBox<String> classificacaoEtaria;
+    @FXML
+    FlowPane secaoResultados;
+    @FXML
+    ScrollPane campoResultados;
+    @FXML
+    Label exibirResultados;
+
     private final String[] classificacoes = { "Livre", "10 anos", "12 anos", "14 anos", "16 anos", "18 anos" };
+    ObservableList<PreviewGrupoEventoController> listaPreviewGrupoEventoControllers = FXCollections.observableArrayList();
+
 
     public void initialize() throws IOException {
         loadMenu();
         classificacaoEtaria.getItems().addAll(classificacoes);
+        addListenersParticipante(listaPreviewGrupoEventoControllers);
+        dimensionarFlowPane();
     }
 
     private void loadMenu() throws IOException {
@@ -52,7 +72,7 @@ public class pesquisarGrupoEventosController {
     }
 
     public void pesquisarGrupoEvento(){
-        ArrayList<GrupoEventos> grupoEventosFinais;
+        ArrayList<GrupoEventos> grupoEventosFinais = new ArrayList<>();
         String nome = nomeGrupoEventos.getText();
         Date dataInicial = null;
         Date dataFinal = null;
@@ -65,10 +85,37 @@ public class pesquisarGrupoEventosController {
             grupoEventosFinais = filtroMetas(grupoEventosFinais, metasSelecionadas);
         }
         
-        for (GrupoEventos grupoEventos : grupoEventosFinais) {
-            System.out.println(grupoEventos.getIdGrupoEventos());
-        }
+        secaoResultados.getChildren().clear();
+        listaPreviewGrupoEventoControllers.clear();
+        loadGrupoEventos(grupoEventosFinais);
 
+    }
+
+    private void dimensionarFlowPane() {
+        campoResultados.viewportBoundsProperty().addListener((observable, oldValue, newValue) -> {
+            campoResultados.setPrefWidth(newValue.getWidth());
+        });
+        campoResultados.prefHeightProperty().bind(campoResultados.heightProperty());
+    }
+
+    private void loadGrupoEventos(ArrayList<GrupoEventos> grupoEventosFinais){
+        secaoResultados.setVisible(true);
+        campoResultados.setVisible(true);
+        exibirResultados.setVisible(true);
+        for (GrupoEventos grupoEventos : grupoEventosFinais) {
+            FXMLLoader loaderInstituicao = new FXMLLoader(
+                    App.class.getResource("view/preview/previewGrupoEvento.fxml"));
+            try {
+                loaderInstituicao.load();
+                PreviewGrupoEventoController controller = loaderInstituicao.getController();
+                controller.setGrupoEventos(grupoEventos);
+                listaPreviewGrupoEventoControllers.add(controller);
+            } catch (IOException e) {
+                Alert alert = new Alert(AlertType.WARNING, "falha carregando organizador");
+                alert.show();
+            }
+        }
+        
     }
 
     private ArrayList<GrupoEventos> filtroMetas(ArrayList<GrupoEventos> grupoEventosFinais, ArrayList<Integer> metasSelecionadas) {
@@ -133,6 +180,20 @@ public class pesquisarGrupoEventosController {
             }
         }
         return metasSelecionadas;
+    }
+
+    public void addListenersParticipante(ObservableList<PreviewGrupoEventoController> observableList) {
+        pesquisarGrupoEventosController superController = this;
+        observableList.addListener((ListChangeListener<PreviewGrupoEventoController>) change -> {
+            while (change.next()) {
+                if (change.wasAdded()) {
+                    for (PreviewGrupoEventoController addedController : change.getAddedSubList()) {
+                        addedController.setParentController(superController);
+                        secaoResultados.getChildren().add(addedController.getContainer());
+                    }
+                }
+        }
+      });
     }
 
 }
