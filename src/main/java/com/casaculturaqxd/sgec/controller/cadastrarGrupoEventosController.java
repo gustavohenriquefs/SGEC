@@ -129,6 +129,11 @@ public class CadastrarGrupoEventosController implements ControllerServiceFile, C
         }
     }
 
+    public void cancelar() throws IOException {
+        builderGrupoEvento.resetar();
+        App.setRoot("view/home");
+    }
+
     private void verificarInput() {
         if (!camposObrigatoriosPreenchidos()) {
             Alert erroLocalizacao = new Alert(AlertType.ERROR, "nem todos os campos obrigatorios foram preenchidos");
@@ -401,6 +406,20 @@ public class CadastrarGrupoEventosController implements ControllerServiceFile, C
             mensagem.setAlertType(AlertType.ERROR);
             mensagem.setContentText("Não foi possivel realizar a vinculação: Evento já foi vinculada!");
             mensagem.show();
+        }
+
+        ArrayList<Instituicao> colaboradores = evento.getListaColaboradores();
+        if(!colaboradores.isEmpty()){
+            for (Instituicao colaborador : colaboradores) {
+                adicionarColaborador(colaborador);
+            }
+        }
+
+        ArrayList<Instituicao> organizadores = evento.getListaOrganizadores();
+        if(!organizadores.isEmpty()){
+            for (Instituicao organizador : organizadores) {
+                adicionarOrganizador(organizador);
+            }
         }
     }
 

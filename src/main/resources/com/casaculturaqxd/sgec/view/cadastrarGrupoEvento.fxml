@@ -38,9 +38,9 @@
                      </VBox>
                      <HBox minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="740.0" spacing="10.0">
                         <children>
-                           <HBox prefHeight="30.0" prefWidth="968.0" HBox.hgrow="ALWAYS">
+                           <HBox prefHeight="30.0" prefWidth="701.0" HBox.hgrow="ALWAYS">
                               <children>
-                                 <TextField fx:id="titulo" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="729.0" HBox.hgrow="ALWAYS" />
+                                 <TextField fx:id="titulo" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="668.0" HBox.hgrow="ALWAYS" />
                               </children>
                            </HBox>
                            <HBox fx:id="secaoMetas" prefHeight="30.0" prefWidth="703.0">
@@ -234,7 +234,7 @@
                      </VBox>
                      <HBox alignment="TOP_RIGHT" spacing="20.0">
                         <children>
-                           <Button id="cancelar" fx:id="cancelar" mnemonicParsing="false" prefHeight="26.0" prefWidth="124.0" style="-fx-background-color: #352929;" text="Cancelar" textFill="#fffef7" />
+                           <Button id="cancelar" fx:id="cancelar" mnemonicParsing="false" onAction="#cancelar" prefHeight="26.0" prefWidth="124.0" style="-fx-background-color: #352929;" text="Cancelar" textFill="#fffef7" />
                            <Button id="criar" fx:id="criar" mnemonicParsing="false" onAction="#criarNovoEvento" prefHeight="26.0" prefWidth="124.0" style="-fx-background-color: #2A3F25;" text="Criar" textFill="#fffef7" />
                         </children>
                      </HBox>
