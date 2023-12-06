@@ -19,6 +19,7 @@ import com.casaculturaqxd.sgec.models.Instituicao;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -143,7 +144,7 @@ public class DialogInstituicaoController {
     InputStream fileAsStream;
     FileChooser fileChooser = new FileChooser();
     fileChooser.setTitle("Alterar foto da instituição");
-    ExtensionFilter filterImagens = new ExtensionFilter("imagem", "*.jpeg", "*.jpg", "*.png", "*.bmp");
+    ExtensionFilter filterImagens = new ExtensionFilter("imagem", ".jpeg", ".jpg", ".png", ".bmp");
     fileChooser.getExtensionFilters().add(filterImagens);
     try {
       file = fileChooser.showOpenDialog(stage);
@@ -163,24 +164,46 @@ public class DialogInstituicaoController {
   public void bindingSetOnAutoCompleted() {
     binding.setOnAutoCompleted(autoCompletionEvent -> {
       String selected = autoCompletionEvent.getCompletion();
+      
       try {
         instituicao = instituicaoDAO.getInstituicao(selected).get();
-      } catch (SQLException e) {
+      } catch (Exception e) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Erro");
+        alert.setContentText("Não foi possível carregar a instituição selecionada!");
+        alert.showAndWait();
+
         e.printStackTrace();
       }
-      if (instituicao.getImagemCapa() != null) {
-        InputStream fileAsStream;
-        try {
-          file = serviceFileDAO.getContent(instituicao.getImagemCapa());
-          fileAsStream = new FileInputStream(file);
-          this.imagem.setImage(new Image(fileAsStream));
-        } catch (FileNotFoundException e) {
-          e.printStackTrace();
-        } catch (NullPointerException e) {
-          e.printStackTrace();
-        } catch (SQLException e) {
-          e.printStackTrace();
+      
+      try {
+        
+        if (instituicao.getImagemCapa() != null) {
+          ServiceFileDAO serviceFileDAO = new ServiceFileDAO(db.getConnection());
+            
+            File file = serviceFileDAO.getContent(instituicao.getImagemCapa());
+  
+            InputStream fileAsStream;
+            
+            try {
+              fileAsStream = new FileInputStream(file);
+              this.imagem.setImage(new Image(fileAsStream));
+  
+              imagem.setImage(new Image(file.toURI().toString()));
+            } catch (Exception e) {
+              imagem.setImage(null);
+  
+              e.printStackTrace();
+            }
         }
+
+      } catch (Exception e) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Erro");
+        alert.setContentText("Não foi possível carregar a imagem!");  
+        alert.showAndWait();
+
+        e.printStackTrace();
       }
       nomeInstituicao.setEditable(false);
     });

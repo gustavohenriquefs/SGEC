@@ -538,7 +538,7 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
             @Override
             public void handle(TableColumn.CellEditEvent<Indicador, Integer> t) {
                 ((Indicador) t.getTableView().getItems().get(t.getTablePosition().getRow()))
-                        .setValorEsperado(t.getNewValue());
+                         .setValorEsperado(t.getNewValue());
             }
         });
         TableColumn<Indicador, Integer> valorAlcancado = new TableColumn<>("Valor alcançado");
