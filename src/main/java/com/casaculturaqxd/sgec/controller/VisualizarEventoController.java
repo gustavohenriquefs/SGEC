@@ -1039,4 +1039,10 @@ public class VisualizarEventoController implements ControllerServiceFile, Contro
                 e.printStackTrace();
             }
     }
+
+    @Override
+    public void removerEvento(Evento evento) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'removerEvento'");
+    }
 }

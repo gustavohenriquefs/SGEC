@@ -87,13 +87,13 @@ public class CadastrarGrupoEventosController implements ControllerServiceFile, C
    
     private Alert mensagem = new Alert(AlertType.NONE);
 
-    public void initialize() throws IOException {
+    public void initialize() throws IOException, SQLException {
         loadMenu();
         classificacaoEtaria.getItems().addAll(classificacoes);
         addListenersColaborador(listaControllersColaboradores);
         addListenersOrganizador(listaControllersOrganizadores);
         addListenersEvento(listaControllersEventos);
-        nomeEventos = obterNomesEventos();
+        nomeEventos = eventoDAO.listarNomesEventos();
     }
 
     private void loadMenu() throws IOException {
@@ -431,15 +431,6 @@ public class CadastrarGrupoEventosController implements ControllerServiceFile, C
             }
         }
         return false;
-    }
-
-    public ArrayList<String> obterNomesEventos(){
-        ArrayList<Evento> eventos = eventoDAO.pesquisarEvento("", null, null);
-        ArrayList<String> nomesEventos = new ArrayList<>();
-        for (Evento evento : eventos) {
-            nomesEventos.add(evento.getNome());
-        }
-        return nomesEventos;
     }
 
     public void removerEvento(Evento evento) {
