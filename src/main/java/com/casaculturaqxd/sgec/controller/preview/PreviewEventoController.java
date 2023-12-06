@@ -11,6 +11,7 @@ import java.util.NoSuchElementException;
 
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.EventoDAO;
+import com.casaculturaqxd.sgec.controller.ControllerEvento;
 import com.casaculturaqxd.sgec.DAO.ServiceFileDAO;
 import com.casaculturaqxd.sgec.controller.ControllerEvento;
 import com.casaculturaqxd.sgec.controller.VisualizarEventoController;
@@ -33,14 +34,15 @@ public class PreviewEventoController {
     private DatabasePostgres db = DatabasePostgres.getInstance("URL", "USER_NAME", "PASSWORD");
     private ServiceFileDAO serviceFileDAO;
     private Evento evento;
+    private ControllerEvento parentController;
+    @FXML
+    private Parent container; // pane raiz do fxml
     @FXML
     Label dataHora, titulo;
     @FXML
-    Button detalhes;
+    Button detalhes, remover;
     @FXML
-    private Parent container; // pane raiz do fxml
     ImageView imagem;
-    private ControllerEvento parentController;
 
     File file = null;
 
@@ -59,21 +61,6 @@ public class PreviewEventoController {
         return this.evento;
     }
 
-    public Parent getContainer(){
-        return container;
-    }
-
-    public void setContainer(Parent container){
-        this.container = container;
-    }
-
-    public void setParentController(ControllerEvento parentController) {
-        this.parentController = parentController;
-    }
-
-    public ControllerEvento getParentController() {
-        return parentController;
-    }
 
     private void setarInformacoesEvento() {
         if (evento.getHorario() == null) {
@@ -115,5 +102,33 @@ public class PreviewEventoController {
             Alert erroLoading = new Alert(AlertType.WARNING, "Falha ao carregar o evento");
             erroLoading.show();
         }
+    }
+
+    public ControllerEvento getParentController() {
+      return parentController;
+    }
+
+    public void setParentController(ControllerEvento parentController) {
+        this.parentController = parentController;
+        habilitaBotao();
+    }
+
+    void habilitaBotao(){
+        if(getParentController()!=null){
+            remover.setDisable(false);
+            remover.setVisible(true);
+        }
+    }
+
+    public Parent getContainer() {
+        return container;
+    }
+
+    public void setContainer(Parent container) {
+        this.container = container;
+    }
+
+    public void remover() {
+        parentController.removerEvento(getEvento());
     }
 }
