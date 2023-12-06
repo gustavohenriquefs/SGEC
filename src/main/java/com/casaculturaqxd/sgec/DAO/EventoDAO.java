@@ -189,7 +189,7 @@ public class EventoDAO extends DAO {
   }
 
   public ArrayList<Evento> listarUltimosEventos() throws SQLException {
-    String sql = "select id_evento,nome_evento,data_inicial, horario, id_service_file from evento where nome_evento <> '' order by data_inicial desc limit 5";
+    String sql = "SELECT id_evento,nome_evento,data_inicial, horario, id_service_file FROM ultimos_eventos LIMIT 5";
     PreparedStatement stmt = connection.prepareStatement(sql);
     ArrayList<Evento> eventos = new ArrayList<>();
     try {
@@ -229,7 +229,8 @@ public class EventoDAO extends DAO {
   }
 
   public ArrayList<Evento> pesquisarEvento(String nome, Date inicioDate, Date fimDate) {
-    String sql = "select id_evento, nome_evento, inicio, fim from pesquisar_evento where nome_evento ilike ? ";
+    String sql = "SELECT * FROM pesquisar_evento where nome ilike ? ";
+
     if (inicioDate != null)
       sql += "and inicio >= '" + inicioDate.toString() + "' ";
 
@@ -245,6 +246,7 @@ public class EventoDAO extends DAO {
       PreparedStatement stmt = connection.prepareStatement(sql);
       stmt.setString(1, "%" + nome + "%");
       ResultSet resultSet = stmt.executeQuery();
+
       while (resultSet.next()) {
         Evento evento = new Evento(resultSet.getInt("id_evento"));
         eventos.add(getPreviewEvento(evento).get());
@@ -359,9 +361,8 @@ public class EventoDAO extends DAO {
   }
 
   public Optional<Evento> getPreviewEvento(Evento evento) throws SQLException {
-    String sql = "SELECT id_evento,nome_evento,data_inicial, horario, id_service_file FROM evento WHERE id_evento = ?";
+    String sql = "SELECT id_evento, nome_evento, acessivel_em_libras, data_inicial, horario, id_service_file FROM evento WHERE id_evento = ?";
     PreparedStatement preparedStatement = connection.prepareStatement(sql);
-
     try {
       preparedStatement.setInt(1, evento.getIdEvento());
       ResultSet resultSet = preparedStatement.executeQuery();
@@ -377,8 +378,12 @@ public class EventoDAO extends DAO {
         }
         EventoBuilder eventoBuilder = new EventoBuilder();
 
-        eventoBuilder.setHorario(resultSet.getTime("horario")).setId(resultSet.getInt("id_evento"))
-          .setNome(resultSet.getString("nome_evento")).setDataInicial(resultSet.getDate("data_inicial"))
+        eventoBuilder
+          .setHorario(resultSet.getTime("horario"))
+          .setAcessivelEmLibras(resultSet.getBoolean("acessivel_em_libras"))
+          .setId(resultSet.getInt("id_evento"))
+          .setNome(resultSet.getString("nome_evento"))
+          .setDataInicial(resultSet.getDate("data_inicial"))
           .setImagemCapa(imagemCapa);
 
         return Optional.ofNullable(eventoBuilder.getEvento());
@@ -389,28 +394,6 @@ public class EventoDAO extends DAO {
       String nomeEventoCausa = evento != null && evento.getNome() != null ? evento.getNome() : "";
       logException(e);
       throw new SQLException("falha buscando preview de evento " + nomeEventoCausa, e);
-    } finally {
-      preparedStatement.close();
-    }
-  }
-
-  public Optional<Evento> getPreviewEvento(String nomeEvento) throws SQLException {
-    String sql = "SELECT id_evento FROM evento WHERE nome_evento ILIKE ?";
-    PreparedStatement preparedStatement = connection.prepareStatement(sql);
-
-    try {
-      preparedStatement.setString(1, nomeEvento);
-      ResultSet resultSet = preparedStatement.executeQuery();
-      if (resultSet.next()) {
-        Evento evento = new Evento(resultSet.getInt("id_evento"));
-
-        return getPreviewEvento(evento);
-      } else {
-        return Optional.empty();
-      }
-    } catch (Exception e) {
-      logException(e);
-      throw new SQLException("falha buscando evento com nome" + nomeEvento, e);
     } finally {
       preparedStatement.close();
     }
