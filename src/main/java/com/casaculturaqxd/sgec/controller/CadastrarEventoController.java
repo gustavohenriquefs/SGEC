@@ -1,7 +1,10 @@
 package com.casaculturaqxd.sgec.controller;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Time;
@@ -51,6 +54,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DateCell;
@@ -65,6 +70,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 import javafx.util.converter.LocalTimeStringConverter;
 
@@ -121,11 +127,14 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
     ObservableList<PreviewParticipanteController> participantes = FXCollections
             .<PreviewParticipanteController>observableList(new ArrayList<>());
     private Alert mensagem = new Alert(AlertType.NONE);
+    @FXML
+    ImageView capaEvento;
+    File file = null;
 
     public void initialize() throws IOException {
         eventoDAO = new EventoDAO(db.getConnection());
         participanteDAO.setConnection(db.getConnection());
-        serviceFileDAO = new ServiceFileDAO(eventoDAO.getConnection());
+        serviceFileDAO = new ServiceFileDAO(db.getConnection());
 
         formatterHorario = new SimpleDateFormat("HH:mm");
         addListenersServiceFile(mapServiceFiles);
@@ -303,6 +312,20 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
         builderEvento.setListaArquivos(listaArquivos);
         builderEvento.setLocalizacoes(locais);
         builderEvento.setListaMetas(getMetasSelecionadas());
+        if(file != null){
+            ServiceFile serviceFileTemp = new ServiceFile(file);
+            try {
+                if(serviceFileDAO.getArquivo(serviceFileTemp.getFileKey()).isEmpty()){
+                  serviceFileDAO.inserirArquivo(serviceFileTemp);
+                  serviceFileTemp = serviceFileDAO.getArquivo(serviceFileTemp.getFileKey()).get();
+                } else {
+                  serviceFileTemp = serviceFileDAO.getArquivo(serviceFileTemp.getFileKey()).get();
+                }
+              } catch (SQLException e) {
+                e.printStackTrace();
+              }
+            builderEvento.setImagemCapa(serviceFileTemp);
+        } 
 
         return builderEvento.getEvento();
     }
@@ -669,32 +692,29 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
 
     public void addListenersParticipante(ObservableList<PreviewParticipanteController> observableList) {
         CadastrarEventoController superController = this;
-        observableList.addListener(new ListChangeListener<PreviewParticipanteController>() {
-            @Override
-            public void onChanged(ListChangeListener.Change<? extends PreviewParticipanteController> change) {
+        observableList.addListener((ListChangeListener<PreviewParticipanteController>) change -> {
 
-                while (change.next()) {
-                    if (change.wasAdded()) {
+            while (change.next()) {
+                if (change.wasAdded()) {
 
-                        for (PreviewParticipanteController addedController : change.getAddedSubList()) {
-                            addedController.setParentController(superController);
+                    for (PreviewParticipanteController addedController : change.getAddedSubList()) {
+                        addedController.setParentController(superController);
 
-                            secaoParticipantes.getChildren().add(addedController.getContainer());
-                        }
-
+                        secaoParticipantes.getChildren().add(addedController.getContainer());
                     }
 
-                    if (change.wasRemoved()) {
-
-                        for (PreviewParticipanteController removedController : change.getRemoved()) {
-                            secaoParticipantes.getChildren().remove(removedController.getContainer());
-                        }
-
-                    }
                 }
 
+                if (change.wasRemoved()) {
+
+                    for (PreviewParticipanteController removedController : change.getRemoved()) {
+                        secaoParticipantes.getChildren().remove(removedController.getContainer());
+                    }
+
             }
-        });
+
+        }
+      });
     }
 
     public void addListenersOrganizador(ObservableList<PreviewInstituicaoController> observableList) {
@@ -928,5 +948,22 @@ public class CadastrarEventoController implements ControllerServiceFile, Control
     public void removerEvento(Evento evento) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'removerEvento'");
+    }
+
+    public void loadImagem(){
+        InputStream fileAsStream;
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Alterar foto do evento");
+        ExtensionFilter filterImagens = new ExtensionFilter("imagem", "*.jpeg", "*.jpg", "*.png", "*.bmp");
+        fileChooser.getExtensionFilters().add(filterImagens);
+        try {
+            file = fileChooser.showOpenDialog(stage);
+            fileAsStream = new FileInputStream(file);
+            capaEvento.setImage(new Image(fileAsStream));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
     }
 }

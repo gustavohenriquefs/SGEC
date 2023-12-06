@@ -29,8 +29,8 @@ public class LoginController {
 
     private User usuario;
     private UserDAO userDAO;
-    private final Database userConnection = DatabasePostgres.getInstance("URL", "USER_NAME",
-            "PASSWORD");
+
+    private final Database userConnection = DatabasePostgres.getInstance("URL", "USER_NAME", "PASSWORD");
 
     /**
      * Carrega a página com o botão de login desabilitado

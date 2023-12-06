@@ -34,6 +34,11 @@
                                     <ImageView fx:id="capaEvento" fitHeight="200.0" fitWidth="1000.0" pickOnBounds="true" preserveRatio="true" HBox.hgrow="ALWAYS" />
                                  </children>
                               </HBox>
+                              <HBox alignment="CENTER" prefHeight="50.0" prefWidth="1380.0">
+                                 <children>
+                                    <Button mnemonicParsing="false" onAction="#loadImagem" style="-fx-background-color: #2A3F25; -fx-text-fill: #FFFEF7;" text="Mudar Imagem" />
+                                 </children>
+                              </HBox>
                            </children>
                            <VBox.margin>
                               <Insets bottom="10.0" top="10.0" />

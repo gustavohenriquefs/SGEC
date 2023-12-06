@@ -46,9 +46,13 @@ public class EventoDAO extends DAO {
     }
 
     try {
-      String sql = "INSERT INTO evento (nome_evento, publico_esperado, publico_alcancado, descricao, data_inicial, data_final, horario, classificacao_etaria, certificavel, carga_horaria, acessivel_em_libras, num_participantes_esperado, num_municipios_esperado) VALUES (?, ?, ?, ?, ?, ?, ?, ?::faixa_etaria, ?, ?, ?, ?, ?) RETURNING id_evento";
+      String sql = "INSERT INTO evento (nome_evento, publico_esperado, publico_alcancado, descricao, data_inicial, data_final, horario, classificacao_etaria, certificavel, carga_horaria, acessivel_em_libras, num_participantes_esperado, num_municipios_esperado, id_service_file) VALUES (?, ?, ?, ?, ?, ?, ?, ?::faixa_etaria, ?, ?, ?, ?, ?, ?) RETURNING id_evento";
 
       PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+      Integer idServiceFile = null;
+      if (evento.getImagemCapa() != null) {
+        idServiceFile = evento.getImagemCapa().getServiceFileId();
+      }
 
       stmt.setString(1, evento.getNome());
       stmt.setInt(2, evento.getPublicoEsperado());
@@ -63,6 +67,7 @@ public class EventoDAO extends DAO {
       stmt.setBoolean(11, evento.isAcessivelEmLibras());
       stmt.setInt(12, evento.getNumParticipantesEsperado());
       stmt.setInt(13, evento.getNumMunicipiosEsperado());
+      stmt.setObject(14, idServiceFile, Types.INTEGER);
 
       stmt.executeUpdate();
 
@@ -184,7 +189,7 @@ public class EventoDAO extends DAO {
   }
 
   public ArrayList<Evento> listarUltimosEventos() throws SQLException {
-    String sql = "select id_evento,nome_evento,data_inicial, horario, id_service_file from evento where nome_evento <> '' order by data_inicial desc limit 5";
+    String sql = "SELECT id_evento,nome_evento,data_inicial, horario, id_service_file FROM ultimos_eventos LIMIT 5";
     PreparedStatement stmt = connection.prepareStatement(sql);
     ArrayList<Evento> eventos = new ArrayList<>();
     try {
@@ -204,13 +209,33 @@ public class EventoDAO extends DAO {
     return eventos;
   }
 
+  public ArrayList<String> listarNomesEventos() throws SQLException {
+    String sql = "select nome_evento from evento";
+    PreparedStatement stmt = connection.prepareStatement(sql);
+    try {
+      ArrayList<String> nomes = new ArrayList<>();
+
+      ResultSet resultSet = stmt.executeQuery();
+      while (resultSet.next()) {
+        nomes.add(resultSet.getString("nome_evento"));
+      }
+      return nomes;
+    } catch (Exception e) {
+      logException(e);
+      throw new SQLException("falha listando nomes dos eventos", e);
+    } finally {
+      stmt.close();
+    }
+  }
+
   public ArrayList<Evento> pesquisarEvento(String nome, Date inicioDate, Date fimDate) {
-    String sql = "select id_evento,nome_evento,data_inicial, horario, id_service_file from evento where nome_evento ilike ? ";
+    String sql = "SELECT * FROM pesquisar_evento where nome ilike ? ";
+
     if (inicioDate != null)
-      sql += "and data_inicial >= '" + inicioDate.toString() + "' ";
+      sql += "and inicio >= '" + inicioDate.toString() + "' ";
 
     if (fimDate != null)
-      sql += "and data_final <= '" + fimDate.toString() + "' ";
+      sql += "and fim <= '" + fimDate.toString() + "' ";
 
     if (nome == "" && inicioDate == null && fimDate == null)
       sql += "limit 30";
@@ -221,6 +246,7 @@ public class EventoDAO extends DAO {
       PreparedStatement stmt = connection.prepareStatement(sql);
       stmt.setString(1, "%" + nome + "%");
       ResultSet resultSet = stmt.executeQuery();
+
       while (resultSet.next()) {
         Evento evento = new Evento(resultSet.getInt("id_evento"));
         eventos.add(getPreviewEvento(evento).get());
@@ -233,29 +259,29 @@ public class EventoDAO extends DAO {
 
   public Optional<Evento> getEvento(Evento evento) throws SQLException {
     String sql = """
-        SELECT
-        id_evento,
-        nome_evento,
-        publico_esperado,
-        publico_alcancado,
-        descricao,
-        data_inicial,
-        data_final,
-        horario,
-        classificacao_etaria,
-        certificavel,
-        carga_horaria,
-        acessivel_em_libras,
-        num_participantes_esperado,
-        num_municipios_esperado,
-        id_grupo_eventos,
-        num_municipios_alcancado,
-        num_participantes_alcancado,
-        num_colaboradores_alcancado,
-        num_colaboradores_esperado,
-        id_service_file
-        FROM evento WHERE id_evento = ?
-          """;
+      SELECT
+      id_evento,
+      nome_evento,
+      publico_esperado,
+      publico_alcancado,
+      descricao,
+      data_inicial,
+      data_final,
+      horario,
+      classificacao_etaria,
+      certificavel,
+      carga_horaria,
+      acessivel_em_libras,
+      num_participantes_esperado,
+      num_municipios_esperado,
+      id_grupo_eventos,
+      num_municipios_alcancado,
+      num_participantes_alcancado,
+      num_colaboradores_alcancado,
+      num_colaboradores_esperado,
+      id_service_file
+      FROM evento WHERE id_evento = ?
+        """;
     PreparedStatement stmt = connection.prepareStatement(sql);
     try {
       stmt.setInt(1, evento.getIdEvento());
@@ -266,9 +292,9 @@ public class EventoDAO extends DAO {
         GrupoEventosDAO grupoEventosDAO = new GrupoEventosDAO(connection);
         ServiceFileDAO serviceFileDAO = new ServiceFileDAO(connection);
         Optional<ServiceFile> optionalImagemCapa = serviceFileDAO
-            .getArquivo(new ServiceFile(resultSet.getInt("id_service_file")));
+          .getArquivo(new ServiceFile(resultSet.getInt("id_service_file")));
         Optional<GrupoEventos> optionalGrupoEventos = grupoEventosDAO
-            .getPreviewGrupoEventos(new GrupoEventos(resultSet.getInt("id_grupo_eventos")));
+          .getPreviewGrupoEventos(new GrupoEventos(resultSet.getInt("id_grupo_eventos")));
         eventoRetorno = new Evento();
         eventoRetorno.setIdEvento(resultSet.getInt("id_evento"));
         eventoRetorno.setNome(resultSet.getString("nome_evento"));
@@ -335,9 +361,8 @@ public class EventoDAO extends DAO {
   }
 
   public Optional<Evento> getPreviewEvento(Evento evento) throws SQLException {
-    String sql = "SELECT id_evento,nome_evento,data_inicial, horario, id_service_file FROM evento WHERE id_evento = ?";
+    String sql = "SELECT id_evento, nome_evento, acessivel_em_libras, data_inicial, horario, id_service_file FROM evento WHERE id_evento = ?";
     PreparedStatement preparedStatement = connection.prepareStatement(sql);
-
     try {
       preparedStatement.setInt(1, evento.getIdEvento());
       ResultSet resultSet = preparedStatement.executeQuery();
@@ -347,14 +372,19 @@ public class EventoDAO extends DAO {
         Optional<ServiceFile> resultOptional = serviceFileDAO.getArquivo(imagemCapa);
         if (resultOptional.isPresent()) {
           imagemCapa = serviceFileDAO.getArquivo(imagemCapa).get();
+          imagemCapa.setContent(serviceFileDAO.getContent(imagemCapa));
         } else {
           imagemCapa = null;
         }
         EventoBuilder eventoBuilder = new EventoBuilder();
 
-        eventoBuilder.setHorario(resultSet.getTime("horario")).setId(resultSet.getInt("id_evento"))
-            .setNome(resultSet.getString("nome_evento")).setDataInicial(resultSet.getDate("data_inicial"))
-            .setImagemCapa(imagemCapa);
+        eventoBuilder
+          .setHorario(resultSet.getTime("horario"))
+          .setAcessivelEmLibras(resultSet.getBoolean("acessivel_em_libras"))
+          .setId(resultSet.getInt("id_evento"))
+          .setNome(resultSet.getString("nome_evento"))
+          .setDataInicial(resultSet.getDate("data_inicial"))
+          .setImagemCapa(imagemCapa);
 
         return Optional.ofNullable(eventoBuilder.getEvento());
       } else {
@@ -364,28 +394,6 @@ public class EventoDAO extends DAO {
       String nomeEventoCausa = evento != null && evento.getNome() != null ? evento.getNome() : "";
       logException(e);
       throw new SQLException("falha buscando preview de evento " + nomeEventoCausa, e);
-    } finally {
-      preparedStatement.close();
-    }
-  }
-
-  public Optional<Evento> getPreviewEvento(String nomeEvento) throws SQLException {
-    String sql = "SELECT id_evento FROM evento WHERE nome_evento ILIKE ?";
-    PreparedStatement preparedStatement = connection.prepareStatement(sql);
-
-    try {
-      preparedStatement.setString(1, nomeEvento);
-      ResultSet resultSet = preparedStatement.executeQuery();
-      if (resultSet.next()) {
-        Evento evento = new Evento(resultSet.getInt("id_evento"));
-
-        return getPreviewEvento(evento);
-      } else {
-        return Optional.empty();
-      }
-    } catch (Exception e) {
-      logException(e);
-      throw new SQLException("falha buscando evento com nome" + nomeEvento, e);
     } finally {
       preparedStatement.close();
     }
@@ -425,26 +433,26 @@ public class EventoDAO extends DAO {
    */
   public boolean alterarEvento(Evento evento) throws SQLException {
     String sql = """
-        update evento
-        set nome_evento=?,
-        publico_esperado=?,
-        publico_alcancado=?,
-        descricao=?,
-        data_inicial=?,
-        data_final=?,
-        horario=?,
-        classificacao_etaria=?::faixa_etaria,
-        certificavel=?,
-        carga_horaria=?,
-        acessivel_em_libras=?,
-        num_participantes_esperado = ?,
-        num_municipios_esperado = ?,
-        num_colaboradores_esperado = ?,
-        id_grupo_eventos = ?,
-        id_service_file = ?
+      update evento
+      set nome_evento=?,
+      publico_esperado=?,
+      publico_alcancado=?,
+      descricao=?,
+      data_inicial=?,
+      data_final=?,
+      horario=?,
+      classificacao_etaria=?::faixa_etaria,
+      certificavel=?,
+      carga_horaria=?,
+      acessivel_em_libras=?,
+      num_participantes_esperado = ?,
+      num_municipios_esperado = ?,
+      num_colaboradores_esperado = ?,
+      id_grupo_eventos = ?,
+      id_service_file = ?
 
-        WHERE id_evento=?
-        """;
+      WHERE id_evento=?
+      """;
 
     PreparedStatement stmt = connection.prepareStatement(sql);
     try {
@@ -532,7 +540,7 @@ public class EventoDAO extends DAO {
    * @throws SQLException
    */
   public boolean atualizarParticipantesEvento(ArrayList<Participante> participantes, Evento evento)
-      throws SQLException {
+    throws SQLException {
     ParticipanteDAO participanteDAO = new ParticipanteDAO(connection);
     ArrayList<Participante> participantesAtuais = buscarParticipantesPorEvento(evento.getIdEvento());
     try {

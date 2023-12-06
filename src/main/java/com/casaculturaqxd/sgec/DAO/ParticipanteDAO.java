@@ -45,15 +45,17 @@ public class ParticipanteDAO extends DAO {
       ResultSet resultado = statement.executeQuery();
 
       if (resultado.next()) {
-        ServiceFile resultFile = new ServiceFile(resultado.getInt("id_service_file"));
-
+        Optional<ServiceFile> optionalImagemCapa = serviceFileDAO
+          .getArquivo(new ServiceFile(resultado.getInt("id_service_file")));
         participante.setIdParticipante(resultado.getInt("id_participante"));
         participante.setAreaDeAtuacao(resultado.getString("area_atuacao"));
         participante.setNome(resultado.getString("nome_participante"));
         participante.setBio(resultado.getString("bio"));
         participante.setLinkMapaDaCultura(resultado.getString("link_perfil"));
-        if (serviceFileDAO.getArquivo(resultFile).isPresent()) {
-          participante.setImagemCapa(serviceFileDAO.getArquivo(resultFile).get());
+        if (optionalImagemCapa.isPresent()) {
+          ServiceFile imagemCapa = optionalImagemCapa.get();
+          imagemCapa.setContent(serviceFileDAO.getContent(imagemCapa));
+          participante.setImagemCapa(imagemCapa);
         }
         return Optional.of(participante);
       } else {
@@ -71,9 +73,9 @@ public class ParticipanteDAO extends DAO {
 
   public Optional<Participante> getParticipantePorNome(String nome) throws SQLException {
     String getParticipanteQuery = "SELECT id_participante,nome_participante,area_atuacao,bio,link_perfil,id_service_file FROM participante WHERE nome_participante=?";
-    
+
     PreparedStatement statement = conn.prepareStatement(getParticipanteQuery);
-    
+
     try {
 
       statement.setString(1, nome);
@@ -81,7 +83,8 @@ public class ParticipanteDAO extends DAO {
       ResultSet resultado = statement.executeQuery();
 
       if (resultado.next()) {
-        ServiceFile resultFile = new ServiceFile(resultado.getInt("id_service_file"));
+        Optional<ServiceFile> optionalImagemCapa = serviceFileDAO
+          .getArquivo(new ServiceFile(resultado.getInt("id_service_file")));
 
         Participante participante = new Participante(0);
 
@@ -91,8 +94,10 @@ public class ParticipanteDAO extends DAO {
         participante.setBio(resultado.getString("bio"));
         participante.setLinkMapaDaCultura(resultado.getString("link_perfil"));
 
-        if (serviceFileDAO.getArquivo(resultFile).isPresent()) {
-          participante.setImagemCapa(serviceFileDAO.getArquivo(resultFile).get());
+        if (optionalImagemCapa.isPresent()) {
+          ServiceFile imagemCapa = optionalImagemCapa.get();
+          imagemCapa.setContent(serviceFileDAO.getContent(imagemCapa));
+          participante.setImagemCapa(imagemCapa);
         }
         return Optional.of(participante);
       } else {
@@ -122,7 +127,7 @@ public class ParticipanteDAO extends DAO {
       statement.executeUpdate();
 
       ResultSet rs = statement.getGeneratedKeys();
-      
+
       if (rs.next()) {
         participante.setIdParticipante(rs.getInt("id_participante"));
         return true;
@@ -206,9 +211,9 @@ public class ParticipanteDAO extends DAO {
     String sql = "SELECT nome_participante FROM participante";
 
     PreparedStatement statement = conn.prepareStatement(sql);
-    
+
     ArrayList<String> nomesParticipantes = new ArrayList<String>();
-    
+
     try {
       ResultSet resultado = statement.executeQuery();
 
