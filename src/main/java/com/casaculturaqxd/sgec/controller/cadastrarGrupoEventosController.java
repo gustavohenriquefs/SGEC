@@ -1,5 +1,6 @@
 package com.casaculturaqxd.sgec.controller;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -7,6 +8,7 @@ import java.io.InputStream;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Time;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Optional;
@@ -17,12 +19,11 @@ import org.controlsfx.control.textfield.TextFields;
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.EventoDAO;
 import com.casaculturaqxd.sgec.DAO.GrupoEventosDAO;
-import com.casaculturaqxd.sgec.builder.EventoBuilder;
+import com.casaculturaqxd.sgec.DAO.ServiceFileDAO;
 import com.casaculturaqxd.sgec.builder.GrupoEventosBuilder;
 import com.casaculturaqxd.sgec.controller.dialog.DialogNovaInstituicao;
 import com.casaculturaqxd.sgec.controller.preview.PreviewEventoController;
 import com.casaculturaqxd.sgec.controller.preview.PreviewInstituicaoController;
-import com.casaculturaqxd.sgec.controller.preview.PreviewParticipanteController;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.Evento;
 import com.casaculturaqxd.sgec.models.GrupoEventos;
@@ -45,19 +46,25 @@ import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputControl;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
 
 public class CadastrarGrupoEventosController implements ControllerServiceFile, ControllerEvento {
     DatabasePostgres db = DatabasePostgres.getInstance("URL", "USER_NAME", "PASSWORD");
     EventoDAO eventoDAO = new EventoDAO(db.getConnection());
+    ServiceFileDAO serviceFileDAO = new ServiceFileDAO(db.getConnection());
     GrupoEventosDAO grupoEventosDAO = new GrupoEventosDAO(db.getConnection());
     AutoCompletionBinding<String> binding;
     GrupoEventosBuilder builderGrupoEvento = new GrupoEventosBuilder();
@@ -86,6 +93,10 @@ public class CadastrarGrupoEventosController implements ControllerServiceFile, C
             .<PreviewEventoController>observableList(new ArrayList<>());
    
     private Alert mensagem = new Alert(AlertType.NONE);
+    @FXML
+    ImageView capaEvento;
+    File file = null;
+    Stage stage;
 
     public void initialize() throws IOException, SQLException {
         loadMenu();
@@ -94,6 +105,7 @@ public class CadastrarGrupoEventosController implements ControllerServiceFile, C
         addListenersOrganizador(listaControllersOrganizadores);
         addListenersEvento(listaControllersEventos);
         nomeEventos = eventoDAO.listarNomesEventos();
+        compararDatas();
     }
 
     private void loadMenu() throws IOException {
@@ -102,13 +114,13 @@ public class CadastrarGrupoEventosController implements ControllerServiceFile, C
         root.getChildren().add(0, carregarMenu.load());
     }
 
-    public void criarNovoEvento() {
+    public void criarNovoGrupoEvento() {
         verificarInput();
 
         try {
             GrupoEventos grupoEventos = getTargetGrupoEvento();
             insertGrupoEvento(grupoEventos);
-            Alert alertaSucesso = new Alert(AlertType.CONFIRMATION, "Evento cadastrado com sucesso");
+            Alert alertaSucesso = new Alert(AlertType.CONFIRMATION, "Grupo Evento cadastrado com sucesso");
             ButtonType sucesso = new ButtonType("OK", ButtonData.FINISH);
             alertaSucesso.getButtonTypes().setAll(sucesso);
             alertaSucesso.setResultConverter(dialogButton -> {
@@ -225,6 +237,7 @@ public class CadastrarGrupoEventosController implements ControllerServiceFile, C
         int numColaboradoresEsperados = formatNumericInputField(colaboradoresEsperados);
         int numAcoesDeselvolvidasEsperadas = formatNumericInputField(acoesDeselvolvidasEsperadas);
 
+
         builderGrupoEvento.setNome(titulo.getText()).setDescricao(descricao.getText())
                 .setClassificacaoEtaria(classificacaoEtaria.getSelectionModel().getSelectedItem())
                 .setDataInicial(novaDataInicial).setDataFinal(novaDataFinal).setPublicoEsperado(novoPublicoEsperado)
@@ -234,6 +247,21 @@ public class CadastrarGrupoEventosController implements ControllerServiceFile, C
                 .setNumColaboradoresEsperado(numColaboradoresEsperados)
                 .setNumAcoesEsperado(numAcoesDeselvolvidasEsperadas);
         builderGrupoEvento.setMetas(getMetasSelecionadas());
+
+        if(file != null){
+            ServiceFile serviceFileTemp = new ServiceFile(file);
+            try {
+                if(serviceFileDAO.getArquivo(serviceFileTemp.getFileKey()).isEmpty()){
+                  serviceFileDAO.inserirArquivo(serviceFileTemp);
+                  serviceFileTemp = serviceFileDAO.getArquivo(serviceFileTemp.getFileKey()).get();
+                } else {
+                  serviceFileTemp = serviceFileDAO.getArquivo(serviceFileTemp.getFileKey()).get();
+                }
+              } catch (SQLException e) {
+                e.printStackTrace();
+              }
+            builderGrupoEvento.setImagemCapa(serviceFileTemp);
+        }
 
         
 
@@ -551,6 +579,34 @@ public class CadastrarGrupoEventosController implements ControllerServiceFile, C
         }
     }
 
+    public void compararDatas() {
+
+        // Impede que data posteriores á dataFinal sejam seleciondas no campo
+        // dataInicial
+        dataFinal.valueProperty().addListener((observable, oldValue, newValue) -> {
+            dataInicial.setDayCellFactory(picker -> new DateCell() {
+                @Override
+                public void updateItem(LocalDate date, boolean empty) {
+                    super.updateItem(date, empty);
+                    LocalDate currentDate = dataFinal.getValue();
+                    setDisable(empty || date.compareTo(currentDate) > 0);
+                }
+            });
+        });
+
+        // Impede que datas anteriores à dataInicial sejam selecionadas em dataFinal
+        dataInicial.valueProperty().addListener((observable, oldValue, newValue) -> {
+            dataFinal.setDayCellFactory(picker -> new DateCell() {
+                @Override
+                public void updateItem(LocalDate date, boolean empty) {
+                    super.updateItem(date, empty);
+                    LocalDate currentDate = dataInicial.getValue();
+                    setDisable(empty || date.compareTo(currentDate) < 0);
+                }
+            });
+        });
+    }
+
     @Override
     public void adicionarLocalizacao(Localizacao localizacao) {
         // TODO Auto-generated method stub
@@ -573,6 +629,23 @@ public class CadastrarGrupoEventosController implements ControllerServiceFile, C
     public void removerArquivo(ServiceFile serviceFile) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'removerArquivo'");
+    }
+
+    public void loadImagem(){
+        InputStream fileAsStream;
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Alterar foto do Grupo Evento");
+        ExtensionFilter filterImagens = new ExtensionFilter("imagem", "*.jpeg", "*.jpg", "*.png", "*.bmp");
+        fileChooser.getExtensionFilters().add(filterImagens);
+        try {
+            file = fileChooser.showOpenDialog(stage);
+            fileAsStream = new FileInputStream(file);
+            capaEvento.setImage(new Image(fileAsStream));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
     }
 
 }

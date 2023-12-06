@@ -9,6 +9,8 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
@@ -29,6 +31,30 @@
                                  <Font name="System Bold" size="20.0" />
                               </font>
                            </Label>
+                           <HBox alignment="CENTER" prefHeight="134.0" prefWidth="1682.0">
+                              <children>
+                                 <VBox alignment="CENTER" prefHeight="186.0" prefWidth="328.0" style="-fx-background-color: -white;">
+                                    <children>
+                                       <ImageView fx:id="capaEvento" fitHeight="194.0" fitWidth="396.0" pickOnBounds="true" preserveRatio="true">
+                                          <image>
+                                             <Image url="@../imagens/default_image.png" />
+                                          </image>
+                                       </ImageView>
+                                       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                                          <children>
+                                             <Button mnemonicParsing="false" onAction="#loadImagem" style="-fx-background-color: #2A3F25; -fx-text-fill: -branco;" text="Alterar Imagem" />
+                                          </children>
+                                          <opaqueInsets>
+                                             <Insets />
+                                          </opaqueInsets>
+                                          <VBox.margin>
+                                             <Insets top="10.0" />
+                                          </VBox.margin>
+                                       </HBox>
+                                    </children>
+                                 </VBox>
+                              </children>
+                           </HBox>
                            <Label text="Título">
                               <font>
                                  <Font name="System Bold" size="12.0" />
@@ -235,7 +261,7 @@
                      <HBox alignment="TOP_RIGHT" spacing="20.0">
                         <children>
                            <Button id="cancelar" fx:id="cancelar" mnemonicParsing="false" onAction="#cancelar" prefHeight="26.0" prefWidth="124.0" style="-fx-background-color: #352929;" text="Cancelar" textFill="#fffef7" />
-                           <Button id="criar" fx:id="criar" mnemonicParsing="false" onAction="#criarNovoEvento" prefHeight="26.0" prefWidth="124.0" style="-fx-background-color: #2A3F25;" text="Criar" textFill="#fffef7" />
+                           <Button id="criar" fx:id="criar" mnemonicParsing="false" onAction="#criarNovoGrupoEvento" prefHeight="26.0" prefWidth="124.0" style="-fx-background-color: #2A3F25;" text="Criar" textFill="#fffef7" />
                         </children>
                      </HBox>
                   </children>
