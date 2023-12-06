@@ -72,7 +72,12 @@ public class GrupoEventosDAO extends DAO {
             preparedStatement.setDate(11, grupoEventos.getDataInicial());
             preparedStatement.setDate(12, grupoEventos.getDataFinal());
 
-            preparedStatement.execute();
+            preparedStatement.executeUpdate();
+            ResultSet rs = preparedStatement.getGeneratedKeys();
+            if (rs.next()) {
+                grupoEventos.setIdGrupoEventos(rs.getInt("id_grupo_eventos"));
+            }
+
             return true;
         } catch (Exception exception) {
             String nomeGrupoEventosCausa = "";
