@@ -69,7 +69,9 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.util.converter.IntegerStringConverter;
 
-public class VisualizarGrupoEventosController implements ControllerEvento{
+public class VisualizarGrupoEventosController implements ControllerEvento {
+
+    private final Image IMAGEM_DEFAULT = new Image(App.class.getResourceAsStream("imagens/default_image.png"));
 
     private ObservableList<PreviewInstituicaoController> listaPreviewOrganizadores = FXCollections.observableArrayList();
     private ObservableList<PreviewInstituicaoController> listaPreviewColaboradores = FXCollections.observableArrayList();
@@ -131,7 +133,6 @@ public class VisualizarGrupoEventosController implements ControllerEvento{
     @FXML
     private Tooltip tooltipCliboard;
     private Alert mensagem = new Alert(AlertType.NONE);
-    private File file;
 
     public void initialize() throws IOException {
         compararDatas();
@@ -254,7 +255,6 @@ public class VisualizarGrupoEventosController implements ControllerEvento{
 
     }
 
-
     public void adicionarCapa(){
         FileChooser fileChooser = new FileChooser();
         if (lastDirectoryOpen != null) {
@@ -295,23 +295,23 @@ public class VisualizarGrupoEventosController implements ControllerEvento{
     private void loadImagemCapa(){
         if(this.grupoEventos.getImagemCapa() == null) {
             return;
-        }else{
-            try {
-                File imageFile = this.grupoEventos.getImagemCapa().getContent();
-                if(imageFile != null && imageFile.exists()) {
-                    try (FileInputStream fileAsStream = new FileInputStream(imageFile)) {
-                        this.imagemCapa.setImage(new Image(fileAsStream));
-                    } catch (Exception e) {
-                        imagemCapa.setImage(null);
-                        e.printStackTrace();
-                    }
-                }else{
-                    imagemCapa.setImage(null);
+        }
+
+        try {
+            File imageFile = this.grupoEventos.getImagemCapa().getContent();
+            if(imageFile != null && imageFile.exists()) {
+                try (FileInputStream fileAsStream = new FileInputStream(imageFile)) {
+                    this.imagemCapa.setImage(new Image(fileAsStream));
+                } catch (Exception e) {
+                    imagemCapa.setImage(IMAGEM_DEFAULT);
+                    e.printStackTrace();
                 }
-            } catch (IOException e) {
-                imagemCapa.setImage(null);
-                e.printStackTrace();
-            } 
+            }else{
+                imagemCapa.setImage(IMAGEM_DEFAULT);
+            }
+        } catch (IOException e) {
+            imagemCapa.setImage(IMAGEM_DEFAULT);
+            e.printStackTrace();
         }
     }
 
@@ -335,7 +335,7 @@ public class VisualizarGrupoEventosController implements ControllerEvento{
                 loaderInstituicao.load();
                 PreviewInstituicaoController controller = loaderInstituicao.getController();
                 controller.setInstituicao(instituicao);
-                listaPreviewOrganizadores.add(controller);
+                listaPreviewOrganizadores.add(controller); 
 
                 listaDeOrganizadores.add(instituicao);
             } catch (IOException e) {
@@ -608,7 +608,9 @@ public class VisualizarGrupoEventosController implements ControllerEvento{
         loadContent();
     }
 
-    public GrupoEventos getTargetGrupoEventos(){
+    public GrupoEventos getTargetGrupoEventos() throws IOException{
+        updateListaMetas();
+
         GrupoEventos novogrupoEventos = new GrupoEventos();
         Date novaDataInicial = dataInicial.getValue() != null ? Date.valueOf(dataInicial.getValue()) : null;
         Date novaDataFinal = dataFinal.getValue() != null ? Date.valueOf(dataFinal.getValue()) : null;
@@ -633,22 +635,29 @@ public class VisualizarGrupoEventosController implements ControllerEvento{
         
         
         if(grupoEventos.getImagemCapa() != null){
-            InputStream fileAsStream;
-            try {;
-                ServiceFileDAO serviceFileDAO = new ServiceFileDAO(db.getConnection());
-                file = serviceFileDAO.getContent(grupoEventos.getImagemCapa());
-                fileAsStream = new FileInputStream(file);
-                this.imagemCapa.setImage(new Image(fileAsStream));
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (NullPointerException e) {
-                e.printStackTrace();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+
+            ServiceFile novo = new ServiceFile(grupoEventos.getImagemCapa().getContent(), grupoEventos.getImagemCapa().getBucket());
+            novogrupoEventos.setImagemCapa(novo);
         }
 
         return novogrupoEventos;
+    }
+
+    private void updateListaMetas() {
+        grupoEventos.setMetas(getMetasSelecionadas());
+    }
+
+    private ArrayList<Meta> getMetasSelecionadas() {
+        ArrayList<Meta> metasSelecionadas = new ArrayList<>();
+        for (CheckBox checkBox : checkBoxesMetas) {
+            if (checkBox.isSelected()) {
+                // id das metas e 1-based
+                Meta selectedMeta = new Meta(checkBoxesMetas.indexOf(checkBox) + 1);
+                selectedMeta.setNomeMeta(checkBox.getText());
+                metasSelecionadas.add(selectedMeta);
+            }
+        }
+        return metasSelecionadas;
     }
 
     public void addListenerEvento(ObservableList<PreviewEventoController> observableList){

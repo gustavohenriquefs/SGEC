@@ -18,6 +18,8 @@ import com.casaculturaqxd.sgec.models.Instituicao;
 import com.casaculturaqxd.sgec.models.Meta;
 import com.casaculturaqxd.sgec.models.arquivo.ServiceFile;
 
+import javafx.scene.control.Alert;
+
 public class GrupoEventosDAO extends DAO {
     private Connection connection;
 
@@ -114,11 +116,13 @@ public class GrupoEventosDAO extends DAO {
                     .setColaboradores(listColaboradores(grupoEventos))
                     .setOrganizadores(listOrganizadores(grupoEventos))
                     .setEventos(listEventos(grupoEventos));
+
                 if (resultFile.isPresent()) {
                     ServiceFile imagemCapa = resultFile.get();
                     imagemCapa.setContent(serviceFileDAO.getContent(imagemCapa));
                     grupoEventosBuilder.setImagemCapa(imagemCapa);
                 }
+                
                 return Optional.of(grupoEventosBuilder.getGrupoEventos());
             } else {
                 return Optional.empty();
@@ -314,12 +318,8 @@ public class GrupoEventosDAO extends DAO {
             """;
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         try {
-            int idImagemCapa = 0;
-            
-            if (grupoEventos.getImagemCapa() != null) {
-                idImagemCapa = grupoEventos.getImagemCapa().getServiceFileId();
-            }
-            
+            ServiceFile imagemCapa = getFile(grupoEventos.getImagemCapa());
+
             preparedStatement.setString(1, grupoEventos.getNome());
             preparedStatement.setString(2, grupoEventos.getDescricao());
             preparedStatement.setObject(3, grupoEventos.getClassificacaoEtaria(), Types.OTHER);
@@ -329,16 +329,16 @@ public class GrupoEventosDAO extends DAO {
             preparedStatement.setInt(7, grupoEventos.getNumMunicipiosEsperado());
             preparedStatement.setInt(8, grupoEventos.getNumParticipantesEsperado());
             preparedStatement.setInt(9, grupoEventos.getNumColaboradoresEsperado());
-            preparedStatement.setObject(10, idImagemCapa != 0 ? idImagemCapa : null, Types.OTHER);
+            preparedStatement.setObject(10, (imagemCapa!= null && imagemCapa.getServiceFileId() != null ? imagemCapa.getServiceFileId() : null), Types.OTHER);
             preparedStatement.setDate(11, grupoEventos.getDataInicial());
             preparedStatement.setDate(12, grupoEventos.getDataFinal());
-
+            
             preparedStatement.setInt(13, grupoEventos.getIdGrupoEventos());
-
+            
             int numAtualizacoes = preparedStatement.executeUpdate();
             
             this.atualizarInfosGrupoEventos(grupoEventos);
-
+            
             this.atualizarCriarImageCapaGrupoEventos(grupoEventos);
             
             return numAtualizacoes > 0;
@@ -353,18 +353,48 @@ public class GrupoEventosDAO extends DAO {
         }
     }
 
+    private ServiceFile getFile(ServiceFile imagemCapa) throws SQLException {
+        ServiceFileDAO serviceFileDAO = new ServiceFileDAO(connection);
+
+        Optional<ServiceFile> optionalImagemCapa  = Optional.empty();
+
+        if(imagemCapa == null || imagemCapa.getFileKey() == null) {
+            return imagemCapa;
+        }
+
+        try {
+            optionalImagemCapa = serviceFileDAO
+                .getArquivo(imagemCapa.getFileKey());
+
+        } catch (SQLException e) {
+            Alert mensagem = new Alert(Alert.AlertType.ERROR);
+
+            mensagem.setTitle("Erro");
+            mensagem.setHeaderText("Erro ao atualizar imagem de capa");
+
+            mensagem.show();
+            e.printStackTrace();
+        }
+
+        if(optionalImagemCapa.isPresent()) {
+            return optionalImagemCapa.get();
+        } 
+        
+        return imagemCapa; 
+    }
+
     private void atualizarCriarImageCapaGrupoEventos(GrupoEventos grupoEventos) throws SQLException {
         ServiceFileDAO serviceFileDAO = new ServiceFileDAO(connection);
 
         if (grupoEventos.getImagemCapa() != null) {
-            if (grupoEventos.getImagemCapa().getServiceFileId() == 0) {
-                serviceFileDAO.inserirArquivo(grupoEventos.getImagemCapa());
+            if (grupoEventos.getImagemCapa().getServiceFileId() == null) {
+                
             } else {
                 serviceFileDAO.vincularArquivo(
                     grupoEventos.getImagemCapa().getServiceFileId(), 
                     grupoEventos.getIdGrupoEventos()
                 );
-            }
+            }   
         }
     }
 
