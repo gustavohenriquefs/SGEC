@@ -624,6 +624,13 @@ public class VisualizarGrupoEventosController implements ControllerEvento{
         novogrupoEventos.setNumAcoesAlcancado(grupoEventos.getEventos().size());
         novogrupoEventos.setIdGrupoEventos(grupoEventos.getIdGrupoEventos());
         novogrupoEventos.setMetas(grupoEventos.getMetas());
+        novogrupoEventos.setNumColaboradoresAlcancado(numeroColaboradores.getValorAlcancado());
+        novogrupoEventos.setNumColaboradoresEsperado(numeroColaboradores.getValorEsperado());
+        novogrupoEventos.setNumMunicipiosAlcancado(numeroMunicipios.getValorAlcancado());
+        novogrupoEventos.setNumMunicipiosEsperado(numeroMunicipios.getValorEsperado());
+        novogrupoEventos.setNumParticipantesAlcancado(numeroMestres.getValorAlcancado());
+        novogrupoEventos.setNumParticipantesEsperado(numeroMestres.getValorEsperado());
+        
         
         if(grupoEventos.getImagemCapa() != null){
             InputStream fileAsStream;
@@ -696,7 +703,21 @@ public class VisualizarGrupoEventosController implements ControllerEvento{
 
     @Override
     public void removerInstituicao(Instituicao instituicao) {
-        
+        if(listaDeOrganizadores.contains(instituicao)){
+            for(PreviewInstituicaoController preview : listaPreviewOrganizadores){
+                if(preview.getInstituicao().equals(instituicao)) {
+                    listaPreviewOrganizadores.remove(preview);
+                    break;
+                }
+            }
+        } else {
+            for(PreviewInstituicaoController preview : listaPreviewColaboradores){
+                if(preview.getInstituicao().equals(instituicao)){
+                    listaPreviewColaboradores.remove(preview);
+                    break;
+                }
+            }
+        }
     }
 
     @Override
