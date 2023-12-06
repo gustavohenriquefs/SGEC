@@ -83,7 +83,7 @@
                         </VBox>
                      </children>
                   </HBox>
-                  <Button id="verdetalhes" fx:id="verDetalhes" mnemonicParsing="false" prefWidth="100.0" styleClass="botoes" text="Ver detalhes" />
+                  <Button id="verdetalhes" fx:id="verDetalhes" mnemonicParsing="false" onAction="#verDetalhes" prefWidth="100.0" styleClass="botoes" text="Ver detalhes" />
                </children>
             </HBox>
          </children>

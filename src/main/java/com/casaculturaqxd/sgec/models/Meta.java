@@ -37,8 +37,8 @@ public class Meta {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((idMeta == null) ? 0 : idMeta.hashCode());
         result = prime * result + ((nomeMeta == null) ? 0 : nomeMeta.hashCode());
+        result = prime * result + ((idMeta == null)   ? 0 : idMeta.hashCode());
         return result;
     }
 
@@ -50,7 +50,9 @@ public class Meta {
             return false;
         if (getClass() != obj.getClass())
             return false;
+
         Meta other = (Meta) obj;
+        
         if (idMeta == null) {
             if (other.idMeta != null)
                 return false;
@@ -59,8 +61,8 @@ public class Meta {
         if (nomeMeta == null) {
             if (other.nomeMeta != null)
                 return false;
-        } else if (!nomeMeta.equals(other.nomeMeta))
-            return false;
+        }
+        
         return true;
     }
 

@@ -12,6 +12,7 @@ import java.util.NoSuchElementException;
 import com.casaculturaqxd.sgec.App;
 import com.casaculturaqxd.sgec.DAO.EventoDAO;
 import com.casaculturaqxd.sgec.DAO.ServiceFileDAO;
+import com.casaculturaqxd.sgec.controller.ControllerEvento;
 import com.casaculturaqxd.sgec.controller.VisualizarEventoController;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.models.Evento;
@@ -37,7 +38,9 @@ public class PreviewEventoController {
     @FXML
     Button detalhes;
     @FXML
+    private Parent container; // pane raiz do fxml
     ImageView imagem;
+    private ControllerEvento parentController;
 
     File file = null;
 
@@ -50,6 +53,26 @@ public class PreviewEventoController {
         this.evento = evento;
         this.setarInformacoesEvento();
 
+    }
+
+    public Evento getEvento(){
+        return this.evento;
+    }
+
+    public Parent getContainer(){
+        return container;
+    }
+
+    public void setContainer(Parent container){
+        this.container = container;
+    }
+
+    public void setParentController(ControllerEvento parentController) {
+        this.parentController = parentController;
+    }
+
+    public ControllerEvento getParentController() {
+        return parentController;
     }
 
     private void setarInformacoesEvento() {
