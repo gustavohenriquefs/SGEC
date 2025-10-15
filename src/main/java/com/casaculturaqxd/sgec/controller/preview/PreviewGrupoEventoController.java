@@ -15,7 +15,7 @@ import com.casaculturaqxd.sgec.DAO.GrupoEventosDAO;
 import com.casaculturaqxd.sgec.controller.VisualizarGrupoEventosController;
 import com.casaculturaqxd.sgec.jdbc.DatabasePostgres;
 import com.casaculturaqxd.sgec.controller.ControllerEvento;
-import com.casaculturaqxd.sgec.controller.pesquisarGrupoEventosController;
+import com.casaculturaqxd.sgec.controller.PesquisarGrupoEventosController;
 import com.casaculturaqxd.sgec.models.GrupoEventos;
 import com.casaculturaqxd.sgec.models.Meta;
 import com.casaculturaqxd.sgec.service.DateFormattingService;
@@ -46,7 +46,7 @@ public class PreviewGrupoEventoController {
     private ResourceBundle resources;
 
     @FXML
-    private pesquisarGrupoEventosController parentController;
+    private PesquisarGrupoEventosController parentController;
 
     @FXML
     private URL location;
@@ -105,11 +105,11 @@ public class PreviewGrupoEventoController {
         dataRealizacao.setText(dataRealizada);
     }
 
-    public void setParentController(pesquisarGrupoEventosController superController) {
+    public void setParentController(PesquisarGrupoEventosController superController) {
       this.parentController = superController;
     }
 
-    public pesquisarGrupoEventosController getParentController() {
+    public PesquisarGrupoEventosController getParentController() {
       return parentController;
     }
 
