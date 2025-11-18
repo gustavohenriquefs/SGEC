@@ -33,7 +33,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 
-public class pesquisarGrupoEventosController {
+public class PesquisarGrupoEventosController {
     DatabasePostgres db = DatabasePostgres.getInstance("URL", "USER_NAME", "PASSWORD");
     private MetaDAO metaDAO = new MetaDAO(db.getConnection());
     private GrupoEventosDAO grupoEventosDAO = new GrupoEventosDAO(db.getConnection());
@@ -183,7 +183,7 @@ public class pesquisarGrupoEventosController {
     }
 
     public void addListenersParticipante(ObservableList<PreviewGrupoEventoController> observableList) {
-        pesquisarGrupoEventosController superController = this;
+        PesquisarGrupoEventosController superController = this;
         observableList.addListener((ListChangeListener<PreviewGrupoEventoController>) change -> {
             while (change.next()) {
                 if (change.wasAdded()) {
